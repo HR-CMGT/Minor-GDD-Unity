@@ -4,16 +4,15 @@
 Tijdens deze minor maken we games met [Unity](https://unity.com/). 
 
 > ## aantekeningen:
+- [Aantekeningen.md](./aantekeningen.md) van de vorige ronde aan development les, grote to-do lijst die tijdens de lessen werdt bijgewerkt.
 - Snippets pagina op github voor oplossingen voor kleine unity problemen, 
 - studenten voegen daar snippets aan toe
 - Via Discord programmeer  discussie, en aansturen tot snippets aanvullen
 - Github overzicht van alle weken, en een readme per week
 - Opdrachtje per week 
-- 
 - Git vs. Unity Collab / Plastic SCM (research: paid?)
 - Scenes collab, gelocked? 
 - Components - ik doe health, jij doet movement
-- 
 - Week 6 TLE Start, eventueel week 7 TLE Sync (introductie Unity 3D voor blocktober)
   
 <br>
@@ -22,7 +21,7 @@ Tijdens deze minor maken we games met [Unity](https://unity.com/).
 
 | Week | Ochtend | Middag | 
 |------|---------|----------|
-| 1.1 | **Basics 1, Introduction to Unity**: GameObjects, Camera, Sprites, Physics, Pre-made scripts, Sounds. | Scripting: Public variables, GetComponent, Awake, Start, Update, FixedUpdate, Instantiate, InvokeRepeating, Transform, Time.deltaTime, velocity, AddForce, Arrays, Lists, Dictionaries, Input (GetAxis, basic), GameManager 
+| 1.1 | **Basics 1, Introduction to Unity**: GameObjects, Camera, Sprites, Physics, Pre-made scripts, Sounds. | Scripting: Public variables, GetComponent, Awake, Start, Update, FixedUpdate, Instantiate, InvokeRepeating, Transform, Time.deltaTime, velocity, AddForce, Arrays, Lists, Dictionaries, Input (GetAxis, basic), GameManager
 |  | [Lesmateriaal](./lesmateriaal/basics1.md) en [Opdracht](./opdrachten/les1.md) | [Opdracht](./opdrachten/les2.md) | 
 | 1.2 | **Basics 2 Communication**: Tags, GetComponent, GameObject.Find, GetObjectOfType etc, InputSystem, Coroutines, Seperate Graphics From Physics And Logic  | Google Play Publishing proces |
 |  | [Lesmateriaal](./lesmateriaal/basics2.md) en [Opdracht](./opdrachten/les1.md) | [Opdracht](./opdrachten/les4.md) | 
@@ -56,44 +55,30 @@ Tijdens deze minor maken we games met [Unity](https://unity.com/).
 <br>
 <br>
 
+
+
 ## Startcode
 
-- [Startproject Excalibur](https://github.com/HR-CMGT/prg4-startproject-2023)
-- [Voorbeeldproject op Codesandbox](https://codesandbox.io/p/sandbox/excalibur-vite-testproject-olk4bu)
-- [Setup instructies voor github pages](./setup.md)
 - [Code snippets](./snippets.md)
-- [Arcade Kast](https://github.com/HR-CMGT/arcade-game)
 
-## Excalibur
+## Unity
 
-- [Excalibur](https://excaliburjs.com)
-- [Excalibur API documentation](https://excaliburjs.com/docs/api/edge/index.html)
-- [Excalibur forum](https://github.com/excaliburjs/Excalibur/discussions)
+- [Unity](https://unity3d.com)
+- [Unity Manual](https://docs.unity3d.com/Manual/index.html)
+- [Unity Script Reference](https://docs.unity3d.com/ScriptReference/index.html)
+- [Unity forum](https://forum.unity.com)
 
-## Excalibur Code Examples
+## Tutorials and Learning Resources
+- [Unity Learn]()
 
-- [Excalibur Gallery](https://excaliburjs.com/gallery/)
-- [Excalibur Show and Tell](https://github.com/excaliburjs/Excalibur/discussions/categories/show-and-tell)
-- [Tenpa Excalibur Examples](https://github.com/tenpaMk2/excalibur-examples)
-- [Terrible Games Examples](https://github.com/dcgw)
+## Unity Code examples
+
+- [Asset Store]()
 
 ## Links
 
-- [Codesandbox Excalibur playground](https://codesandbox.io/s/excalibur-vite-testproject-olk4bu?file=/game.js)
-- [Voortgang opslaan met localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 - [Git instellen](https://www.youtube.com/watch?v=HfTXHrWMGVY)
-- [Open Game Art](https://opengameart.org) en [Kenney Assets](https://www.kenney.nl/assets)
-- [Font Loader](https://fontfaceobserver.com)
-- [Een excalibur project opzetten zonder het startproject](./advanced.md)
-- [MDN Game Development](https://developer.mozilla.org/en-US/docs/Games)
-- [MDN Object Oriented Programming](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object-oriented_programming)
-- [Online Multiplayer met Socket.IO](https://socket.io) of [Lance](https://lance-gg.github.io)
-- [Create Game Sounds](https://sfxr.me)
-- [Net Ninja OOP Javascript course](https://www.youtube.com/playlist?list=PL4cUxeGkcC9i5yvDkJgt60vNVWffpblB7)
-- [Genereer je Class Diagram met markdown](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNp9kc1uwyAMgF8F-bS1zQtEO1XddtmtVy5OcFs0_sSPtKjruy8JBaWZNi6gD_PZ2FforSBooVcYwkHi2aPmhhs2rnfUxDZNw_ap6xSt4JsMlxJ5dF5GYi_fla9pUeSbOVtWXTOZ1tYk3ZFnobeeFvjDohixmrcFT05gpKfnBRLW0BQuzbnw22PSXEjN2pScjkgU-Mu8dcq6P4TTf__XNY-61fvcpWooTfhag6ECQSF6O1Qf7ECT1yjFOMhZxCFeSBOHdjwK9J8cuJniMEV7HEwPbfSJdpAru88d2hOqUOmrkNH6O7z9AKopqB4)
-- [Javascript project zonder excalibur](https://github.com/HR-CMGT/prg4-javascript-2023)
 
 ## Advanced
 
-- [Javascript Game Design Patterns](https://designpatternsgame.com/patterns)
-- [Type Checking](./typechecking.md)
+- [Game Programming Patterns](https://gameprogrammingpatterns.com)
