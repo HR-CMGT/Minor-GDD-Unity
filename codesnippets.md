@@ -6,3 +6,4 @@ GameObject.Find()
 ```
 
 ## plz stop using GameObject.Find()
+
