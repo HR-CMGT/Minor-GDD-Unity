@@ -26,5 +26,7 @@
 ### Almost always keep scale 1,1,1
 ### Don't use GameObject.Find
 ### Instantiate by component/script
+### ContextMenu for debug
+
 
 ### Google Play Publishing process
