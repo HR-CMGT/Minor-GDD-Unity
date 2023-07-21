@@ -10,11 +10,15 @@
 Introduction text hello we're going to start with Unity basics today.
 
 Assignments:
-- [TEMP]
-- Get familiar with the Unity interface
+- Download Unity
+- Create a new 2D project
+- Download [basics1.unitypackage](startprojects/basics1.unitypackage)
+- With the Unity 
 - 
 
-Visit this page for [tutorials](0_tutorials.md#basics-1-tutorials)
+
+
+Visit [this page for tutorials](0_tutorials.md#basics-1-tutorials) for this week's class
 
 
 <details>
