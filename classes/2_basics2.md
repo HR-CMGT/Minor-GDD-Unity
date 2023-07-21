@@ -27,6 +27,6 @@
 ### Don't use GameObject.Find
 ### Instantiate by component/script
 ### ContextMenu for debug
-
+### play/stop changes saving
 
 ### Google Play Publishing process

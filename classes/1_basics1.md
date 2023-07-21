@@ -1,79 +1,42 @@
 # Basics 1
 
-## Introduction To Unity
-
 [Presentation]() -
 [Assignment]() -
 [Start Project Files]() -
-[Resources]() - 
+[Resources](0_resources.md) -
+[Tutorials](0_tutorials.md) -
 [Read More]()
 
 Introduction text hello we're going to start with Unity basics today.
+
 Assignments:
 - [TEMP]
 - Get familiar with the Unity interface
 - 
 
+Visit this page for [tutorials](0_tutorials.md#basics-1-tutorials)
+
+
 <details>
 <summary> Table Of Contents </summary>
-
-- [Basics 1](#basics-1)
-  - [Introduction To Unity](#introduction-to-unity)
-    - [Project view](#project-view)
-    - [Scene view](#scene-view)
-    - [Hierarchy](#hierarchy)
-    - [Game view](#game-view)
-    - [Inspector](#inspector)
-    - [Console](#console)
-    - [Layers](#layers)
-      - [Package Manager](#package-manager)
-      - [Services](#services)
-      - [Rendering -\> Lighting](#rendering---lighting)
-      - [Animation \& Animator](#animation--animator)
-      - [Audio Mixer](#audio-mixer)
-      - [Profiler](#profiler)
-      - [AI -\> Navigation](#ai---navigation)
-  - [Scripting \& The Unity Editor](#scripting--the-unity-editor)
-    - [Public variables](#public-variables)
-    - [Using Pre-made scripts](#using-pre-made-scripts)
-    - [Prefabs and instances](#prefabs-and-instances)
-    - [Sprites](#sprites)
-    - [Sounds](#sounds)
-  - [Scripting](#scripting)
-    - [Script order of execution](#script-order-of-execution)
-    - [Unity's built-in functions/methods](#unitys-built-in-functionsmethods)
-    - [How scripts talk to each other](#how-scripts-talk-to-each-other)
-  - [Physics](#physics)
-    - [Raycasting](#raycasting)
-    - [AddForce](#addforce)
-    - [Velocity](#velocity)
-    - [Checking Collisions](#checking-collisions)
-    - [Physics Tips](#physics-tips)
-      - [Use FixedUpdate](#use-fixedupdate)
-      - [Move the RigidBody, not the Transform](#move-the-rigidbody-not-the-transform)
-  - [Miscellaneous](#miscellaneous)
-    - [Play mode edits = lose changes](#play-mode-edits--lose-changes)
-    - [Transform](#transform)
-    - [Instantiate](#instantiate)
-    - [Input (GetAxis basic)](#input-getaxis-basic)
-    - [Input (InputSystem)](#input-inputsystem)
-    - [GameManager (?)](#gamemanager-)
 
 </details>
 
 ---
 
-<details>
-<summary> Unity Editor</summary>
 
-<blockquote>
+## 1. Unity Editor
+
 <details>
 <summary> Default windows</summary>
 
+
 ### Project view
 ![](../img/basics1/project.png)
+
 ### Scene view
 ![](../img/basics1/scene.png)
+
 ### Hierarchy
 ![](../img/basics1/hierarchy.png)
 ### Game view
@@ -122,11 +85,16 @@ Assignments:
 
 </details>
 
-<details>
-<summary> Scripting & The Unity Editor </summary>
 
-## Scripting & The Unity Editor
+
+## 2. Scripting & The Unity Editor
+
+<details>
+
+<summary> How Unity handles C# scripts </summary>
+
 ### Public variables
+
 <blockquote>
 Reference any component/script/gameobject by making a public variable and dragging in the scene-object containing that component
 </blockquote>
@@ -176,10 +144,12 @@ When sprites are sliced (Sprite Mode: Multiple), drag the file into the Scene vi
 
 </details>
 
-<details>
-<summary> Scripting </summary>
 
-## Scripting
+## 3. Scripting
+
+<details>
+<summary> Scripting in Unity's C#  </summary>
+
 ### Script order of execution
 
 [Unity Manual: Script Execution Order](https://docs.unity3d.com/Manual/ExecutionOrder.html)
@@ -187,16 +157,14 @@ When sprites are sliced (Sprite Mode: Multiple), drag the file into the Scene vi
 
 ### Unity's built-in functions/methods
 
-
-
 ### How scripts talk to each other
 
 </details>
 
+## 4. Physics
 <details>
-<summary> Physics </summary>
+<summary> Physics in Unity </summary>
 
-## Physics
 ### Raycasting
 ### AddForce
 ### Velocity
@@ -207,10 +175,11 @@ When sprites are sliced (Sprite Mode: Multiple), drag the file into the Scene vi
 
 </details>
 
-<details>
-<summary> Miscellaneous </summary>
+## 5. Miscellaneous
 
-## Miscellaneous
+<details>
+<summary> Various Tips & Best Practices </summary>
+
 ### Play mode edits = lose changes
 ### Transform
 ### Instantiate
