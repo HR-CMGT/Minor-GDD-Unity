@@ -12,7 +12,7 @@ Introduction text hello we're going to start with Unity basics today.
 Assignments:
 - Download Unity
 - Create a new 2D project
-- Download [basics1.unitypackage](./startprojects/basics1.unitypackage)
+- Download [basics1.unitypackage](../startprojects/basics1.unitypackage)
 - With the Unity 
 - 
 
