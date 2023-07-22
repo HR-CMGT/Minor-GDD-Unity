@@ -1,5 +1,9 @@
 # Resources
 
+## Code Snippets (Unity C#)
+
+- [Our code snippets](./codesnippets.md)
+
 ## Graphics
 - [TODO: Textures]()
 - [TODO: Sprite Sheets]()
@@ -17,3 +21,4 @@
 
 ## Tutorials
 - [Tutorials](0_tutorials.md)
+

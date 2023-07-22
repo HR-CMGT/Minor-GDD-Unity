@@ -3,7 +3,8 @@
 [Presentation](../presentations/basics1.pdf) -
 [Project Files](../projectfiles/basics1.unitypackage) -
 [Resources](0_resources.md) -
-[Tutorials](0_tutorials.md#basics-1-tutorials)
+[Tutorials](0_tutorials.md#basics-1-tutorials) -
+[Assignment](#assignment)
 
 ## Presentation
 This week's [presentation can be found here](../presentations/basics1.pdf)
@@ -47,6 +48,7 @@ This week's [presentation can be found here](../presentations/basics1.pdf)
 >   - Place a few new floors, some more coins and enemies
 >   - Check out which sprites are available in Class1/Graphics/Textures/PNG and see if you can use those to make new objects for the game
 >   - Get some new sounds and implement them
+>   - Done with the game, and you wanna explore? Try out different 2D components, like very useful [Platform Effector](https://docs.unity3d.com/Manual/class-PlatformEffector2D.html), create some 2D objects with RigidBodies and connect them with the different [2D Joints](https://docs.unity3d.com/Manual/Joints2D.html). Make organic looking hills and slopes with [Sprite Shape](https://docs.unity3d.com/Packages/com.unity.2d.spriteshape@10.0/manual/index.html). See if you can make a level with [Tilemaps](https://docs.unity3d.com/Manual/class-Tilemap.html).
 
 ### Tips:
 Don't forget to install Cinemachine and Input System! You'll get errors and the project won't run if you don't
