@@ -1,7 +1,7 @@
 # Minor GDD - Unity Development
 
-[Presentations](../presentations/) - 
-[Project Files](../projectfiles/) - 
+[Presentations](presentations/) - 
+[Project Files](projectfiles/) - 
 [Resources](classes/0_resources.md) - 
 [Tutorials](classes/0_tutorials.md) -
 [Unity Tips](classes/0_unity.md)
