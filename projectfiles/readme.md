@@ -1,4 +1,4 @@
-Download the .unitypackage file, open the file on Github, click the "..." in the top-right, and select "Download Raw File Content".
+Download the .unitypackage file: open the file on Github, click the "..." in the top-right, and select "Download Raw File Content".
 
 First method:
 1. With the Unity editor open, open (double-click) the .unitypackage file in Windows/Mac/Linux
