@@ -178,9 +178,39 @@ When sprites are sliced (Sprite Mode: Multiple), drag the file into the Scene vi
 ### AddForce
 ### Velocity
 ### Checking Collisions
+```csharp
+void OnTriggerEnter2D(Collider2D collision)
+{
+    // Executes once, if Collider is set as Trigger
+}
+
+void OnCollisionEnter2D(Collision2D collision)
+{
+    // Executes once, if Collider is NOT set as Trigger
+}
+
+// Replace Enter with: 
+//  - Stay, for continuous checking of collisions, executes OFTEN
+//  - Exit, for when the collision has ended, executes once
+```
+
+
 ### Physics Tips
-#### Use FixedUpdate
-#### Move the RigidBody, not the Transform
+#### Use Update for graphics, and FixedUpdate for physics
+
+```csharp
+void Update(){
+    // Runs as fast as Graphics calculations.
+    // So with 60 FPS this block executes sixty times per second
+}
+
+void FixedUpdate(){
+    // Runs as fast as Physics calculations.
+    // See Project Settings -> Time -> Fixed Timestep to see how often FixedUpdate runs. [Default = 0.02]
+```
+
+#### Move the Rigidbody, not the Transform
+> When handling physics objects, ***don't*** use the Transform component to move it. <br> Instead of setting transform.position, use Rigidbody.MovePosition() or Rigidbody2D.MovePosition()
 
 </details>
 
@@ -190,10 +220,86 @@ When sprites are sliced (Sprite Mode: Multiple), drag the file into the Scene vi
 <summary> Various Tips & Best Practices </summary>
 
 ### Play mode edits = lose changes
+Remember that when you are in Play mode, you will lose all changes that you made when you exit Play mode!
+
+### Separate Graphics From Physics And Logic
+Don't keep SpriteRenderer/MeshRenderer on the top object. <br> Make a child object and put the graphics there, including the Animator component. <br> Keep Rigidbody on the top object, Colliders can either be on the top object or on (multiple) child object(s).
+
 ### Transform
-### Instantiate
-### Input (GetAxis basic)
-### Input (InputSystem)
-### GameManager (?)
+Every GameObject has a transform as a component. Instead of needing to call GetComponent every time, you can use "transform".
+```csharp
+// Set object position
+// These two lines are exactly the same
+GetComponent<Transform>().position = Vector3.one;
+transform.position = Vector3.one;
+```
+
+When handling physics objects, ***don't*** use the Transform component to move it. <br> Instead of setting transform.position, use Rigidbody.MovePosition() or Rigidbody2D.MovePosition()
+
+### Instantiate by component/script
+***Don't*** do this:
+```csharp
+public GameObject enemyPrefab;
+
+void Start()
+{
+    GameObject newEnemy = Instantiate(enemyPrefab);
+}
+```
+Instead, do this:
+```csharp
+public EnemyScript enemyPrefab;
+
+void Start()
+{
+    EnemyScript newEnemy = Instantiate(enemyPrefab);
+}
+```
+
+### Input (built-in)
+#### Built-in:
+```csharp
+public Vector2 moveInput;
+
+void Update(){
+    moveInput = new Vector(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"));
+}
+```
+#### InputSystem package:
+```csharp
+using UnityEngine.InputSystem;
+
+public Vector2 moveInput;
+
+public void OnMove(InputValue value){
+    moveInput = value.Get<Vector2>();
+}
+```
+### Keep scale 1,1,1
+At least make sure that the *parent* objects have a uniform scale of 1 (Vector3.one, of new Vector3(1,1,1).
+
+### Don't use GameObject.Find
+Whenever you spawn something, keep it in a list!
+```csharp
+public List<Enemy> spawnedEnemies;
+
+public void SpawnEnemy()
+{
+    EnemyScript newEnemy = Instantiate(enemyPrefab);
+    spawnedEnemies.Add(newEnemy);
+}
+```
+### ContextMenu for debug
+Call a function at any time from the inspector
+
+```csharp
+public List<Enemy> spawnedEnemies;
+
+[ContextMenu("Name To Show Up In Inspector")]
+public void LogAmountOfEnemies()
+{
+    Debug.Log("amount of spawned enemies: "+spawnedEnemies.Count);
+}
+```
 
 </details>
