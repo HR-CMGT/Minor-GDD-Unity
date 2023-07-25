@@ -55,4 +55,4 @@ Don't forget to install Cinemachine and Input System! You'll get errors and the 
 ![](../img/basics1/basics1packages.png)
   
 When you open 1_endscene.unity, installed the packages and you press play, it should look like this:
-![](../img/basics1/endscene.png)
+![](../img/basics1/basics1endscene.png)

@@ -12,5 +12,5 @@ Second method:
 
 Reference: [Unity Manual - Import Local Asset Packages](https://docs.unity3d.com/2023.2/Documentation/Manual/AssetPackagesImport.html)
 
-![](../img/CustomPackageInstallDialog.png)
+![](../img/general/CustomPackageInstallDialog.png)
 
