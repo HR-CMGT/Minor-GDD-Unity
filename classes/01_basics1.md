@@ -23,7 +23,7 @@ This week's [presentation can be found here](../presentations/basics1.pdf)
 6. In the folder Class1/1_ENDSCENE, open the **1_endscene.unity** scene file and press play
 7. In the folder Class1/0_STARTSCENE, open the **0_startscene.unity** scene file
 8. Drag the prefabs from the folder Class1/Prefabs/Project_Start into the Scene view
-9. Finish the game! Use the [Presentation](../presentations/basics1.pdf), [Unity Tips](00_unity.md) and [Tutorials](0_tutorials.md#basics-1-tutorials) to help you on your way. And feel free to look at Class1/1_ENDSCENE/0_startscene.unity to find out how to get there!
+9. Finish the game! Use the [Presentation](../presentations/basics1.pdf), [Unity Tips](00_unity.md) and [Tutorials](00_tutorials.md#basics-1-tutorials) to help you on your way. And feel free to look at Class1/1_ENDSCENE/0_startscene.unity to find out how to get there!
 
 > ### What to do for the Start project:
 > - **Camera Follow**: Make the camera follow the player using Cinemachine Camera Settings
