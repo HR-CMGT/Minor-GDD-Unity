@@ -2,9 +2,9 @@
 
 ## Scripts / Projects
 ### Unity
-- [Our code snippets](./codesnippets.md)
+- [Our code snippets](00_codesnippets.md)
 - [Open Source Unity Package Registry](https://openupm.com/)
-- 
+- [Catlike Coding Tutorials (intermediate/advanced)](https://catlikecoding.com/unity/tutorials/)
 
 ### General game dev (including unity)
 - [Github Unity Awesome list](https://github.com/RyanNielson/awesome-unity)

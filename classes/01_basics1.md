@@ -2,17 +2,17 @@
 
 [Presentation](../presentations/basics1.pdf) -
 [Project Files](../projectfiles/basics1.unitypackage) -
-[Resources](0_resources.md) -
-[Tutorials](0_tutorials.md#basics-1-tutorials) -
+[Resources](00_resources.md) -
+[Tutorials](00_tutorials.md#basics-1-tutorials) -
 [Assignment](#assignment)
 
 ## Presentation
 This week's [presentation can be found here](../presentations/basics1.pdf)
 
 ## Resources
-- Our own [tips, tricks and best practices](0_unity.md) for working with Unity, with a bunch of gifs
-- A list of [external tutorials](0_tutorials.md#basics-1-tutorials) to help you with specific topics, from learning the basics to creating a certain effect.
-- Get graphics, sounds, code and other free stuff from the [resources](0_resources.md) page
+- Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
+- A list of [external tutorials](00_tutorials.md#basics-1-tutorials) to help you with specific topics, from learning the basics to creating a certain effect.
+- Get graphics, sounds, code and other free stuff from the [resources](00_resources.md) page
 
 ## Assignment
 1. Download and open Unity
@@ -23,7 +23,7 @@ This week's [presentation can be found here](../presentations/basics1.pdf)
 6. In the folder Class1/1_ENDSCENE, open the **1_endscene.unity** scene file and press play
 7. In the folder Class1/0_STARTSCENE, open the **0_startscene.unity** scene file
 8. Drag the prefabs from the folder Class1/Prefabs/Project_Start into the Scene view
-9. Finish the game! Use the [Presentation](../presentations/basics1.pdf), [Unity Tips](0_unity.md) and [Tutorials](0_tutorials.md#basics-1-tutorials) to help you on your way. And feel free to look at Class1/1_ENDSCENE/0_startscene.unity to find out how to get there!
+9. Finish the game! Use the [Presentation](../presentations/basics1.pdf), [Unity Tips](00_unity.md) and [Tutorials](0_tutorials.md#basics-1-tutorials) to help you on your way. And feel free to look at Class1/1_ENDSCENE/0_startscene.unity to find out how to get there!
 
 > ### What to do for the Start project:
 > - **Camera Follow**: Make the camera follow the player using Cinemachine Camera Settings

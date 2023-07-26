@@ -2,9 +2,9 @@
 
 [Presentations](presentations/) - 
 [Project Files](projectfiles/) - 
-[Resources](classes/0_resources.md) - 
-[Tutorials](classes/0_tutorials.md) -
-[Unity Tips](classes/0_unity.md)
+[Resources](classes/00_resources.md) - 
+[Tutorials](classes/00_tutorials.md) -
+[Unity Tips](classes/00_unity.md)
 
 During this minor we're making games with [Unity](https://unity.com/).
 
