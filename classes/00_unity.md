@@ -28,8 +28,10 @@ The topics listed here are for reference to get familiar with using Unity, from 
     - [Sprites](#sprites)
     - [Sounds](#sounds)
   - [3. Scripting](#3-scripting)
-    - [Script order of execution](#script-order-of-execution)
+    - [Differences between Javascript and C# (for Unity)](#differences-between-javascript-and-c-for-unity)
+    - [Types and classes in C# (for Unity)](#types-and-classes-in-c-for-unity)
     - [Unity's built-in functions/methods](#unitys-built-in-functionsmethods)
+    - [Script order of execution](#script-order-of-execution)
     - [How scripts talk to each other](#how-scripts-talk-to-each-other)
   - [4. Physics](#4-physics)
     - [Raycasting](#raycasting)
@@ -203,14 +205,76 @@ When sprites are sliced (Sprite Mode: Multiple), drag the file into the Scene vi
 ## 3. Scripting
 
 <details>
+<summary> Differences between Javascript and C#  </summary>
+
+### Differences between Javascript and C# (for Unity)
+
+```javascript  
+// Javascript
+// note that there's no ; at the end of these variable statements
+
+let variable1 = 0   // 'let' doesn't exist in C#
+const variable2 = "text"  // 'const' doesn't exist in C#
+var variable3 = { "name":"john" } // 'var' does exist in C#, but the object notation like { "name":"john" } doesn't.
+
+function FunctionName1(){
+  // do something
+}
+
+console.log("Log a message")    // write to console
+```
+
+```csharp 
+// C#
+// note that there is always a ; at the end of these variable statements
+
+int variable1 = 0;  // you define the type of variable (int/string/GameObject)
+string variable2 = "text";   // and the line needs to end with a ;
+var variable3 = null;   // var may only be used within functions, not as class variables
+
+private void FunctionName1(){
+  // do something
+}
+
+Debug.Log("Log a message");   // write to console
+```
+
+### Types and classes in C# (for Unity)
+
+```csharp
+// Some important types and classes:
+string variable1 = "pi";
+int variable2 = 3;
+float variable3 = 3.14f;
+GameObject variable4 = Instantiate(prefabReference);
+Vector2 variable5 = new Vector2( 1.01f, 1f );
+ScriptThatIWrote variable6 = GetComponent<ScriptThatIWrote>();
+
+```
+
+</details>
+
+<details>
 <summary> Scripting in Unity's C#  </summary>
+
+
+### Unity's built-in functions/methods
+
+```csharp
+void Awake(){}  // runs once, before Start
+void Start(){}  // runs once, before Update
+void Update(){} // runs every frame
+void OnCollisionEnter2D(Collision2D collision){}  // runs once, when colliding
+void OnEnable(){} // and OnDisable(){}
+void OnMouseDown(){} // for basic click interactions
+```
+For more functions, and reference: [Monobehaviour Script API Reference](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html)
 
 ### Script order of execution
 
 [Unity Manual: Script Execution Order](https://docs.unity3d.com/Manual/ExecutionOrder.html)
 [![Unity Script Execution Order](../img/unitytips/scriptorder.png)](https://docs.unity3d.com/Manual/ExecutionOrder.html)
 
-### Unity's built-in functions/methods
 
 ### How scripts talk to each other
 
