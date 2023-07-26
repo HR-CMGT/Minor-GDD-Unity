@@ -15,4 +15,4 @@ Unity Introduction workshop - Game Design and Development
 
 # Workshop
 
-For the presentation, assignment and all other reference material, [click here to go to the workshop files on Github](https://github.com/HR-CMGT/MGDD-unity)
+For the presentation, assignment and all other reference material, [click here to go to the workshop files on Github](https://github.com/HR-CMGT/Minor-GDD-Unity/)
