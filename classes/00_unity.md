@@ -313,8 +313,30 @@ public class SecondScript : MonoBehaviour
 <summary> Physics in Unity </summary>
 
 ### Raycasting
+Ref: [Raycasting In Unity](https://docs.unity3d.com/ScriptReference/Physics.Raycast.html)
+
+```csharp
+// Simple raycast with three parameters: point of origin, direction, and distance.
+if (Physics.Raycast(transform.position, transform.forward, 10)){
+  Debug.Log("There is something in front of the object!");
+}
+```
+
 ### AddForce
+```csharp
+public RigidBody rb;
+void FixedUpdate(){
+  rb.AddForce(Vector3.forward); // pushes the object forward, *increasingly* faster!
+}
+```
 ### Velocity
+```csharp
+public RigidBody rb;
+void FixedUpdate(){
+  rb.velocity = Vector3.forward; // moves the object forward at a constant rate
+}
+```
+
 ### Checking Collisions
 ```csharp
 void OnTriggerEnter2D(Collider2D collision)

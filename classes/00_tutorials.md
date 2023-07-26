@@ -9,12 +9,16 @@
 - [Unity Forum](https://forum.unity.com)
 - [Unity Learn](https://learn.unity.com)
 - [Unity Tips (from Unity Learn)](https://learn.unity.com/tutorial/unity-tips)
+- [Unity in 100 seconds (YT)](https://www.youtube.com/watch?v=iqlH4okiQqg)
 
 Beginners
+- [Coding in C# in Unity for beginners](https://unity.com/how-to/learning-c-sharp-unity-beginners)
 - [Game Maker's Toolkit Unity Tutorial for complete beginners](https://www.youtube.com/watch?v=XtQMytORBmM)
+- [Brackeys Beginner Unity Tutorials (YT Playlist)](https://www.youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
 
 Advanced
 - [Game Programming Patterns](https://gameprogrammingpatterns.com)
+- [SOLID coding principles in Unity (YT Playlist - Jason Weimann)](https://www.youtube.com/watch?v=Eyr7_l5NMds&list=PLB5_EOMkLx_WjcjrsGUXq9wpTib3NCuqg&pp=iAQB)
 
 Version Control
 - [Unity & Git (Brackeys)](https://youtu.be/qpXxcvS-g3g)
