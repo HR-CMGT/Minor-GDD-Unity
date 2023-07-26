@@ -278,6 +278,34 @@ For more functions, and reference: [Monobehaviour Script API Reference](https://
 
 ### How scripts talk to each other
 
+```csharp
+// FirstScript.cs
+public class FirstScript : MonoBehaviour
+{
+  public SecondScript externalScript; // Drag the gameobject containing this SecondScript.cs script here, in the Unity Inspector
+
+  public void FirstScriptFunction(){ Debug.Log("I'm the first script!"); }
+
+  void Start(){
+    externalScript.SecondScriptFunction(); // Logs: "I'm the second script!"
+  }
+}
+```
+
+```csharp
+// SecondScript.cs
+public class SecondScript : MonoBehaviour
+{
+  public FirstScript externalScript; // Drag the gameobject containing this FirstScript.cs script here, in the Unity Inspector
+
+  public void SecondScriptFunction(){ Debug.Log("I'm the second script!"); }
+
+  void Start(){
+    externalScript.FirstScriptFunction(); // Logs: "I'm the first script!"
+  }
+}
+```
+
 </details>
 
 ## 4. Physics
