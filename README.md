@@ -1,6 +1,6 @@
 # Minor GDD - Unity Development
 
-[Presentations](presentations/) - 
+[Presentations](https://hr-cmgt.github.io/Minor-GDD-Unity/)
 [Project Files](projectfiles/) - 
 [Resources](classes/00_resources.md) - 
 [Tutorials](classes/00_tutorials.md) -
