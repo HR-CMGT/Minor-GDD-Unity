@@ -1,4 +1,4 @@
-#Minor GDD - Unity Development
+# Minor GDD - Unity Development
 
 [Presentations](https://hr-cmgt.github.io/Minor-GDD-Unity/) -
 [Project Files](projectfiles/) - 
@@ -8,7 +8,7 @@
 
 During this minor we're making games with [Unity](https://unity.com/).
 
-##Topics per week
+## Topics per week
 
 | Week | Topic(s) 
 |------|---------
