@@ -1,6 +1,6 @@
 # Basics 1
 
-[Presentations](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_class1) -
+[Presentations](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics1) -
 [Project Files](../projectfiles/basics1.unitypackage) -
 [Resources](00_resources.md) -
 [Tutorials](00_tutorials.md#basics-1-tutorials) -
