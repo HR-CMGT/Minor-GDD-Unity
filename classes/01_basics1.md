@@ -19,7 +19,7 @@ This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD
 2. Create a new 2D project
 3. Download [basics1.unitypackage](../projectfiles/basics1.unitypackage)
 4. With the Unity editor open, open the **basics1.unitypackage** file
-5. From Window->Package Manager, install **Input System** and **Cinemachine**
+5. From Window->Package Manager, install **Input System** and **Cinemachine** (click "Packages: In Project" and change it to "Packages: Unity Registry")
 6. In the folder Class1/1_ENDSCENE, open the **1_endscene.unity** scene file and press play
 7. In the folder Class1/0_STARTSCENE, open the **0_startscene.unity** scene file
 8. Drag the prefabs from the folder Class1/Prefabs/Project_Start into the Scene view
