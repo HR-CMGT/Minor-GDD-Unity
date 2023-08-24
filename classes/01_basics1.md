@@ -26,7 +26,7 @@ This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD
 9. Finish the game! Use the [Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics1), [Unity Tips](00_unity.md) and [Tutorials](00_tutorials.md#basics-1-tutorials) to help you on your way. And feel free to look at Class1/1_ENDSCENE/0_startscene.unity to find out how to get there!
 
 > ### What to do for the Start project:
-> - **Camera Follow**: Make the camera follow the player using Cinemachine Camera Settings
+> - **Camera Follow**: Make the camera follow the player using Cinemachine Camera Settings. Drag the Player object into the Follow setting.
 > - **Configure the Player**: In the Inspector, select the Player_Start object and in *the Inspector view*, drag in the required component references: InputHandler, Animator, AudioClips and GroundCheck.
 > - **Programming the Player**: Open PlayerStart.cs and code;
 >   - The Jump function
