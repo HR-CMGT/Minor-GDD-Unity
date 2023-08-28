@@ -44,6 +44,7 @@ The topics listed here are for reference to get familiar with using Unity, from 
   - [5. Miscellaneous](#5-miscellaneous)
     - [Play mode edits = lose changes](#play-mode-edits--lose-changes)
     - [Separate Graphics From Physics And Logic](#separate-graphics-from-physics-and-logic)
+    - [Don't do math, do Mathf](#dont-do-math-do-mathf)
     - [Transform](#transform)
     - [Instantiate by component/script](#instantiate-by-componentscript)
     - [Input (built-in)](#input-built-in)
@@ -384,6 +385,11 @@ Remember that when you are in Play mode, you will lose all changes that you made
 
 ### Separate Graphics From Physics And Logic
 Don't keep SpriteRenderer/MeshRenderer on the top object. <br> Make a child object and put the graphics there, including the Animator component. <br> Keep Rigidbody on the top object, Colliders can either be on the top object or on (multiple) child object(s).
+
+### Don't do math, do Mathf
+Instead of trying to code your own math, take a look at what Unity's own MathF library has to offer: [Unity's MathF script reference](https://docs.unity3d.com/ScriptReference/Mathf.html)
+<br> Same goes for calculating positions, rotations, angles etc., use the functions available to you in [Vector2](https://docs.unity3d.com/ScriptReference/Vector2.html)/[Vector3](https://docs.unity3d.com/ScriptReference/Vector3.html), [Transform](https://docs.unity3d.com/ScriptReference/Transform.html) and [Quaternion](https://docs.unity3d.com/ScriptReference/Quaternion.html)
+
 
 ### Transform
 Every GameObject has a transform as a component. Instead of needing to call GetComponent every time, you can use "transform".
