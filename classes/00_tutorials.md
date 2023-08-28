@@ -12,9 +12,11 @@
 - [Unity in 100 seconds (YT)](https://www.youtube.com/watch?v=iqlH4okiQqg)
 
 Beginners
-- [Coding in C# in Unity for beginners](https://unity.com/how-to/learning-c-sharp-unity-beginners)
-- [Game Maker's Toolkit Unity Tutorial for complete beginners](https://www.youtube.com/watch?v=XtQMytORBmM)
-- [Brackeys Beginner Unity Tutorials (YT Playlist)](https://www.youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
+- [Coding in C# in Unity for beginners - Unity.com](https://unity.com/how-to/learning-c-sharp-unity-beginners)
+- [Unity Tutorial for complete beginners - Game Maker's Toolkit](https://www.youtube.com/watch?v=XtQMytORBmM)
+- [Beginner Unity Tutorials (YT Playlist) - Brackeys](https://www.youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
+- [Learn C# BASICS in 10 MINUTES! - Code Monkey](https://www.youtube.com/watch?v=IFayQioG71A)
+- [Learn Unity in 17 MINUTES! (2023 UPDATED) - Code Monkey](https://www.youtube.com/watch?v=E6A4WvsDeLE)
 
 Advanced
 - [Game Programming Patterns](https://gameprogrammingpatterns.com)
@@ -31,6 +33,13 @@ Version Control
 
 - [Unity Learn](https://learn.unity.com)
 - [Instagram Unity Tips (@unitymedved)](https://www.instagram.com/unitymedved/)
+
+### Prefabs
+- [Unity Prefabs - The Complete Animated Guide - Game Dev Classroom](https://www.youtube.com/watch?v=RNoJGuujbjM)
+- [Prefabs - Concept and usage - Unity Official Tutorials](https://www.youtube.com/watch?v=H1OkG3a1w-o)
+- [(YT Shorts) Unity Prefabs with overrides have blue indicator 🟦 in the hierarchy - @sunnyvalleystudio](https://www.youtube.com/shorts/Rgj2MS_PX5c)
+- [Unity Manual - Instantiating Prefabs at run time](https://docs.unity3d.com/Manual/InstantiatingPrefabs.html)
+- [Unity Manual - Prefabs](https://docs.unity3d.com/Manual/Prefabs.html)
 
 </details>
 
@@ -60,10 +69,21 @@ Version Control
 <details>
 <summary> Complete projects </summary>
 
-- [Brackeys full project tutorial](https://youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
+- [Brackeys "How to make a 2D Game" full project tutorial (YT playlist)](https://youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
 - [Jason Weimann full project tutorial](https://www.youtube.com/watch?v=OR0e-1UBEOU)
 - [Nodulus (Github)](https://github.com/Hyperparticle/nodulus)
 </details>
 
 ## Basics 1 Tutorials
-- 
+- [Rigidbody 2D - Official Unity Tutorial](https://www.youtube.com/watch?v=rq6c2B_socs)
+- [2D CHARACTER MOVEMENT IN UNITY 🎮 - Dani Krossing](https://www.youtube.com/watch?v=w9NmPShzPpE)
+- [What is a Component? (Unity Tutorial for Beginners) - Code Monkey](https://www.youtube.com/watch?v=etTZYeTrpZU)
+- [Object References in Unity - How to Communicate Between Scripts - Tarodev](https://www.youtube.com/watch?v=dtv7mjj_iog)
+- [Prefabs (from this page)](#prefabs)
+
+<!-- 
+## Basics 2 Tutorials
+- [Coroutines (YT Shorts) - @Tvtig](https://www.youtube.com/shorts/qjF7e2Muo7E)
+
+## UI Tutorials
+- to be continued -->
