@@ -28,9 +28,8 @@ Version Control
 
 
 ## General Tutorials
-<details>
-<summary> Using Unity </summary>
 
+### Using Unity
 - [Unity Learn](https://learn.unity.com)
 - [Instagram Unity Tips (@unitymedved)](https://www.instagram.com/unitymedved/)
 
@@ -40,11 +39,6 @@ Version Control
 - [(YT Shorts) Unity Prefabs with overrides have blue indicator 🟦 in the hierarchy - @sunnyvalleystudio](https://www.youtube.com/shorts/Rgj2MS_PX5c)
 - [Unity Manual - Instantiating Prefabs at run time](https://docs.unity3d.com/Manual/InstantiatingPrefabs.html)
 - [Unity Manual - Prefabs](https://docs.unity3d.com/Manual/Prefabs.html)
-
-</details>
-
-<details>
-<summary> Coding </summary>
 
 ### Recommended Youtube channels
 - [Jason Weimann (Unity3DCollege)](https://www.youtube.com/channel/UCX_b3NNQN5bzExm-22-NVVg)
@@ -57,22 +51,17 @@ Version Control
 - [Mix And Jam](https://www.youtube.com/@mixandjam)
 - [Thomas Brush](https://www.youtube.com/@thomasbrush)
 - [Sebastian Lague](https://www.youtube.com/@SebastianLague)
-</details>
 
-<details>
-<summary> Graphics </summary>
 
+## Graphics
 - [Unity Manual graphics](https://docs.unity3d.com/Manual/Graphics.html)
 - [Unity Learn Graphics & VFX](https://learn.unity.com/search?k=%5B%22tag%3A5d351f0b7fbf7d006af48182%22%5D)
-</details>
 
-<details>
-<summary> Complete projects </summary>
-
+## Complete Projects
 - [Brackeys "How to make a 2D Game" full project tutorial (YT playlist)](https://youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
 - [Jason Weimann full project tutorial](https://www.youtube.com/watch?v=OR0e-1UBEOU)
 - [Nodulus (Github)](https://github.com/Hyperparticle/nodulus)
-</details>
+
 
 ## Basics 1 Tutorials
 - [Rigidbody 2D - Official Unity Tutorial](https://www.youtube.com/watch?v=rq6c2B_socs)
