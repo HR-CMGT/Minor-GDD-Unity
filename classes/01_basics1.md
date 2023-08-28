@@ -17,13 +17,13 @@ This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD
 ## Assignment
 1. Download and open Unity
 2. Create a new 2D project
-3. With the Unity editor open, open the **basics1.unitypackage** file
-4. From Window->Package Manager, install **Input System** and **Cinemachine** <br/>(click "*Packages: In Project*" and change it to "*Packages: Unity Registry*")
-5. Download [basics1.unitypackage](../projectfiles/basics1.unitypackage)
+3. From Window->Package Manager, install **Input System** and **Cinemachine** <br/>(click "*Packages: In Project*" and change it to "*Packages: Unity Registry*")
+4. Download [basics1.unitypackage](../projectfiles/basics1.unitypackage)
+5. With the Unity editor open, open the **basics1.unitypackage** file
 6. In the folder Class1/1_ENDSCENE, open the **1_endscene.unity** scene file and press play
 7. In the folder Class1/0_STARTSCENE, open the **0_startscene.unity** scene file
 8. Drag the prefabs from the folder Class1/Prefabs/Project_Start into the Scene view
-9. Finish the game! Use the [Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics1), [Unity Tips](00_unity.md) and [Tutorials](00_tutorials.md#basics-1-tutorials) to help you on your way. And feel free to look at Class1/1_ENDSCENE/0_startscene.unity to find out how to get there!
+9. Finish the game! Use the [Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics1), [Unity Tips](00_unity.md) and [Tutorials](00_tutorials.md#basics-1-tutorials) to help you on your way. And feel free to look at Class1/1_ENDSCENE/1_endscene.unity to find out how to get there!
 
 > ### What to do for the Start project:
 > - **Camera Follow**: Make the camera follow the player using Cinemachine Camera Settings. Drag the Player object into the Follow setting.
