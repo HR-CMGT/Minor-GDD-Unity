@@ -33,13 +33,6 @@ Version Control
 - [Unity Learn](https://learn.unity.com)
 - [Instagram Unity Tips (@unitymedved)](https://www.instagram.com/unitymedved/)
 
-### Prefabs
-- [Unity Prefabs - The Complete Animated Guide - Game Dev Classroom](https://www.youtube.com/watch?v=RNoJGuujbjM)
-- [Prefabs - Concept and usage - Unity Official Tutorials](https://www.youtube.com/watch?v=H1OkG3a1w-o)
-- [(YT Shorts) Unity Prefabs with overrides have blue indicator 🟦 in the hierarchy - @sunnyvalleystudio](https://www.youtube.com/shorts/Rgj2MS_PX5c)
-- [Unity Manual - Instantiating Prefabs at run time](https://docs.unity3d.com/Manual/InstantiatingPrefabs.html)
-- [Unity Manual - Prefabs](https://docs.unity3d.com/Manual/Prefabs.html)
-
 ### Recommended Youtube channels
 - [Jason Weimann (Unity3DCollege)](https://www.youtube.com/channel/UCX_b3NNQN5bzExm-22-NVVg)
 - [Brackeys (old channel, good basics)](https://www.youtube.com/@Brackeys/videos)
@@ -68,7 +61,12 @@ Version Control
 - [2D CHARACTER MOVEMENT IN UNITY 🎮 - Dani Krossing](https://www.youtube.com/watch?v=w9NmPShzPpE)
 - [What is a Component? (Unity Tutorial for Beginners) - Code Monkey](https://www.youtube.com/watch?v=etTZYeTrpZU)
 - [Object References in Unity - How to Communicate Between Scripts - Tarodev](https://www.youtube.com/watch?v=dtv7mjj_iog)
-- [Prefabs (from this page)](#prefabs)
+    ### Prefabs
+    - [Unity Prefabs - The Complete Animated Guide - Game Dev Classroom](https://www.youtube.com/watch?v=RNoJGuujbjM)
+    - [Prefabs - Concept and usage - Unity Official Tutorials](https://www.youtube.com/watch?v=H1OkG3a1w-o)
+    - [(YT Shorts) Unity Prefabs with overrides have blue indicator 🟦 in the hierarchy - @sunnyvalleystudio](https://www.youtube.com/shorts/Rgj2MS_PX5c)
+    - [Unity Manual - Instantiating Prefabs at run time](https://docs.unity3d.com/Manual/InstantiatingPrefabs.html)
+    - [Unity Manual - Prefabs](https://docs.unity3d.com/Manual/Prefabs.html)
 
 <!-- 
 ## Basics 2 Tutorials
