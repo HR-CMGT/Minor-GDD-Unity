@@ -1,7 +1,7 @@
 # Basics 2
 
 [Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics2) -
-[Project Files](../projectfiles/basics2.unitypackage) -
+<!-- [Project Files](../projectfiles/basics2.unitypackage) - --> Project Files -
 [Resources](00_resources.md) -
 [Tutorials](00_tutorials.md#basics-2-tutorials) -
 [Assignment](#assignment)
@@ -17,7 +17,7 @@ This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD
 ## Assignment
 1. Create a new 2D project
 2. From Window->Package Manager, install **Input System** and **Cinemachine** <br/>(click "*Packages: In Project*" and change it to "*Packages: Unity Registry*")
-3. Download [basics2.unitypackage](../projectfiles/basics2.unitypackage)
+3. Download <!-- [basics2.unitypackage](../projectfiles/basics2.unitypackage) --> basics2.unitypackage
 4. With the Unity editor open, open the **basics2.unitypackage** file
 5. In the folder Class2/1_ENDSCENE, open the **1_endscene.unity** scene file and press play
 6. In the folder Class2/0_STARTSCENE, open the **0_startscene.unity** scene file
