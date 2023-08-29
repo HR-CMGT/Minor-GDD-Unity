@@ -71,9 +71,18 @@ Version Control
     - [Unity Manual - Instantiating Prefabs at run time](https://docs.unity3d.com/Manual/InstantiatingPrefabs.html)
     - [Unity Manual - Prefabs](https://docs.unity3d.com/Manual/Prefabs.html)
 
-<!-- 
 ## Basics 2 Tutorials
 - [Coroutines (YT Shorts) - @Tvtig](https://www.youtube.com/shorts/qjF7e2Muo7E)
+- [GetComponent - Official Unity Beginner Scripting Tutorials (YT)](https://www.youtube.com/watch?v=xbDKC4zP9XY)
+- [Tags - Official Unity Beginner Scripting Tutorials (YT)](https://www.youtube.com/watch?v=EA54-vfLkUI)
+- [C# Lists and Dictionaries in Unity - Official Unity Intermediate Scripting Tutorial (YT)](https://www.youtube.com/watch?v=0WdWiF_Si4I)
+- [Better Data with Scriptable Objects in Unity - Official Unity Intermediate Scripting Tutorial (YT)](https://www.youtube.com/watch?v=PVOVIxNxxeQ)
+- [C# Coroutines in Unity! - Official Unity Intermediate Scripting Tutorial](https://www.youtube.com/watch?v=5L9ksCs6MbE)
+- [Unity Events Explained (YT - @SpeedTutor)](https://www.youtube.com/watch?v=TWxXD-UpvSg)
+- [How To Publish An App To The Google Play Console | Step By Step | 2023 Updated](https://www.youtube.com/watch?v=295bzuj02BI)
+<!-- GetComponent, Tags, Collections, ScriptableObjects, Timers, Events & Listeners, Time.deltaTime, Coroutines, InvokeRepeating, Google Play publishing -->
 
+
+<!-- 
 ## UI Tutorials
 - to be continued -->
