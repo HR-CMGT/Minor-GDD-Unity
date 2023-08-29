@@ -8,8 +8,7 @@ Project Files -
 [Assignment](#assignment)
 
 ## Presentation
-<!-- This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics2) -->
-This week's presentation can be found here (work in progress)
+This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics2)
 
 ## Resources
 - Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
