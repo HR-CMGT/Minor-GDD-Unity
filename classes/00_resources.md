@@ -31,7 +31,6 @@
 - [Free Sounds (account required)](https://freesound.org/)
 - [Free audio editing (Audacity)](https://www.audacityteam.org/)
 
-
 ## Tutorials
 - [Tutorials](00_tutorials.md)
 
@@ -39,4 +38,3 @@
 - [Game From Scratch (yt)](https://gamefromscratch.com/)
 - [Game Developer](https://www.gamedeveloper.com/)
 - [80.lv](https://80.lv/)
-- 
