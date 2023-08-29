@@ -1,8 +1,7 @@
 # Basics 2
 
-[Project Files](../projectfiles/basics2.unitypackage) -
 [Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics2) -
-Project Files -
+[Project Files](../projectfiles/basics2.unitypackage) -
 [Resources](00_resources.md) -
 [Tutorials](00_tutorials.md#basics-2-tutorials) -
 [Assignment](#assignment)
