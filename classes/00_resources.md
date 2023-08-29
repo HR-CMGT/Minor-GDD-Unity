@@ -33,7 +33,7 @@
 
 
 ## Tutorials
-- [Tutorials](0_tutorials.md)
+- [Tutorials](00_tutorials.md)
 
 ## Game development news
 - [Game From Scratch (yt)](https://gamefromscratch.com/)
