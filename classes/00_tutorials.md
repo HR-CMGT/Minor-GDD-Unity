@@ -18,6 +18,9 @@ Beginners
 - [Learn C# BASICS in 10 MINUTES! - Code Monkey](https://www.youtube.com/watch?v=IFayQioG71A)
 - [Learn Unity in 17 MINUTES! (2023 UPDATED) - Code Monkey](https://www.youtube.com/watch?v=E6A4WvsDeLE)
 
+Intermediate
+- [Catlike Coding Tutorials (intermediate/advanced)](https://catlikecoding.com/unity/tutorials/)
+
 Advanced
 - [Game Programming Patterns](https://gameprogrammingpatterns.com)
 - [SOLID coding principles in Unity (YT Playlist - Jason Weimann)](https://www.youtube.com/watch?v=Eyr7_l5NMds&list=PLB5_EOMkLx_WjcjrsGUXq9wpTib3NCuqg&pp=iAQB)
