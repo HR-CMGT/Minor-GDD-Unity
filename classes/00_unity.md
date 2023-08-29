@@ -386,6 +386,8 @@ Remember that when you are in Play mode, you will lose all changes that you made
 ### Separate Graphics From Physics And Logic
 Don't keep SpriteRenderer/MeshRenderer on the top object. <br> Make a child object and put the graphics there, including the Animator component. <br> Keep Rigidbody on the top object, Colliders can either be on the top object or on (multiple) child object(s).
 
+![](../img/unitytips/separategraphics.png)
+
 ### Don't do math, do Mathf
 Instead of trying to code your own math, take a look at what Unity's own MathF library has to offer: [Unity's MathF script reference](https://docs.unity3d.com/ScriptReference/Mathf.html)
 <br> Same goes for calculating positions, rotations, angles etc., use the functions available to you in [Vector2](https://docs.unity3d.com/ScriptReference/Vector2.html)/[Vector3](https://docs.unity3d.com/ScriptReference/Vector3.html), [Transform](https://docs.unity3d.com/ScriptReference/Transform.html) and [Quaternion](https://docs.unity3d.com/ScriptReference/Quaternion.html)
