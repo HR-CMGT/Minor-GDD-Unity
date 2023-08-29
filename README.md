@@ -26,7 +26,7 @@ During this minor we're making games with [Unity](https://unity.com/).
 | 1.7 | **Block Prototyping** 
 |  | <!-- [Week 7 Material](./classes/07_blockprototyping.md) --> Week 7 Material
 | 1.8 | n/a
-| 1.9 | **Problem Solving**: <br/>HTRTFM, Using Unity Learn, Package Manager, Overview of useful Unity components, Script Reference, Tutorials second, Separate problems into small projects
+| 1.9 | **Problem Solving**: <br/>Profiler, HTRTFM, Using Unity Learn, Package Manager, Overview of useful Unity components, Script Reference > Tutorials, Separate problems into small projects
 |  | <!--  [Week 9 Material](./classes/09_problemsolving.md) --> Week 9 Material
 | 1.10 | **Game Dev Architecture 2**: Databases and other ways to store data, Refactoring.
 |  | <!--  [Week 10 Material](./classes/10_architecture2.md) --> Week 10 Material
