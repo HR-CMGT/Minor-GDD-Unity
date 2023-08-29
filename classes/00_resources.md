@@ -4,8 +4,9 @@
 ### Unity
 - [Our code snippets](00_codesnippets.md)
 - [Open Source Unity Package Registry](https://openupm.com/)
+- [Unity Asset Store](https://assetstore.unity.com/)
 - [Catlike Coding Tutorials (intermediate/advanced)](https://catlikecoding.com/unity/tutorials/)
-- [Complete Projects (Github - proyecto26)](https://github.com/proyecto26/awesome-unity)
+- [Complete Unity Projects (Github - proyecto26)](https://github.com/proyecto26/awesome-unity)
 
 ### General game dev (including unity)
 - [Github Unity Awesome list](https://github.com/RyanNielson/awesome-unity)
