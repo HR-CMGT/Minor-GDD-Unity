@@ -58,6 +58,11 @@ Version Control
 - [Jason Weimann full project tutorial](https://www.youtube.com/watch?v=OR0e-1UBEOU)
 - [Nodulus (Github)](https://github.com/Hyperparticle/nodulus)
 
+## Google Play Publishing Process
+- Read the official [Android Environment Setup](https://docs.unity3d.com/Manual/android-sdksetup.html) manual
+- Read the official [Building and delivering for Android](https://docs.unity3d.com/Manual/android-building-and-delivering.html) manual
+- YT tutorial walking through Google Play Console: [How To Publish An App To The Google Play Console | Step By Step | 2023 Updated](https://www.youtube.com/watch?v=295bzuj02BI)
+
 
 ## Basics 1 Tutorials
 - [Rigidbody 2D - Official Unity Tutorial](https://www.youtube.com/watch?v=rq6c2B_socs)
