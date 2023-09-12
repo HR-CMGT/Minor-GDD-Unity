@@ -17,7 +17,7 @@ During this minor we're making games with [Unity](https://unity.com/).
 | 1.2 | **Basics 2 Communication**: <br/>*GameObject Identification*: Collision/Trigger, Tags, GetComponent, Find GameObjects <br/>*Collections*: List/Array/Dictionary/ScriptableObject <br/>*Timers and Events*: Quick Timer in Update, Coroutines, UnityEvents & Listeners <br/>*Tips & Best Practices* <br/>*Google Play Publishing process*
 |  | [Week 2 Material](./classes/02_basics2.md)
 | 1.3 | **UI, Saving**: <br/>Screen Space, World Space, Canvas, Resizing, Anchors, Pivots, UI Components. Persistence, Saving/Loading, JSONUtility
-|  | <!--[Week 3 Material](./classes/03_UI.md) --> Week 3 Material
+|  | [Week 3 Material](./classes/03_UI.md)
 | 1.4 | **Game Dev Architecture 1**: <br/>Prefab as API, Game Programming Patterns, SOLID principles.
 |  | <!-- [Week 4 Material](./classes/04_architecture1.md) --> Week 4 Material
 | 1.5 | **Game Jam Code**: <br/>AnimationClips, Player Feedback/VFX, iTween/DOTween, How To Debug Quickly
