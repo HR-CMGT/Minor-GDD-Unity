@@ -30,3 +30,5 @@ During this minor we're making games with [Unity](https://unity.com/).
 |  | <!--  [Week 9 Material](./classes/09_problemsolving.md) --> Week 9 Material
 | 1.10 | **Game Dev Architecture 2**: Databases and other ways to store data, Refactoring.
 |  | <!--  [Week 10 Material](./classes/10_architecture2.md) --> Week 10 Material
+| 2.1 | **Game Dev Architecture 2**: Databases and other ways to store data, Refactoring.
+|  | <!--  [Week 10 Material](./classes/10_architecture2.md) --> Week 10 Material
