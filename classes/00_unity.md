@@ -449,7 +449,7 @@ At least make sure that the *parent* objects have a uniform scale of 1 (Vector3.
 ### Don't use GameObject.Find
 Whenever you spawn something, keep it in a list!
 ```csharp
-public List<Enemy> spawnedEnemies;
+public List<EnemyScript> spawnedEnemies;
 
 public void SpawnEnemy()
 {
