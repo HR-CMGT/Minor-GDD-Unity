@@ -24,23 +24,30 @@ During this minor we're making games with [Unity](https://unity.com/).
 | 1.5 | **Game Jam Code** <br/> *AnimationClips, Player Feedback/VFX, iTween/DOTween, How To Debug Quickly*
 |  | <center> [Week 1.5 Material](./classes/05_08_gamejam.md)
 | 1.6 | `{ no class } Final Presentations 2D Project`
+|
 | 1.7 | **Block Prototyping (3D)** <br/> *3D Navigation, ProBuilder, prefabs & prototyping assets*
 |  | <center> [Week 1.7 Material](./classes/07_blockprototyping.md)
 | 1.8 | `{ no class } Blocktober Demo`
+|
 | 1.9 | **Problem Solving** <br/> *Profiler, HTRTFM, Using Unity Learn, Package Manager, Overview of useful Unity components, Script Reference > Tutorials, Separate problems into small projects*
 |  | <center> [Week 1.9 Material](./classes/09_problemsolving.md)
 | 1.10 | **Game Architecture 2** <br/> *Databases and other ways to store data, Refactoring.*
 |  | <center> [Week 1.10 Material](./classes/10_architecture2.md)
 |  | <center> ========== 3D Project ========== </center>
+|
 | 2.1 & 2.2 | **Materials, Shaders, 3D Animation** <br/> *Description*
 |  | <center> [Week 2.1 & 2.2 Material]()
 | 2.3 | ` { no class } Concept Presentations 3D Project `
+|
 | 2.4 | **3D Animation in Unity** <br/> *Description*
 |  | <center> [Week 2.4 Material]()
 | 2.5 | `{ no class }`
+|
 | 2.6 | **FX in Unity** <br/> *Description*
 |  | <center> [Week 2.6 Material]()
 | 2.7 | **Audio in Unity** <br/> *Description*
 |  | <center> [Week 2.7 Material]()
 | 2.8 | `{ no class }`
+|
 | 2.9 | `{ no class } Final Presentations 3D Project`
+|
