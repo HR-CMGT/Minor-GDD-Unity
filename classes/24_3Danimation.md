@@ -1,7 +1,7 @@
 # 3D Animation
 
-[Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics1) -
-[Project Files](../projectfiles/basics1.unitypackage) -
+[~~Presentation~~]() -
+[~~Project Files~~]() -
 [Resources](00_resources.md) -
 [Tutorials](00_tutorials.md) -
 [Assignment](#assignment)
@@ -21,6 +21,7 @@ No assignment for this class.
 
 > ## Topics & Explanation
 
+## Animation in Unity 3D
 ### Timeline (use to preview animations in context, with particles, trail renderers etc)
 ### Animator
 ### Animation Clips: split the Jump animation in 3 clips: "startJump", "jumpLoop", "land"

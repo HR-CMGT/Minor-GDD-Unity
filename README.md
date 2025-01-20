@@ -12,7 +12,7 @@ During this minor we're making games with [Unity](https://unity.com/).
 
 | Week | Topic(s) 
 |------|---------
-|  | ========== 2D Project ========== 
+|  | <div align="center"> ==================== 2D Project ==================== </div>
 | 1.1 | **Introduction Unity2D (workshop for all)** <br/> *Course Intro, RigidBody2D, Script Lifecycle, Sprites, Components, Referencing Objects, Prefabs, Creating/Destroying GameObjects, Camera (Cinemachine), Sounds.*
 |  | <div align="center">[Week 1.1 Material](./classes/01_basics1.md)</div>
 | 1.2 | **Object Communication** <br/> *Collision/Trigger, Tags, GetComponent, Find GameObjects Collections: List/Array/Dictionary/ScriptableObject, Timers and Events: Quick Timer in Update, Coroutines, UnityEvents & Listeners, Tips & Best Practices*
@@ -33,10 +33,10 @@ During this minor we're making games with [Unity](https://unity.com/).
 |  | <div align="center">[Week 1.9 Material](./classes/09_problemsolving.md)</div>
 | 1.10 | **Game Architecture 2** <br/> *Databases and other ways to store data, Refactoring.*
 |  | <div align="center">[Week 1.10 Material](./classes/10_architecture2.md)</div>
-|  | ========== 3D Project ========== 
+|  | <div align="center"> ==================== 3D Project ==================== </div>
 | | 
-| 2.1 & 2.2 | **Materials, Shaders, 3D Animation** <br/> *Description*
-|  | <div align="center">[Week 2.1 & 2.2 Material]()</div>
+| 2.1 & 2.2 | **Materials, Shaders** <br/> *Description*
+|  | <div align="center">[~~Week 2.1 & 2.2 Material~~]()</div>
 | 2.3 | ` { no class } Concept Presentations 3D Project `
 | | 
 | 2.4 | **3D Animation in Unity** <br/> *Description*
@@ -44,9 +44,9 @@ During this minor we're making games with [Unity](https://unity.com/).
 | 2.5 | `{ no class }`
 | | 
 | 2.6 | **FX in Unity** <br/> *Description*
-|  | <div align="center">[Week 2.6 Material]()</div>
+|  | <div align="center">[Week 2.6 Material](./classes/26_VFX.md)</div>
 | 2.7 | **Audio in Unity** <br/> *Description*
-|  | <div align="center">[Week 2.7 Material]()</div>
+|  | <div align="center">[Week 2.7 Material](./classes/27_audio.md)</div>
 | 2.8 | `{ no class }`
 | | 
 | 2.9 | `{ no class } Final Presentations 3D Project`
