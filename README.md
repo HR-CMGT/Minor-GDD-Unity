@@ -36,7 +36,7 @@ During this minor we're making games with [Unity](https://unity.com/).
 |  | <div align="center"> ==================== 3D Project ==================== </div>
 | | 
 | 2.1 & 2.2 | **Materials, Shaders** <br/> *Description*
-|  | <div align="center">[~~Week 2.1 & 2.2 Material~~]()</div>
+|  | <div align="center">[Week 2.1 & 2.2 Material](./classes/10_architecture2.md)</div>
 | 2.3 | ` { no class } Concept Presentations 3D Project `
 | | 
 | 2.4 | **3D Animation in Unity** <br/> *Description*
