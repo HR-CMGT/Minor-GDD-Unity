@@ -40,7 +40,7 @@ During this minor we're making games with [Unity](https://unity.com/).
 | 2.3 | ` { no class } Concept Presentations 3D Project `
 | | 
 | 2.4 | **3D Animation in Unity** <br/> *Description*
-|  | <div align="center">[Week 2.4 Material]()</div>
+|  | <div align="center">[Week 2.4 Material](./classes/24_3Danimation.md)</div>
 | 2.5 | `{ no class }`
 | | 
 | 2.6 | **FX in Unity** <br/> *Description*
