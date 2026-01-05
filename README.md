@@ -35,19 +35,18 @@ During this minor we're making games with [Unity](https://unity.com/).
 |  | <div align="center">[Week 1.10 Material](./classes/10_architecture2.md)</div>
 |  | <div align="center"> ==================== 3D Project ==================== </div>
 | | 
-| 2.1 & 2.2 | **Materials, Shaders** <br/> *Description*
+| 2.1 & 2.2 | **Materials, Shaders** <br/> *-*
 |  | <div align="center">[Week 2.1 & 2.2 Material](./classes/10_architecture2.md)</div>
 | 2.3 | ` { no class } Concept Presentations 3D Project `
 | | 
-| 2.4 | **3D Animation in Unity** <br/> *Description*
+| 2.4 | **3D Animation in Unity** <br/> *-*
 |  | <div align="center">[Week 2.4 Material](./classes/24_3Danimation.md)</div>
 | 2.5 | `{ no class }`
 | | 
-| 2.6 | **FX in Unity** <br/> *Description*
+| 2.6 | **FX in Unity** <br/> *-*
 |  | <div align="center">[Week 2.6 Material](./classes/26_VFX.md)</div>
-| 2.7 | **Audio in Unity** <br/> *Description*
+| 2.7 | **Audio in Unity** <br/> *-*
 |  | <div align="center">[Week 2.7 Material](./classes/27_audio.md)</div>
 | 2.8 | `{ no class }`
 | | 
 | 2.9 | `{ no class } Final Presentations 3D Project`
-| | 
