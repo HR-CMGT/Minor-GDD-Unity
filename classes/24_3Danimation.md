@@ -1,13 +1,13 @@
 # 3D Animation
 
-[~~Presentation~~]() -
+[Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_animation) -
 [~~Project Files~~]() -
 [Resources](00_resources.md) -
 [Tutorials](00_tutorials.md) -
 [Assignment](#assignment)
 
 ## Presentation
-No presentation available for this class.
+This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_animation)
 
 ## Resources
 - Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
