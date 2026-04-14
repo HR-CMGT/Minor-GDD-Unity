@@ -110,3 +110,12 @@
 - [] TODO: Put on repository with UnityPackage as release
 - [x] TODO: Action sequencer? (in state graph)
 - [] 
+
+
+Dev Topics Requests
+
+- Switching UI Menus in Canvas
+- Folder structure, messy code
+- Reading files (spreadsheets, data)
+- Framerate independence, LERP
+- ScriptableObjects (presets, settings, gamedata, events)

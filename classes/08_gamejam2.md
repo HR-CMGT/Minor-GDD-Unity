@@ -1,4 +1,4 @@
-# Game Jam Coding
+# Game Jam Coding 2
 
 [Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics1) -
 [Project Files](../projectfiles/basics1.unitypackage) -

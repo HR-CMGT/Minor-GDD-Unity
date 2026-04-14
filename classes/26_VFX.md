@@ -23,7 +23,9 @@ No assignment for this class.
 
 ## Visual Effects
 ### Particle System
+- Important settings
 ### Sprite Sheet particle animation
+- ![VFX](../img/vfx/img/vfx/spritesheetParticles.gif)
 ### 3D Particle Animation
 ### Kenney Particle Pack examples
 ### DOTween

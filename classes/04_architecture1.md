@@ -1,12 +1,11 @@
 # Game Dev Architecture 1
 
-
-[Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_uisaving) -
+[Presentation]() -
 [Resources](00_resources.md) -
 [Tutorials](00_tutorials.md)
 
 ## Presentation
-This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_uisaving)
+This week's [presentation can be found here]()
 
 ## Resources
 - Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
@@ -16,14 +15,21 @@ This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD
 ## Assignment
 No assignment for this week, apply these topics to your own group project.
 
-<br><br><br>
 
 > ## Topics & Explanation
+> - Recommended Resources
+> - Organising your project
+> - Organising your scenes
+> - Prefab as “API”
+> - Game Programming Patterns
 
+## Folder structure
+  ### Typical folder structure
+  ![](../img/general/unityfolderstructure.png)
+  
 ## Scene hierarchy
-  ### Typical scene structure
+  ### Multiple scenes
   > Note: Unity can load scenes additively. This allows for different scene structures. Read more about this here: [Unity Manual: Set Up Multiple Scenes](https://docs.unity3d.com/Manual/setupmultiplescenes.html)
-
 
   <details>
   <summary> Multiple Scenes [Fold Out]</summary>
@@ -31,15 +37,24 @@ No assignment for this week, apply these topics to your own group project.
   ### Multiple Scenes In Hierarchy
 
   In the Hierarchy view, you can add multiple scenes to work in simultaneously.
-
+  
   > This means that, for example, you can keep a persistent scene and load other scenes on top of it. You can use this to have scripts with persistent data and references, like Managers/Singletons, without worrying that these references break.
 
+![Multiple Scenes](../img/architecture/multiplescenes.png)
 
   ### DontDestroyOnLoad
+  [DontDestroyOnLoad (Unity api reference)](https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Object.DontDestroyOnLoad.html)
+  ``` csharp
 
-  ### Managers, Canvas, Persistent data
 
-![Multiple Scenes](../img/architecture/multiplescenes.png)
+  void Awake()
+    {
+      // make this object (and its components) persistent even after switching scenes
+      DontDestroyOnLoad(this.gameObject);
+    }
+
+
+  ```
 
   </details>
 
@@ -63,14 +78,25 @@ public void SpawnEnemy()
     spawnedEnemies.Add(newEnemy);
 }
 ```
-[ Screenshot of EnemyScript list in Unity ]
 
-### GameProgrammingPatterns
+### Design Patterns In Game Dev
+
+Unity course on Design Patterns:
+	- https://learn.unity.com/course/design-patterns-unity-6
 #### Observer/Factory
-- Observer: Events & Listeners, 
-- Factory: Spawned object has reference to spawnscript, spawnscript keeps list of spawned objects.
-- Command: queueing? buffers
-- 
+- **Singleton**:
+  - Example: Always accessible GameState Manager class for switching game modes
+  - YT Tutorial: 
+    - [Game Dev Beginner - Singletons in Unity (done right)](https://www.youtube.com/watch?v=yhlyoQ2F-NM)
+  - More information: 
+    - https://gameprogrammingpatterns.com/singleton.html
+  
+- **Observer**: 
+	- Example: Achievement system
+- YT Tutorial:
+	- [Jason Weimann - Observer Pattern](https://youtu.be/Yy7Dt2usGy0)
+- More information: 
+    - https://gameprogrammingpatterns.com/observer.html
 
 ### Database and other ways to store data
 - ScriptableObjects, classes, structs.
