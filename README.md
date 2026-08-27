@@ -19,9 +19,9 @@ This curriculum guides students from foundational 2D game prototyping to advance
 
 ## Software Requirements & Standards
 
-- **Unity Version:** Unity 2022.3 LTS
-- **Render Pipeline:** Universal Render Pipeline (URP)
-- **Code Editor:** Visual Studio 2022 / Visual Studio Code / JetBrains Rider
+- **Target Engine:** Unity 6 (6000.x) with Universal Render Pipeline (URP)
+- **Primary IDE:** JetBrains Rider / Visual Studio 2022
+- **Language:** C# (.NET Standard)
 - **Version Control:** Git + Git LFS (Large File Storage)
 
 ---

@@ -334,7 +334,7 @@
     <div class="header">
         <div class="title-group">
             <h1>Lesson 1.1 Curriculum Comparison</h1>
-            <p>Minor Game Design & Development - Unity 2022.3 LTS</p>
+            <p>Minor Game Design & Development - Unity 6 (6000.x)</p>
         </div>
         <div class="toggle-container">
             <span class="toggle-label active-old" id="labelOld" onclick="setMode(false)">OLD WAY</span>
@@ -650,7 +650,7 @@
             for (let i = 0; i < totalSlides; i++) {
                 const badge = document.getElementById(`badge-${i}`);
                 if (badge) {
-                    badge.textContent = isNewMode ? 'New Way (2022.3 LTS)' : 'Old Way (Original)';
+                    badge.textContent = isNewMode ? 'New Way (Unity 6 / 6000.x)' : 'Old Way (Original)';
                     badge.className = `badge ${isNewMode ? 'badge-new' : 'badge-old'}`;
                 }
             }

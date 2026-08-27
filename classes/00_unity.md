@@ -94,8 +94,9 @@ if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
 ### 3 Methods to Move a Rigidbody:
 
 ```csharp
-// 1. Direct Velocity - Best for arcade platformers, running, and jumping
-rb.velocity = new Vector3(inputX * speed, rb.velocity.y, inputZ * speed);
+// 1. Direct Linear Velocity (Unity 6 Standard) - Best for arcade platformers, running, and jumping
+rb.linearVelocity = new Vector3(inputX * speed, rb.linearVelocity.y, inputZ * speed); // 3D
+rb2d.linearVelocity = new Vector2(inputX * speed, rb2d.linearVelocity.y);              // 2D
 
 // 2. MovePosition (Kinematic / Physics-Interpolated) - Moves object with collision detection
 Vector3 targetPosition = rb.position + movementVector * Time.fixedDeltaTime;

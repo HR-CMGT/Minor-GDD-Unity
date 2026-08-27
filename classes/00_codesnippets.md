@@ -102,7 +102,8 @@ public class Movement2D : MonoBehaviour
     {
         if (value.isPressed && isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            // Unity 6 linearVelocity standard (replaces legacy rb.velocity)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
     }
 
@@ -113,7 +114,8 @@ public class Movement2D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(inputDirection.x * speed, rb.velocity.y);
+        // Unity 6 linearVelocity applied in FixedUpdate
+        rb.linearVelocity = new Vector2(inputDirection.x * speed, rb.linearVelocity.y);
     }
 }
 ```
