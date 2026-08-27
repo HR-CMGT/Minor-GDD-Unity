@@ -1,86 +1,171 @@
-# Block Prototyping
+# Lesson 1.7: 3D Block Prototyping & Greyboxing
 
-[Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_blockprototyping) -
-[Project Files](../projectfiles/basics1.unitypackage) -
-[Resources](00_resources.md) -
-[Tutorials](00_tutorials.md) -
-[Assignment](#assignment)
+In this lesson, you transition from 2D to 3D. You learn how to rapidly prototype levels using **ProBuilder**, work accurately with snapping, and implement a camera-relative 3D character controller.
 
-## Presentation
-No presentation available for this class.
+---
 
-## Resources
-- Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
-- A list of [external tutorials](00_tutorials.md) to help you with specific topics, from learning the basics to creating a certain effect.
-- Get graphics, sounds, code and other free stuff from the [resources](00_resources.md) page
+## 🎯 Learning Objectives
+1. Rapidly greybox and iterate 3D levels using **ProBuilder**.
+2. Master **Snapping techniques** (Grid Snap & Vertex Snap) for modular assembly.
+3. Implement a 3D character controller using the `CharacterController` component.
+4. Set up AI navigation using **NavMesh**.
 
-## Assignment
-No assignment for this class.
+---
 
-<br><br><br>
+## 🧱 1. Level Greyboxing with ProBuilder
 
+ProBuilder provides direct in-editor 3D modeling inside Unity.
 
-        
->## 🛠️ Quick Level Design
-### Unity 3D editor tools
-#### Shortcuts/Hotkeys
-[Unity Manual for keyboard shortcuts]
-Hotkeys for Orbit, View Tool (drag), FPV (wasd).
-Rect tool for easy scaling from custom pivot.
-Grid Snap
-Vertex Snap
-Size Indicator
+### Opening ProBuilder:
+1. Go to: `Tools > ProBuilder > ProBuilder Window`.
+2. Right-click the window to toggle between icon and text modes.
 
-#### Using prefabs
-[Tutorial about using prefabs]
-Prefab editing, reusable, modular, lego, 
+### 4 Editing Modes of ProBuilder:
+- **Object Mode:** Move, rotate, or scale the entire ProBuilder shape.
+- **Vertex Mode:** Manipulate individual vertices (useful for ramps and slopes).
+- **Edge Mode:** Manipulate or split edges (useful for chamfers and bevels).
+- **Face Mode:** Select faces to **Extrude** (`Shift + Drag`), delete, or apply materials.
 
-#### ProBuilder
-[Tutorial about using ProBuilder]
-Draw blueprint, load as texture (plane, XYZ scale = resolution/100), draw vertices and trace drawing (hold CTRL for grid snapping).
+### Essential ProBuilder Shortcuts:
+- **Extrude Face:** Hold `Shift` while dragging the Move Gizmo on a selected face to create corridors, rooms, or pillars instantly.
+- **Merge Objects:** Select multiple shapes and click `Merge Objects` in the toolbar.
 
-#### PolyBrush
-[Tutorial about using PolyBrush]
-Spawn and scatter prefabs for quick object placement.
-However, use Terrain tools for organic environments.
+---
 
-#### Terrain
-[Tutorial about using Terrain]
-Terrain.
+## 📏 2. Level Design Metrics & Snapping
 
-### Procedural?
-No. Stahp.
+### Standard Design Metrics (1 Unity Unit = 1 Meter):
+- **Doorways:** $1.2\text{ m}$ wide, $2.2\text{ m}$ high.
+- **Corridors:** Minimum $3.0\text{ m}$ wide for clean third-person camera clearance.
+- **Character Jump Height:** $1.5\text{ m}$ to $2.0\text{ m}$.
+- **Stair Riser:** $0.2\text{ m}$ step height.
 
->## 🎨 Quick Graphics
-### iTween/DOTween
-[Tutorial about using DOTween]
-Tweening library = animate objects and values with pre-written code.
+### Snapping Shortcuts:
+- **Grid Snapping:** Hold `Ctrl` while moving to snap to grid intervals (default $1.0\text{ m}$ or $0.5\text{ m}$).
+- **Vertex Snapping:** Hold `V`, hover over a source vertex, and drag it directly to snap onto another object's vertex without seam gaps.
 
-### Cinemachine
-[Tutorial about using Cinemachine in 3D]
-Camera go whoosh
+---
 
-### Timeline
-[Tutorial about using Timeline]
-Cutscenes go whoosh
+## 🏃 3. 3D Character Controller Script
 
-### AnimationClip (record keyframes)
-[Tutorial about quickly animating objects in Unity]
-[Unity Manual for AnimationClips]
-GameObjects go whoosh
+For prototyping, prefer `CharacterController` over `Rigidbody 3D` to avoid unwanted bouncing or clipping on seams.
 
-### TrailRenderer
-[Tutorial about using TrailRenderer]
-[Unity Manual for TrailRenderer]
-whoosh goes whoosh
+```csharp
+using UnityEngine;
+using UnityEngine.InputSystem;
 
->## 🤖 Quick Behaviour
-### NavMesh (AI Pathfinding)
-[Tutorial about using NavMesh]
-[Unity Manual for NavMesh]
-3D Pathfinding on specific surfaces
+[RequireComponent(typeof(CharacterController))]
+public class PlayerController3D : MonoBehaviour
+{
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 7f;
+    [SerializeField] private float sprintMultiplier = 1.5f;
+    [SerializeField] private float jumpHeight = 1.8f;
+    [SerializeField] private float gravity = -20f;
 
-### Visual Scripting Graph
-[Tutorial about using VSG]
-[Unity Manual for VSG]
-Designer-friendly behaviour coding
+    [Header("Camera Reference")]
+    [SerializeField] private Transform cameraTransform;
+
+    private CharacterController controller;
+    private Vector2 inputVector;
+    private float verticalVelocity;
+    private bool isSprinting;
+
+    private void Awake()
+    {
+        controller = GetComponent<CharacterController>();
+    }
+
+    public void OnMove(InputValue value) => inputVector = value.Get<Vector2>();
+    public void OnSprint(InputValue value) => isSprinting = value.isPressed;
+
+    public void OnJump(InputValue value)
+    {
+        if (value.isPressed && controller.isGrounded)
+        {
+            // Exact upward velocity formula for desired jump height: v = sqrt(2 * g * h)
+            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+    }
+
+    private void Update()
+    {
+        // 1. Calculate direction relative to camera
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        float currentSpeed = isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
+        Vector3 moveDirection = (forward * inputVector.y + right * inputVector.x) * currentSpeed;
+
+        // 2. Gravity handling
+        if (controller.isGrounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f; // Slight downward force to keep grounded
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
+        }
+
+        moveDirection.y = verticalVelocity;
+
+        // 3. Move controller
+        controller.Move(moveDirection * Time.deltaTime);
+
+        // 4. Rotate character towards movement direction
+        Vector3 horizontalMove = new Vector3(moveDirection.x, 0, moveDirection.z);
+        if (horizontalMove.sqrMagnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(horizontalMove);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 12f);
+        }
+    }
+}
+```
+
+---
+
+## 🤖 4. AI NavMesh Pathfinding Setup
+
+1. Mark all static floor and wall geometry as **Static** (or add `NavMeshSurface`).
+2. Open `Window > AI > Navigation` and click **Bake**.
+3. Create an enemy GameObject with a `NavMeshAgent` component.
+4. Attach a target follower script:
+
+```csharp
+using UnityEngine;
+using UnityEngine.AI;
+
+[RequireComponent(typeof(NavMeshAgent))]
+public class EnemyAI : MonoBehaviour
+{
+    [SerializeField] private Transform targetPlayer;
+    private NavMeshAgent agent;
+
+    private void Awake() => agent = GetComponent<NavMeshAgent>();
+
+    private void Update()
+    {
+        if (targetPlayer != null)
+        {
+            agent.SetDestination(targetPlayer.position);
+        }
+    }
+}
+```
+
+---
+
+## 🛠️ Hands-on Assignment (30 minutes)
+
+1. Open ProBuilder and spawn a `New Shape` (e.g., a 10x1x10 meter floor).
+2. Using Face Extrude and Vertex Snapping, build a greybox arena containing:
+   - An elevated platform with a ramp or stairs.
+   - A narrow walkway bridge.
+   - At least 2 cover pillars.
+3. Attach `PlayerController3D.cs` and test jump distances and traversal flow.
+4. Bake a NavMesh and have an enemy chase the player!

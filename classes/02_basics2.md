@@ -1,39 +1,144 @@
-# Basics 2
-[Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics2) -
-[Project Files](../projectfiles/basics2.unitypackage) -
-[Resources](00_resources.md) -
-[Tutorials](00_tutorials.md#basics-2-tutorials) -
-[Assignment](#assignment)
+# Lesson 1.2: Object Communication, Events & Data
 
-## Presentation
-This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics2)
+In this lesson, you learn how distinct scripts and objects communicate without turning your codebase into an unmanageable 'spaghetti' architecture. We cover C# Events, UnityEvents, Collections, and ScriptableObjects.
 
-## Resources
-- Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
-- A list of [external tutorials](00_tutorials.md#basics-2-tutorials) to help you with specific topics, from learning the basics to creating a certain effect.
-- Get graphics, sounds, code and other free stuff from the [resources](00_resources.md) page
+---
 
-## Assignment
-1. Create a new 2D project
-2. From Window->Package Manager, install **Input System** and **Cinemachine** <br/>(click "*Packages: In Project*" and change it to "*Packages: Unity Registry*")
-3. Download [basics2.unitypackage](../projectfiles/basics2.unitypackage)
-4. With the Unity editor open, open the **basics2.unitypackage** file
-5. In the folder Class2/1_ENDSCENE, open the **1_endscene.unity** scene file and press play
-6. In the folder Class2/0_STARTSCENE, open the **0_startscene.unity** scene file
-7. Finish the game! Use the [Presentation](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics2), [Unity Tips](00_unity.md) and [Tutorials](00_tutorials.md#basics-2-tutorials) to help you on your way. And feel free to look at Class2/1_ENDSCENE/1_endscene.unity to find out how to get there!
+## 🎯 Learning Objectives
+1. Know how and when to decouple scripts using **Events** (`System.Action` and `UnityEvent`).
+2. Store and share game data using **ScriptableObjects**.
+3. Work with dynamic lists (`List<T>`) and Dictionaries.
+4. Write clean timers and repetitive routines with **Coroutines**.
 
+---
 
-> ### What to do for the Start project:
-> - Configure the Goomba prefabs (use the _START prefabs) by dragging/selecting a EnemyStatsSO (scriptableobject) under "Enemy Settings File"
-> - Add several different Goomba prefabs (use the _START prefabs) to the EnemySpawner object
-> - Open EnemySpawner_Start.cs in a code editor and complete the script
-> #### Code to write (EnemySpawner_Start.cs)
-> 1. Edit a coroutine - https://docs.unity3d.com/Manual/Coroutines.html
-> 2. Grab a random item from a list - https://docs.unity3d.com/ScriptReference/Random.Range.html
-> 3. Add to a list - https://learn.unity.com/tutorial/lists-and-dictionaries
-> 4. Invoke a UnityEvent and pass a parameter - https://docs.unity3d.com/Manual/UnityEvents.html & https://docs.unity3d.com/ScriptReference/Events.UnityEvent_1.html
+## 🧭 Decision Tree: How Should Scripts Talk?
 
+```
+Question: Which script needs to send information to another script?
 
-### Tips:
-- Lot of difficult topics this week (Coroutines, prefabs, events, collections). But absolutely essential for game dev, even for quick prototyping. We've made a [Tutorials](00_tutorials.md) page to help you get through this.
-- Working with prefabs is very common but it can get tricky, definitely check our [Tutorials#Prefabs](00_tutorials.md#prefabs) to learn more about it
+├── 1. Exclusive direct relationship (Character owns 1 specific Weapon)?
+│   └── SOLUTION: Direct Reference -> [SerializeField] private Weapon currentWeapon;
+│
+├── 2. One event triggers multiple independent systems (Player dies -> UI, Audio, Spawner)?
+│   └── SOLUTION: C# Event / UnityEvent -> public event Action OnPlayerDied;
+│
+└── 3. Data needs to persist or be shared across prefabs/scenes (Enemy stats, Item definitions)?
+    └── SOLUTION: ScriptableObject -> [CreateAssetMenu] public class EnemyStatsSO : ScriptableObject
+```
+
+---
+
+## 📦 1. Data Decoupling with ScriptableObjects
+
+A `ScriptableObject` stores configuration data on disk as an asset, avoiding duplicate inspector parameters across 50 enemy prefabs.
+
+```csharp
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "NewEnemyStats", menuName = "GDD/Enemy Stats")]
+public class EnemyStatsSO : ScriptableObject
+{
+    [Header("Base Properties")]
+    public string enemyName = "Goomba";
+    public int maxHealth = 30;
+    public float movementSpeed = 3.5f;
+    public int damageOnTouch = 10;
+    public GameObject deathVfxPrefab;
+}
+```
+
+---
+
+## 🔄 2. Coroutines: Dynamic Enemy Spawner
+
+Create a spawner that spawns enemies periodically from a prefab list:
+
+```csharp
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class EnemySpawner : MonoBehaviour
+{
+    [Header("Configuration")]
+    [SerializeField] private List<GameObject> enemyPrefabs;
+    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private float spawnInterval = 2.5f;
+    [SerializeField] private int maxActiveEnemies = 10;
+
+    [Header("Events")]
+    [SerializeField] private UnityEvent<int> onEnemyCountChanged;
+
+    private readonly List<GameObject> activeEnemies = new();
+    private Coroutine spawnLoopCoroutine;
+
+    private void Start()
+    {
+        spawnLoopCoroutine = StartCoroutine(SpawnRoutine());
+    }
+
+    private IEnumerator SpawnRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(spawnInterval);
+
+            // Clean up destroyed enemies from the list
+            activeEnemies.RemoveAll(enemy => enemy == null);
+
+            if (activeEnemies.Count < maxActiveEnemies && enemyPrefabs.Count > 0 && spawnPoints.Length > 0)
+            {
+                SpawnRandomEnemy();
+            }
+        }
+    }
+
+    private void SpawnRandomEnemy()
+    {
+        // 1. Pick random prefab and spawn point
+        GameObject randomPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
+        Transform randomPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+
+        // 2. Instantiate enemy
+        GameObject newEnemy = Instantiate(randomPrefab, randomPoint.position, Quaternion.identity);
+        activeEnemies.Add(newEnemy);
+
+        // 3. Fire count update event
+        onEnemyCountChanged?.Invoke(activeEnemies.Count);
+    }
+
+    public void StopSpawning()
+    {
+        if (spawnLoopCoroutine != null)
+        {
+            StopCoroutine(spawnLoopCoroutine);
+            spawnLoopCoroutine = null;
+        }
+    }
+}
+```
+
+---
+
+## 🛠️ Step-by-Step Assignment
+
+### Step 1: Open Package & Start Scene
+1. Download and import [`basics2.unitypackage`](../projectfiles/basics2.unitypackage).
+2. Open `Class2/0_STARTSCENE/0_startscene.unity`.
+
+### Step 2: Create ScriptableObject Assets
+1. Right-click in Project View: `Create > GDD > Enemy Stats`.
+2. Create 2 assets: `Stats_FastGoomba` (Speed: 6, Health: 15) and `Stats_TankGoomba` (Speed: 2, Health: 100).
+3. Assign the stat assets to the corresponding enemy prefabs.
+
+### Step 3: Complete Enemy Spawner
+1. Open `EnemySpawner_Start.cs` and implement the `SpawnRoutine` coroutine.
+2. Add a UI Text element in the Canvas and hook it up to the `onEnemyCountChanged` event via Inspector.
+
+---
+
+## 🔍 Troubleshooting Checklist
+- **NullReferenceException when invoking Event:** Always use the null-conditional operator `?.Invoke()`.
+- **Coroutines freeze Unity:** Ensure there is a `yield return` statement inside your `while` loop, otherwise execution will block indefinitely.

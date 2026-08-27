@@ -1,114 +1,176 @@
-# Game Dev Architecture 1
+# Lesson 1.4: Game Architecture 1 – Decoupling & Prefab API
 
-[Presentation]() -
-[Resources](00_resources.md) -
-[Tutorials](00_tutorials.md)
+In this lesson, you learn how to apply software architecture patterns in Unity to prevent your codebase from turning into unmaintainable spaghetti as your project scales.
 
-## Presentation
-This week's [presentation can be found here]()
+---
 
-## Resources
-- Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
-- A list of [external tutorials](00_tutorials.md#ui--saving) to help you with specific topics, from learning the basics to creating a certain effect.
-- Get graphics, sounds, code and other free stuff from the [resources](00_resources.md) page
+## 🎯 Learning Objectives
+1. Master the **Prefab as an API** design pattern.
+2. Fully decouple game systems using **ScriptableObject Event Channels**.
+3. Understand the risks of the **Singleton** pattern and implement robust alternatives.
+4. Utilize **Multi-Scene Additive Loading** for persistent architecture.
 
-## Assignment
-No assignment for this week, apply these topics to your own group project.
+---
 
+## 🧱 1. Prefab as an API
 
-> ## Topics & Explanation
-> - Recommended Resources
-> - Organising your project
-> - Organising your scenes
-> - Prefab as “API”
-> - Game Programming Patterns
+A common beginner mistake is writing code where spawners or managers search for child components or mutate internal fields directly.
 
-## Folder structure
-  ### Typical folder structure
-  ![](../img/general/unityfolderstructure.png)
-  
-## Scene hierarchy
-  ### Multiple scenes
-  > Note: Unity can load scenes additively. This allows for different scene structures. Read more about this here: [Unity Manual: Set Up Multiple Scenes](https://docs.unity3d.com/Manual/setupmultiplescenes.html)
+### The Principle:
+A Prefab should function as a **Black Box**. The root script forms the public interface (the API). External systems interact only with the root API, never directly with internal child components.
 
-  <details>
-  <summary> Multiple Scenes [Fold Out]</summary>
+```
+[Enemy_Goblin Prefab]
+  ├── Root GameObject -> Contains: GoblinController.cs (THE API)
+  │                      [Public methods: Initialize(), TakeDamage(), Die()]
+  ├── Visuals (Child) -> MeshRenderer / SpriteRenderer, Animator
+  ├── Hitboxes (Child) -> Colliders
+  └── Audio (Child) -> AudioSource
+```
 
-  ### Multiple Scenes In Hierarchy
+### Production Example:
+```csharp
+using UnityEngine;
 
-  In the Hierarchy view, you can add multiple scenes to work in simultaneously.
-  
-  > This means that, for example, you can keep a persistent scene and load other scenes on top of it. You can use this to have scripts with persistent data and references, like Managers/Singletons, without worrying that these references break.
+public class GoblinController : MonoBehaviour
+{
+    [SerializeField] private Animator animator;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hitSound;
 
-![Multiple Scenes](../img/architecture/multiplescenes.png)
+    public int CurrentHealth { get; private set; } = 50;
 
-  ### DontDestroyOnLoad
-  [DontDestroyOnLoad (Unity api reference)](https://docs.unity3d.com/6000.3/Documentation/ScriptReference/Object.DontDestroyOnLoad.html)
-  ``` csharp
-
-
-  void Awake()
+    // THE PUBLIC API: External scripts call only this method
+    public void TakeDamage(int damage)
     {
-      // make this object (and its components) persistent even after switching scenes
-      DontDestroyOnLoad(this.gameObject);
+        CurrentHealth -= damage;
+        animator.SetTrigger("Hit");
+        audioSource.PlayOneShot(hitSound);
+
+        if (CurrentHealth <= 0)
+        {
+            Die();
+        }
     }
 
-
-  ```
-
-  </details>
-
-
-## Component-based programming
-### Component-based programming
-- GameObjects are the "physical" objects that exist in a scene. 
-- A GameObject can contain multiple components. 
-- A component can be a script, a graphics renderer, a physics tool, anything that generates a specific behaviour for an object.
-- [ screenshot of components on an object ]
-
-### Prefab as "API"
-- Main script as identifier, and as main reference point for other components/scripts
-
-```csharp
-public List<EnemyScript> spawnedEnemies;
-
-public void SpawnEnemy()
-{
-    EnemyScript newEnemy = Instantiate(enemyPrefab);
-    spawnedEnemies.Add(newEnemy);
+    private void Die()
+    {
+        animator.SetTrigger("Death");
+        Destroy(gameObject, 1.5f);
+    }
 }
 ```
 
-### Design Patterns In Game Dev
+---
 
-Unity course on Design Patterns:
-	- https://learn.unity.com/course/design-patterns-unity-6
-#### Observer/Factory
-- **Singleton**:
-  - Example: Always accessible GameState Manager class for switching game modes
-  - YT Tutorial: 
-    - [Game Dev Beginner - Singletons in Unity (done right)](https://www.youtube.com/watch?v=yhlyoQ2F-NM)
-  - More information: 
-    - https://gameprogrammingpatterns.com/singleton.html
-  
-- **Observer**: 
-	- Example: Achievement system
-- YT Tutorial:
-	- [Jason Weimann - Observer Pattern](https://youtu.be/Yy7Dt2usGy0)
-- More information: 
-    - https://gameprogrammingpatterns.com/observer.html
+## 📡 2. ScriptableObject Event Channels (Complete Decoupling)
 
-### Database and other ways to store data
-- ScriptableObjects, classes, structs.
-- JSONUtility, PlayerPrefs
-- 
+Instead of the Player maintaining direct references to the UI, Audio Manager, and Achievement Tracker, the Player broadcasts an event through a **ScriptableObject Event Channel**.
 
+```
+[Player Takes Damage] 
+         │
+         ▼
+[ScriptableObject: OnPlayerHealthChanged] ─── (Event Channel Asset)
+         ├───> [HealthBar UI Script] (Listens & updates slider)
+         ├───> [AudioManager Script] (Listens & plays hurt audio)
+         └───> [CameraShake Script]  (Listens & shakes camera)
+```
 
-### Separate Graphics
-- 
+### Event Channel Implementation:
 
-### Physics and Logic
-- 
+```csharp
+using System;
+using UnityEngine;
 
-### How to refactor?
-- 
+[CreateAssetMenu(fileName = "HealthEventChannel", menuName = "Architecture/Events/Health Channel")]
+public class HealthEventChannelSO : ScriptableObject
+{
+    private Action<int, int> onHealthChanged; // (currentHealth, maxHealth)
+
+    public void RaiseEvent(int currentHealth, int maxHealth)
+    {
+        onHealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
+    public void RegisterListener(Action<int, int> listener) => onHealthChanged += listener;
+    public void UnregisterListener(Action<int, int> listener) => onHealthChanged -= listener;
+}
+```
+
+---
+
+## ⚠️ 3. The Singleton Pattern: Tradeoffs & Clean Implementation
+
+A Singleton ensures only one instance of a class exists with a global access point (`GameManager.Instance`).
+
+### ❌ The Dangers of Singletons:
+- **Tight Coupling:** Any script calling `GameManager.Instance` becomes hard-wired to that concrete class.
+- **Scene Reload Issues:** Reloading scenes can cause duplicate `DontDestroyOnLoad` singletons or leave dead references.
+
+### ✅ Clean Generic Singleton Implementation:
+
+```csharp
+using UnityEngine;
+
+public abstract class PersistentSingleton<T> : MonoBehaviour where T : MonoBehaviour
+{
+    private static T instance;
+
+    public static T Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<T>();
+            }
+            return instance;
+        }
+    }
+
+    protected virtual void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this as T;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
+        {
+            // Prevent duplicate managers on scene reload
+            Destroy(gameObject);
+        }
+    }
+}
+```
+
+---
+
+## 🎬 4. Multi-Scene Additive Loading
+
+Instead of placing all managers and level art in one giant scene, split your project into:
+1. **Core Scene (`_PersistentCore`):** Contains persistent managers, event channels, and audio listeners.
+2. **Level Scenes (`Level_01`, `Level_02`):** Contain only geometry, gameplay objects, and visuals.
+
+```csharp
+using UnityEngine.SceneManagement;
+
+public static class SceneLoader
+{
+    public static void LoadLevelAdditive(string levelSceneName)
+    {
+        SceneManager.LoadSceneAsync(levelSceneName, LoadSceneMode.Additive);
+    }
+}
+```
+
+---
+
+## 🛠️ Hands-on Assignment (25 minutes)
+
+1. Create a `HealthEventChannelSO` ScriptableObject asset.
+2. Create a `Player` script that takes damage on spacebar and raises the channel event.
+3. Create two independent scripts in your scene: `SoundPlayer` and `ScreenFlasher`.
+4. Have both scripts subscribe to `HealthEventChannelSO` in `OnEnable()` and unsubscribe in `OnDisable()`.
+5. Verify sound and flash feedback without the `Player` script holding any reference to Audio or Graphics!

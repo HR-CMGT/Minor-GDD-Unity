@@ -1,42 +1,51 @@
-# Resources
+# GDD Resources & Asset Catalog
 
-## Scripts / Projects
-### Unity
-- [Our code snippets](00_codesnippets.md)
-- [Open Source Unity Package Registry](https://openupm.com/)
-- [Unity Asset Store](https://assetstore.unity.com/)
-- [Catlike Coding Tutorials (intermediate/advanced)](https://catlikecoding.com/unity/tutorials/)
-- [Complete Unity Projects (Github - proyecto26)](https://github.com/proyecto26/awesome-unity)
+A curated collection of free, high-quality assets, tools, open-source repositories, and software for game development in Unity.
 
-### General game dev (including unity)
-- [Github Unity Awesome list](https://github.com/RyanNielson/awesome-unity)
-- [Open Source Game Clones](https://osgameclones.com/)
-- [Game Programming Patterns](https://gameprogrammingpatterns.com/)
+---
 
-## Graphics
-### 2D
-- [Kenney.nl Free Assets](https://kenney.nl/assets)
-- [Freepik.com Graphics](https://www.freepik.com/)
-- [Noun Project (Icons, account required)]()
-- [Open ClipArt](https://openclipart.org/)
-- [Spritesheets from retro games](https://www.spriters-resource.com/)
-### 3D
-- [Textures for 3D](https://polyhaven.com/textures)
-- [Textures for 3D from retro games](https://www.textures-resource.com/)
-- [3D Character models and animations (Mixamo, Adobe ID required)](https://www.mixamo.com/)
-- [3D Models: Polyhaven](https://polyhaven.com/models)
-- [3D Models: Sketchfab CC0](https://sketchfab.com/3d-models?date=week&features=downloadable&licenses=7c23a1ba438d4306920229c12afcb5f9&licenses=72eb2b1960364637901eacce19283624&sort_by=-likeCount)
+## 🎮 2D Graphics & Sprites
 
-## Sounds
-- [Generate 8-bit sounds (SFXR)](https://sfxr.me/)
-- [Free music creation tool (Bosca Ceoil)](https://terrycavanagh.itch.io/bosca-ceoil)
-- [Free Sounds (account required)](https://freesound.org/)
-- [Free audio editing (Audacity)](https://www.audacityteam.org/)
+- [Kenney.nl](https://kenney.nl/assets) - Thousands of free CC0 2D sprites, UI packs, audio, and tiles.
+- [OpenGameArt.org](https://opengameart.org/) - Large community database of free 2D game assets.
+- [Itch.io Game Assets (Free)](https://itch.io/game-assets/free) - Free pixel art, icons, tilesets, and UI elements.
+- [The Spriters Resource](https://www.spriters-resource.com/) - Spritesheets from retro games for reference and study.
+- [Lospec](https://lospec.com/) - Pixel art tutorials, color palettes, and tools.
+- [The Noun Project](https://thenounproject.com/) - Vector icons for UI prototyping.
 
-## Tutorials
-- [Tutorials](00_tutorials.md)
+---
 
-## Game development news
-- [Game From Scratch (yt)](https://gamefromscratch.com/)
-- [Game Developer](https://www.gamedeveloper.com/)
-- [80.lv](https://80.lv/)
+## 🧊 3D Models & PBR Textures
+
+- [Poly Haven](https://polyhaven.com/) - 100% free CC0 3D models, HDRIs, and PBR materials (up to 8K).
+- [Sketchfab (CC0 / Downloadable)](https://sketchfab.com/3d-models?features=downloadable&licenses=7c23a1ba438d4306920229c12afcb5f9) - Professional-grade downloadable 3D assets.
+- [Mixamo (Adobe)](https://www.mixamo.com/) - Free rigged 3D humanoids and hundreds of mocap animation clips.
+- [Quixel Megascans](https://quixel.com/megascans) - High-resolution 3D scans and photoreal textures.
+- [AmbientCG](https://ambientcg.com/) - Extensive collection of CC0 PBR textures (Albedo, Normal, Roughness, AO).
+
+---
+
+## 🔊 Audio & Sound FX
+
+- [Freesound.org](https://freesound.org/) - Extensive database of sound effects under Creative Commons licenses.
+- [sfxr.me (jsfxr)](https://sfxr.me/) - 8-bit retro sound generator in your browser.
+- [Sonniss GDC Audio Archives](https://sonniss.com/gameaudioarchive) - Commercial-grade audio packs released during GDC.
+- [Incompetech (Kevin MacLeod)](https://incompetech.com/music/royalty-free/music.html) - Royalty-free background music.
+- [Audacity](https://www.audacityteam.org/) - Free, open-source audio editor and recorder.
+
+---
+
+## 🛠️ Unity Tools & Open Source Packages
+
+- [OpenUPM](https://openupm.com/) - Open-source package registry for Unity (UniTask, UniRx, NaughtyAttributes).
+- [DOTween (Demigiant)](http://dotween.demigiant.com/) - The industry standard for tweening transforms, UI, and variables.
+- [Awesome Unity (GitHub)](https://github.com/RyanNielson/awesome-unity) - Curated list of top Unity libraries and tools.
+- [Unity Particle Pack](https://assetstore.unity.com/packages/vfx/particles/particle-pack-127325) - Free official particle library from Unity.
+
+---
+
+## 📖 Game Architecture & Game Design Theory
+
+- [Game Programming Patterns (Robert Nystrom)](https://gameprogrammingpatterns.com/) - Free online book on software architecture in game development.
+- [Game Developer](https://www.gamedeveloper.com/) - In-depth post-mortems and game design essays.
+- [Game Maker's Toolkit (Mark Brown)](https://www.youtube.com/@GMTK) - Deep video essays on level design and gameplay mechanics.

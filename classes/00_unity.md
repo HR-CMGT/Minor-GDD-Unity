@@ -1,473 +1,162 @@
-# Unity Tips & Best Practices
+# Unity Complete Reference Manual & Best Practices
 
-The topics listed here are for reference to get familiar with using Unity, from basic tips on working with Unity to best practices.
+This document is the core technical reference manual for the Minor GDD. It covers the inner workings of the Unity Editor, C# architecture, physics simulation, and optimization best practices.
 
-<details>
-<summary> Table Of Contents </summary>
+---
 
-- [Unity Tips \& Best Practices](#unity-tips--best-practices)
-  - [1. Unity Editor](#1-unity-editor)
-    - [Project view](#project-view)
-    - [Scene view](#scene-view)
-    - [Hierarchy](#hierarchy)
-    - [Game view](#game-view)
-    - [Inspector](#inspector)
-    - [Console](#console)
-    - [Layers](#layers)
-      - [Package Manager](#package-manager)
-      - [Services](#services)
-      - [Rendering -\> Lighting](#rendering---lighting)
-      - [Animation \& Animator](#animation--animator)
-      - [Audio Mixer](#audio-mixer)
-      - [Profiler](#profiler)
-      - [AI -\> Navigation](#ai---navigation)
-  - [2. Scripting \& The Unity Editor](#2-scripting--the-unity-editor)
-    - [Public variables](#public-variables)
-    - [Using Pre-made scripts](#using-pre-made-scripts)
-    - [Prefabs and instances](#prefabs-and-instances)
-    - [Sprites](#sprites)
-    - [Sounds](#sounds)
-  - [3. Scripting](#3-scripting)
-    - [Differences between Javascript and C# (for Unity)](#differences-between-javascript-and-c-for-unity)
-    - [Types and classes in C# (for Unity)](#types-and-classes-in-c-for-unity)
-    - [Unity's built-in functions/methods](#unitys-built-in-functionsmethods)
-    - [Script order of execution](#script-order-of-execution)
-    - [How scripts talk to each other](#how-scripts-talk-to-each-other)
-  - [4. Physics](#4-physics)
-    - [Raycasting](#raycasting)
-    - [AddForce](#addforce)
-    - [Velocity](#velocity)
-    - [Checking Collisions](#checking-collisions)
-    - [Physics Tips](#physics-tips)
-      - [Use Update for graphics, and FixedUpdate for physics](#use-update-for-graphics-and-fixedupdate-for-physics)
-      - [Move the Rigidbody, not the Transform](#move-the-rigidbody-not-the-transform)
-  - [5. Miscellaneous](#5-miscellaneous)
-    - [Play mode edits = lose changes](#play-mode-edits--lose-changes)
-    - [Separate Graphics From Physics And Logic](#separate-graphics-from-physics-and-logic)
-    - [Don't do math, do Mathf](#dont-do-math-do-mathf)
-    - [Transform](#transform)
-    - [Instantiate by component/script](#instantiate-by-componentscript)
-    - [Input (built-in)](#input-built-in)
-      - [Built-in:](#built-in)
-      - [InputSystem package:](#inputsystem-package)
-    - [Keep scale 1,1,1](#keep-scale-111)
-    - [Don't use GameObject.Find](#dont-use-gameobjectfind)
-    - [ContextMenu for debug](#contextmenu-for-debug)
+## Table of Contents
+1. [The Unity Editor & Windows](#1-the-unity-editor--windows)
+2. [Script Lifecycle & Execution Order](#2-script-lifecycle--execution-order)
+3. [C# in Unity: Types, References & Communication](#3-c-in-unity-types-references--communication)
+4. [Physics: 2D & 3D Movement and Collisions](#4-physics-2d--3d-movement-and-collisions)
+5. [Performance & Memory Management (Garbage Collection)](#5-performance--memory-management-garbage-collection)
+6. [Best Practices Checklist](#6-best-practices-checklist)
 
-</details>
+---
 
+## 1. The Unity Editor & Windows
 
-## 1. Unity Editor
+### Primary Windows
+- **Project View:** Contains all physical asset files on your hard drive (scripts, textures, audio, prefabs).
+  > **Golden Rule:** *Never* drag a script file from the Project View into an inspector reference slot if you intend to reference an active scene object!
+- **Hierarchy:** Displays all active GameObjects and Prefab instances in currently open scenes.
+- **Scene View:** The 3D/2D spatial workspace where you position, rotate, and scale GameObjects.
+- **Game View:** The view rendered by active cameras. Always set this to a fixed aspect ratio (e.g., `1920x1080 Full HD`) instead of `Free Aspect` to prevent UI distortions.
+- **Inspector:** Displays all `Components` on the selected GameObject and exposes fields that are `public` or `[SerializeField]`.
+- **Console:** Logs runtime information (`Debug.Log`), warnings (yellow), and compilation/runtime exceptions (red). Double-click a red error to jump directly to that exact line of code in your IDE.
 
-<details>
-<summary> Default windows</summary>
+---
 
+## 2. Script Lifecycle & Execution Order
 
-### Project view
-This is where your **physical files** are located, these are on your hard-drive. 
-> Note: when referencing scripts in your scene, **NEVER** drag and drop these files into the Inspector. Always use the ones that are in your scene (Hierarchy view)
+Every script inheriting from `MonoBehaviour` follows a deterministic lifecycle:
 
-![](../img/unitytips/project.png)
+```
+[INITIALIZATION]
+  ├── Awake()         -> Called once when GameObject is loaded (even if component is disabled).
+  ├── OnEnable()      -> Called whenever the GameObject or component becomes active.
+  └── Start()         -> Called once before the first frame update, only if component is enabled.
 
-### Scene view
-It's important to get familiar with the buttons at the top of the scene view. Especially the first two (Center/Pivot, Global/Local), they influence how you manipulate objects in your scene.
+[GAME LOOP / FRAMES]
+  ├── FixedUpdate()   -> Runs at fixed time intervals (default 50Hz / 0.02s). USE FOR PHYSICS!
+  ├── Update()        -> Runs once per frame (variable time delta). USE FOR INPUT & GAME LOGIC!
+  └── LateUpdate()    -> Runs immediately after all Update() calls. USE FOR CAMERA FOLLOWS!
 
-![](../img/unitytips/scene.png)
+[DESTRUCTION]
+  ├── OnDisable()     -> Called whenever the GameObject or component is disabled.
+  └── OnDestroy()     -> Called when the GameObject is permanently destroyed.
+```
 
-### Hierarchy
-These are the objects (like prefab instances) that are currently in your scene.
-> Remember that you should create and use **empty game objects** a lot. You can use them to create a "folder" structure, to create a parent-child hierarchy (child follows parent), or just to have an object with a single script on it, like InputHandler.
+---
 
-![](../img/unitytips/hierarchy.png)
+## 3. C# in Unity: Types, References & Communication
 
-### Game view
-The game view shows what the camera is currently rendering.
-> Note: You can and should set a resolution for your game here, instead of the default "Free Aspect" mode. This will save you a lot of time in developing your UI.
-
-![](../img/unitytips/game.png)
-
-### Inspector
-The inspector shows all the components of a selected object. 
-> Note that Transform is also a component, even though it's a "default" one and you can't remove it.
-
-![](../img/unitytips/inspector.png)
-### Console
-The console shows warnings, errors and output from Debug.Log().
-Always have this window visible, it's the most important one for fixing issues in your game/code. 
-Yellow means warning, Red means error.
-> Note: If you double-click an error message (red), it will open up the script in Visual Studio to the exact line where the error is coming from.
-
-![](../img/unitytips/console.png)
-
-### Layers
-The two Layers windows, one in the top-right corner of the editor, and the other that opens when you click on "Edit Layers...".
-Layers are useful for rendering, for identifying *categories* of objects, and they're useful for physics (making one layer of objects ignore collision with another layer).
-
-> When you're starting out with unity, leave this alone. This is going to become useful when you're going to work with LayerMasks for raycasting, or when you want different cameras to render different things. 
-
-![](../img/unitytips/layers.png)
-![](../img/unitytips/layers-inspector.png)
-</details>
-
-<details>
-<summary> Non-default windows</summary>
-
-#### Package Manager
-![](../img/unitytips/packagemanager.png)
-#### Services
-![](../img/unitytips/services.png)
-#### Rendering -> Lighting
-![](../img/unitytips/lighting.png)
-#### Animation & Animator
-![](../img/unitytips/animation.png)
-![](../img/unitytips/animation.png)
-![](../img/unitytips/animation2.png)
-![](../img/unitytips/animation3.png)
-![](../img/unitytips/animation4.png)
-![](../img/unitytips/animator-inspector.png)
-![](../img/unitytips/animator.png)
-![](../img/unitytips/animator2.png)
-![](../img/unitytips/animator3.png)
-#### Audio Mixer
-![](../img/unitytips/audiomixer.png)
-#### Profiler
-![](../img/unitytips/profiler.png)
-![](../img/unitytips/profiler-hierarchy.png)
-![](../img/unitytips/profiler-rawhierarchy.png)
-![](../img/unitytips/profiler-views.png)
-#### AI -> Navigation
-![](../img/unitytips/navigation-bake.png)
-![](../img/unitytips/navigation-object.png)
-</details>
-</blockquote>
-
-</details>
-
-
-
-## 2. Scripting & The Unity Editor
-
-<details>
-
-<summary> How Unity handles C# scripts </summary>
-
-### Public variables
-
-<blockquote>
-Reference any component/script/gameobject by making a public variable and dragging in the scene-object containing that component
-</blockquote>
-<br>
-
-![](../img/unitytips/publicvars.gif)
-### Using Pre-made scripts
-<blockquote>
-(Re-)use scripts on multiple objects. This is one of the reasons it's good to have multiple, separate scripts on one object. For example, one for tracking health/damage, one for movement patterns, and a separate script for handling graphics, etc.
-</blockquote>
-<br>
-
-![](../img/unitytips/premadescripts.gif)
-
-### Prefabs and instances
-
-<blockquote>
-Drag a prefab into the Scene/Hierarchy view to create an instance, or create an instance through code by using 
-
+### Type Declarations
 ```csharp
-GameObject newGameObject = Instantiate(prefabReference); 
+// Primitive types
+int score = 10;
+float speed = 5.5f;           // Always terminate float literals with 'f'
+string playerName = "Alex";
+bool isGrounded = true;
+const float GRAVITY = -9.81f; // Constants exist in C#!
+
+// Unity Vectors & References
+Vector2 direction2D = new Vector2(1f, 0f);
+Vector3 position3D = new Vector3(0f, 2f, -5f);
+[SerializeField] private Rigidbody rb;      // 3D Rigidbody (lowercase 'b'!)
+[SerializeField] private Rigidbody2D rb2d;  // 2D Rigidbody
 ```
 
-
-!Important! Notice the difference between:
-- editing a prefab (found in Project view), which is a physical file on your harddrive, which alters all unmodified instances of that prefab
-- editing an instance of a prefab, which ONLY affects that one instance but has no relation to the rest
-- editing a prefab when an instance has been modified. The prefab is the "origin" file, and should affect all instances in the scene, EXCEPT for when these instances have been modified.  
-
-</blockquote>
-<br>
-
-![](../img/unitytips/prefabsinstances.gif)
-
-### Sprites
-
-<blockquote>
-Quick tip to work with spritesheets and animations:
-When sprites are sliced (Sprite Mode: Multiple), drag the file into the Scene view and Unity will ask you to auto-generate an Animator Contoller and an animation clip (file) for you.
-</blockquote>
-<br>
-
-![](../img/unitytips/sprites.gif)
-
-### Sounds
-
-
-</details>
-
-
-## 3. Scripting
-
-<details>
-<summary> Differences between Javascript and C#  </summary>
-
-### Differences between Javascript and C# (for Unity)
-
-```javascript  
-// Javascript
-// note that there's no ; at the end of these variable statements
-
-let variable1 = 0   // 'let' doesn't exist in C#
-const variable2 = "text"  // 'const' doesn't exist in C#
-var variable3 = { "name":"john" } // 'var' does exist in C#, but the object notation like { "name":"john" } doesn't.
-
-function FunctionName1(){
-  // do something
-}
-
-console.log("Log a message")    // write to console
-```
-
-```csharp 
-// C#
-// note that there is always a ; at the end of these variable statements
-
-int variable1 = 0;  // you define the type of variable (int/string/GameObject)
-string variable2 = "text";   // and the line needs to end with a ;
-var variable3 = null;   // var may only be used within functions, not as class variables
-
-private void FunctionName1(){
-  // do something
-}
-
-Debug.Log("Log a message");   // write to console
-```
-
-### Types and classes in C# (for Unity)
-
+### Encapsulation: `[SerializeField]` vs `public`
+Avoid making fields `public` by default. Use `[SerializeField] private`:
 ```csharp
-// Some important types and classes:
-string variable1 = "pi";
-int variable2 = 3;
-float variable3 = 3.14f;
-GameObject variable4 = Instantiate(prefabReference);
-Vector2 variable5 = new Vector2( 1.01f, 1f );
-ScriptThatIWrote variable6 = GetComponent<ScriptThatIWrote>();
+// GOOD: Visible in Inspector, but protected from unwanted external mutation
+[SerializeField] private int maxHealth = 100;
 
+// Read-only Property for external access:
+public int MaxHealth => maxHealth;
 ```
 
-</details>
-
-<details>
-<summary> Scripting in Unity's C#  </summary>
-
-
-### Unity's built-in functions/methods
-
+### Safe Component Retrieval (`TryGetComponent`)
+Avoid `GetComponent` when a component might not be present:
 ```csharp
-void Awake(){}  // runs once, before Start
-void Start(){}  // runs once, before Update
-void Update(){} // runs every frame
-void OnCollisionEnter2D(Collision2D collision){}  // runs once, when colliding
-void OnEnable(){} // and OnDisable(){}
-void OnMouseDown(){} // for basic click interactions
-```
-For more functions, and reference: [Monobehaviour Script API Reference](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html)
-
-### Script order of execution
-
-[Unity Manual: Script Execution Order](https://docs.unity3d.com/Manual/ExecutionOrder.html)
-[![Unity Script Execution Order](../img/unitytips/scriptorder.png)](https://docs.unity3d.com/Manual/ExecutionOrder.html)
-
-
-### How scripts talk to each other
-
-```csharp
-// FirstScript.cs
-public class FirstScript : MonoBehaviour
+// Allocates no garbage on failure and runs faster:
+if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
 {
-  public SecondScript externalScript; // Drag the gameobject containing this SecondScript.cs script here, in the Unity Inspector
-
-  public void FirstScriptFunction(){ Debug.Log("I'm the first script!"); }
-
-  void Start(){
-    externalScript.SecondScriptFunction(); // Logs: "I'm the second script!"
-  }
+    damageable.TakeDamage(10);
 }
 ```
+
+---
+
+## 4. Physics: 2D & 3D Movement and Collisions
+
+### 3 Methods to Move a Rigidbody:
 
 ```csharp
-// SecondScript.cs
-public class SecondScript : MonoBehaviour
-{
-  public FirstScript externalScript; // Drag the gameobject containing this FirstScript.cs script here, in the Unity Inspector
+// 1. Direct Velocity - Best for arcade platformers, running, and jumping
+rb.velocity = new Vector3(inputX * speed, rb.velocity.y, inputZ * speed);
 
-  public void SecondScriptFunction(){ Debug.Log("I'm the second script!"); }
+// 2. MovePosition (Kinematic / Physics-Interpolated) - Moves object with collision detection
+Vector3 targetPosition = rb.position + movementVector * Time.fixedDeltaTime;
+rb.MovePosition(targetPosition);
 
-  void Start(){
-    externalScript.FirstScriptFunction(); // Logs: "I'm the first script!"
-  }
-}
+// 3. AddForce - Realistic Newtonian physics (rockets, explosions)
+rb.AddForce(Vector3.up * jumpImpulse, ForceMode.Impulse);
 ```
 
-</details>
+### Collision vs Trigger Callbacks
 
-## 4. Physics
-<details>
-<summary> Physics in Unity </summary>
+| Type | When Triggered? | Component Requirements | Methods |
+| :--- | :--- | :--- | :--- |
+| **Collision** | Solid physical impact (objects bounce/block) | Both objects have Colliders, at least one has `Rigidbody` (`isTrigger = false`) | `OnCollisionEnter(Collision col)`<br>`OnCollisionStay(...)`<br>`OnCollisionExit(...)` |
+| **Trigger** | Objects pass through each other (volume zones) | At least one Collider has `isTrigger = true`, at least one has `Rigidbody` | `OnTriggerEnter(Collider other)`<br>`OnTriggerStay(...)`<br>`OnTriggerExit(...)` |
 
-### Raycasting
-Ref: [Raycasting In Unity](https://docs.unity3d.com/ScriptReference/Physics.Raycast.html)
+> **Note for 2D:** Use 2D variants: `OnCollisionEnter2D(Collision2D col)` and `OnTriggerEnter2D(Collider2D col)`.
 
-```csharp
-// Simple raycast with three parameters: point of origin, direction, and distance.
-if (Physics.Raycast(transform.position, transform.forward, 10)){
-  Debug.Log("There is something in front of the object!");
-}
-```
+---
 
-### AddForce
-```csharp
-public RigidBody rb;
-void FixedUpdate(){
-  rb.AddForce(Vector3.forward); // pushes the object forward, *increasingly* faster!
-}
-```
-### Velocity
-```csharp
-public RigidBody rb;
-void FixedUpdate(){
-  rb.velocity = Vector3.forward; // moves the object forward at a constant rate
-}
-```
+## 5. Performance & Memory Management (Garbage Collection)
 
-### Checking Collisions
-```csharp
-void OnTriggerEnter2D(Collider2D collision)
-{
-    // Executes once, if Collider is set as Trigger
-}
+The Garbage Collector (GC) frees unused heap allocations. When GC runs, the game experiences stutter and framedrops.
 
-void OnCollisionEnter2D(Collision2D collision)
-{
-    // Executes once, if Collider is NOT set as Trigger
-}
+### Preventing GC Allocations in `Update()`:
 
-// Replace Enter with: 
-//  - Stay, for continuous checking of collisions, executes OFTEN
-//  - Exit, for when the collision has ended, executes once
-```
+1. **Avoid `new` in loops:**
+   ```csharp
+   // BAD: Allocates heap memory every frame
+   void Update() {
+       List<Enemy> enemies = new List<Enemy>(); 
+   }
 
+   // GOOD: Reuse collection on class level
+   private List<Enemy> enemies = new List<Enemy>();
+   void Update() {
+       enemies.Clear();
+   }
+   ```
+2. **Avoid String Concatenation in `Update()`:**
+   ```csharp
+   // BAD: Creates new string allocations every frame
+   scoreText.text = "Score: " + score.ToString();
 
-### Physics Tips
-#### Use Update for graphics, and FixedUpdate for physics
+   // GOOD: Only update UI when the score actually changes via an event!
+   ```
+3. **Use NonAlloc Physics Queries:**
+   ```csharp
+   // GOOD: Fills pre-allocated array with zero garbage
+   private Collider2D[] hitResults = new Collider2D[10];
+   void CheckArea() {
+       int hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, 3f, hitResults);
+   }
+   ```
 
-```csharp
-void Update(){
-    // Runs as fast as Graphics calculations.
-    // So with 60 FPS this block executes sixty times per second
-}
+---
 
-void FixedUpdate(){
-    // Runs as fast as Physics calculations.
-    // See Project Settings -> Time -> Fixed Timestep to see how often FixedUpdate runs. [Default = 0.02]
-```
+## 6. Best Practices Checklist
 
-#### Move the Rigidbody, not the Transform
-> When handling physics objects, ***don't*** use the Transform component to move it. <br> Instead of setting transform.position, use Rigidbody.MovePosition() or Rigidbody2D.MovePosition()
-
-</details>
-
-## 5. Miscellaneous
-
-<details>
-<summary> Various Tips & Best Practices </summary>
-
-### Play mode edits = lose changes
-Remember that when you are in Play mode, you will lose all changes that you made when you exit Play mode!
-
-### Separate Graphics From Physics And Logic
-Don't keep SpriteRenderer/MeshRenderer on the top object. <br> Make a child object and put the graphics there, including the Animator component. <br> Keep Rigidbody on the top object, Colliders can either be on the top object or on (multiple) child object(s).
-
-![](../img/unitytips/separategraphics.png)
-
-### Don't do math, do Mathf
-Instead of trying to code your own math, take a look at what Unity's own MathF library has to offer: [Unity's MathF script reference](https://docs.unity3d.com/ScriptReference/Mathf.html)
-<br> Same goes for calculating positions, rotations, angles etc., use the functions available to you in [Vector2](https://docs.unity3d.com/ScriptReference/Vector2.html)/[Vector3](https://docs.unity3d.com/ScriptReference/Vector3.html), [Transform](https://docs.unity3d.com/ScriptReference/Transform.html) and [Quaternion](https://docs.unity3d.com/ScriptReference/Quaternion.html)
-
-
-### Transform
-Every GameObject has a transform as a component. Instead of needing to call GetComponent every time, you can use "transform".
-```csharp
-// Set object position
-// These two lines are exactly the same
-GetComponent<Transform>().position = Vector3.one;
-transform.position = Vector3.one;
-```
-
-When handling physics objects, ***don't*** use the Transform component to move it. <br> Instead of setting transform.position, use Rigidbody.MovePosition() or Rigidbody2D.MovePosition()
-
-### Instantiate by component/script
-***Don't*** do this:
-```csharp
-public GameObject enemyPrefab;
-
-void Start()
-{
-    GameObject newEnemy = Instantiate(enemyPrefab);
-}
-```
-Instead, do this:
-```csharp
-public EnemyScript enemyPrefab;
-
-void Start()
-{
-    EnemyScript newEnemy = Instantiate(enemyPrefab);
-}
-```
-
-### Input (built-in)
-#### Built-in:
-```csharp
-public Vector2 moveInput;
-
-void Update(){
-    moveInput = new Vector(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"));
-}
-```
-#### InputSystem package:
-```csharp
-using UnityEngine.InputSystem;
-
-public Vector2 moveInput;
-
-public void OnMove(InputValue value){
-    moveInput = value.Get<Vector2>();
-}
-```
-### Keep scale 1,1,1
-At least make sure that the *parent* objects have a uniform scale of 1 (Vector3.one, of new Vector3(1,1,1).
-
-### Don't use GameObject.Find
-Whenever you spawn something, keep it in a list!
-```csharp
-public List<EnemyScript> spawnedEnemies;
-
-public void SpawnEnemy()
-{
-    EnemyScript newEnemy = Instantiate(enemyPrefab);
-    spawnedEnemies.Add(newEnemy);
-}
-```
-### ContextMenu for debug
-Call a function at any time from the inspector
-
-```csharp
-public List<Enemy> spawnedEnemies;
-
-[ContextMenu("Name To Show Up In Inspector")]
-public void LogAmountOfEnemies()
-{
-    Debug.Log("amount of spawned enemies: "+spawnedEnemies.Count);
-}
-```
-
-</details>
+- [x] **Separation of Concerns:** Visuals (Renderers, Animators) on a Child GameObject; Physics (`Rigidbody`, `Collider`) on the Root.
+- [x] **Uniform Scale:** Ensure parent GameObjects maintain a uniform scale of `(1, 1, 1)` to prevent distorted physics math.
+- [x] **Never `GameObject.Find` in Update:** Use serialized direct references (`[SerializeField]`), Events, or ScriptableObjects.
+- [x] **Physics in `FixedUpdate` Only:** Use `Time.fixedDeltaTime` or let the physics engine step time.
+- [x] **Input in `Update` or Callbacks Only:** Prevents missed keypresses.

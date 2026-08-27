@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 1.1 Comparison Presentation: Old Way vs New Way</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-new: #10b981;
+            --accent-new-bg: rgba(16, 185, 129, 0.1);
+            --accent-old: #f43f5e;
+            --accent-old-bg: rgba(244, 63, 94, 0.1);
+            --code-bg: #0b0f19;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .title-group h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .title-group p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--code-bg);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-label.active-old {
+            color: var(--accent-old);
+        }
+
+        .toggle-label.active-new {
+            color: var(--accent-new);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--accent-old);
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-new);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .stage {
+            width: 100%;
+            max-width: 1100px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 36px;
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .slide-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-old {
+            background-color: var(--accent-old-bg);
+            color: var(--accent-old);
+            border: 1px solid var(--accent-old);
+        }
+
+        .badge-new {
+            background-color: var(--accent-new-bg);
+            color: var(--accent-new);
+            border: 1px solid var(--accent-new);
+        }
+
+        .slide-body {
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .content-block {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+
+        .content-block.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rationale-box {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(16, 185, 129, 0.08);
+            border-left: 4px solid var(--accent-new);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .rationale-title {
+            font-weight: 700;
+            color: var(--accent-new);
+            margin-bottom: 6px;
+        }
+
+        .old-issue-box {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(244, 63, 94, 0.08);
+            border-left: 4px solid var(--accent-old);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .old-issue-title {
+            font-weight: 700;
+            color: var(--accent-old);
+            margin-bottom: 6px;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            font-size: 0.88rem;
+            color: #38bdf8;
+            margin: 14px 0;
+            line-height: 1.45;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--code-bg);
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .indicators {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .dot.active {
+            background: var(--text-primary);
+            transform: scale(1.2);
+        }
+
+        .hint {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="title-group">
+            <h1>Lesson 1.1 Curriculum Comparison</h1>
+            <p>Minor Game Design & Development - Unity 2022.3 LTS</p>
+        </div>
+        <div class="toggle-container">
+            <span class="toggle-label active-old" id="labelOld" onclick="setMode(false)">OLD WAY</span>
+            <label class="switch">
+                <input type="checkbox" id="modeSwitch" onchange="handleToggle()">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label" id="labelNew" onclick="setMode(true)">NEW REVISED WAY</span>
+        </div>
+    </div>
+
+    <div class="stage">
+        <div class="slide-container">
+            <!-- Slide 1 -->
+            <div class="slide" id="slide-0">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-title">1. Introduction & Learning Goals</div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">Orientation and technical scope of Lesson 1</p>
+                    </div>
+                    <span class="badge badge-old" id="badge-0">Old Way</span>
+                </div>
+                <div class="slide-body">
+                    <div class="content-block old-content active">
+                        <p><strong>Original Repository Content:</strong></p>
+                        <ul>
+                            <li>No learning objectives listed anywhere in the document.</li>
+                            <li>Jumped straight into downloading packages and opening scenes without architectural context.</li>
+                            <li>No explanation of what engineering patterns students should look for.</li>
+                        </ul>
+                        <div class="old-issue-box">
+                            <div class="old-issue-title">Why the Old Way Caused Confusion:</div>
+                            Students entered the exercise without knowing what core skills they were practicing. They treated the class as "fixing broken buttons" rather than learning the Unity component model and script execution flow.
+                        </div>
+                    </div>
+                    <div class="content-block new-content">
+                        <p><strong>New Revised Structure:</strong></p>
+                        <ol>
+                            <li><strong>Component Model:</strong> Master the GameObject-Component-Prefab hierarchy.</li>
+                            <li><strong>Script Lifecycle:</strong> Correctly apply <code>Awake</code>, <code>Start</code>, <code>Update</code>, and <code>FixedUpdate</code>.</li>
+                            <li><strong>Input & Physics:</strong> Drive a 2D character using <code>Rigidbody2D</code>, <code>Collider2D</code>, and the new Input System.</li>
+                            <li><strong>Dynamic Framing:</strong> Configure a smooth 2D follow camera with Cinemachine.</li>
+                        </ol>
+                        <div class="rationale-box">
+                            <div class="rationale-title">Why This Is Better:</div>
+                            Provides explicit engineering milestones up front. Students understand that physics separation and input callbacks are the core learning goals.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide" id="slide-1" style="display: none;">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-title">2. Project Setup & Package Workflow</div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">Template selection and Package Manager setup</p>
+                    </div>
+                    <span class="badge badge-old" id="badge-1">Old Way</span>
+                </div>
+                <div class="slide-body">
+                    <div class="content-block old-content active">
+                        <p><strong>Original Instructions:</strong></p>
+                        <ol>
+                            <li>Create a new 2D project.</li>
+                            <li>Open Package Manager, switch to Unity Registry.</li>
+                            <li>Install Input System and Cinemachine.</li>
+                        </ol>
+                        <div class="old-issue-box">
+                            <div class="old-issue-title">Why the Old Way Caused Confusion:</div>
+                            Installing the Input System triggers a modal prompt: <em>"This project uses the new input system backend. Restart editor?"</em>. Beginners often clicked "No" or experienced editor freezes, resulting in non-functional keyboard input.
+                        </div>
+                    </div>
+                    <div class="content-block new-content">
+                        <p><strong>New Revised Instructions:</strong></p>
+                        <ol>
+                            <li>Create a project using the <strong>2D (URP)</strong> template in Unity Hub.</li>
+                            <li>Open <code>Window > Package Manager</code> and switch to <strong>Packages: Unity Registry</strong>.</li>
+                            <li>Install <strong>Input System</strong> &rarr; Click <strong>Yes</strong> when prompted to restart the backend.</li>
+                            <li>Install <strong>Cinemachine</strong>.</li>
+                            <li>Import <code>basics1.unitypackage</code> via <code>Assets > Import Package > Custom Package</code>.</li>
+                        </ol>
+                        <div class="rationale-box">
+                            <div class="rationale-title">Why This Is Better:</div>
+                            Explicitly warns students about the mandatory restart prompt and specifies URP template defaults, preventing missing render pipelines and input lockups.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide" id="slide-2" style="display: none;">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-title">3. Scene Hierarchy & Separation of Concerns</div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">Player object architecture</p>
+                    </div>
+                    <span class="badge badge-old" id="badge-2">Old Way</span>
+                </div>
+                <div class="slide-body">
+                    <div class="content-block old-content active">
+                        <p><strong>Original Structure:</strong></p>
+                        <p>Placed SpriteRenderer, BoxCollider2D, Rigidbody2D, Animator, and scripts on a single GameObject.</p>
+                        <div class="old-issue-box">
+                            <div class="old-issue-title">Why the Old Way Caused Bugs:</div>
+                            When students flipped the sprite or animated local scale (squash and stretch), the physics Collider scaled and rotated along with the graphics, causing the player to fall through platforms or get stuck in walls.
+                        </div>
+                    </div>
+                    <div class="content-block new-content">
+                        <p><strong>New Standard Hierarchy:</strong></p>
+                        <pre>[Player] (Root: Rigidbody2D, BoxCollider2D, PlayerController2D, PlayerInput)
+  └── [Graphics] (Child: SpriteRenderer, Animator)
+  └── [GroundCheck] (Child: Empty GameObject at foot level)</pre>
+                        <div class="rationale-box">
+                            <div class="rationale-title">Why This Is Better:</div>
+                            Strict <strong>Separation of Concerns</strong>: The Root handles physics and position; the Graphics child handles visual scale and sprite flips without altering collision boundaries.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide" id="slide-3" style="display: none;">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-title">4. C# Controller Implementation</div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">PlayerController2D architecture</p>
+                    </div>
+                    <span class="badge badge-old" id="badge-3">Old Way</span>
+                </div>
+                <div class="slide-body">
+                    <div class="content-block old-content active">
+                        <p><strong>Original Approach:</strong></p>
+                        <ul>
+                            <li>Zero code provided in the markdown document.</li>
+                            <li>Told students: <em>"Open PlayerStart.cs and code the Jump function, Move function, ResetPlayer function..."</em> without guidance.</li>
+                        </ul>
+                        <div class="old-issue-box">
+                            <div class="old-issue-title">Why the Old Way Failed:</div>
+                            Students guessed how to handle velocity, wrote input polling in <code>FixedUpdate</code> (missed keypresses), or mutated <code>transform.position</code> on Rigidbodies (broke physics interpolation).
+                        </div>
+                    </div>
+                    <div class="content-block new-content">
+                        <p><strong>New Production C# Standard:</strong></p>
+                        <pre>public class PlayerController2D : MonoBehaviour {
+    void Awake() {
+        rb = GetComponent&lt;Rigidbody2D&gt;();
+        rb.freezeRotation = true; // Prevents tipping over
+    }
+    public void OnMove(InputValue val) => moveInput = val.Get&lt;Vector2&gt;();
+    public void OnJump(InputValue val) {
+        if (val.isPressed && isGrounded) jumpRequested = true;
+    }
+    void Update() {
+        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, 0.25f, groundLayer);
+    }
+    void FixedUpdate() {
+        rb.velocity = new Vector2(moveInput.x * moveSpeed, rb.velocity.y);
+        if (jumpRequested) { rb.velocity = new Vector2(rb.velocity.x, jumpForce); jumpRequested = false; }
+    }
+}</pre>
+                        <div class="rationale-box">
+                            <div class="rationale-title">Why This Is Better:</div>
+                            Input is polled responsively in <code>Update()</code>, physics velocities are applied deterministically in <code>FixedUpdate()</code>, and <code>OnDrawGizmosSelected</code> gives visual groundcheck debugging.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5 -->
+            <div class="slide" id="slide-4" style="display: none;">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-title">5. Assignment Workflow & Scope</div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">Milestone pacing and core mechanics</p>
+                    </div>
+                    <span class="badge badge-old" id="badge-4">Old Way</span>
+                </div>
+                <div class="slide-body">
+                    <div class="content-block old-content active">
+                        <p><strong>Original Scope:</strong></p>
+                        <p>A sprawling checklist asking Week 1 students to implement:</p>
+                        <ul>
+                            <li>Spritesheet slicing and manual Animator controllers</li>
+                            <li>2D Joints and Physics Materials</li>
+                            <li>Sprite Shapes and Tilemaps</li>
+                            <li>Platform Effectors</li>
+                        </ul>
+                        <div class="old-issue-box">
+                            <div class="old-issue-title">Why the Old Way Overwhelmed Students:</div>
+                            Trying to learn 6 distinct sub-systems in the very first class resulted in cognitive overload. Most students finished zero working mechanics.
+                        </div>
+                    </div>
+                    <div class="content-block new-content">
+                        <p><strong>New 4-Step Focused Milestones:</strong></p>
+                        <ol>
+                            <li><strong>Step 1:</strong> Import starter package and open <code>0_startscene.unity</code>.</li>
+                            <li><strong>Step 2:</strong> Assemble Player hierarchy with <code>PlayerController2D</code>, <code>PlayerInput</code>, and <code>GroundCheck</code>.</li>
+                            <li><strong>Step 3:</strong> Add Cinemachine 2D Camera and assign Follow target.</li>
+                            <li><strong>Step 4:</strong> Place Coin prefabs with <code>isTrigger</code> pickup detection.</li>
+                        </ol>
+                        <div class="rationale-box">
+                            <div class="rationale-title">Why This Is Better:</div>
+                            Builds a clean, playable core loop in 45 minutes. Advanced tools (Tilemaps, Sprite Shapes) are moved to dedicated workshops where they can be properly taught.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6 -->
+            <div class="slide" id="slide-5" style="display: none;">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-title">6. Troubleshooting & Failure Modes</div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">Diagnostic matrix for common beginner errors</p>
+                    </div>
+                    <span class="badge badge-old" id="badge-5">Old Way</span>
+                </div>
+                <div class="slide-body">
+                    <div class="content-block old-content active">
+                        <p><strong>Original Content:</strong></p>
+                        <p>No troubleshooting checklist or debugging tips provided.</p>
+                        <div class="old-issue-box">
+                            <div class="old-issue-title">Why the Old Way Left Students Stranded:</div>
+                            When a character fell through the floor or flipped upside down, students spent hours trial-and-erroring random inspector checkboxes.
+                        </div>
+                    </div>
+                    <div class="content-block new-content">
+                        <p><strong>New Diagnostic Table:</strong></p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Symptom</th>
+                                    <th>Root Cause</th>
+                                    <th>One-Click Fix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Falls through floor</td>
+                                    <td>LayerMask mismatch or missing Collider</td>
+                                    <td>Ensure floor has BoxCollider2D; verify Ground LayerMask</td>
+                                </tr>
+                                <tr>
+                                    <td>Character tips over</td>
+                                    <td>Z-axis torque from physics collisions</td>
+                                    <td>Check Constraints &gt; Freeze Rotation Z on Rigidbody2D</td>
+                                </tr>
+                                <tr>
+                                    <td>Input unresponsive</td>
+                                    <td>PlayerInput missing or wrong mode</td>
+                                    <td>Add PlayerInput component; set Behavior to Send Messages</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="rationale-box">
+                            <div class="rationale-title">Why This Is Better:</div>
+                            Empowers students to self-debug immediately without waiting for teacher assistance.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>&larr; Previous Slide</button>
+            <div class="indicators" id="dotContainer"></div>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next Slide &rarr;</button>
+        </div>
+        <div class="hint">Keyboard Shortcuts: Left/Right Arrow = Navigate Slides | Spacebar = Toggle Old / New Mode</div>
+    </div>
+
+    <script>
+        const totalSlides = 6;
+        let currentSlide = 0;
+        let isNewMode = false;
+
+        function init() {
+            const container = document.getElementById('dotContainer');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(i);
+                container.appendChild(dot);
+            }
+            updateView();
+        }
+
+        function handleToggle() {
+            const switchEl = document.getElementById('modeSwitch');
+            isNewMode = switchEl.checked;
+            updateModeDisplay();
+        }
+
+        function setMode(mode) {
+            isNewMode = mode;
+            document.getElementById('modeSwitch').checked = mode;
+            updateModeDisplay();
+        }
+
+        function updateModeDisplay() {
+            const labelOld = document.getElementById('labelOld');
+            const labelNew = document.getElementById('labelNew');
+
+            if (isNewMode) {
+                labelOld.classList.remove('active-old');
+                labelNew.classList.add('active-new');
+            } else {
+                labelOld.classList.add('active-old');
+                labelNew.classList.remove('active-new');
+            }
+
+            for (let i = 0; i < totalSlides; i++) {
+                const badge = document.getElementById(`badge-${i}`);
+                if (badge) {
+                    badge.textContent = isNewMode ? 'New Way (2022.3 LTS)' : 'Old Way (Original)';
+                    badge.className = `badge ${isNewMode ? 'badge-new' : 'badge-old'}`;
+                }
+            }
+
+            const oldBlocks = document.querySelectorAll('.old-content');
+            const newBlocks = document.querySelectorAll('.new-content');
+
+            oldBlocks.forEach(b => b.classList.toggle('active', !isNewMode));
+            newBlocks.forEach(b => b.classList.toggle('active', isNewMode));
+        }
+
+        function changeSlide(direction) {
+            goToSlide(currentSlide + direction);
+        }
+
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+
+            document.getElementById(`slide-${currentSlide}`).style.display = 'none';
+            currentSlide = index;
+            document.getElementById(`slide-${currentSlide}`).style.display = 'flex';
+
+            document.getElementById('prevBtn').disabled = (currentSlide === 0);
+            document.getElementById('nextBtn').disabled = (currentSlide === totalSlides - 1);
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentSlide);
+            });
+        }
+
+        function updateView() {
+            updateModeDisplay();
+            goToSlide(0);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === ' ') {
+                e.preventDefault();
+                setMode(!isNewMode);
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>

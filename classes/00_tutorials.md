@@ -1,96 +1,49 @@
+# Curated Video Tutorials & Unity Documentation
 
-# Tutorials
+A verified, modern, and didactically sound collection of learning resources for Unity (URP & C#).
 
-## Unity
+---
 
-- [Unity](https://unity3d.com)
-- [Unity Manual](https://docs.unity3d.com/Manual/index.html)
-- [Unity Script Reference](https://docs.unity3d.com/ScriptReference/index.html)
-- [Unity Forum](https://forum.unity.com)
-- [Unity Learn](https://learn.unity.com)
-- [Unity Tips (from Unity Learn)](https://learn.unity.com/tutorial/unity-tips)
-- [Unity in 100 seconds (YT)](https://www.youtube.com/watch?v=iqlH4okiQqg)
+## 🎯 Official Unity Documentation
 
-Beginners
-- [Coding in C# in Unity for beginners - Unity.com](https://unity.com/how-to/learning-c-sharp-unity-beginners)
-- [Unity Tutorial for complete beginners - Game Maker's Toolkit](https://www.youtube.com/watch?v=XtQMytORBmM)
-- [Beginner Unity Tutorials (YT Playlist) - Brackeys](https://www.youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
-- [Learn C# BASICS in 10 MINUTES! - Code Monkey](https://www.youtube.com/watch?v=IFayQioG71A)
-- [Learn Unity in 17 MINUTES! (2023 UPDATED) - Code Monkey](https://www.youtube.com/watch?v=E6A4WvsDeLE)
+- [Unity User Manual](https://docs.unity3d.com/Manual/index.html) - Complete guide for all editor tools and components.
+- [Unity C# Script Reference](https://docs.unity3d.com/ScriptReference/index.html) - API documentation for all Unity C# classes.
+- [Unity Learn](https://learn.unity.com/) - Official courses and project tutorials from Unity Technologies.
+- [Universal Render Pipeline (URP) Guide](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest/index.html) - Documentation for Shaders, Post-Processing, and URP rendering.
 
-Intermediate
-- [Catlike Coding Tutorials (intermediate/advanced)](https://catlikecoding.com/unity/tutorials/)
+---
 
-Advanced
-- [Game Programming Patterns](https://gameprogrammingpatterns.com)
-- [SOLID coding principles in Unity (YT Playlist - Jason Weimann)](https://www.youtube.com/watch?v=Eyr7_l5NMds&list=PLB5_EOMkLx_WjcjrsGUXq9wpTib3NCuqg&pp=iAQB)
+## 👨‍💻 C# & Game Engineering
 
-Version Control
-- [Unity & Git (Brackeys)](https://youtu.be/qpXxcvS-g3g)
-- [Unity & Plastic SCM version control](https://www.youtube.com/watch?v=lOES0_6Hf6w&list=PL29P1RRr5_NzEhAustJCTwdahs60JvcMm&ab_channel=plasticscm)
+### Core C# in Unity
+- [Code Monkey: Learn C# Basics in Unity (Complete Guide)](https://www.youtube.com/watch?v=IFayQioG71A) - Clear explanations of variables, methods, classes, and loops.
+- [Tarodev: How Scripts Talk to Each Other (Object References)](https://www.youtube.com/watch?v=dtv7mjj_iog) - Decoupling and communication patterns.
 
+### Unity Input System (New System)
+- [Sammyam: Unity New Input System Tutorial](https://www.youtube.com/watch?v=k_l2k9K2l4w) - Action Maps, Callbacks (`InputValue`), and Gamepad support.
 
-## General Tutorials
+### Game Architecture & SOLID
+- [Jason Weimann: SOLID Coding Principles in Unity](https://www.youtube.com/watch?v=Eyr7_l5NMds&list=PLB5_EOMkLx_WjcjrsGUXq9wpTib3NCuqg) - Scalable code architecture without spaghetti.
+- [Game Dev Beginner: Singletons in Unity (The Right Way)](https://www.youtube.com/watch?v=yhlyoQ2F-NM) - When and when not to use singletons.
 
-### Using Unity
-- [Unity Learn](https://learn.unity.com)
-- [Instagram Unity Tips (@unitymedved)](https://www.instagram.com/unitymedved/)
+---
 
-### Recommended Youtube channels
-- [Jason Weimann (Unity3DCollege)](https://www.youtube.com/channel/UCX_b3NNQN5bzExm-22-NVVg)
-- [Brackeys (old channel, good basics)](https://www.youtube.com/@Brackeys/videos)
-- [Blackthornprod (2D games)](https://www.youtube.com/watch?v=QGDeafTx5ug&list=PLBIb_auVtBwBotxgdQXn2smO0Fvqqea4-&ab_channel=Blackthornprod)
-- [Samyam](https://www.youtube.com/@samyam)
-- [Lost Relic Games](https://www.youtube.com/@LostRelicGames/)
-- [Jonas Tyroller](https://www.youtube.com/@JonasTyroller)
-- [CodeMonkey](https://www.youtube.com/@CodeMonkeyUnity)
-- [Mix And Jam](https://www.youtube.com/@mixandjam)
-- [Thomas Brush](https://www.youtube.com/@thomasbrush)
-- [Sebastian Lague](https://www.youtube.com/@SebastianLague)
+## 🎨 Graphics, Shader Graph & VFX
 
+- [Brackeys: Introduction to Shader Graph in Unity URP](https://www.youtube.com/watch?v=Ar9eIn4z6XE) - Visual shader construction.
+- [Gabriel Aguiar Prod: Unity VFX Graph & Particle System Tutorials](https://www.youtube.com/@GabrielAguiarProd) - Professional visual effects, explosions, and magic spells.
+- [Mix and Jam](https://www.youtube.com/@mixandjam) - Iconic game mechanics and polish recreated in Unity.
 
-## Graphics
-- [Unity Manual graphics](https://docs.unity3d.com/Manual/Graphics.html)
-- [Unity Learn Graphics & VFX](https://learn.unity.com/search?k=%5B%22tag%3A5d351f0b7fbf7d006af48182%22%5D)
+---
 
-## Complete Projects
-- [Brackeys "How to make a 2D Game" full project tutorial (YT playlist)](https://youtube.com/playlist?list=PLPV2KyIb3jR5QFsefuO2RlAgWEz6EvVi6)
-- [Jason Weimann full project tutorial](https://www.youtube.com/watch?v=OR0e-1UBEOU)
-- [Nodulus (Github)](https://github.com/Hyperparticle/nodulus)
+## 🏃 3D Animation & Rigging
 
-## Google Play Publishing Process
-- Read the official [Android Environment Setup](https://docs.unity3d.com/Manual/android-sdksetup.html) manual
-- Read the official [Building and delivering for Android](https://docs.unity3d.com/Manual/android-building-and-delivering.html) manual
-- YT tutorial walking through Google Play Console: [How To Publish An App To The Google Play Console | Step By Step | 2023 Updated](https://www.youtube.com/watch?v=295bzuj02BI)
+- [iHeartGameDev: Unity Animation & BlendTrees Guide](https://www.youtube.com/watch?v=heP87qQ64wM) - Setting up smooth locomotion transitions in Animator.
+- [Unity Animation Rigging Package Guide](https://www.youtube.com/watch?v=kYI_tN6i8hE) - Procedural IK, head aiming, and secondary motion.
 
+---
 
-## Basics 1 Tutorials
-- [Rigidbody 2D - Official Unity Tutorial](https://www.youtube.com/watch?v=rq6c2B_socs)
-- [2D CHARACTER MOVEMENT IN UNITY 🎮 - Dani Krossing](https://www.youtube.com/watch?v=w9NmPShzPpE)
-- [What is a Component? (Unity Tutorial for Beginners) - Code Monkey](https://www.youtube.com/watch?v=etTZYeTrpZU)
-- [Object References in Unity - How to Communicate Between Scripts - Tarodev](https://www.youtube.com/watch?v=dtv7mjj_iog)
-    ### Prefabs
-    - [Unity Prefabs - The Complete Animated Guide - Game Dev Classroom](https://www.youtube.com/watch?v=RNoJGuujbjM)
-    - [Prefabs - Concept and usage - Unity Official Tutorials](https://www.youtube.com/watch?v=H1OkG3a1w-o)
-    - [(YT Shorts) Unity Prefabs with overrides have blue indicator 🟦 in the hierarchy - @sunnyvalleystudio](https://www.youtube.com/shorts/Rgj2MS_PX5c)
-    - [Unity Manual - Instantiating Prefabs at run time](https://docs.unity3d.com/Manual/InstantiatingPrefabs.html)
-    - [Unity Manual - Prefabs](https://docs.unity3d.com/Manual/Prefabs.html)
+## 🛠️ Debugging, Profiling & Optimization
 
-## Basics 2 Tutorials
-- [Coroutines (YT Shorts) - @Tvtig](https://www.youtube.com/shorts/qjF7e2Muo7E)
-- [GetComponent - Official Unity Beginner Scripting Tutorials (YT)](https://www.youtube.com/watch?v=xbDKC4zP9XY)
-- [Tags - Official Unity Beginner Scripting Tutorials (YT)](https://www.youtube.com/watch?v=EA54-vfLkUI)
-- [C# Lists and Dictionaries in Unity - Official Unity Intermediate Scripting Tutorial (YT)](https://www.youtube.com/watch?v=0WdWiF_Si4I)
-- [Better Data with Scriptable Objects in Unity - Official Unity Intermediate Scripting Tutorial (YT)](https://www.youtube.com/watch?v=PVOVIxNxxeQ)
-- [C# Coroutines in Unity! - Official Unity Intermediate Scripting Tutorial](https://www.youtube.com/watch?v=5L9ksCs6MbE)
-- [Unity Events Explained (YT - @SpeedTutor)](https://www.youtube.com/watch?v=TWxXD-UpvSg)
-- [How To Publish An App To The Google Play Console | Step By Step | 2023 Updated](https://www.youtube.com/watch?v=295bzuj02BI)
-<!-- GetComponent, Tags, Collections, ScriptableObjects, Timers, Events & Listeners, Time.deltaTime, Coroutines, InvokeRepeating, Google Play publishing -->
-
-## UI & Saving
-- [Rect Transform - Unity Official Tutorials](https://www.youtube.com/watch?v=FeheZqu85WI&pp=ygUQdW5pdHkgdWkgYW5jaG9ycw%3D%3D)
-- [Unity UI tutorials Basics to advance (YT Playlist) - @fastsolution](https://www.youtube.com/playlist?list=PLgAF6rpCsTCgFkN0Nk7CaUL71eoB0HsiJ)
-
-<!-- 
-## UI Tutorials
-- to be continued -->
+- [Unity: Performance Profiling for Beginners](https://www.youtube.com/watch?v=qTj8zK740_c) - Locating CPU lag and Garbage Collection spikes.
+- [Infallible Code: How to Debug Unity Code Like a Pro](https://www.youtube.com/watch?v=Y53_V6fCjG0) - Visual Studio debugger, breakpoints, and conditional debugging.
