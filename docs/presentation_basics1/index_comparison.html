@@ -229,7 +229,7 @@
             width: min(100%, calc((100vh - 52px - 46px - 32px) * (16 / 9)));
             height: min(calc((100vw - 210px - 32px) * (9 / 16)), calc(100vh - 52px - 46px - 32px));
             background: #ffffff;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 24px 64px rgba(0, 0, 0, 0.95);
             overflow: hidden;
             position: relative;
@@ -261,15 +261,18 @@
             background: #000;
         }
 
-        /* Interactive Revised Slide (Base Styling) */
+        /* ==========================================================================
+           SCALE-TO-FIT PRESENTATION ENGINE (Massive Screen-Filling Typography)
+           ========================================================================== */
         .view-interactive {
             width: 100%;
             height: 100%;
             background: #ffffff;
             color: var(--text-dark);
-            padding: 28px 36px;
+            padding: clamp(24px, 4vh, 48px) clamp(30px, 4vw, 56px);
             display: none;
             flex-direction: column;
+            justify-content: space-between;
             overflow-y: auto;
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -287,7 +290,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 50px 60px;
+            padding: clamp(30px, 5vh, 60px) clamp(40px, 5vw, 70px);
             z-index: 5;
         }
 
@@ -302,49 +305,52 @@
         .hero-inner {
             position: relative;
             z-index: 2;
-            max-width: 860px;
+            max-width: 920px;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(10px, 1.8vh, 20px);
         }
 
         .hero-tag-badge {
             background: var(--hr-red);
             color: #fff;
-            padding: 8px 24px;
-            border-radius: 6px;
-            font-size: 2rem;
+            padding: clamp(8px, 1.5vh, 16px) clamp(20px, 2.5vw, 36px);
+            border-radius: 8px;
+            font-size: clamp(1.8rem, 3.2vw, 3rem);
             font-weight: 900;
             display: inline-block;
-            margin-bottom: 14px;
-            box-shadow: 0 8px 24px rgba(226, 0, 73, 0.4);
+            box-shadow: 0 10px 30px rgba(226, 0, 73, 0.45);
+            letter-spacing: -0.5px;
+            width: fit-content;
         }
 
         .hero-sub {
-            font-size: 1.35rem;
+            font-size: clamp(1.3rem, 2vw, 1.8rem);
             font-weight: 700;
             color: #f8fafc;
-            margin-bottom: 24px;
         }
 
-        .hero-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
+        .hero-stack {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(10px, 1.5vh, 18px);
         }
 
         .hero-pill-card {
-            background: rgba(30, 41, 59, 0.88);
+            background: rgba(30, 41, 59, 0.9);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            padding: 16px 18px;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            padding: clamp(12px, 2vh, 20px) clamp(16px, 2vw, 24px);
             color: #e2e8f0;
         }
 
         .hero-pill-title {
-            font-size: 0.85rem;
-            font-weight: 800;
+            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .hero-pill-title.core { color: #34d399; }
@@ -352,9 +358,9 @@
         .hero-pill-title.boss { color: #c084fc; }
 
         .hero-pill-desc {
-            font-size: 0.86rem;
-            line-height: 1.45;
-            color: #cbd5e1;
+            font-size: clamp(1rem, 1.4vw, 1.35rem);
+            line-height: 1.5;
+            color: #e2e8f0;
         }
 
         /* Standard Slide Header */
@@ -362,201 +368,178 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 8px;
+            margin-bottom: clamp(12px, 2vh, 20px);
+            border-bottom: 3px solid #f1f5f9;
+            padding-bottom: clamp(8px, 1.2vh, 14px);
         }
 
         .slide-title-banner {
             background: var(--hr-red);
             color: #ffffff;
-            padding: 6px 18px;
-            border-radius: 6px;
-            font-size: 1.3rem;
-            font-weight: 800;
+            padding: clamp(8px, 1.2vh, 14px) clamp(18px, 2vw, 30px);
+            border-radius: 8px;
+            font-size: clamp(1.4rem, 2.3vw, 2.4rem);
+            font-weight: 900;
             display: inline-block;
+            letter-spacing: -0.5px;
         }
 
         .slide-meta-badges {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .badge-pill {
-            font-size: 0.7rem;
+            font-size: clamp(0.72rem, 1vw, 1rem);
             font-weight: 800;
             text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.2vw, 14px);
+            border-radius: 6px;
             letter-spacing: 0.5px;
         }
 
-        .badge-core { background: var(--tier-core-bg); color: var(--tier-core); border: 1px solid var(--tier-core-border); }
-        .badge-levelup { background: var(--tier-levelup-bg); color: var(--tier-levelup); border: 1px solid var(--tier-levelup-border); }
-        .badge-boss { background: var(--tier-boss-bg); color: var(--tier-boss); border: 1px solid var(--tier-boss-border); }
+        .badge-core { background: var(--tier-core-bg); color: var(--tier-core); border: 1.5px solid var(--tier-core-border); }
+        .badge-levelup { background: var(--tier-levelup-bg); color: var(--tier-levelup); border: 1.5px solid var(--tier-levelup-border); }
+        .badge-boss { background: var(--tier-boss-bg); color: var(--tier-boss); border: 1.5px solid var(--tier-boss-border); }
 
-        /* Slide Content Area */
+        /* Slide Content Area (Screen-Filling Vertical Stack) */
         .slide-content-area {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            gap: clamp(12px, 2vh, 22px);
+            margin-bottom: clamp(8px, 1.5vh, 16px);
+            height: 100%;
         }
 
-        /* ==========================================================================
-           PROJECTOR / LECTURE MODE (Strict Core Only, Big Typography)
-           ========================================================================== */
-        body.projector-mode .slide-viewport {
-            background: #ffffff;
-            border: 3px solid #cbd5e1;
-        }
-
-        body.projector-mode .view-interactive {
-            padding: 36px 48px;
-        }
-
-        body.projector-mode .slide-title-banner {
-            font-size: 1.85rem;
-            padding: 8px 24px;
-            letter-spacing: -0.5px;
-        }
-
-        body.projector-mode .hero-tag-badge {
-            font-size: 2.5rem;
-            padding: 12px 30px;
-        }
-
-        body.projector-mode .hero-sub {
-            font-size: 1.65rem;
-            margin-bottom: 30px;
-        }
-
-        body.projector-mode .content-card {
-            padding: 18px 22px;
-            border-radius: 10px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-        }
-
-        body.projector-mode .content-card.primary {
-            border-left: 6px solid var(--tier-core);
-        }
-
-        body.projector-mode .card-title {
-            font-size: 1.15rem;
-            margin-bottom: 8px;
-        }
-
-        body.projector-mode .card-body {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            color: #1e293b;
-        }
-
-        body.projector-mode .card-body li {
-            margin-bottom: 8px;
-        }
-
-        body.projector-mode pre {
-            font-size: 1.18rem;
-            line-height: 1.5;
-            padding: 14px 18px;
-            border-radius: 8px;
-        }
-
-        body.projector-mode table.dense-table th,
-        body.projector-mode table.dense-table td {
-            font-size: 1.15rem;
-            padding: 10px 14px;
-        }
-
-        /* HIDE LEVEL UP & BOSS CHALLENGE IN LECTURE MODE */
-        body.projector-mode .tier-accordion {
-            display: none !important;
-        }
-
-        body.projector-mode .slide-meta-badges .badge-levelup,
-        body.projector-mode .slide-meta-badges .badge-boss {
-            display: none !important;
-        }
-
-        /* ==========================================================================
-           STUDENT / LAB MODE (Compact Desktop Engineering Reference)
-           ========================================================================== */
-        body:not(.projector-mode) .content-card {
-            padding: 12px 16px;
-        }
-
-        body:not(.projector-mode) .card-title {
-            font-size: 0.82rem;
-            margin-bottom: 4px;
-        }
-
-        body:not(.projector-mode) .card-body {
-            font-size: 0.9rem;
-            line-height: 1.48;
-        }
-
-        body:not(.projector-mode) pre {
-            font-size: 0.8rem;
-            line-height: 1.38;
-            padding: 8px 12px;
-        }
-
-        /* High-Density Grid Cards */
-        .card-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .card-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .card-grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+        .content-stack {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(12px, 2vh, 20px);
+            flex-grow: 1;
+            justify-content: space-evenly;
+            height: 100%;
         }
 
         .content-card {
             background: #f8fafc;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
+            border: 2px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: clamp(16px, 2.5vh, 28px) clamp(20px, 2.5vw, 32px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .content-card.primary {
-            border-left: 4px solid var(--tier-core);
+            border-left: clamp(8px, 1vw, 14px) solid var(--tier-core);
             background: #ffffff;
         }
 
         .card-title {
-            font-weight: 800;
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
+            font-size: clamp(1.15rem, 1.7vw, 1.75rem);
+            margin-bottom: clamp(6px, 1vh, 12px);
         }
 
         .card-title.core { color: var(--tier-core); }
         .card-title.levelup { color: var(--tier-levelup); }
         .card-title.boss { color: var(--tier-boss); }
 
+        .card-body {
+            font-size: clamp(1.15rem, 1.6vw, 1.6rem);
+            line-height: 1.6;
+            color: #1e293b;
+            font-weight: 500;
+        }
+
         .card-body ul, .card-body ol {
-            margin-left: 20px;
-            margin-top: 4px;
-            margin-bottom: 4px;
+            margin-left: clamp(24px, 3vw, 40px);
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        .card-body li {
+            margin-bottom: clamp(6px, 1vh, 12px);
+        }
+
+        /* Monospace Code Boxes */
+        .code-box {
+            position: relative;
+            margin: clamp(6px, 1.2vh, 14px) 0;
+            width: 100%;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #38bdf8;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, "Courier New", Courier, monospace;
+            font-size: clamp(1.1rem, 1.55vw, 1.55rem);
+            line-height: 1.5;
+            padding: clamp(14px, 2vh, 24px) clamp(18px, 2vw, 28px);
+            border-radius: 10px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: clamp(0.7rem, 0.9vw, 0.95rem);
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .copy-btn:hover { background: #334155; color: #ffffff; }
+        .copy-btn.copied { background: var(--tier-core); color: #ffffff; border-color: var(--tier-core); }
+
+        /* Tables */
+        table.dense-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0;
+            height: 100%;
+        }
+
+        table.dense-table th {
+            background: #f1f5f9;
+            color: #0f172a;
+            text-align: left;
+            border: 2px solid #cbd5e1;
+            font-weight: 900;
+            font-size: clamp(1.15rem, 1.6vw, 1.65rem);
+            padding: clamp(10px, 1.8vh, 18px) clamp(14px, 1.8vw, 22px);
+        }
+
+        table.dense-table td {
+            border: 2px solid #e2e8f0;
+            color: #1e293b;
+            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+            padding: clamp(10px, 1.8vh, 18px) clamp(14px, 1.8vw, 22px);
+            font-weight: 500;
         }
 
         /* Collapsible Tier Accordions */
         details.tier-accordion {
-            border-radius: 6px;
+            border-radius: 8px;
             overflow: hidden;
-            margin-top: 4px;
-            border: 1px solid transparent;
+            margin-top: 6px;
+            border: 1.5px solid transparent;
             transition: all 0.15s ease;
+            width: 100%;
         }
 
         details.tier-accordion.levelup {
@@ -570,14 +553,14 @@
         }
 
         summary.accordion-header {
-            font-weight: 800;
+            font-weight: 900;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: 0.82rem;
-            padding: 6px 10px;
+            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
+            padding: clamp(8px, 1.2vh, 14px) clamp(12px, 1.5vw, 18px);
         }
 
         details.levelup summary.accordion-header { color: var(--tier-levelup); }
@@ -587,60 +570,19 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: 0.86rem;
-            padding: 8px 12px;
-            line-height: 1.45;
+            font-size: clamp(1rem, 1.4vw, 1.4rem);
+            padding: clamp(12px, 1.8vh, 20px) clamp(16px, 2vw, 24px);
+            line-height: 1.55;
         }
 
-        /* Monospace Code Boxes */
-        .code-box {
-            position: relative;
-            margin: 6px 0;
+        /* HIDE LEVEL UP & BOSS CHALLENGE IN LECTURE MODE */
+        body.projector-mode .tier-accordion {
+            display: none !important;
         }
 
-        pre {
-            background: var(--code-bg);
-            color: #38bdf8;
-            overflow-x: auto;
-            font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-        }
-
-        .copy-btn {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: #1e293b;
-            color: #cbd5e1;
-            border: 1px solid #475569;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .copy-btn:hover { background: #334155; color: #ffffff; }
-        .copy-btn.copied { background: var(--tier-core); color: #ffffff; border-color: var(--tier-core); }
-
-        /* Tables */
-        table.dense-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 6px 0;
-        }
-
-        table.dense-table th {
-            background: #f1f5f9;
-            color: #334155;
-            text-align: left;
-            border: 1px solid #cbd5e1;
-            font-weight: 800;
-        }
-
-        table.dense-table td {
-            border: 1px solid #e2e8f0;
-            color: #1e293b;
+        body.projector-mode .slide-meta-badges .badge-levelup,
+        body.projector-mode .slide-meta-badges .badge-boss {
+            display: none !important;
         }
 
         /* Slide Footer */
@@ -649,8 +591,8 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding-top: 8px;
-            border-top: 1px solid #f1f5f9;
+            padding-top: clamp(6px, 1vh, 12px);
+            border-top: 2px solid #f1f5f9;
         }
 
         /* Bottom Navigation Bar */
@@ -771,18 +713,18 @@
                         <div class="hero-inner">
                             <div class="hero-tag-badge">Dev - Basics 1 (Unity 6)</div>
                             <div class="hero-sub">Minor Game Design & Development - Hogeschool Rotterdam</div>
-                            <div class="hero-grid">
+                            <div class="hero-stack">
                                 <div class="hero-pill-card">
-                                    <div class="hero-pill-title core">Core Track</div>
-                                    <div class="hero-pill-desc">2D component model, deterministic script lifecycles, and physics-driven platformer movement.</div>
+                                    <div class="hero-pill-title core">Core Track (Live Lecture)</div>
+                                    <div class="hero-pill-desc">2D component model, deterministic script lifecycles, and physics-driven platformer movement with <code>Rigidbody2D.linearVelocity</code>.</div>
                                 </div>
                                 <div class="hero-pill-card">
-                                    <div class="hero-pill-title levelup">Level Up Track</div>
-                                    <div class="hero-pill-desc">Jump buffering, coyote time, variable jump cuts, and physics material tuning.</div>
+                                    <div class="hero-pill-title levelup">Level Up Track (Self-Service)</div>
+                                    <div class="hero-pill-desc">Jump buffering, coyote time, variable jump cuts, and custom physics material tuning.</div>
                                 </div>
                                 <div class="hero-pill-card">
-                                    <div class="hero-pill-title boss">Boss Challenge</div>
-                                    <div class="hero-pill-desc">Separation of Concerns, Object Pooling, and ScriptableObject event channels.</div>
+                                    <div class="hero-pill-title boss">Boss Challenge (Advanced Architecture)</div>
+                                    <div class="hero-pill-desc">Separation of Concerns, zero-allocation Object Pooling, and decoupled ScriptableObject event channels.</div>
                                 </div>
                             </div>
                         </div>
@@ -799,16 +741,16 @@
                             </div>
                         </div>
 
-                        <!-- Dynamic Slide Content Area (High Information Density) -->
+                        <!-- Dynamic Slide Content Area (Scale-to-Fit Screen Filling) -->
                         <div class="slide-content-area" id="slideContentArea">
                             <!-- Populated dynamically via JS -->
                         </div>
 
                         <!-- Slide Footer with Official Logo Only -->
                         <div class="slide-footer">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-                                <img src="assets/HR_Logo.jpg" style="height: 26px; width: 26px; border-radius: 50%; object-fit: cover;" alt="HR Logo">
-                                <span style="font-weight: 900; font-size: 0.78rem; letter-spacing: 0.5px; color: var(--hr-red);">HOGESCHOOL ROTTERDAM</span>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
+                                <img src="assets/HR_Logo.jpg" style="height: 30px; width: 30px; border-radius: 50%; object-fit: cover;" alt="HR Logo">
+                                <span style="font-weight: 900; font-size: 0.85rem; letter-spacing: 0.5px; color: var(--hr-red);">HOGESCHOOL ROTTERDAM</span>
                             </div>
                         </div>
                     </div>
@@ -863,7 +805,7 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // Content Matrix: Friendly Tier Names (Core, Level Up, Boss Challenge) Across All 21 Slides
+        // Content Matrix: Screen-Filling Vertical Stack Layouts Across All 21 Slides
         const slidesData = [
             // Slide 1
             {
@@ -874,23 +816,23 @@
             {
                 title: "Dev Class Intro & Toolchain",
                 content: `
-                    <div class="card-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Engine Standard</div>
+                            <div class="card-title core">1. Engine Standard: Unity 6 (6000.x)</div>
                             <div class="card-body">
-                                <strong>Unity 6 (6000.x)</strong> with Universal Render Pipeline (URP). Stable, pre-configured packages, zero broken dependencies.
+                                We use <strong>Unity 6 LTS with 2D Universal Render Pipeline (URP)</strong>. Stable releases, pre-installed packages, and zero broken build pipelines.
                             </div>
                         </div>
-                        <div class="content-card">
-                            <div class="card-title core">2. Code Editor</div>
+                        <div class="content-card primary">
+                            <div class="card-title core">2. Recommended IDE: JetBrains Rider</div>
                             <div class="card-body">
-                                <strong>JetBrains Rider</strong> (Free with school email) or <strong>Visual Studio 2022</strong>. Provides real-time Unity inspections and zero-lag debugging.
+                                <strong>JetBrains Rider</strong> (Free with student license) or <strong>Visual Studio 2022</strong>. Provides real-time Unity serialization inspections and instant debugging.
                             </div>
                         </div>
-                        <div class="content-card">
-                            <div class="card-title core">3. Help & Community</div>
+                        <div class="content-card primary">
+                            <div class="card-title core">3. Community & Live Lecture Support</div>
                             <div class="card-body">
-                                <strong>Discord #dev-help</strong> channel for live assistance during and after workshop sessions.
+                                Join the official <strong>Discord #dev-help</strong> channel for instant code reviews and teacher assistance during workshops.
                             </div>
                         </div>
                     </div>
@@ -918,28 +860,27 @@
             {
                 title: "Lesson 1 Structure & Roadmap",
                 content: `
-                    <div class="card-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">Part 1: Setup & Project Core (45 Min)</div>
+                            <div class="card-title core">Part 1: Setup & Project Core (45 Minutes)</div>
                             <div class="card-body">
                                 <ul>
-                                    <li>Download starter asset packages & open documentation</li>
-                                    <li>Unity 6 2D URP Project Creation</li>
-                                    <li>Installing Cinemachine 3 in Package Manager</li>
-                                    <li>Importing <code>basics1.unitypackage</code></li>
-                                    <li>4-Step Milestone Assignment Overview</li>
+                                    <li>Download starter asset package (<code>basics1.unitypackage</code>) and open documentation</li>
+                                    <li>Create Unity 6 project using the <strong>2D (URP)</strong> Template</li>
+                                    <li>Install <strong>Cinemachine 3</strong> via Unity Package Manager</li>
+                                    <li>Import starter scene and review the 4-Step Milestone Assignment</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Part 2: 2D Physics & Architecture (60 Min)</div>
+                            <div class="card-title core">Part 2: 2D Physics & Architecture (60 Minutes)</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><code>Rigidbody2D</code> physics simulation & constraints</li>
-                                    <li><code>linearVelocity</code> movement vs <code>AddForce</code></li>
-                                    <li>Deterministic script execution order</li>
-                                    <li>Separation of Concerns: Root (Physics) vs Child (Graphics)</li>
-                                    <li>Cinemachine 3 follow camera setup</li>
+                                    <li>Configure <code>Rigidbody2D</code> physics simulation, mass, and rotation constraints</li>
+                                    <li>Script responsive platformer movement using modern <code>rb.linearVelocity</code></li>
+                                    <li>Understand deterministic script lifecycles: <code>Awake</code>, <code>Start</code>, <code>FixedUpdate</code>, <code>Update</code></li>
+                                    <li>Apply Separation of Concerns: Root (Physics) vs Child (Visuals)</li>
+                                    <li>Configure Cinemachine 3 follow camera and test coin collection triggers</li>
                                 </ul>
                             </div>
                         </div>
@@ -968,23 +909,23 @@
             {
                 title: "Part 1: Course & Project Setup",
                 content: `
-                    <div class="card-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Package Download</div>
+                            <div class="card-title core">Step 1: Download Starter Package</div>
                             <div class="card-body">
                                 Download <code>basics1.unitypackage</code> directly from the course repository or class portal.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Unity 6 Project</div>
+                            <div class="card-title core">Step 2: Create Unity 6 Project</div>
                             <div class="card-body">
-                                Create new project using <strong>2D (URP)</strong> template. Input System is pre-installed.
+                                Launch Unity Hub &rarr; Click <strong>New Project</strong> &rarr; Select <strong>2D (URP)</strong> Template &rarr; Unity 6.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Custom Package</div>
+                            <div class="card-title core">Step 3: Import Custom Package</div>
                             <div class="card-body">
-                                Import package via Unity menu to load starter scenes and sprites.
+                                In Unity top menu: <code>Assets > Import Package > Custom Package...</code> &rarr; Select <code>basics1.unitypackage</code> &rarr; Click <strong>Import All</strong>.
                             </div>
                         </div>
                     </div>
@@ -1012,14 +953,19 @@
             {
                 title: "Course Resources & Package Download",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Course Repository Web Portal:</div>
-                        <div class="code-box">
-                            <pre>https://github.com/HR-CMGT/Minor-GDD-Unity</pre>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy URL</button>
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Official Course Repository:</div>
+                            <div class="code-box">
+                                <pre>https://github.com/HR-CMGT/Minor-GDD-Unity</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy URL</button>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <strong>Core Track:</strong> Download starter packages directly via browser from <code>projectfiles/basics1.unitypackage</code> (no Git command line required for day 1).
+                        <div class="content-card primary">
+                            <div class="card-title core">Browser Download (Zero Terminal Required):</div>
+                            <div class="card-body">
+                                Navigate to the <code>projectfiles/</code> folder on GitHub and download <code>basics1.unitypackage</code> directly to your computer.
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1050,23 +996,23 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Course Reference Manuals & Docs",
                 content: `
-                    <div class="card-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">00_unity.md</div>
+                            <div class="card-title core">1. Reference Manual (00_unity.md)</div>
                             <div class="card-body">
-                                Complete reference manual. Explains script lifecycles, transform hierarchy, physics calculations, and Garbage Collection.
+                                Complete manual on script lifecycles, transform hierarchies, physics calculations, and Garbage Collection prevention.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">00_codesnippets.md</div>
+                            <div class="card-title core">2. Production Snippets (00_codesnippets.md)</div>
                             <div class="card-body">
-                                Production-grade C# code snippets: 2D/3D movement, framerate-independent timers, raycasting, and event channels.
+                                Tested C# scripts: 2D/3D platformer physics, framerate-independent timers, raycasting, and event channels.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">00_resources.md</div>
+                            <div class="card-title core">3. Curated Free Assets (00_resources.md)</div>
                             <div class="card-body">
-                                Curated free assets: Kenney game assets, PolyHaven textures, FreeSound audio effects, and 2D sprite sheets.
+                                Curated free game assets: Kenney assets, PolyHaven textures, FreeSound audio effects, and 2D sprite sheets.
                             </div>
                         </div>
                     </div>
@@ -1094,16 +1040,18 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Unity Startproject Import Guide",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Step-by-Step Package Import (Guaranteed Method)</div>
-                        <div class="card-body">
-                            <ol>
-                                <li>Open your Unity 6 project with the <strong>2D (URP)</strong> template active.</li>
-                                <li>In the top menu bar, click: <code>Assets > Import Package > Custom Package...</code></li>
-                                <li>Browse to <code>projectfiles/basics1.unitypackage</code> and click <strong>Open</strong>.</li>
-                                <li>In the Import Unity Package window, ensure all items are checked and click <strong>Import</strong>.</li>
-                                <li>Open <code>Class1/0_STARTSCENE/0_startscene.unity</code> in Project view.</li>
-                            </ol>
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Step-by-Step Package Import Process</div>
+                            <div class="card-body">
+                                <ol>
+                                    <li>Open your Unity 6 project with the <strong>2D (URP)</strong> template active.</li>
+                                    <li>In the top menu bar, click: <code>Assets > Import Package > Custom Package...</code></li>
+                                    <li>Browse to <code>projectfiles/basics1.unitypackage</code> and click <strong>Open</strong>.</li>
+                                    <li>In the Import Package window, ensure all files are checked and click <strong>Import</strong>.</li>
+                                    <li>In Project View, double-click: <code>Class1/0_STARTSCENE/0_startscene.unity</code>.</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1130,22 +1078,21 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Package Manager Installation (Cinemachine 3)",
                 content: `
-                    <div class="card-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">Cinemachine 3 (Camera Tracking)</div>
+                            <div class="card-title core">1. Installing Cinemachine 3 (Camera Tracking)</div>
                             <div class="card-body">
                                 <ol>
-                                    <li>Navigate to <code>Window > Package Manager</code>.</li>
-                                    <li>In top dropdown, select <strong>Packages: Unity Registry</strong>.</li>
-                                    <li>Search for <strong>Cinemachine</strong>.</li>
-                                    <li>Click <strong>Install</strong> (downloads latest Cinemachine 3.x).</li>
+                                    <li>In top menu: <code>Window > Package Manager</code>.</li>
+                                    <li>In top dropdown, switch to <strong>Packages: Unity Registry</strong>.</li>
+                                    <li>Search for <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
                                 </ol>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Input System (Pre-Installed)</div>
+                            <div class="card-title core">2. Modern Input System (Pre-Installed in Unity 6)</div>
                             <div class="card-body">
-                                In <strong>Unity 6</strong>, the modern Input System is active by default in 2D (URP) templates. No manual installation or backend restart prompt is required!
+                                In <strong>Unity 6</strong>, the new Input System is active by default in all 2D URP templates. No manual installation or backend restart prompt is required!
                             </div>
                         </div>
                     </div>
@@ -1173,29 +1120,29 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Assignment: 4-Step Milestones",
                 content: `
-                    <div class="card-grid-4">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Player Setup</div>
+                            <div class="card-title core">1. Player Setup & Physics</div>
                             <div class="card-body">
-                                Attach <code>PlayerController2D</code> and <code>PlayerInput</code>. Position child <code>GroundCheck</code> at feet.
+                                Attach <code>PlayerController2D</code> and <code>PlayerInput</code>. Position child <code>GroundCheck</code> Transform at feet.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Cinemachine</div>
+                            <div class="card-title core">2. Cinemachine Camera Follow</div>
                             <div class="card-body">
-                                Create Cinemachine 3 Camera. Drag Player root into <strong>Tracking Target</strong>.
+                                Create Cinemachine 3 Camera. Drag Player root into the <strong>Tracking Target</strong> slot.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Coins</div>
+                            <div class="card-title core">3. Collectible Coin Triggers</div>
                             <div class="card-body">
-                                Place <code>Coin_Start</code> prefab with <code>CircleCollider2D</code> (<code>isTrigger = true</code>).
+                                Place <code>Coin_Start</code> prefab in scene with <code>CircleCollider2D</code> (<code>isTrigger = true</code>).
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">4. Playtest</div>
+                            <div class="card-title core">4. Playtest & Verification</div>
                             <div class="card-body">
-                                Press Play. Run, jump, and collect all coins cleanly without tipping over.
+                                Press Play. Run, jump, and collect all coins cleanly without the player tipping over!
                             </div>
                         </div>
                     </div>
@@ -1223,37 +1170,39 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Rigidbody2D Component Essentials",
                 content: `
-                    <table class="dense-table">
-                        <thead>
-                            <tr>
-                                <th>Property</th>
-                                <th>Recommended Setting</th>
-                                <th>Why It Matters</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Body Type</strong></td>
-                                <td><code>Dynamic</code></td>
-                                <td>Simulated by physics engine with gravity and velocity calculations.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Collision Detection</strong></td>
-                                <td><code>Continuous</code></td>
-                                <td>Prevents tunneling (passing through thin ground colliders at high speed).</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Constraints</strong></td>
-                                <td><code>Freeze Rotation Z: TRUE</code></td>
-                                <td><strong>Critical:</strong> Prevents character capsule from tipping over when walking!</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Interpolate</strong></td>
-                                <td><code>Interpolate</code></td>
-                                <td>Smooths physics movement visually between fixed 50Hz physics ticks.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="content-stack">
+                        <table class="dense-table">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Setting</th>
+                                    <th>Engineering Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Body Type</strong></td>
+                                    <td><code>Dynamic</code></td>
+                                    <td>Simulated by physics engine with gravity and velocity calculations.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Collision Detection</strong></td>
+                                    <td><code>Continuous</code></td>
+                                    <td>Prevents tunneling (passing through thin ground colliders at high speeds).</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Constraints</strong></td>
+                                    <td><code>Freeze Rotation Z</code></td>
+                                    <td><strong>Mandatory:</strong> Prevents player capsule from tipping over when walking!</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Interpolate</strong></td>
+                                    <td><code>Interpolate</code></td>
+                                    <td>Smooths visual rendering between fixed 50Hz physics calculation ticks.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
                         <summary class="accordion-header">
                             <span>[Level Up] Frictionless Wall PhysicsMaterial2D</span>
@@ -1278,10 +1227,11 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Rigidbody2D Scripting (linearVelocity)",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Arcade Platformer Movement (FixedUpdate)</div>
-                        <div class="code-box">
-                            <pre>// Horizontal Movement: Direct linearVelocity in physics step
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Arcade Platformer Movement (FixedUpdate)</div>
+                            <div class="code-box">
+                                <pre>// Horizontal Movement: Direct linearVelocity in physics step
 rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
 // Jump Impulse: Instant vertical velocity
@@ -1289,10 +1239,14 @@ if (jumpRequested) {
     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     jumpRequested = false;
 }</pre>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <strong>Golden Rule:</strong> Never modify <code>transform.position</code> directly on dynamic Rigidbodies! Modifying position teleports the object and breaks collision interpolation.
+                        <div class="content-card primary">
+                            <div class="card-title core">Golden Physics Rule:</div>
+                            <div class="card-body">
+                                Never modify <code>transform.position</code> directly on dynamic Rigidbodies! Modifying position teleports the object and breaks collision interpolation.
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1330,17 +1284,17 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Unity Manual & API Reference",
                 content: `
-                    <div class="card-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Unity Manual</div>
+                            <div class="card-title core">1. Unity Manual (Conceptual Understanding)</div>
                             <div class="card-body">
-                                Conceptual guides and architecture overviews. Use when learning systems for the first time (Physics 2D, URP Lighting, Canvas Scaler).
+                                High-level architectural overviews. Use when learning new systems (2D Physics overview, URP 2D Lighting, Canvas Scaler).
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Script Reference</div>
+                            <div class="card-title core">2. Script Reference (Code API Signatures)</div>
                             <div class="card-body">
-                                Technical API documentation. Shows exact method signatures, return types, and parameters (e.g. <code>Physics2D.OverlapCircle</code>).
+                                Exact method signatures, parameter types, and return values (e.g. <code>Physics2D.OverlapCircle</code> and <code>RaycastHit2D</code>).
                             </div>
                         </div>
                     </div>
@@ -1368,23 +1322,23 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Unity Learn & Modern Resources",
                 content: `
-                    <div class="card-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">Unity Learn</div>
+                            <div class="card-title core">1. Unity Learn: 2D Essentials Track</div>
                             <div class="card-body">
-                                Official verified learning tracks for 2D platformers and physics architecture in Unity 6.
+                                Official verified learning tracks covering 2D platformers and physics architecture in Unity 6.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">00_tutorials.md</div>
+                            <div class="card-title core">2. Course Repository Tutorials (00_tutorials.md)</div>
                             <div class="card-body">
-                                Curated video repository maintained in course repo. Filtered to remove outdated Built-in Pipeline tutorials.
+                                Curated video repository maintained in the course repo, filtered to remove deprecated Built-in Pipeline tutorials.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Community Channels</div>
+                            <div class="card-title core">3. Community Channels</div>
                             <div class="card-body">
-                                Tarodev (2D controller math), Mina Pêcheux (C# patterns), and Infallible Code (clean architecture).
+                                <strong>Tarodev</strong> (2D platformer math), <strong>Mina Pêcheux</strong> (C# patterns), and <strong>Infallible Code</strong> (clean architecture).
                             </div>
                         </div>
                     </div>
@@ -1412,18 +1366,23 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Script Execution Order & Lifecycle",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Deterministic MonoBehaviour Order of Execution:</div>
-                        <div class="code-box">
-                            <pre>[Awake]       -> Component cache (rb = GetComponent<Rigidbody2D>())
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Deterministic Execution Order</div>
+                            <div class="code-box">
+                                <pre>[Awake]       -> Component cache (rb = GetComponent<Rigidbody2D>())
 [Start]       -> Initialize runtime variables
 [Update]      -> Read Input & GroundCheck (variable frame rate)
 [FixedUpdate] -> Apply Rigidbody velocity (physics tick, fixed 50Hz)
 [LateUpdate]  -> Camera tracking follow logic</pre>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <strong>Crucial Rule:</strong> Input checks belong in <code>Update()</code> so keystrokes are never missed; physics calculations belong in <code>FixedUpdate()</code>.
+                        <div class="content-card primary">
+                            <div class="card-title core">Crucial Rule:</div>
+                            <div class="card-body">
+                                Input checks belong in <code>Update()</code> so keystrokes are never missed; physics calculations belong in <code>FixedUpdate()</code>.
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1450,25 +1409,17 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Part 2 Agenda: Architecture & Components",
                 content: `
-                    <div class="card-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Component Architecture</div>
+                            <div class="card-title core">1. Modular Component Architecture</div>
                             <div class="card-body">
-                                <ul>
-                                    <li><code>[RequireComponent]</code> attributes</li>
-                                    <li>Safe component retrieval with <code>TryGetComponent</code></li>
-                                    <li>Separation of Concerns (Root vs Child)</li>
-                                </ul>
+                                Enforcing dependencies with <code>[RequireComponent]</code>, safe retrieval with <code>TryGetComponent</code>, and Separation of Concerns.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Gameplay Systems</div>
+                            <div class="card-title core">2. Gameplay Systems & Prefabs</div>
                             <div class="card-body">
-                                <ul>
-                                    <li>Cinemachine 3 Follow Camera</li>
-                                    <li>Prefab Instances & Overrides</li>
-                                    <li>Trigger Colliders & Coin Collection</li>
-                                </ul>
+                                Cinemachine 3 smooth camera follow, prefab overrides, and collectible coin trigger detection.
                             </div>
                         </div>
                     </div>
@@ -1496,18 +1447,23 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Component Architecture & Requirements",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Prevent Missing Component Errors:</div>
-                        <div class="code-box">
-                            <pre>[RequireComponent(typeof(Rigidbody2D))]
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Enforce Required Components Automatically:</div>
+                            <div class="code-box">
+                                <pre>[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour {
-    // Automatically adds Rigidbody2D & Collider2D when script is attached!
+    // Unity automatically adds Rigidbody2D & Collider2D when attached!
 }</pre>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            Attaching this script automatically validates and adds required components in the Inspector.
+                        <div class="content-card primary">
+                            <div class="card-title core">Engineering Benefit:</div>
+                            <div class="card-body">
+                                Permanently eliminates <code>NullReferenceException</code> errors across team members.
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1539,16 +1495,21 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Separation of Concerns (Root vs Child)",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Industry Standard Player Prefab Hierarchy:</div>
-                        <div class="code-box">
-                            <pre>[Player] (Root: Rigidbody2D, BoxCollider2D, PlayerController2D, PlayerInput)
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Industry Standard Player Prefab Hierarchy:</div>
+                            <div class="code-box">
+                                <pre>[Player] (Root: Rigidbody2D, BoxCollider2D, PlayerController2D, PlayerInput)
   └── [Graphics] (Child: SpriteRenderer, Animator)
   └── [GroundCheck] (Child: Empty Transform at feet)</pre>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <strong>Golden Rule:</strong> Keep physics colliders on the Root. Put sprite flips and squash-and-stretch animations on the Graphics child so physics hitboxes never deform!
+                        <div class="content-card primary">
+                            <div class="card-title core">Golden Architectural Rule:</div>
+                            <div class="card-body">
+                                Keep physics colliders on the Root GameObject. Put sprite flips and squash-and-stretch animations on the Graphics child so hitboxes never deform!
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1575,15 +1536,17 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Cinemachine 3 Camera Setup",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Creating a 2D Smooth Follow Camera:</div>
-                        <div class="card-body">
-                            <ol>
-                                <li>In top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
-                                <li>In Inspector, drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
-                                <li>Set <strong>Body</strong> to <code>Framing Transposer</code>.</li>
-                                <li>Adjust <strong>Dead Zone Width/Height</strong> to control smooth lead distance.</li>
-                            </ol>
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Creating a 2D Smooth Follow Camera:</div>
+                            <div class="card-body">
+                                <ol>
+                                    <li>In top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
+                                    <li>In Inspector, drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
+                                    <li>Set <strong>Body</strong> to <code>Framing Transposer</code>.</li>
+                                    <li>Adjust <strong>Dead Zone Width/Height</strong> to control smooth lead distance.</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1610,23 +1573,17 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Using Prefabs in Production",
                 content: `
-                    <div class="card-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Prefab Asset</div>
+                            <div class="card-title core">1. Prefab Asset on Disk</div>
                             <div class="card-body">
-                                Reusable GameObject template saved on disk. Editing the asset updates all scene instances.
+                                Reusable GameObject template saved on disk. Editing the asset updates all scene instances automatically.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Prefab Mode</div>
+                            <div class="card-title core">2. Prefab Mode & Overrides</div>
                             <div class="card-body">
-                                Double-click any prefab in Project View to open isolated edit mode.
-                            </div>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">3. Overrides</div>
-                            <div class="card-body">
-                                Customize specific scene instances or click <strong>Apply All</strong> to commit changes globally.
+                                Double-click any prefab in Project View to open isolated edit mode. Customize individual scene instances or click <strong>Apply All</strong> to commit changes globally.
                             </div>
                         </div>
                     </div>
@@ -1654,10 +1611,11 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Creating & Destroying GameObjects (Coins)",
                 content: `
-                    <div class="content-card primary">
-                        <div class="card-title core">Collectible Trigger Script (Coin.cs)</div>
-                        <div class="code-box">
-                            <pre>using UnityEngine;
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Collectible Trigger Script (Coin.cs)</div>
+                            <div class="code-box">
+                                <pre>using UnityEngine;
 
 public class Coin : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
@@ -1667,7 +1625,8 @@ public class Coin : MonoBehaviour {
         }
     }
 }</pre>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
@@ -1701,37 +1660,39 @@ coinPool.Release(gameObject);</pre>
             {
                 title: "Help Channels & Troubleshooting Matrix",
                 content: `
-                    <table class="dense-table">
-                        <thead>
-                            <tr>
-                                <th>Issue</th>
-                                <th>Root Cause</th>
-                                <th>One-Click Fix</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Falls through floor</strong></td>
-                                <td>Missing collider or layer mismatch</td>
-                                <td>Attach <code>BoxCollider2D</code> to floor and set Ground Layer.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Character tips over</strong></td>
-                                <td>Physics torque on Z axis</td>
-                                <td>Check <code>Constraints > Freeze Rotation Z</code> on Rigidbody2D.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Keys don't respond</strong></td>
-                                <td>Missing PlayerInput</td>
-                                <td>Attach <code>PlayerInput</code> component set to <code>Send Messages</code>.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Need live help?</strong></td>
-                                <td>Questions during class</td>
-                                <td>Post in Discord <strong>#dev-help</strong> channel.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="content-stack">
+                        <table class="dense-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Root Cause</th>
+                                    <th>One-Click Fix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Falls through floor</strong></td>
+                                    <td>Missing collider or layer mismatch</td>
+                                    <td>Attach <code>BoxCollider2D</code> to floor and set Ground Layer.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Character tips over</strong></td>
+                                    <td>Physics torque on Z axis</td>
+                                    <td>Check <code>Constraints > Freeze Rotation Z</code> on Rigidbody2D.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Keys don't respond</strong></td>
+                                    <td>Missing PlayerInput</td>
+                                    <td>Attach <code>PlayerInput</code> component set to <code>Send Messages</code>.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Need live help?</strong></td>
+                                    <td>Questions during class</td>
+                                    <td>Post in Discord <strong>#dev-help</strong> channel.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <details class="tier-accordion levelup" id="tierLevelUpBlock">
                         <summary class="accordion-header">
                             <span>[Level Up] Visual Raycast Debugging in Scene View</span>
@@ -1841,7 +1802,6 @@ coinPool.Release(gameObject);</pre>
             const levelUpBlocks = document.querySelectorAll('#tierLevelUpBlock');
             const bossBlocks = document.querySelectorAll('#tierBossBlock');
 
-            // If in projector mode, CSS already handles hiding them
             if (currentViewMode === 'projector') {
                 return;
             }
