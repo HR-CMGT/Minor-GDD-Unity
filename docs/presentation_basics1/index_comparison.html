@@ -8,20 +8,19 @@
         :root {
             --hr-red: #e20049;
             --hr-darkred: #b8003b;
-            --bg-stage: #0f0f12;
-            --bg-card: #18181d;
-            --bg-code: #121216;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-subtle: #e2e8f0;
+            --bg-stage: #0a0a0d;
+            --bg-topbar: #141418;
+            --bg-drawer: #101014;
+            --bg-card: #ffffff;
+            --bg-code: #0f1117;
             
-            --tier-beginner: #10b981;
-            --tier-beginner-bg: rgba(16, 185, 129, 0.08);
-            --tier-beginner-border: #a7f3d0;
+            --tier-beg: #10b981;
+            --tier-beg-bg: rgba(16, 185, 129, 0.08);
+            --tier-beg-border: #a7f3d0;
             
-            --tier-intermediate: #0284c7;
-            --tier-intermediate-bg: rgba(2, 132, 199, 0.08);
-            --tier-intermediate-border: #bae6fd;
+            --tier-int: #0284c7;
+            --tier-int-bg: rgba(2, 132, 199, 0.08);
+            --tier-int-border: #bae6fd;
             
             --tier-pro: #8b5cf6;
             --tier-pro-bg: rgba(139, 92, 246, 0.08);
@@ -49,8 +48,8 @@
         /* Top Bar */
         .top-bar {
             height: 56px;
-            background: #17171c;
-            border-bottom: 1px solid #272730;
+            background: var(--bg-topbar);
+            border-bottom: 1px solid #24242e;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -79,10 +78,10 @@
         .tier-selector {
             display: flex;
             align-items: center;
-            background: #22222b;
+            background: #1f1f27;
             padding: 3px;
             border-radius: 8px;
-            border: 1px solid #333340;
+            border: 1px solid #30303d;
             gap: 2px;
         }
 
@@ -98,39 +97,21 @@
             transition: all 0.15s ease;
         }
 
-        .tier-btn:hover {
-            color: #fff;
-        }
-
-        .tier-btn.active-all {
-            background: #3c3c4e;
-            color: #fff;
-        }
-
-        .tier-btn.active-beg {
-            background: var(--tier-beginner);
-            color: #fff;
-        }
-
-        .tier-btn.active-int {
-            background: var(--tier-intermediate);
-            color: #fff;
-        }
-
-        .tier-btn.active-pro {
-            background: var(--tier-pro);
-            color: #fff;
-        }
+        .tier-btn:hover { color: #fff; }
+        .tier-btn.active-all { background: #383848; color: #fff; }
+        .tier-btn.active-beg { background: var(--tier-beg); color: #fff; }
+        .tier-btn.active-int { background: var(--tier-int); color: #fff; }
+        .tier-btn.active-pro { background: var(--tier-pro); color: #fff; }
 
         /* Main View Switch (Original vs Revised) */
         .toggle-wrap {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: #22222b;
+            background: #1f1f27;
             padding: 4px 12px;
             border-radius: 9999px;
-            border: 1px solid #333340;
+            border: 1px solid #30303d;
         }
 
         .toggle-text {
@@ -142,7 +123,7 @@
         }
 
         .toggle-text.active-old { color: var(--accent-old); }
-        .toggle-text.active-new { color: var(--tier-beginner); }
+        .toggle-text.active-new { color: var(--tier-beg); }
 
         .switch {
             position: relative;
@@ -174,7 +155,7 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider { background-color: var(--tier-beginner); }
+        input:checked + .slider { background-color: var(--tier-beg); }
         input:checked + .slider:before { transform: translateX(22px); }
 
         /* Workspace Layout */
@@ -188,8 +169,8 @@
         /* Slide Drawer */
         .slide-drawer {
             width: 220px;
-            background: #141418;
-            border-right: 1px solid #23232b;
+            background: var(--bg-drawer);
+            border-right: 1px solid #202028;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -210,7 +191,7 @@
 
         .drawer-item:hover {
             transform: scale(1.03);
-            border-color: #4a4a58;
+            border-color: #444456;
         }
 
         .drawer-item.active {
@@ -242,19 +223,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 18px;
-            background: #0b0b0e;
+            padding: 16px;
+            background: #07070a;
         }
 
         .slide-viewport {
             width: 100%;
-            max-width: 1120px;
+            max-width: 1140px;
             height: 100%;
-            max-height: 640px;
+            max-height: 650px;
             aspect-ratio: 16 / 9;
             background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 16px 44px rgba(0, 0, 0, 0.8);
             overflow: hidden;
             position: relative;
             display: flex;
@@ -270,13 +251,13 @@
             background: #000;
         }
 
-        /* Interactive Revised View */
+        /* Interactive Revised View (Rich Visual + Code Layout) */
         .view-interactive {
             width: 100%;
             height: 100%;
             background: #f8fafc;
-            color: var(--text-main);
-            padding: 28px 36px;
+            color: #0f172a;
+            padding: 24px 30px;
             display: none;
             flex-direction: column;
             overflow-y: auto;
@@ -292,17 +273,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
         .slide-banner {
             background: var(--hr-red);
             color: #fff;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 6px;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 800;
             display: inline-block;
         }
@@ -313,7 +294,7 @@
         }
 
         .pill-badge {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 800;
             text-transform: uppercase;
             padding: 3px 8px;
@@ -321,30 +302,82 @@
             letter-spacing: 0.5px;
         }
 
-        .pill-beg { background: var(--tier-beginner-bg); color: var(--tier-beginner); border: 1px solid var(--tier-beginner-border); }
-        .pill-int { background: var(--tier-intermediate-bg); color: var(--tier-intermediate); border: 1px solid var(--tier-intermediate-border); }
+        .pill-beg { background: var(--tier-beg-bg); color: var(--tier-beg); border: 1px solid var(--tier-beg-border); }
+        .pill-int { background: var(--tier-int-bg); color: var(--tier-int); border: 1px solid var(--tier-int-border); }
         .pill-pro { background: var(--tier-pro-bg); color: var(--tier-pro); border: 1px solid var(--tier-pro-border); }
 
-        /* Tier Content Blocks */
-        .tier-section {
-            margin-bottom: 14px;
+        /* Content Split Layout: Visual Reference on Left, Tiers & Code on Right */
+        .slide-split-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 18px;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        /* Left Visual Reference Frame */
+        .visual-card {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
-            transition: all 0.2s ease;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .visual-img-wrap {
+            width: 100%;
+            height: 195px;
+            background: #0f172a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .visual-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.25s ease;
+        }
+
+        .visual-img-wrap img:hover {
+            transform: scale(1.05);
+        }
+
+        .visual-caption {
+            padding: 8px 12px;
+            font-size: 0.76rem;
+            color: #475569;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+            font-weight: 600;
+        }
+
+        /* Right Column: Multi-Tier Content */
+        .tiers-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         /* Beginner Main Road */
         .beg-main-road {
             background: #ffffff;
             border: 1.5px solid #cbd5e1;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border-radius: 8px;
-            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
         .beg-title {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 800;
-            color: var(--tier-beginner);
+            color: var(--tier-beg);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
@@ -354,33 +387,30 @@
         }
 
         .content-body {
-            font-size: 0.96rem;
-            line-height: 1.55;
+            font-size: 0.92rem;
+            line-height: 1.5;
             color: #334155;
         }
 
         .content-body ul, .content-body ol {
-            margin-left: 20px;
-            margin-top: 6px;
-            margin-bottom: 6px;
-        }
-
-        .content-body li {
+            margin-left: 18px;
+            margin-top: 4px;
             margin-bottom: 4px;
         }
+
+        .content-body li { margin-bottom: 3px; }
 
         /* Collapsible Spoiler Cards (Intermediate & Pro) */
         details.spoiler-card {
             border-radius: 8px;
             overflow: hidden;
-            margin-bottom: 10px;
             border: 1.5px solid transparent;
             transition: all 0.2s ease;
         }
 
         details.spoiler-card.card-int {
-            background: var(--tier-intermediate-bg);
-            border-color: var(--tier-intermediate-border);
+            background: var(--tier-int-bg);
+            border-color: var(--tier-int-border);
         }
 
         details.spoiler-card.card-pro {
@@ -389,8 +419,8 @@
         }
 
         summary.spoiler-header {
-            padding: 10px 16px;
-            font-size: 0.86rem;
+            padding: 8px 14px;
+            font-size: 0.84rem;
             font-weight: 800;
             cursor: pointer;
             display: flex;
@@ -400,17 +430,15 @@
             transition: background-color 0.15s ease;
         }
 
-        details.card-int summary.spoiler-header { color: var(--tier-intermediate); }
+        details.card-int summary.spoiler-header { color: var(--tier-int); }
         details.card-pro summary.spoiler-header { color: var(--tier-pro); }
 
-        summary.spoiler-header:hover {
-            filter: brightness(0.95);
-        }
+        summary.spoiler-header:hover { filter: brightness(0.95); }
 
         .spoiler-body {
-            padding: 12px 18px 16px 18px;
-            font-size: 0.92rem;
-            line-height: 1.5;
+            padding: 10px 14px 14px 14px;
+            font-size: 0.88rem;
+            line-height: 1.48;
             color: #1e293b;
             border-top: 1px solid rgba(0,0,0,0.06);
             background: #ffffff;
@@ -419,92 +447,69 @@
         /* Copyable Code Block Container */
         .code-container {
             position: relative;
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
         pre {
             background: var(--bg-code);
             color: #38bdf8;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            line-height: 1.45;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            line-height: 1.4;
             overflow-x: auto;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
         }
 
         .copy-btn {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #2b2b36;
+            top: 6px;
+            right: 6px;
+            background: #242430;
             color: #cbd5e1;
-            border: 1px solid #444456;
-            padding: 3px 8px;
+            border: 1px solid #3c3c4e;
+            padding: 2px 7px;
             border-radius: 4px;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s ease;
         }
 
-        .copy-btn:hover {
-            background: #444458;
-            color: #ffffff;
-        }
+        .copy-btn:hover { background: #383848; color: #ffffff; }
 
         .copy-btn.copied {
-            background: var(--tier-beginner);
+            background: var(--tier-beg);
             color: #ffffff;
-            border-color: var(--tier-beginner);
-        }
-
-        /* Media Slot (Images/GIFs/Videos) */
-        .media-slot {
-            margin: 10px 0;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #cbd5e1;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            max-height: 220px;
-        }
-
-        .media-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
+            border-color: var(--tier-beg);
         }
 
         /* Change Rationale Box */
         .callout-box {
             background: rgba(16, 185, 129, 0.06);
-            border-left: 4px solid var(--tier-beginner);
-            padding: 10px 14px;
+            border-left: 4px solid var(--tier-beg);
+            padding: 8px 12px;
             border-radius: 6px;
             margin-top: auto;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #065f46;
         }
 
         .callout-title {
             font-weight: 800;
             margin-bottom: 2px;
-            color: var(--tier-beginner);
+            color: var(--tier-beg);
             text-transform: uppercase;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             letter-spacing: 0.5px;
         }
 
         .footer-logo {
             position: absolute;
-            bottom: 12px;
-            right: 24px;
+            bottom: 10px;
+            right: 20px;
             font-weight: 900;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--hr-red);
             opacity: 0.6;
             letter-spacing: 0.5px;
@@ -513,8 +518,8 @@
         /* Bottom Controls */
         .bottom-bar {
             height: 50px;
-            background: #17171c;
-            border-top: 1px solid #272730;
+            background: var(--bg-topbar);
+            border-top: 1px solid #24242e;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -523,9 +528,9 @@
         }
 
         .nav-btn {
-            background: #262630;
+            background: #23232c;
             color: #f1f5f9;
-            border: 1px solid #3e3e50;
+            border: 1px solid #383846;
             padding: 6px 16px;
             border-radius: 6px;
             cursor: pointer;
@@ -534,15 +539,8 @@
             transition: all 0.2s ease;
         }
 
-        .nav-btn:hover:not(:disabled) {
-            background: #383848;
-            border-color: #5a5a70;
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
+        .nav-btn:hover:not(:disabled) { background: #343442; border-color: #525264; }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
         .slide-counter {
             font-size: 0.82rem;
@@ -566,8 +564,8 @@
 
         .mode-indicator.new {
             background: rgba(16, 185, 129, 0.15);
-            color: var(--tier-beginner);
-            border: 1px solid var(--tier-beginner);
+            color: var(--tier-beg);
+            border: 1px solid var(--tier-beg);
         }
     </style>
 </head>
@@ -577,7 +575,7 @@
     <div class="top-bar">
         <div class="brand-title">
             <span class="hr-tag">HR CMGT</span>
-            <span>Dev - Basics 1 (3-Tier Interactive Deck)</span>
+            <span>Dev - Basics 1 (Multi-Tier Interactive Deck)</span>
         </div>
 
         <!-- Tier Selector Filter -->
@@ -610,7 +608,7 @@
                 <!-- Original Full HD 1920x1080 Rendered Slide -->
                 <img id="originalSlideImg" src="" alt="Original Keynote Slide">
 
-                <!-- Interactive View (Revised 3-Tier Slide) -->
+                <!-- Interactive View (Revised Multi-Tier + Visual Reference) -->
                 <div id="interactiveSlide" class="view-interactive">
                     <div class="slide-banner-row">
                         <div class="slide-banner" id="revisedBanner">Topic Header</div>
@@ -621,33 +619,47 @@
                         </div>
                     </div>
 
-                    <!-- Tier 1: Beginner (Class Default / Main Lecture Road) -->
-                    <div class="beg-main-road" id="tierBegContainer">
-                        <div class="beg-title">Beginner Core (Lecture Main Road):</div>
-                        <div class="content-body" id="revisedBegContent">Beginner content...</div>
+                    <!-- Split Grid: Visual Reference + Multi-Tier Content -->
+                    <div class="slide-split-grid">
+                        <!-- Visual Reference Frame (from Keynote / Diagrams) -->
+                        <div class="visual-card">
+                            <div class="visual-img-wrap">
+                                <img id="visualRefImg" src="" alt="Slide Visual Diagram">
+                            </div>
+                            <div class="visual-caption" id="visualCaption">Keynote Visual Reference</div>
+                        </div>
+
+                        <!-- Multi-Tier Content Columns -->
+                        <div class="tiers-column">
+                            <!-- Tier 1: Beginner Core -->
+                            <div class="beg-main-road" id="tierBegContainer">
+                                <div class="beg-title">Beginner Core (Lecture Main Road):</div>
+                                <div class="content-body" id="revisedBegContent">Beginner content...</div>
+                            </div>
+
+                            <!-- Tier 2: Intermediate Deep Dive -->
+                            <details class="spoiler-card card-int" id="tierIntContainer">
+                                <summary class="spoiler-header">
+                                    <span>[Intermediate Deep Dive] - Game Feel & Tuning</span>
+                                    <span style="font-size:0.75rem; opacity:0.8;">Click to Open ▼</span>
+                                </summary>
+                                <div class="spoiler-body" id="revisedIntContent">
+                                    Intermediate content...
+                                </div>
+                            </details>
+
+                            <!-- Tier 3: Pro Challenge -->
+                            <details class="spoiler-card card-pro" id="tierProContainer">
+                                <summary class="spoiler-header">
+                                    <span>[Pro Challenge] - Architecture & Polish</span>
+                                    <span style="font-size:0.75rem; opacity:0.8;">Click to Open ▼</span>
+                                </summary>
+                                <div class="spoiler-body" id="revisedProContent">
+                                    Pro content...
+                                </div>
+                            </details>
+                        </div>
                     </div>
-
-                    <!-- Tier 2: Intermediate Deep Dive (Collapsible Spoiler) -->
-                    <details class="spoiler-card card-int" id="tierIntContainer">
-                        <summary class="spoiler-header">
-                            <span>[Intermediate Deep Dive] - Game Feel & Physics Tuning</span>
-                            <span style="font-size:0.75rem; opacity:0.8;">Click to Open ▼</span>
-                        </summary>
-                        <div class="spoiler-body" id="revisedIntContent">
-                            Intermediate content...
-                        </div>
-                    </details>
-
-                    <!-- Tier 3: Pro Architectural Challenge (Collapsible Spoiler) -->
-                    <details class="spoiler-card card-pro" id="tierProContainer">
-                        <summary class="spoiler-header">
-                            <span>[Pro Challenge] - Architecture, Decoupling & Polish</span>
-                            <span style="font-size:0.75rem; opacity:0.8;">Click to Open ▼</span>
-                        </summary>
-                        <div class="spoiler-body" id="revisedProContent">
-                            Pro content...
-                        </div>
-                    </details>
 
                     <!-- Why This Change Was Made (vs Original) -->
                     <div class="callout-box" id="revisedCallout">
@@ -689,27 +701,28 @@
             "FF5F932E-FE66-4CE5-B9F8-3079B2F58805", // Slide 14: Script Lifecycle
             "ABDA6BA3-37B6-4351-B8CD-2B13BE0473D9", // Slide 15: Part 2 Agenda
             "66236B77-CB83-4F0A-8EAC-A1B4B260C1B1", // Slide 16: Component-based Workflow
-            "7ACB1906-13D3-4269-9ED6-C26BE902C38C", // Slide 17: (Blank in Original) -> Separation of Concerns
-            "D0C6749D-8C77-4609-996A-8E5343BF49B7", // Slide 18: (Blank in Original) -> Cinemachine 3 Camera
-            "99FDEC69-710D-4F21-932B-C32C7B1E8040", // Slide 19: (Blank in Original) -> Using Prefabs
-            "4B00CB36-1060-4A51-865D-62A35E3FAF80", // Slide 20: (Blank in Original) -> Coins & Destruction
+            "7ACB1906-13D3-4269-9ED6-C26BE902C38C", // Slide 17: Separation of Concerns
+            "D0C6749D-8C77-4609-996A-8E5343BF49B7", // Slide 18: Cinemachine 3 Camera
+            "99FDEC69-710D-4F21-932B-C32C7B1E8040", // Slide 19: Using Prefabs
+            "4B00CB36-1060-4A51-865D-62A35E3FAF80", // Slide 20: Coins & Destruction
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // 3-Tier Multi-Level Content Matrix
+        // 3-Tier Multi-Level Content Matrix with Visual Asset Captions
         const tierSlides = [
             // Slide 1
             {
                 banner: "Dev - Basics 1 (Unity 6)",
-                beg: `<p><strong>Welcome to Lesson 1!</strong> Today you learn core Unity 2D component architecture, script execution lifecycles, and physics movement in Unity 6.</p>
+                caption: "Workshop Title & Course Scope",
+                beg: `<p><strong>Welcome to Lesson 1!</strong> Learn core 2D component architecture, script execution lifecycles, and physics movement in Unity 6.</p>
                       <ul>
-                        <li>Understand the GameObject &rarr; Component relationship.</li>
-                        <li>Build a responsive 2D player with <code>Rigidbody2D.linearVelocity</code>.</li>
-                        <li>Create a smooth Cinemachine 3 follow camera.</li>
+                        <li>Master the GameObject &rarr; Component model.</li>
+                        <li>Build a responsive player with <code>Rigidbody2D.linearVelocity</code>.</li>
+                        <li>Setup a Cinemachine 3 follow camera.</li>
                       </ul>`,
                 int: `<p><strong>Game Feel Preview:</strong> Beyond basic physics, a great platformer needs responsiveness:</p>
                       <ul>
-                        <li><strong>Jump Buffering:</strong> Store jump input pressed 0.15s before landing.</li>
+                        <li><strong>Jump Buffering:</strong> Store jump input 0.15s before landing.</li>
                         <li><strong>Coyote Time:</strong> Allow jumping 0.12s after walking off a ledge.</li>
                       </ul>`,
                 pro: `<p><strong>Architectural Goal:</strong> Master <em>Separation of Concerns</em>. Never put sprite animation, audio, and physics calculations on the same GameObject.</p>`,
@@ -718,6 +731,7 @@
             // Slide 2
             {
                 banner: "Dev Class Intro & Unity 6",
+                caption: "Unity 6 & C# Development Tools",
                 beg: `<ul>
                         <li><strong>Engine:</strong> Unity 6 (6000.x) with 2D URP Template.</li>
                         <li><strong>Structure:</strong> Block 1 (2D Architecture) &rarr; Block 2 (3D Graphics & Shaders).</li>
@@ -730,17 +744,19 @@
             // Slide 3
             {
                 banner: "Lesson 1 Roadmap",
+                caption: "2-Part Lesson Curriculum Structure",
                 beg: `<ol>
                         <li><strong>Part 1: Setup & Project Core</strong> (URP Template, Cinemachine 3, Input System).</li>
                         <li><strong>Part 2: 2D Physics & Scripting</strong> (Rigidbody2D linearVelocity, Colliders, Separation of Concerns).</li>
                       </ol>`,
-                int: `<p><strong>Class Pacing Strategy:</strong> Complete the 4 core beginner milestones first before opening the Intermediate spoilers.</p>`,
+                int: `<p><strong>Class Pacing:</strong> Complete the 4 core beginner milestones first before opening the Intermediate spoilers.</p>`,
                 pro: `<p><strong>Self-Guided Challenge:</strong> Replace all <code>Destroy()</code> calls with an <code>ObjectPool&lt;T&gt;</code> by end of class.</p>`,
                 rationale: "Clear structure prevents cognitive overload in the first 45 minutes."
             },
             // Slide 4
             {
                 banner: "Part 1: Course & Project Setup",
+                caption: "Part 1 Milestone Checklist",
                 beg: `<ul>
                         <li>Clone/Download GitHub Course Repository.</li>
                         <li>Create Unity 6 Project with <strong>2D (URP)</strong> Template.</li>
@@ -754,6 +770,7 @@
             // Slide 5
             {
                 banner: "GitHub Course Repository",
+                caption: "Course Repository & Project Packages",
                 beg: `<p>Access all lessons, code snippets, and resources:</p>
                       <div class="code-container">
                         <pre>https://github.com/HR-CMGT/Minor-GDD-Unity</pre>
@@ -767,6 +784,7 @@
             // Slide 6
             {
                 banner: "Course Reference Manuals & Docs",
+                caption: "Course Reference Documentation",
                 beg: `<ul>
                         <li><code>00_unity.md</code>: Complete reference manual & best practices.</li>
                         <li><code>00_codesnippets.md</code>: Production C# snippets (Movement, Timers, Raycasting).</li>
@@ -779,6 +797,7 @@
             // Slide 7
             {
                 banner: "Unity Startproject Import Guide",
+                caption: "Package Import Dialog Window",
                 beg: `<ol>
                         <li>Open Unity 6 with your 2D (URP) project active.</li>
                         <li>Navigate to: <code>Assets > Import Package > Custom Package...</code></li>
@@ -791,6 +810,7 @@
             // Slide 8
             {
                 banner: "Package Manager (Cinemachine 3)",
+                caption: "Unity Package Manager Window",
                 beg: `<p><strong>Input System is pre-installed in Unity 6!</strong></p>
                       <ol>
                         <li>Go to <code>Window > Package Manager</code>.</li>
@@ -804,6 +824,7 @@
             // Slide 9
             {
                 banner: "Assignment: 4-Step Milestones",
+                caption: "Target EndScene vs StartScene Workflow",
                 beg: `<ol>
                         <li><strong>Step 1: Player Setup:</strong> Attach <code>PlayerController2D</code> and configure <code>GroundCheck</code>.</li>
                         <li><strong>Step 2: Camera Follow:</strong> Create Cinemachine 3 Camera, set Tracking Target to Player.</li>
@@ -817,6 +838,7 @@
             // Slide 10
             {
                 banner: "Rigidbody2D Component Essentials",
+                caption: "Rigidbody2D Inspector Properties",
                 beg: `<ul>
                         <li><strong>Body Type: Dynamic</strong> (Simulated by physics engine).</li>
                         <li><strong>Collision Detection: Continuous</strong> (Prevents falling through high-speed floors).</li>
@@ -829,6 +851,7 @@
             // Slide 11
             {
                 banner: "Rigidbody2D Scripting (linearVelocity)",
+                caption: "Physics Velocity API Comparison",
                 beg: `<p>Arcade movement applied in <code>FixedUpdate()</code>:</p>
                       <div class="code-container">
                         <pre>// Unity 6 standard: Direct linearVelocity in FixedUpdate
@@ -859,6 +882,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             // Slide 12
             {
                 banner: "Unity Manual & API Reference",
+                caption: "Unity Documentation & Script Reference",
                 beg: `<ul>
                         <li><strong>Unity Manual:</strong> Explains concept architecture (e.g. Physics 2D overview, URP 2D lights).</li>
                         <li><strong>Script Reference:</strong> Method signatures, parameters, and return types (e.g. <code>Physics2D.OverlapCircle</code>).</li>
@@ -870,6 +894,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             // Slide 13
             {
                 banner: "Unity Learn & Modern Resources",
+                caption: "Unity Learn 2D Tracks & Tutorials",
                 beg: `<ul>
                         <li>Unity Learn: 2D Essentials & Physics System in Unity 6.</li>
                         <li>New Input System: Action Maps & <code>InputValue</code> Callbacks.</li>
@@ -882,6 +907,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             // Slide 14
             {
                 banner: "Script Execution Order & Lifecycle",
+                caption: "MonoBehaviour Lifecycle Flowchart",
                 beg: `<div class="code-container">
                         <pre>[Awake]       -> Cache components (rb = GetComponent&lt;Rigidbody2D&gt;())
 [Start]       -> Initialize runtime data
@@ -897,6 +923,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             // Slide 15
             {
                 banner: "Part 2 Agenda: Architecture & Components",
+                caption: "Part 2 Component Architecture Overview",
                 beg: `<ul>
                         <li>Separation of Concerns (Root vs Graphics).</li>
                         <li>Cinemachine 3 Follow Camera.</li>
@@ -910,6 +937,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             // Slide 16
             {
                 banner: "Component Architecture & Requirements",
+                caption: "Player GameObject Component Inspector",
                 beg: `<p>Enforce required components automatically:</p>
                       <div class="code-container">
                         <pre>[RequireComponent(typeof(Rigidbody2D))]
@@ -932,6 +960,7 @@ public class PlayerController2D : MonoBehaviour {
             // Slide 17
             {
                 banner: "Separation of Concerns (Root vs Child)",
+                caption: "Hierarchical Architecture Diagram",
                 beg: `<div class="code-container">
                         <pre>[Player] (Root: Rigidbody2D, BoxCollider2D, PlayerController2D, PlayerInput)
   └── [Graphics] (Child: SpriteRenderer, Animator)
@@ -946,6 +975,7 @@ public class PlayerController2D : MonoBehaviour {
             // Slide 18
             {
                 banner: "Cinemachine 3 Camera Setup",
+                caption: "Cinemachine 3 Camera Target Settings",
                 beg: `<ol>
                         <li>In top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
                         <li>In Inspector, drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
@@ -958,6 +988,7 @@ public class PlayerController2D : MonoBehaviour {
             // Slide 19
             {
                 banner: "Using Prefabs Efficiently",
+                caption: "Prefab Asset & Instance Overrides",
                 beg: `<ul>
                         <li><strong>Prefab:</strong> A reusable GameObject template saved on disk.</li>
                         <li><strong>Prefab Mode:</strong> Double-click any prefab in Project View to edit all instances simultaneously.</li>
@@ -970,6 +1001,7 @@ public class PlayerController2D : MonoBehaviour {
             // Slide 20
             {
                 banner: "Creating & Destroying GameObjects",
+                caption: "Coin Pickup Trigger Lifecycle",
                 beg: `<p>Collectible trigger pickup script:</p>
                       <div class="code-container">
                         <pre>public class Coin : MonoBehaviour {
@@ -997,6 +1029,7 @@ coinPool.Release(gameObject);</pre>
             // Slide 21
             {
                 banner: "Help, Discord & Troubleshooting",
+                caption: "HR CMGT Discord Community & Help Channel",
                 beg: `<p><strong>Troubleshooting Quick Checklist:</strong></p>
                       <ul>
                         <li><strong>Falls through floor:</strong> Ensure floor has <code>BoxCollider2D</code> and Ground Layer matches.</li>
@@ -1139,10 +1172,15 @@ coinPool.Release(gameObject);</pre>
             const img = document.getElementById("originalSlideImg");
             img.src = `assets/${slideId}/slide_hd.png`;
 
-            // 2. Update Revised 3-Tier slide contents
+            // 2. Update Left Visual Reference in Revised View
+            const visualImg = document.getElementById("visualRefImg");
+            visualImg.src = `assets/${slideId}/slide_hd.png`;
+
+            // 3. Update Revised 3-Tier slide contents
             const slide = tierSlides[currentSlide];
             if (slide) {
                 document.getElementById("revisedBanner").textContent = slide.banner;
+                document.getElementById("visualCaption").textContent = slide.caption || "Keynote Visual Reference";
                 document.getElementById("revisedBegContent").innerHTML = slide.beg;
                 document.getElementById("revisedIntContent").innerHTML = slide.int;
                 document.getElementById("revisedProContent").innerHTML = slide.pro;
