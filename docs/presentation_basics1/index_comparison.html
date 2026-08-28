@@ -570,7 +570,7 @@
         .split-media-layout .left-column {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             justify-content: space-between;
             min-height: 0;
             height: 100%;
@@ -583,7 +583,19 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 12px 18px;
+            padding: 10px 16px;
+        }
+
+        .split-media-layout .left-column .content-card:has(table),
+        .content-card:has(table) {
+            flex: 1.65 1 0;
+            padding: 8px 14px;
+            justify-content: flex-start;
+        }
+
+        .content-card:has(table) .card-title {
+            margin-bottom: 4px;
+            font-size: clamp(0.92rem, 1.15vw, 1.25rem);
         }
 
         .split-media-layout .right-column {
@@ -951,21 +963,21 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.80rem, 0.98vw, 1.05rem);
-            padding: 6px 10px;
+            font-size: clamp(0.70rem, 0.84vw, 0.92rem);
+            padding: 3.5px 8px;
             display: table-cell !important;
             vertical-align: middle;
-            line-height: 1.25;
+            line-height: 1.15;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.78rem, 0.92vw, 0.98rem);
-            padding: 6px 10px;
+            font-size: clamp(0.68rem, 0.80vw, 0.86rem);
+            padding: 3.5px 8px;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.35;
+            line-height: 1.25;
             display: table-cell !important;
             vertical-align: middle;
             word-wrap: break-word;

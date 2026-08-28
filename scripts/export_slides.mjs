@@ -1,4 +1,4 @@
-﻿import puppeteer from 'puppeteer-core';
+import puppeteer from 'puppeteer-core';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -58,6 +58,25 @@ async function run() {
         }, i);
         await new Promise(r => setTimeout(r, 150));
 
+        const coreOverflows = await page.evaluate(() => {
+            const issues = [];
+            const area = document.getElementById("slideContentArea");
+            if (area && area.scrollHeight > area.clientHeight + 1) {
+                issues.push(`slideContentArea (+${(area.scrollHeight - area.clientHeight).toFixed(1)}px)`);
+            }
+            document.querySelectorAll('.content-card').forEach((c, idx) => {
+                if (c.scrollHeight > c.clientHeight + 1) {
+                    issues.push(`card[${idx}] (+${(c.scrollHeight - c.clientHeight).toFixed(1)}px)`);
+                }
+            });
+            document.querySelectorAll('table.dense-table').forEach((t, idx) => {
+                if (t.scrollHeight > t.clientHeight + 1) {
+                    issues.push(`table[${idx}] (+${(t.scrollHeight - t.clientHeight).toFixed(1)}px)`);
+                }
+            });
+            return issues;
+        });
+
         const viewportEl = await page.$('#viewport') || await page.$('.slide-viewport');
         if (viewportEl) {
             await viewportEl.screenshot({
@@ -75,13 +94,35 @@ async function run() {
         }, i);
         await new Promise(r => setTimeout(r, 150));
 
+        const labOverflows = await page.evaluate(() => {
+            const issues = [];
+            const area = document.getElementById("slideContentArea");
+            if (area && area.scrollHeight > area.clientHeight + 1) {
+                issues.push(`slideContentArea (+${(area.scrollHeight - area.clientHeight).toFixed(1)}px)`);
+            }
+            document.querySelectorAll('.content-card').forEach((c, idx) => {
+                if (c.scrollHeight > c.clientHeight + 1) {
+                    issues.push(`card[${idx}] (+${(c.scrollHeight - c.clientHeight).toFixed(1)}px)`);
+                }
+            });
+            document.querySelectorAll('table.dense-table').forEach((t, idx) => {
+                if (t.scrollHeight > t.clientHeight + 1) {
+                    issues.push(`table[${idx}] (+${(t.scrollHeight - t.clientHeight).toFixed(1)}px)`);
+                }
+            });
+            return issues;
+        });
+
         if (viewportEl) {
             await viewportEl.screenshot({
                 path: path.join(outDir, `slide_${slideNum}_expert_lab.png`)
             });
         }
 
-        console.log(`[OK] Slide ${slideNum}/${slideCount} -> exported lecture_core & expert_lab`);
+        let status = `[OK] Slide ${slideNum}/${slideCount}`;
+        if (coreOverflows.length > 0) status += ` [OVERFLOW Core: ${coreOverflows.join(', ')}]`;
+        if (labOverflows.length > 0) status += ` [OVERFLOW Lab: ${labOverflows.join(', ')}]`;
+        console.log(status);
     }
 
     await browser.close();
