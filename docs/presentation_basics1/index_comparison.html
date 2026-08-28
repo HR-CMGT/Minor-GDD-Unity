@@ -307,7 +307,7 @@
         }
 
         .view-interactive.hr-inverted-slide .content-stack {
-            gap: 1.2cqh;
+            gap: 1.4cqh;
         }
 
         .view-interactive.hr-inverted-slide .content-card {
@@ -315,34 +315,49 @@
             border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
             border-left: 6px solid #ffffff !important;
             color: #ffffff !important;
-            padding: 1.2cqh 1.8cqw;
-            border-radius: 8px;
+            padding: 1.8cqh 2.4cqw;
+            border-radius: 10px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
         }
 
         .view-interactive.hr-inverted-slide .card-title {
             color: #ffffff !important;
-            font-size: clamp(0.92rem, 2.2cqh, 1.35rem);
-            margin-bottom: 0.4cqh;
+            font-size: clamp(1.15rem, 2.8cqh, 1.75rem);
+            margin-bottom: 0.5cqh;
         }
 
         .view-interactive.hr-inverted-slide .card-body {
             color: #ffffff !important;
-            font-size: clamp(0.78rem, 1.8cqh, 1.10rem);
-            line-height: 1.45;
+            font-size: clamp(0.98rem, 2.3cqh, 1.40rem);
+            line-height: 1.55;
         }
 
         .view-interactive.hr-inverted-slide .card-body ul,
         .view-interactive.hr-inverted-slide .card-body ol {
-            padding-left: 2.2cqw;
+            padding-left: 2.4cqw;
         }
 
         .view-interactive.hr-inverted-slide .card-body li {
-            margin-bottom: 0.3cqh;
+            margin-bottom: 0.4cqh;
         }
 
         .view-interactive.hr-inverted-slide .card-body strong {
             color: #ffffff !important;
+        }
+
+        body.projector-mode .view-interactive.hr-inverted-slide .content-card {
+            padding: 2.2cqh 2.8cqw;
+            border-left: 8px solid #ffffff !important;
+        }
+
+        body.projector-mode .view-interactive.hr-inverted-slide .card-title {
+            font-size: clamp(1.25rem, 3.2cqh, 1.95rem);
+            margin-bottom: 0.8cqh;
+        }
+
+        body.projector-mode .view-interactive.hr-inverted-slide .card-body {
+            font-size: clamp(1.08rem, 2.5cqh, 1.55rem);
+            line-height: 1.6;
         }
 
         .view-interactive.hr-inverted-slide .slide-footer {
@@ -491,8 +506,8 @@
         .content-stack {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 1.2cqh;
+            justify-content: center;
+            gap: 1.8cqh;
             width: 100%;
             height: 100%;
             min-height: 0;
@@ -503,11 +518,12 @@
         .content-card {
             background: #f8fafc;
             border: 1.5px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 1.2cqh 1.5cqw;
+            border-radius: 10px;
+            padding: 1.6cqh 2.2cqw;
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             width: 100%;
-            flex: 1 1 0;
+            flex: 0 0 auto !important;
+            height: auto !important;
             min-height: 0;
             display: flex;
             flex-direction: column;
@@ -521,16 +537,27 @@
             background: #ffffff;
         }
 
+        .content-stack .content-card {
+            padding: 2.0cqh 2.6cqw;
+            flex: 0 0 auto !important;
+            height: auto !important;
+        }
+
         .card-title {
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(0.85rem, 2.0cqh, 1.25rem);
-            margin-bottom: 0.4cqh;
+            font-size: clamp(1.05rem, 2.5cqh, 1.55rem);
+            margin-bottom: 0.5cqh;
             transition: font-size 0.15s ease;
-            line-height: 1.2;
+            line-height: 1.25;
             flex-shrink: 0;
+        }
+
+        .content-stack .card-title {
+            font-size: clamp(1.15rem, 2.8cqh, 1.75rem);
+            margin-bottom: 0.6cqh;
         }
 
         .card-title.core { color: var(--tier-core); }
@@ -538,21 +565,36 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.75rem, 1.75cqh, 1.05rem);
-            line-height: 1.4;
+            font-size: clamp(0.95rem, 2.2cqh, 1.35rem);
+            line-height: 1.52;
             color: #1e293b;
             font-weight: 500;
             transition: font-size 0.15s ease;
         }
 
+        .content-stack .card-body {
+            font-size: clamp(1.05rem, 2.4cqh, 1.50rem);
+            line-height: 1.58;
+        }
+
         .card-body ul, .card-body ol {
-            padding-left: 1.8cqw;
-            margin-top: 0.2cqh;
-            margin-bottom: 0.2cqh;
+            padding-left: 2.0cqw;
+            margin-top: 0.3cqh;
+            margin-bottom: 0.3cqh;
+        }
+
+        .content-stack .card-body ul, .content-stack .card-body ol {
+            padding-left: 2.4cqw;
+            margin-top: 0.4cqh;
+            margin-bottom: 0.4cqh;
         }
 
         .card-body li {
-            margin-bottom: 0.3cqh;
+            margin-bottom: 0.4cqh;
+        }
+
+        .content-stack .card-body li {
+            margin-bottom: 0.5cqh;
         }
 
         /* ==========================================================================
@@ -561,8 +603,8 @@
         .split-media-layout {
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
-            gap: 1.5cqw;
-            align-items: stretch;
+            gap: 1.8cqw;
+            align-items: center;
             width: 100%;
             height: 100%;
             min-height: 0;
@@ -573,40 +615,43 @@
         .split-media-layout .left-column {
             display: flex;
             flex-direction: column;
-            gap: 0.9cqh;
-            justify-content: space-between;
+            gap: 1.4cqh;
+            justify-content: center;
             min-height: 0;
             height: 100%;
             overflow: hidden;
         }
 
         .split-media-layout .left-column .content-card {
-            flex: 1 1 0;
+            flex: 0 0 auto !important;
+            height: auto !important;
             min-height: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 1.0cqh 1.4cqw;
+            padding: 1.5cqh 2.0cqw;
         }
 
         .split-media-layout .left-column .content-card:has(table),
         .content-card:has(table) {
-            flex: 1.75 1 0;
-            padding: 0.8cqh 1.2cqw;
-            justify-content: flex-start;
+            flex: 0 0 auto !important;
+            height: auto !important;
+            padding: 1.2cqh 1.6cqw;
+            justify-content: center;
         }
 
         .split-media-layout .left-column .content-card:has(pre),
         .content-card:has(pre) {
-            flex: 1.65 1 0;
-            padding: 0.8cqh 1.2cqw;
-            justify-content: flex-start;
+            flex: 0 0 auto !important;
+            height: auto !important;
+            padding: 1.2cqh 1.6cqw;
+            justify-content: center;
         }
 
         .content-card:has(table) .card-title,
         .content-card:has(pre) .card-title {
-            margin-bottom: 0.3cqh;
-            font-size: clamp(0.82rem, 1.9cqh, 1.15rem);
+            margin-bottom: 0.5cqh;
+            font-size: clamp(1.0rem, 2.4cqh, 1.45rem);
         }
 
         .split-media-layout .right-column {
@@ -932,23 +977,23 @@
             white-space: pre-wrap;
             word-break: break-word;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.68rem, 1.65cqh, 0.90rem);
-            line-height: 1.28;
-            padding: 0.6cqh 0.9cqw;
-            border-radius: 6px;
+            font-size: clamp(0.85rem, 2.1cqh, 1.20rem);
+            line-height: 1.40;
+            padding: 1.0cqh 1.4cqw;
+            border-radius: 8px;
             margin: 0;
         }
 
         .copy-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
+            top: 6px;
+            right: 6px;
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #475569;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
-            font-size: 0.65rem;
+            font-size: 0.70rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -974,21 +1019,21 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.66rem, 1.60cqh, 0.88rem);
-            padding: 0.35cqh 0.8cqw;
+            font-size: clamp(0.80rem, 2.0cqh, 1.15rem);
+            padding: 0.6cqh 1.0cqw;
             display: table-cell !important;
             vertical-align: middle;
-            line-height: 1.15;
+            line-height: 1.20;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.64rem, 1.50cqh, 0.84rem);
-            padding: 0.35cqh 0.8cqw;
+            font-size: clamp(0.76rem, 1.85cqh, 1.05rem);
+            padding: 0.6cqh 1.0cqw;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.20;
+            line-height: 1.28;
             display: table-cell !important;
             vertical-align: middle;
             word-wrap: break-word;
@@ -1260,59 +1305,71 @@
            LECTURE MODE (Strict Core Only): Large Screen-Filling Typography & Cards
            ========================================================================== */
         body.projector-mode .view-interactive {
-            padding: 24px 40px;
+            padding: 2.2cqh 3.2cqw;
         }
 
         /* Slide 1 Hero in Lecture Mode */
         body.projector-mode .slide-hero {
-            padding: 36px 54px;
+            padding: 3.5cqh 4.5cqw;
         }
 
         body.projector-mode .hero-tag-badge {
-            font-size: clamp(2rem, 3.2vw, 3.4rem);
-            padding: 12px 32px;
+            font-size: clamp(1.8rem, 4.5cqh, 3.2rem);
+            padding: 1.2cqh 2.8cqw;
             border-radius: 10px;
             letter-spacing: -0.5px;
         }
 
         body.projector-mode .hero-sub {
-            font-size: clamp(1.25rem, 1.8vw, 1.85rem);
+            font-size: clamp(1.15rem, 2.6cqh, 1.8rem);
             font-weight: 800;
-            margin-bottom: 4px;
+            margin-bottom: 0.5cqh;
         }
 
         body.projector-mode .hero-stack {
-            gap: 12px;
+            gap: 1.2cqh;
         }
 
         body.projector-mode .hero-pill-card {
-            padding: 14px 22px;
-            border-radius: 10px;
+            padding: 1.4cqh 2.0cqw;
+            border-radius: 8px;
         }
 
         body.projector-mode .hero-pill-title {
-            font-size: clamp(1.05rem, 1.45vw, 1.5rem);
-            margin-bottom: 4px;
+            font-size: clamp(1.0rem, 2.4cqh, 1.45rem);
+            margin-bottom: 0.3cqh;
         }
 
         body.projector-mode .hero-pill-desc {
-            font-size: clamp(1.02rem, 1.35vw, 1.38rem);
-            line-height: 1.5;
+            font-size: clamp(0.90rem, 2.0cqh, 1.25rem);
+            line-height: 1.45;
         }
 
         /* Standard Slides in Lecture Mode */
         body.projector-mode .slide-title-banner {
-            font-size: clamp(1.2rem, 2.8cqh, 2.0rem);
-            padding: 0.8cqh 2.0cqw;
+            font-size: clamp(1.3rem, 3.2cqh, 2.2rem);
+            padding: 0.8cqh 2.2cqw;
             border-radius: 8px;
         }
 
         body.projector-mode .content-stack {
-            gap: 1.4cqh;
+            justify-content: center;
+            gap: 2.2cqh;
         }
 
-        body.projector-mode .content-card {
-            padding: 1.5cqh 1.8cqw;
+        body.projector-mode .content-stack .content-card {
+            flex: 0 0 auto;
+            padding: 2.4cqh 3.0cqw;
+            border-radius: 10px;
+        }
+
+        body.projector-mode .content-stack:has(.content-card:nth-child(3)) {
+            gap: 1.2cqh;
+        }
+
+        body.projector-mode .content-stack:has(.content-card:nth-child(3)) .content-card {
+            flex: 0 0 auto;
+            padding: 1.6cqh 2.4cqw;
             border-radius: 8px;
         }
 
@@ -1320,51 +1377,84 @@
             border-left: 8px solid var(--tier-core);
         }
 
-        body.projector-mode .card-title {
-            font-size: clamp(0.95rem, 2.3cqh, 1.35rem);
-            margin-bottom: 0.5cqh;
+        body.projector-mode .content-stack .card-title {
+            font-size: clamp(1.25rem, 3.2cqh, 2.0rem);
+            margin-bottom: 0.8cqh;
             letter-spacing: 0.5px;
         }
 
-        body.projector-mode .card-body {
-            font-size: clamp(0.82rem, 1.95cqh, 1.15rem);
-            line-height: 1.45;
+        body.projector-mode .content-stack:has(.content-card:nth-child(3)) .card-title {
+            font-size: clamp(1.10rem, 2.6cqh, 1.65rem);
+            margin-bottom: 0.4cqh;
         }
 
-        body.projector-mode .card-body ul,
-        body.projector-mode .card-body ol {
-            padding-left: 2.2cqw;
-            margin-top: 0.3cqh;
-            margin-bottom: 0.3cqh;
+        body.projector-mode .content-stack .card-body {
+            font-size: clamp(1.10rem, 2.6cqh, 1.65rem);
+            line-height: 1.6;
         }
 
-        body.projector-mode .card-body li {
-            margin-bottom: 0.3cqh;
+        body.projector-mode .content-stack:has(.content-card:nth-child(3)) .card-body {
+            font-size: clamp(0.98rem, 2.2cqh, 1.40rem);
+            line-height: 1.48;
+        }
+
+        body.projector-mode .content-stack .card-body ul,
+        body.projector-mode .content-stack .card-body ol {
+            padding-left: 2.6cqw;
+            margin-top: 0.4cqh;
+            margin-bottom: 0.4cqh;
+        }
+
+        body.projector-mode .content-stack .card-body li {
+            margin-bottom: 0.6cqh;
         }
 
         body.projector-mode .split-media-layout {
-            gap: 1.8cqw;
+            gap: 2.0cqw;
         }
 
         body.projector-mode .split-media-layout .left-column {
-            gap: 1.0cqh;
+            justify-content: center;
+            gap: 1.4cqh;
+        }
+
+        body.projector-mode .split-media-layout .left-column .content-card {
+            flex: 0 0 auto;
+            padding: 1.8cqh 2.2cqw;
+            border-radius: 8px;
+        }
+
+        body.projector-mode .split-media-layout .left-column .content-card:has(table),
+        body.projector-mode .split-media-layout .left-column .content-card:has(pre) {
+            flex: 1 1 auto;
+            padding: 1.2cqh 1.6cqw;
+        }
+
+        body.projector-mode .split-media-layout .card-title {
+            font-size: clamp(1.15rem, 2.8cqh, 1.75rem);
+            margin-bottom: 0.4cqh;
+        }
+
+        body.projector-mode .split-media-layout .card-body {
+            font-size: clamp(1.02rem, 2.3cqh, 1.45rem);
+            line-height: 1.55;
         }
 
         body.projector-mode pre {
-            font-size: clamp(0.72rem, 1.8cqh, 0.95rem);
-            padding: 0.8cqh 1.2cqw;
-            line-height: 1.32;
+            font-size: clamp(0.85rem, 2.1cqh, 1.25rem);
+            padding: 0.9cqh 1.3cqw;
+            line-height: 1.38;
         }
 
         body.projector-mode table.dense-table th {
-            font-size: clamp(0.70rem, 1.8cqh, 0.96rem);
-            padding: 0.4cqh 0.8cqw;
+            font-size: clamp(0.80rem, 2.0cqh, 1.15rem);
+            padding: 0.55cqh 0.9cqw;
             display: table-cell !important;
         }
 
         body.projector-mode table.dense-table td {
-            font-size: clamp(0.66rem, 1.65cqh, 0.88rem);
-            padding: 0.4cqh 0.8cqw;
+            font-size: clamp(0.76rem, 1.85cqh, 1.05rem);
+            padding: 0.55cqh 0.9cqw;
             display: table-cell !important;
         }
 
