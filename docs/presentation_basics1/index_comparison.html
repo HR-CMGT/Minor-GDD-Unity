@@ -975,6 +975,141 @@
             background: #f8fafc;
         }
 
+        /* Visual GameObject Hierarchy Box Diagram */
+        .hierarchy-box-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            margin: 2px 0;
+        }
+
+        .hierarchy-node {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            position: relative;
+            transition: all 0.15s ease;
+        }
+
+        .hierarchy-node.root-node {
+            background: #0f172a;
+            border: 1.5px solid #334155;
+            border-left: 6px solid #38bdf8;
+            color: #f8fafc;
+        }
+
+        .hierarchy-node.child-node {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-left: 5px solid #6366f1;
+            color: #1e293b;
+        }
+
+        .hierarchy-node.sensor-node {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-left: 5px solid #10b981;
+            color: #1e293b;
+        }
+
+        .hierarchy-node-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hierarchy-tag {
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            line-height: 1;
+        }
+
+        .hierarchy-tag.root {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        .hierarchy-tag.child {
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .hierarchy-tag.sensor {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .hierarchy-node-title {
+            font-size: clamp(0.88rem, 1.05vw, 1.10rem);
+            font-weight: 800;
+            letter-spacing: 0.3px;
+        }
+
+        .hierarchy-node.root-node .hierarchy-node-title {
+            color: #ffffff;
+        }
+
+        .hierarchy-node.child-node .hierarchy-node-title,
+        .hierarchy-node.sensor-node .hierarchy-node-title {
+            color: #0f172a;
+        }
+
+        .hierarchy-node-desc {
+            font-size: clamp(0.75rem, 0.88vw, 0.92rem);
+            font-weight: 500;
+            line-height: 1.35;
+        }
+
+        .hierarchy-node.root-node .hierarchy-node-desc {
+            color: #94a3b8;
+        }
+
+        .hierarchy-node.child-node .hierarchy-node-desc,
+        .hierarchy-node.sensor-node .hierarchy-node-desc {
+            color: #475569;
+        }
+
+        .hierarchy-tree-branch {
+            position: relative;
+            padding-left: 20px;
+            margin-left: 14px;
+            border-left: 2.5px dashed #94a3b8;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .hierarchy-tree-branch .hierarchy-node::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            width: 16px;
+            height: 2.5px;
+            border-top: 2.5px dashed #94a3b8;
+        }
+
+        body.projector-mode .hierarchy-node {
+            padding: 10px 14px;
+        }
+
+        body.projector-mode .hierarchy-node-title {
+            font-size: clamp(1.0rem, 1.25vw, 1.30rem);
+        }
+
+        body.projector-mode .hierarchy-node-desc {
+            font-size: clamp(0.85rem, 1.05vw, 1.10rem);
+        }
+
         /* Collapsible Tier Accordions */
         details.tier-accordion {
             border-radius: 6px;
@@ -2184,11 +2319,30 @@ public class PlayerController2D : MonoBehaviour {
                         <div class="left-column">
                             <div class="content-card primary">
                                 <div class="card-title core">Player Object Structure</div>
-                                <div class="code-box">
-                                    <pre>[<span class="term-tip" data-title="Root GameObject" data-desc="Main parent container holding physics and movement script." data-diff="Moves and collides in the game world.">Player</span>] (Main Object: Physics & Colliders)
-  └── [<span class="term-tip" data-title="Child GameObject" data-desc="Nested container holding character art sprite." data-diff="Can be rotated or squashed without warping physics box.">Graphics</span>] (Child: Visible Character Picture)
-  └── [<span class="term-tip" data-title="Child Sensor" data-desc="Nested empty object at character feet." data-diff="Used to check ground contact without affecting body.">GroundCheck</span>] (Child: Sensor at Feet)</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
+                                <div class="hierarchy-box-tree">
+                                    <div class="hierarchy-node root-node">
+                                        <div class="hierarchy-node-header">
+                                            <span class="hierarchy-tag root">ROOT</span>
+                                            <span class="hierarchy-node-title"><span class="term-tip" data-title="Root GameObject" data-desc="Main parent container holding physics and movement script." data-diff="Moves and collides in the game world.">Player</span></span>
+                                        </div>
+                                        <div class="hierarchy-node-desc">Holds Rigidbody2D, BoxCollider2D & PlayerController (Moves & Collides)</div>
+                                    </div>
+                                    <div class="hierarchy-tree-branch">
+                                        <div class="hierarchy-node child-node">
+                                            <div class="hierarchy-node-header">
+                                                <span class="hierarchy-tag child">CHILD</span>
+                                                <span class="hierarchy-node-title"><span class="term-tip" data-title="Child GameObject" data-desc="Nested container holding character art sprite." data-diff="Can be rotated or squashed without warping physics box.">Graphics</span></span>
+                                            </div>
+                                            <div class="hierarchy-node-desc">SpriteRenderer & Animator (Squash, Stretch, Flip X)</div>
+                                        </div>
+                                        <div class="hierarchy-node sensor-node">
+                                            <div class="hierarchy-node-header">
+                                                <span class="hierarchy-tag sensor">CHILD</span>
+                                                <span class="hierarchy-node-title"><span class="term-tip" data-title="Child Sensor" data-desc="Nested empty object at character feet." data-diff="Used to check ground contact without affecting body.">GroundCheck</span></span>
+                                            </div>
+                                            <div class="hierarchy-node-desc">Empty transform sensor at feet for ground detection</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="content-card primary">
