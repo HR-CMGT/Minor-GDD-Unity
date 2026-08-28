@@ -8,13 +8,26 @@
         :root {
             --hr-red: #e20049;
             --hr-darkred: #b8003b;
-            --bg-stage: #121214;
-            --bg-slide: #ffffff;
-            --text-dark: #1e293b;
-            --text-light: #f8fafc;
-            --accent-new: #10b981;
+            --bg-stage: #0f0f12;
+            --bg-card: #18181d;
+            --bg-code: #121216;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-subtle: #e2e8f0;
+            
+            --tier-beginner: #10b981;
+            --tier-beginner-bg: rgba(16, 185, 129, 0.08);
+            --tier-beginner-border: #a7f3d0;
+            
+            --tier-intermediate: #0284c7;
+            --tier-intermediate-bg: rgba(2, 132, 199, 0.08);
+            --tier-intermediate-border: #bae6fd;
+            
+            --tier-pro: #8b5cf6;
+            --tier-pro-bg: rgba(139, 92, 246, 0.08);
+            --tier-pro-border: #ddd6fe;
+
             --accent-old: #f43f5e;
-            --code-bg: #1e1e24;
         }
 
         * {
@@ -26,7 +39,7 @@
 
         body {
             background-color: var(--bg-stage);
-            color: var(--text-light);
+            color: #f8fafc;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -35,9 +48,9 @@
 
         /* Top Bar */
         .top-bar {
-            height: 54px;
-            background: #1c1c20;
-            border-bottom: 1px solid #2e2e36;
+            height: 56px;
+            background: #17171c;
+            border-bottom: 1px solid #272730;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -48,7 +61,6 @@
         .brand-title {
             font-size: 0.95rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -63,31 +75,74 @@
             font-weight: 800;
         }
 
+        /* Tier Selector Pills */
+        .tier-selector {
+            display: flex;
+            align-items: center;
+            background: #22222b;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid #333340;
+            gap: 2px;
+        }
+
+        .tier-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .tier-btn:hover {
+            color: #fff;
+        }
+
+        .tier-btn.active-all {
+            background: #3c3c4e;
+            color: #fff;
+        }
+
+        .tier-btn.active-beg {
+            background: var(--tier-beginner);
+            color: #fff;
+        }
+
+        .tier-btn.active-int {
+            background: var(--tier-intermediate);
+            color: #fff;
+        }
+
+        .tier-btn.active-pro {
+            background: var(--tier-pro);
+            color: #fff;
+        }
+
+        /* Main View Switch (Original vs Revised) */
         .toggle-wrap {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: #282830;
+            background: #22222b;
             padding: 4px 12px;
             border-radius: 9999px;
-            border: 1px solid #3e3e48;
+            border: 1px solid #333340;
         }
 
         .toggle-text {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             transition: color 0.2s ease;
             color: #888896;
         }
 
-        .toggle-text.active-old {
-            color: var(--accent-old);
-        }
-
-        .toggle-text.active-new {
-            color: var(--accent-new);
-        }
+        .toggle-text.active-old { color: var(--accent-old); }
+        .toggle-text.active-new { color: var(--tier-beginner); }
 
         .switch {
             position: relative;
@@ -96,11 +151,7 @@
             height: 22px;
         }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+        .switch input { opacity: 0; width: 0; height: 0; }
 
         .slider {
             position: absolute;
@@ -123,27 +174,22 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
-            background-color: var(--accent-new);
-        }
+        input:checked + .slider { background-color: var(--tier-beginner); }
+        input:checked + .slider:before { transform: translateX(22px); }
 
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
-
-        /* Workspace layout */
+        /* Workspace Layout */
         .main-workspace {
             flex-grow: 1;
             display: flex;
             position: relative;
-            height: calc(100vh - 54px - 50px);
+            height: calc(100vh - 56px - 50px);
         }
 
         /* Slide Drawer */
         .slide-drawer {
             width: 220px;
-            background: #18181c;
-            border-right: 1px solid #2e2e36;
+            background: #141418;
+            border-right: 1px solid #23232b;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -164,7 +210,7 @@
 
         .drawer-item:hover {
             transform: scale(1.03);
-            border-color: #555566;
+            border-color: #4a4a58;
         }
 
         .drawer-item.active {
@@ -196,25 +242,26 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            background: #0d0d10;
+            padding: 18px;
+            background: #0b0b0e;
         }
 
         .slide-viewport {
             width: 100%;
-            max-width: 1050px;
+            max-width: 1120px;
+            height: 100%;
+            max-height: 640px;
             aspect-ratio: 16 / 9;
-            background: #000000;
+            background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
             overflow: hidden;
             position: relative;
             display: flex;
             flex-direction: column;
-            cursor: pointer;
         }
 
-        /* Original 1920x1080 HD Slide Image */
+        /* Original Slide Image (Full HD 1080p) */
         #originalSlideImg {
             width: 100%;
             height: 100%;
@@ -223,13 +270,13 @@
             background: #000;
         }
 
-        /* Interactive View (Revised Slide) */
+        /* Interactive Revised View */
         .view-interactive {
             width: 100%;
             height: 100%;
             background: #f8fafc;
-            color: var(--text-dark);
-            padding: 40px 50px;
+            color: var(--text-main);
+            padding: 28px 36px;
             display: none;
             flex-direction: column;
             overflow-y: auto;
@@ -238,75 +285,236 @@
             z-index: 10;
         }
 
-        .view-interactive.active {
-            display: flex;
-        }
+        .view-interactive.active { display: flex; }
 
         /* Slide Banner & Headers */
+        .slide-banner-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
         .slide-banner {
             background: var(--hr-red);
             color: #fff;
-            padding: 10px 20px;
+            padding: 6px 16px;
             border-radius: 6px;
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            margin-bottom: 18px;
             display: inline-block;
-            align-self: flex-start;
         }
 
-        .slide-content-text {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 16px;
+        .tier-badges-row {
+            display: flex;
+            gap: 6px;
         }
 
+        .pill-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .pill-beg { background: var(--tier-beginner-bg); color: var(--tier-beginner); border: 1px solid var(--tier-beginner-border); }
+        .pill-int { background: var(--tier-intermediate-bg); color: var(--tier-intermediate); border: 1px solid var(--tier-intermediate-border); }
+        .pill-pro { background: var(--tier-pro-bg); color: var(--tier-pro); border: 1px solid var(--tier-pro-border); }
+
+        /* Tier Content Blocks */
+        .tier-section {
+            margin-bottom: 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        /* Beginner Main Road */
+        .beg-main-road {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+        }
+
+        .beg-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--tier-beginner);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .content-body {
+            font-size: 0.96rem;
+            line-height: 1.55;
+            color: #334155;
+        }
+
+        .content-body ul, .content-body ol {
+            margin-left: 20px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        .content-body li {
+            margin-bottom: 4px;
+        }
+
+        /* Collapsible Spoiler Cards (Intermediate & Pro) */
+        details.spoiler-card {
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1.5px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        details.spoiler-card.card-int {
+            background: var(--tier-intermediate-bg);
+            border-color: var(--tier-intermediate-border);
+        }
+
+        details.spoiler-card.card-pro {
+            background: var(--tier-pro-bg);
+            border-color: var(--tier-pro-border);
+        }
+
+        summary.spoiler-header {
+            padding: 10px 16px;
+            font-size: 0.86rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background-color 0.15s ease;
+        }
+
+        details.card-int summary.spoiler-header { color: var(--tier-intermediate); }
+        details.card-pro summary.spoiler-header { color: var(--tier-pro); }
+
+        summary.spoiler-header:hover {
+            filter: brightness(0.95);
+        }
+
+        .spoiler-body {
+            padding: 12px 18px 16px 18px;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: #1e293b;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            background: #ffffff;
+        }
+
+        /* Copyable Code Block Container */
+        .code-container {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        pre {
+            background: var(--bg-code);
+            color: #38bdf8;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, "Courier New", Courier, monospace;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #2b2b36;
+            color: #cbd5e1;
+            border: 1px solid #444456;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .copy-btn:hover {
+            background: #444458;
+            color: #ffffff;
+        }
+
+        .copy-btn.copied {
+            background: var(--tier-beginner);
+            color: #ffffff;
+            border-color: var(--tier-beginner);
+        }
+
+        /* Media Slot (Images/GIFs/Videos) */
+        .media-slot {
+            margin: 10px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-height: 220px;
+        }
+
+        .media-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Change Rationale Box */
         .callout-box {
-            background: rgba(16, 185, 129, 0.08);
-            border-left: 5px solid var(--accent-new);
-            padding: 12px 18px;
+            background: rgba(16, 185, 129, 0.06);
+            border-left: 4px solid var(--tier-beginner);
+            padding: 10px 14px;
             border-radius: 6px;
             margin-top: auto;
-            font-size: 0.92rem;
+            font-size: 0.85rem;
             color: #065f46;
         }
 
         .callout-title {
             font-weight: 800;
-            margin-bottom: 4px;
-            color: var(--accent-new);
+            margin-bottom: 2px;
+            color: var(--tier-beginner);
             text-transform: uppercase;
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             letter-spacing: 0.5px;
-        }
-
-        pre {
-            background: var(--code-bg);
-            color: #38bdf8;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            line-height: 1.45;
-            overflow-x: auto;
-            margin: 10px 0;
         }
 
         .footer-logo {
             position: absolute;
-            bottom: 16px;
-            right: 26px;
+            bottom: 12px;
+            right: 24px;
             font-weight: 900;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--hr-red);
-            opacity: 0.8;
+            opacity: 0.6;
             letter-spacing: 0.5px;
         }
 
         /* Bottom Controls */
         .bottom-bar {
             height: 50px;
-            background: #1c1c20;
-            border-top: 1px solid #2e2e36;
+            background: #17171c;
+            border-top: 1px solid #272730;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -315,20 +523,20 @@
         }
 
         .nav-btn {
-            background: #2a2a32;
+            background: #262630;
             color: #f1f5f9;
-            border: 1px solid #444452;
-            padding: 8px 18px;
+            border: 1px solid #3e3e50;
+            padding: 6px 16px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             transition: all 0.2s ease;
         }
 
         .nav-btn:hover:not(:disabled) {
-            background: #3c3c48;
-            border-color: #666678;
+            background: #383848;
+            border-color: #5a5a70;
         }
 
         .nav-btn:disabled {
@@ -337,29 +545,29 @@
         }
 
         .slide-counter {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: #94a3b8;
         }
 
         .mode-indicator {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 800;
             text-transform: uppercase;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 4px;
         }
 
         .mode-indicator.old {
-            background: rgba(244, 63, 94, 0.2);
+            background: rgba(244, 63, 94, 0.15);
             color: var(--accent-old);
             border: 1px solid var(--accent-old);
         }
 
         .mode-indicator.new {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-new);
-            border: 1px solid var(--accent-new);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--tier-beginner);
+            border: 1px solid var(--tier-beginner);
         }
     </style>
 </head>
@@ -369,15 +577,25 @@
     <div class="top-bar">
         <div class="brand-title">
             <span class="hr-tag">HR CMGT</span>
-            <span>Dev - Basics 1 (Unity 6 vs Original)</span>
+            <span>Dev - Basics 1 (3-Tier Interactive Deck)</span>
         </div>
+
+        <!-- Tier Selector Filter -->
+        <div class="tier-selector">
+            <button class="tier-btn active-all" id="tierAll" onclick="setTierFilter('all')">All Tiers</button>
+            <button class="tier-btn" id="tierBeg" onclick="setTierFilter('beg')">Beginner (Lecture)</button>
+            <button class="tier-btn" id="tierInt" onclick="setTierFilter('int')">Intermediate (+Feel)</button>
+            <button class="tier-btn" id="tierPro" onclick="setTierFilter('pro')">Pro (+Architecture)</button>
+        </div>
+
+        <!-- Mode Toggle -->
         <div class="toggle-wrap">
             <span class="toggle-text active-old" id="labelOld" onclick="setMode(false)">ORIGINAL KEYNOTE (HD)</span>
             <label class="switch">
                 <input type="checkbox" id="modeSwitch" onchange="handleToggle()">
                 <span class="slider"></span>
             </label>
-            <span class="toggle-text" id="labelNew" onclick="setMode(true)">REVISED UNITY 6 (6000.x)</span>
+            <span class="toggle-text" id="labelNew" onclick="setMode(true)">REVISED UNITY 6</span>
         </div>
     </div>
 
@@ -388,18 +606,55 @@
 
         <!-- Presentation Viewport -->
         <div class="stage-area">
-            <div class="slide-viewport" id="viewport" onclick="changeSlide(1)">
+            <div class="slide-viewport" id="viewport">
                 <!-- Original Full HD 1920x1080 Rendered Slide -->
                 <img id="originalSlideImg" src="" alt="Original Keynote Slide">
 
-                <!-- Interactive View (Revised Slide) -->
+                <!-- Interactive View (Revised 3-Tier Slide) -->
                 <div id="interactiveSlide" class="view-interactive">
-                    <div class="slide-banner" id="revisedBanner">Topic Header</div>
-                    <div class="slide-content-text" id="revisedContent">Content goes here...</div>
+                    <div class="slide-banner-row">
+                        <div class="slide-banner" id="revisedBanner">Topic Header</div>
+                        <div class="tier-badges-row">
+                            <span class="pill-badge pill-beg">Beginner</span>
+                            <span class="pill-badge pill-int">Intermediate</span>
+                            <span class="pill-badge pill-pro">Pro</span>
+                        </div>
+                    </div>
+
+                    <!-- Tier 1: Beginner (Class Default / Main Lecture Road) -->
+                    <div class="beg-main-road" id="tierBegContainer">
+                        <div class="beg-title">Beginner Core (Lecture Main Road):</div>
+                        <div class="content-body" id="revisedBegContent">Beginner content...</div>
+                    </div>
+
+                    <!-- Tier 2: Intermediate Deep Dive (Collapsible Spoiler) -->
+                    <details class="spoiler-card card-int" id="tierIntContainer">
+                        <summary class="spoiler-header">
+                            <span>[Intermediate Deep Dive] - Game Feel & Physics Tuning</span>
+                            <span style="font-size:0.75rem; opacity:0.8;">Click to Open ▼</span>
+                        </summary>
+                        <div class="spoiler-body" id="revisedIntContent">
+                            Intermediate content...
+                        </div>
+                    </details>
+
+                    <!-- Tier 3: Pro Architectural Challenge (Collapsible Spoiler) -->
+                    <details class="spoiler-card card-pro" id="tierProContainer">
+                        <summary class="spoiler-header">
+                            <span>[Pro Challenge] - Architecture, Decoupling & Polish</span>
+                            <span style="font-size:0.75rem; opacity:0.8;">Click to Open ▼</span>
+                        </summary>
+                        <div class="spoiler-body" id="revisedProContent">
+                            Pro content...
+                        </div>
+                    </details>
+
+                    <!-- Why This Change Was Made (vs Original) -->
                     <div class="callout-box" id="revisedCallout">
                         <div class="callout-title">Why This Change Was Made (vs Original):</div>
                         <div id="revisedRationale">Rationale goes here...</div>
                     </div>
+
                     <div class="footer-logo">HOGESCHOOL ROTTERDAM</div>
                 </div>
             </div>
@@ -441,228 +696,323 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // 100% Synchronized 1:1 Revised Slides targeting Unity 6 (6000.x)
-        const revisedSlides = [
-            // Slide 1 (Matches Title Slide)
+        // 3-Tier Multi-Level Content Matrix
+        const tierSlides = [
+            // Slide 1
             {
-                banner: "Dev - Basics 1 (Unity 6 / 6000.x)",
-                content: `<p style="font-size: 1.3rem; font-weight: 700; margin-bottom: 12px;">Minor Game Design & Development</p>
-                          <p>Welcome to Lesson 1. Today you build a 2D platformer base learning component architecture, lifecycle execution, and physics in Unity 6.</p>`,
-                rationale: "Sets explicit engineering targets up front in Unity 6 (6000.x)."
+                banner: "Dev - Basics 1 (Unity 6)",
+                beg: `<p><strong>Welcome to Lesson 1!</strong> Today you learn core Unity 2D component architecture, script execution lifecycles, and physics movement in Unity 6.</p>
+                      <ul>
+                        <li>Understand the GameObject &rarr; Component relationship.</li>
+                        <li>Build a responsive 2D player with <code>Rigidbody2D.linearVelocity</code>.</li>
+                        <li>Create a smooth Cinemachine 3 follow camera.</li>
+                      </ul>`,
+                int: `<p><strong>Game Feel Preview:</strong> Beyond basic physics, a great platformer needs responsiveness:</p>
+                      <ul>
+                        <li><strong>Jump Buffering:</strong> Store jump input pressed 0.15s before landing.</li>
+                        <li><strong>Coyote Time:</strong> Allow jumping 0.12s after walking off a ledge.</li>
+                      </ul>`,
+                pro: `<p><strong>Architectural Goal:</strong> Master <em>Separation of Concerns</em>. Never put sprite animation, audio, and physics calculations on the same GameObject.</p>`,
+                rationale: "Sets explicit engineering targets up front instead of an unguided assignment."
             },
-            // Slide 2 (Matches Dev Class Intro)
+            // Slide 2
             {
                 banner: "Dev Class Intro & Unity 6",
-                content: `<ul>
-                            <li><strong>Engine:</strong> Unity 6 (6000.x) with 2D URP Template.</li>
-                            <li><strong>Progression:</strong> Block 1 (2D Architecture) &rarr; Block 2 (3D Graphics & Shaders).</li>
-                            <li><strong>Tools:</strong> GitHub Classroom, JetBrains Rider / Visual Studio, Discord.</li>
-                          </ul>`,
-                rationale: "Standardizes directly on Unity 6 (6000.x) to ensure full LTS support without enterprise licensing barriers."
+                beg: `<ul>
+                        <li><strong>Engine:</strong> Unity 6 (6000.x) with 2D URP Template.</li>
+                        <li><strong>Structure:</strong> Block 1 (2D Architecture) &rarr; Block 2 (3D Graphics & Shaders).</li>
+                        <li><strong>Tools:</strong> GitHub Classroom, JetBrains Rider / Visual Studio, Discord.</li>
+                      </ul>`,
+                int: `<p><strong>IDE Pro-Tip:</strong> Use JetBrains Rider with free Student License. Rider inspects Unity serializations and flags Garbage Collection allocations in <code>Update()</code> in real time.</p>`,
+                pro: `<p><strong>Assembly Definitions:</strong> For larger projects, split code into custom <code>.asmdef</code> assemblies to keep recompile times under 1 second.</p>`,
+                rationale: "Standardizes on Unity 6 LTS to ensure zero package breakage and free accessibility."
             },
-            // Slide 3 (Matches Overview)
+            // Slide 3
             {
                 banner: "Lesson 1 Roadmap",
-                content: `<p>Today's 2-part structure:</p>
-                          <ol style="margin-left: 24px; margin-top: 10px;">
-                            <li><strong>Part 1: Setup & Project Core</strong> (URP Template, Cinemachine 3, Input System).</li>
-                            <li><strong>Part 2: 2D Physics & Scripting</strong> (Rigidbody2D linearVelocity, Colliders, Separation of Concerns).</li>
-                          </ol>`,
-                rationale: "Structured lesson progression prevents cognitive overload in the first 45 minutes."
+                beg: `<ol>
+                        <li><strong>Part 1: Setup & Project Core</strong> (URP Template, Cinemachine 3, Input System).</li>
+                        <li><strong>Part 2: 2D Physics & Scripting</strong> (Rigidbody2D linearVelocity, Colliders, Separation of Concerns).</li>
+                      </ol>`,
+                int: `<p><strong>Class Pacing Strategy:</strong> Complete the 4 core beginner milestones first before opening the Intermediate spoilers.</p>`,
+                pro: `<p><strong>Self-Guided Challenge:</strong> Replace all <code>Destroy()</code> calls with an <code>ObjectPool&lt;T&gt;</code> by end of class.</p>`,
+                rationale: "Clear structure prevents cognitive overload in the first 45 minutes."
             },
-            // Slide 4 (Matches Part 1 Agenda)
+            // Slide 4
             {
                 banner: "Part 1: Course & Project Setup",
-                content: `<p>Key topics covered in this block:</p>
-                          <ul style="margin-left: 24px; margin-top: 10px;">
-                            <li>Course Syllabus & Repository Documentation</li>
-                            <li>Unity 6 2D URP Project Creation</li>
-                            <li>Installing Cinemachine 3 via Package Manager</li>
-                            <li>Importing <code>basics1.unitypackage</code></li>
-                          </ul>`,
-                rationale: "Clearly demarcates environment setup from gameplay programming."
+                beg: `<ul>
+                        <li>Clone/Download GitHub Course Repository.</li>
+                        <li>Create Unity 6 Project with <strong>2D (URP)</strong> Template.</li>
+                        <li>Install <strong>Cinemachine</strong> via Package Manager.</li>
+                        <li>Import <code>basics1.unitypackage</code>.</li>
+                      </ul>`,
+                int: `<p><strong>URP Settings Check:</strong> Verify your <code>2D Renderer Data</code> asset has <strong>Pixel Perfect Camera</strong> enabled if using pixel art assets.</p>`,
+                pro: `<p><strong>Version Control Hygiene:</strong> Ensure Git LFS tracks <code>*.psd</code>, <code>*.png</code>, <code>*.wav</code>, and <code>*.unitypackage</code> to keep repository clone sizes small.</p>`,
+                rationale: "Demarcates environment setup cleanly from gameplay programming."
             },
-            // Slide 5 (Matches Github MGDD)
+            // Slide 5
             {
                 banner: "GitHub Course Repository",
-                content: `<p>Access all lessons, code snippets, and resources:</p>
-                          <pre>https://github.com/HR-CMGT/Minor-GDD-Unity</pre>
-                          <p>Clone the repository or download starter packages directly from the <code>projectfiles/</code> directory.</p>`,
-                rationale: "Provides fixed relative paths to project files."
+                beg: `<p>Access all lessons, code snippets, and resources:</p>
+                      <div class="code-container">
+                        <pre>https://github.com/HR-CMGT/Minor-GDD-Unity</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>
+                      <p>Download starter packages directly from the <code>projectfiles/</code> directory.</p>`,
+                int: `<p><strong>Git Branching:</strong> Always create a feature branch (e.g. <code>git checkout -b feature/player-controller</code>) rather than committing directly to <code>main</code>.</p>`,
+                pro: `<p><strong>YAML Merge Conflicts:</strong> Learn to use Unity's <code>UnityYAMLMerge</code> tool for resolving binary scene and prefab conflicts across team members.</p>`,
+                rationale: "Provides fixed relative paths and direct URLs to project files."
             },
-            // Slide 6 (Matches Github Documentation)
+            // Slide 6
             {
                 banner: "Course Reference Manuals & Docs",
-                content: `<ul>
-                            <li><code>00_unity.md</code>: Complete reference manual & best practices.</li>
-                            <li><code>00_codesnippets.md</code>: Production C# snippets (Movement, Timers, Raycasting).</li>
-                            <li><code>00_resources.md</code>: Curated free assets (Kenney, PolyHaven, FreeSound).</li>
-                          </ul>`,
-                rationale: "Corrects syntax errors in code examples and eliminates broken external links."
+                beg: `<ul>
+                        <li><code>00_unity.md</code>: Complete reference manual & best practices.</li>
+                        <li><code>00_codesnippets.md</code>: Production C# snippets (Movement, Timers, Raycasting).</li>
+                        <li><code>00_resources.md</code>: Curated free assets (Kenney, PolyHaven, FreeSound).</li>
+                      </ul>`,
+                int: `<p><strong>Editor Productivity:</strong> Use <code>[ContextMenu("Test Function")]</code> above methods to execute them in the Inspector while in Play Mode!</p>`,
+                pro: `<p><strong>Custom Editor Attributes:</strong> Use <code>[SelectionBase]</code> on root GameObjects so clicking in Scene View always selects the root prefab rather than child meshes.</p>`,
+                rationale: "Corrects syntax errors in code examples and eliminates broken links."
             },
-            // Slide 7 (Matches Unity Startproject)
+            // Slide 7
             {
                 banner: "Unity Startproject Import Guide",
-                content: `<p><strong>How to import the project:</strong></p>
-                          <ol style="margin-left: 24px; margin-top: 10px;">
-                            <li>Open Unity 6 with your 2D (URP) project active.</li>
-                            <li>Navigate to <code>Assets > Import Package > Custom Package...</code></li>
-                            <li>Select <code>basics1.unitypackage</code> and click <strong>Import</strong>.</li>
-                          </ol>`,
-                rationale: "Replaces drag-and-drop instructions with guaranteed Unity menu import paths to avoid Windows UAC permission blocks."
+                beg: `<ol>
+                        <li>Open Unity 6 with your 2D (URP) project active.</li>
+                        <li>Navigate to: <code>Assets > Import Package > Custom Package...</code></li>
+                        <li>Select <code>basics1.unitypackage</code> and click <strong>Import All</strong>.</li>
+                      </ol>`,
+                int: `<p><strong>Sprite Import Settings:</strong> For 16x16 pixel sprites: Set <strong>Pixels Per Unit</strong> to 16, <strong>Filter Mode</strong> to <code>Point (no filter)</code>, and <strong>Compression</strong> to <code>None</code>.</p>`,
+                pro: `<p><strong>Automated Package Dependencies:</strong> Add custom packages to <code>Packages/manifest.json</code> via scoped registries for team auto-installs.</p>`,
+                rationale: "Replaces drag-and-drop instructions with guaranteed Unity menu import paths to avoid Windows UAC blocks."
             },
-            // Slide 8 (Matches Package Manager)
+            // Slide 8
             {
                 banner: "Package Manager (Cinemachine 3)",
-                content: `<p><strong>Input System is pre-installed in Unity 6!</strong></p>
-                          <p>To install Cinemachine 3:</p>
-                          <ol style="margin-left: 24px; margin-top: 10px;">
-                            <li><code>Window > Package Manager</code> &rarr; Switch to <strong>Packages: Unity Registry</strong>.</li>
-                            <li>Search <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
-                          </ol>`,
-                rationale: "Notes that Input System is already built-in in Unity 6, eliminating the legacy restart prompt."
+                beg: `<p><strong>Input System is pre-installed in Unity 6!</strong></p>
+                      <ol>
+                        <li>Go to <code>Window > Package Manager</code>.</li>
+                        <li>Switch dropdown to <strong>Packages: Unity Registry</strong>.</li>
+                        <li>Search <strong>Cinemachine</strong> and click <strong>Install</strong>.</li>
+                      </ol>`,
+                int: `<p><strong>Input Action Assets:</strong> Instead of simple Send Messages, create an <code>.inputactions</code> asset with Action Maps for Movement, UI, and Menus.</p>`,
+                pro: `<p><strong>C# Event Subscriptions:</strong> Subscribe to C# actions directly: <code>controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt;();</code>.</p>`,
+                rationale: "Explicitly documents that Input System is built-in in Unity 6, eliminating the legacy restart prompt."
             },
-            // Slide 9 (Matches Assignment StartProject)
+            // Slide 9
             {
-                banner: "Assignment: 4-Step Milestone Checklist",
-                content: `<ol style="margin-left: 24px; margin-top: 10px;">
-                            <li><strong>Player Setup:</strong> Attach <code>PlayerController2D</code> and configure <code>GroundCheck</code>.</li>
-                            <li><strong>Camera Follow:</strong> Create Cinemachine 3 Camera, set Tracking Target to Player.</li>
-                            <li><strong>Coins:</strong> Place <code>Coin_Start</code> prefab with Trigger Collider.</li>
-                            <li><strong>Test & Play:</strong> Run, jump, and collect all coins cleanly.</li>
-                          </ol>`,
-                rationale: "Replaces a chaotic 10-item list (Joints, Tilemaps, Platform Effectors) with 4 focused milestones."
+                banner: "Assignment: 4-Step Milestones",
+                beg: `<ol>
+                        <li><strong>Step 1: Player Setup:</strong> Attach <code>PlayerController2D</code> and configure <code>GroundCheck</code>.</li>
+                        <li><strong>Step 2: Camera Follow:</strong> Create Cinemachine 3 Camera, set Tracking Target to Player.</li>
+                        <li><strong>Step 3: Coins:</strong> Place <code>Coin_Start</code> prefab with Trigger Collider.</li>
+                        <li><strong>Step 4: Test & Play:</strong> Run, jump, and collect all coins cleanly.</li>
+                      </ol>`,
+                int: `<p><strong>Juicing Challenge:</strong> Add a particle burst effect when collecting coins and a camera shake on landing.</p>`,
+                pro: `<p><strong>Architecture Challenge:</strong> Create a <code>ScoreManager</code> that listens to a <code>Coin.OnCoinCollected</code> C# static event without hardcoded references.</p>`,
+                rationale: "Replaces a chaotic 10-item list with 4 focused, sequential milestones."
             },
-            // Slide 10 (Matches Rigidbody2D - Component)
+            // Slide 10
             {
                 banner: "Rigidbody2D Component Essentials",
-                content: `<ul style="margin-left: 24px; margin-top: 10px;">
-                            <li><strong>Body Type: Dynamic</strong> (Fully simulated by physics engine).</li>
-                            <li><strong>Collision Detection: Continuous</strong> (Prevents falling through high-speed floors).</li>
-                            <li><strong>Constraints: Freeze Rotation Z</strong> (Prevents character tipping over when walking!).</li>
-                          </ul>`,
+                beg: `<ul>
+                        <li><strong>Body Type: Dynamic</strong> (Simulated by physics engine).</li>
+                        <li><strong>Collision Detection: Continuous</strong> (Prevents falling through high-speed floors).</li>
+                        <li><strong>Constraints: Freeze Rotation Z</strong> (Prevents character tipping over when walking!).</li>
+                      </ul>`,
+                int: `<p><strong>Physics Materials:</strong> Create a <code>PhysicsMaterial2D</code> with <strong>Friction: 0</strong> for character sides to prevent sticking to vertical walls while jumping.</p>`,
+                pro: `<p><strong>Terminal Velocity:</strong> Clamp vertical velocity in <code>FixedUpdate</code> (<code>Mathf.Max(rb.linearVelocity.y, -maxFallSpeed)</code>) to prevent tunneling on long falls.</p>`,
                 rationale: "Explains why Freeze Rotation Z is mandatory for platformers."
             },
-            // Slide 11 (Matches Rigidbody2D - Scripting)
+            // Slide 11
             {
                 banner: "Rigidbody2D Scripting (linearVelocity)",
-                content: `<pre>// Unity 6 standard: Direct linearVelocity in FixedUpdate
+                beg: `<p>Arcade movement applied in <code>FixedUpdate()</code>:</p>
+                      <div class="code-container">
+                        <pre>// Unity 6 standard: Direct linearVelocity in FixedUpdate
 rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
-// Jump Impulse: Instant vertical linearVelocity
+// Jump Impulse: Instant vertical velocity
 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);</pre>
-                          <p><strong>Rule:</strong> Never modify <code>transform.position</code> directly on dynamic Rigidbodies!</p>`,
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>
+                      <p><strong>Rule:</strong> Never modify <code>transform.position</code> directly on dynamic Rigidbodies!</p>`,
+                int: `<p><strong>Jump Cut (Variable Jump Height):</strong> Cut jump short when player releases jump button early:</p>
+                      <div class="code-container">
+                        <pre>if (!isJumpHeld && rb.linearVelocity.y > 0) {
+    rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+}</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>`,
+                pro: `<p><strong>Acceleration & Deceleration Smoothing:</strong></p>
+                      <div class="code-container">
+                        <pre>float targetSpeed = moveInput.x * moveSpeed;
+float accel = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
+float newSpeedX = Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed, accel * Time.fixedDeltaTime);
+rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>`,
                 rationale: "Uses modern Unity 6 `rb.linearVelocity` instead of deprecated `rb.velocity`."
             },
-            // Slide 12 (Matches Unity Documentation)
+            // Slide 12
             {
                 banner: "Unity Manual & API Reference",
-                content: `<ul>
-                            <li><strong>Unity Manual:</strong> Explains concept architecture (e.g. Physics 2D overview, URP 2D lights).</li>
-                            <li><strong>Script Reference:</strong> Method signatures, parameters, and return types (e.g. <code>Physics2D.OverlapCircle</code>).</li>
-                          </ul>`,
+                beg: `<ul>
+                        <li><strong>Unity Manual:</strong> Explains concept architecture (e.g. Physics 2D overview, URP 2D lights).</li>
+                        <li><strong>Script Reference:</strong> Method signatures, parameters, and return types (e.g. <code>Physics2D.OverlapCircle</code>).</li>
+                      </ul>`,
+                int: `<p><strong>Reading API Signatures:</strong> Look for <code>out</code> parameters (like in <code>Physics2D.Raycast</code>) to extract hit normal and surface collision data.</p>`,
+                pro: `<p><strong>Source Code Reference:</strong> You can view Unity's open-source C# engine source on GitHub to inspect exactly how internal components function.</p>`,
                 rationale: "Teaches students how to read official API documentation independently."
             },
-            // Slide 13 (Matches Unity Learn)
+            // Slide 13
             {
-                banner: "Unity Learn & Modern Video Resources",
-                content: `<p>Recommended verified learning paths for 2D development:</p>
-                          <ul style="margin-left: 24px; margin-top: 10px;">
-                            <li>Unity Learn: 2D Essentials & Physics System in Unity 6</li>
-                            <li>New Input System: Action Maps & <code>InputValue</code> Callbacks</li>
-                            <li>Check <code>00_tutorials.md</code> for curated, non-deprecated videos.</li>
-                          </ul>`,
+                banner: "Unity Learn & Modern Resources",
+                beg: `<ul>
+                        <li>Unity Learn: 2D Essentials & Physics System in Unity 6.</li>
+                        <li>New Input System: Action Maps & <code>InputValue</code> Callbacks.</li>
+                        <li>Check <code>00_tutorials.md</code> for curated, non-deprecated videos.</li>
+                      </ul>`,
+                int: `<p><strong>Curated Channels:</strong> Tarodev (2D Platformer Controller math) and Mina Pêcheux (C# Unity architectural patterns).</p>`,
+                pro: `<p><strong>Architecture Channels:</strong> Infallible Code (Dependency Injection & SOLID in Unity) and Jason Weimann.</p>`,
                 rationale: "Replaces outdated Built-in Pipeline links with modern Unity 6 tutorials."
             },
-            // Slide 14 (Matches Script Lifecycle)
+            // Slide 14
             {
                 banner: "Script Execution Order & Lifecycle",
-                content: `<pre>[Awake]       -> Component cache (rb = GetComponent&lt;Rigidbody2D&gt;())
-[Start]       -> Initialize runtime variables
+                beg: `<div class="code-container">
+                        <pre>[Awake]       -> Cache components (rb = GetComponent&lt;Rigidbody2D&gt;())
+[Start]       -> Initialize runtime data
 [Update]      -> Read Input & GroundCheck (every frame)
 [FixedUpdate] -> Apply Rigidbody velocity (physics tick, 50Hz)
-[LateUpdate]  -> Camera tracking follow logic</pre>`,
+[LateUpdate]  -> Camera tracking follow logic</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>`,
+                int: `<p><strong>Custom Script Execution Order:</strong> In <code>Project Settings > Script Execution Order</code>, force game managers to execute before gameplay entities to prevent null reference race conditions.</p>`,
+                pro: `<p><strong>Coroutine Allocations:</strong> <code>yield return new WaitForSeconds(1f);</code> allocates garbage on heap every call! Cache wait objects: <code>private readonly WaitForSeconds waitOne = new WaitForSeconds(1f);</code>.</p>`,
                 rationale: "Teaches students exactly why input belongs in Update and physics belongs in FixedUpdate."
             },
-            // Slide 15 (Matches Part 2 Agenda)
+            // Slide 15
             {
                 banner: "Part 2 Agenda: Architecture & Components",
-                content: `<p>Advanced topics covered in Part 2:</p>
-                          <ul style="margin-left: 24px; margin-top: 10px;">
-                            <li>Separation of Concerns (Root vs Graphics)</li>
-                            <li>Cinemachine 3 Follow Camera</li>
-                            <li>Prefab Instances & Overrides</li>
-                            <li>Trigger Colliders & Coin Collection</li>
-                          </ul>`,
+                beg: `<ul>
+                        <li>Separation of Concerns (Root vs Graphics).</li>
+                        <li>Cinemachine 3 Follow Camera.</li>
+                        <li>Prefab Instances & Overrides.</li>
+                        <li>Trigger Colliders & Coin Collection.</li>
+                      </ul>`,
+                int: `<p><strong>Decoupled Architecture:</strong> Keep coin audio and VFX separate from coin trigger detection logic.</p>`,
+                pro: `<p><strong>ScriptableObject Event Channels:</strong> Use ScriptableObjects as broadcast channels so UI and audio managers listen without holding references to game entities.</p>`,
                 rationale: "Transitions students from single-script hacking to modular game architecture."
             },
-            // Slide 16 (Matches Component-based Workflow)
+            // Slide 16
             {
                 banner: "Component Architecture & Requirements",
-                content: `<pre>[RequireComponent(typeof(Rigidbody2D))]
+                beg: `<p>Enforce required components automatically:</p>
+                      <div class="code-container">
+                        <pre>[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour {
-    // Automatically adds required components in Inspector!
-}</pre>`,
+    // Unity automatically adds Rigidbody2D and Collider2D in Inspector!
+}</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>`,
+                int: `<p><strong>Safe Component Retrieval:</strong> Use <code>TryGetComponent</code> to avoid garbage allocation when checking optional components:</p>
+                      <div class="code-container">
+                        <pre>if (other.TryGetComponent&lt;ICollectible&gt;(out var item)) {
+    item.Collect();
+}</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>`,
+                pro: `<p><strong>Custom Inspector GUI:</strong> Use <code>[CustomEditor(typeof(PlayerController2D))]</code> to create buttons in Inspector that test jumps or reset checkpoints with 1 click.</p>`,
                 rationale: "Teaches `[RequireComponent]` and `TryGetComponent` to permanently eliminate NullReferenceExceptions."
             },
-            // Slide 17 (Fills Blank Slide 17 from Original)
+            // Slide 17
             {
                 banner: "Separation of Concerns (Root vs Child)",
-                content: `<pre>[Player] (Root: Rigidbody2D, BoxCollider2D, PlayerController2D, PlayerInput)
+                beg: `<div class="code-container">
+                        <pre>[Player] (Root: Rigidbody2D, BoxCollider2D, PlayerController2D, PlayerInput)
   └── [Graphics] (Child: SpriteRenderer, Animator)
   └── [GroundCheck] (Child: Empty Transform at feet)</pre>
-                          <p><strong>Rule:</strong> Keep colliders on Root; keep animations and sprite flips on Child.</p>`,
-                rationale: "Original Keynote slide 17 was completely blank. Now teaches the vital industry standard of isolating physics from graphics."
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>
+                      <p><strong>Golden Rule:</strong> Keep physics on Root; keep animations and sprite flips on Graphics child.</p>`,
+                int: `<p><strong>Squash & Stretch:</strong> Animate the child <code>Graphics</code> scale during jumps without deforming the root physics collider!</p>`,
+                pro: `<p><strong>Attachment Sockets:</strong> Create dedicated empty child GameObjects (<code>FootstepSocket</code>, <code>WeaponSocket</code>) to easily spawn particle effects at exact positions.</p>`,
+                rationale: "Original Keynote slide 17 was blank. Now teaches the vital industry standard of isolating physics from visuals."
             },
-            // Slide 18 (Fills Blank Slide 18 from Original)
+            // Slide 18
             {
-                banner: "Cinemachine 3 Camera Setup (Unity 6)",
-                content: `<ol style="margin-left: 24px; margin-top: 10px;">
-                            <li>In menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
-                            <li>In Inspector, drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
-                            <li>Adjust <strong>Dead Zone Width/Height</strong> to control smooth camera lead.</li>
-                          </ol>`,
+                banner: "Cinemachine 3 Camera Setup",
+                beg: `<ol>
+                        <li>In top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
+                        <li>In Inspector, drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
+                        <li>Adjust <strong>Dead Zone Width/Height</strong> to control camera follow delay.</li>
+                      </ol>`,
+                int: `<p><strong>Lookahead Time:</strong> Set <strong>Lookahead Time</strong> to <code>0.2s</code> so the camera pans slightly ahead of the player's movement direction.</p>`,
+                pro: `<p><strong>Cinemachine Impulse Shake:</strong> Attach a <code>CinemachineImpulseSource</code> to Player and trigger camera screen shakes on hard landings: <code>impulseSource.GenerateImpulse();</code>.</p>`,
                 rationale: "Updated for Cinemachine 3.x in Unity 6 (`CinemachineCamera` and `Tracking Target`)."
             },
-            // Slide 19 (Fills Blank Slide 19 from Original)
+            // Slide 19
             {
                 banner: "Using Prefabs Efficiently",
-                content: `<ul style="margin-left: 24px; margin-top: 10px;">
-                            <li><strong>Prefab:</strong> A reusable GameObject template saved on disk.</li>
-                            <li><strong>Prefab Mode:</strong> Double-click any prefab in Project View to edit all instances simultaneously.</li>
-                            <li><strong>Overrides:</strong> Modify specific instances in a scene or apply changes globally.</li>
-                          </ul>`,
-                rationale: "Original Keynote slide 19 was completely blank. Now explains standard production prefab workflows without confusion."
+                beg: `<ul>
+                        <li><strong>Prefab:</strong> A reusable GameObject template saved on disk.</li>
+                        <li><strong>Prefab Mode:</strong> Double-click any prefab in Project View to edit all instances simultaneously.</li>
+                        <li><strong>Overrides:</strong> Modify specific instances in a scene or apply changes globally.</li>
+                      </ul>`,
+                int: `<p><strong>Prefab Variants:</strong> Create a base <code>Coin_Base</code> prefab, then right-click &rarr; <code>Create > Prefab Variant</code> to make <code>GoldCoin</code> and <code>SilverCoin</code> with custom point values.</p>`,
+                pro: `<p><strong>Nested Prefabs:</strong> Embed modular prefabs (e.g. <code>HealthBar_Prefab</code>) inside character prefabs for unified team asset workflows.</p>`,
+                rationale: "Explains standard production prefab workflows without confusion."
             },
-            // Slide 20 (Fills Blank Slide 20 from Original)
+            // Slide 20
             {
                 banner: "Creating & Destroying GameObjects",
-                content: `<pre>public class Coin : MonoBehaviour {
+                beg: `<p>Collectible trigger pickup script:</p>
+                      <div class="code-container">
+                        <pre>public class Coin : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player")) {
             // Play audio / increment score
             Destroy(gameObject);
         }
     }
-}</pre>`,
-                rationale: "Original Keynote slide 20 was completely blank. Now provides concise, working code for collectible pickup detection."
+}</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>`,
+                int: `<p><strong>Audio Before Destroy:</strong> <code>Destroy(gameObject)</code> stops running AudioSources instantly! Use <code>AudioSource.PlayClipAtPoint(clip, transform.position);</code> or disable the renderer first.</p>`,
+                pro: `<p><strong>Unity Object Pool (Zero GC):</strong></p>
+                      <div class="code-container">
+                        <pre>using UnityEngine.Pool;
+
+private ObjectPool&lt;GameObject&gt; coinPool;
+// Deactivate object back to pool instead of calling Destroy():
+coinPool.Release(gameObject);</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                      </div>`,
+                rationale: "Provides concise, working code for collectible pickup detection and introduces pooling."
             },
-            // Slide 21 (Matches Help Discord)
+            // Slide 21
             {
                 banner: "Help, Discord & Troubleshooting",
-                content: `<p style="font-size: 1.2rem; font-weight: 700; margin-bottom: 12px;">Need assistance?</p>
-                          <ul style="margin-left: 24px; line-height: 1.8;">
-                            <li>Ask in the <strong>#dev-help</strong> channel on Discord.</li>
-                            <li>Consult <a href="../00_unity.md" style="color:var(--hr-red); font-weight:bold;">00_unity.md</a> for quick reference.</li>
-                            <li>Check <a href="../00_codesnippets.md" style="color:var(--hr-red); font-weight:bold;">00_codesnippets.md</a> for verified code snippets.</li>
-                          </ul>`,
-                rationale: "Direct links to internal course documentation and student help channels."
+                beg: `<p><strong>Troubleshooting Quick Checklist:</strong></p>
+                      <ul>
+                        <li><strong>Falls through floor:</strong> Ensure floor has <code>BoxCollider2D</code> and Ground Layer matches.</li>
+                        <li><strong>Character tips over:</strong> Check <code>Constraints > Freeze Rotation Z</code> on Rigidbody2D.</li>
+                        <li><strong>Keys don't respond:</strong> Verify <code>PlayerInput</code> component is on Root with <code>Behavior: Send Messages</code>.</li>
+                        <li><strong>Need help?</strong> Post in Discord <strong>#dev-help</strong> channel.</li>
+                      </ul>`,
+                int: `<p><strong>Visual Raycast Debugging:</strong> Use <code>Debug.DrawRay(transform.position, Vector2.down * distance, Color.green);</code> to see ground rays live in Scene View!</p>`,
+                pro: `<p><strong>Frame-by-Frame Stepping:</strong> Use <code>Debug.Break();</code> in C# to instantly pause the Unity Editor on the exact frame an unexpected collision occurs.</p>`,
+                rationale: "Provides an actionable troubleshooting matrix and immediate debugging techniques."
             }
         ];
 
         let currentSlide = 0;
         let isNewMode = false;
+        let currentTier = 'all'; // 'all', 'beg', 'int', 'pro'
 
         function init() {
             const drawer = document.getElementById("slideDrawer");
@@ -672,10 +1022,7 @@ public class PlayerController2D : MonoBehaviour {
                 const item = document.createElement("div");
                 item.className = `drawer-item ${index === 0 ? 'active' : ''}`;
                 item.id = `drawer-${index}`;
-                item.onclick = (e) => {
-                    e.stopPropagation();
-                    goToSlide(index);
-                };
+                item.onclick = () => goToSlide(index);
 
                 const img = document.createElement("img");
                 img.src = `assets/${id}/slide_hd.png`;
@@ -691,6 +1038,47 @@ public class PlayerController2D : MonoBehaviour {
             });
 
             updateView();
+        }
+
+        function setTierFilter(tier) {
+            currentTier = tier;
+            
+            // Update button styles
+            document.getElementById('tierAll').className = `tier-btn ${tier === 'all' ? 'active-all' : ''}`;
+            document.getElementById('tierBeg').className = `tier-btn ${tier === 'beg' ? 'active-beg' : ''}`;
+            document.getElementById('tierInt').className = `tier-btn ${tier === 'int' ? 'active-int' : ''}`;
+            document.getElementById('tierPro').className = `tier-btn ${tier === 'pro' ? 'active-pro' : ''}`;
+
+            applyTierVisibility();
+        }
+
+        function applyTierVisibility() {
+            const begEl = document.getElementById("tierBegContainer");
+            const intEl = document.getElementById("tierIntContainer");
+            const proEl = document.getElementById("tierProContainer");
+
+            if (currentTier === 'beg') {
+                begEl.style.display = 'block';
+                intEl.style.display = 'none';
+                proEl.style.display = 'none';
+            } else if (currentTier === 'int') {
+                begEl.style.display = 'block';
+                intEl.style.display = 'block';
+                intEl.open = true;
+                proEl.style.display = 'none';
+            } else if (currentTier === 'pro') {
+                begEl.style.display = 'block';
+                intEl.style.display = 'block';
+                proEl.style.display = 'block';
+                proEl.open = true;
+            } else {
+                // All tiers
+                begEl.style.display = 'block';
+                intEl.style.display = 'block';
+                proEl.style.display = 'block';
+                intEl.open = false;
+                proEl.open = false;
+            }
         }
 
         function handleToggle() {
@@ -715,7 +1103,7 @@ public class PlayerController2D : MonoBehaviour {
                 labelOld.classList.remove("active-old");
                 labelNew.classList.add("active-new");
                 interactiveSlide.classList.add("active");
-                modeBadge.textContent = "Revised Unity 6 (6000.x)";
+                modeBadge.textContent = "Revised Unity 6";
                 modeBadge.className = "mode-indicator new";
             } else {
                 labelOld.classList.add("active-old");
@@ -747,17 +1135,21 @@ public class PlayerController2D : MonoBehaviour {
         function renderCurrentSlide() {
             const slideId = slideIds[currentSlide];
 
-            // 1. Update Original Slide to Crystal Clear Full HD 1920x1080 PNG
+            // 1. Update Original Slide Image (1080p Full HD)
             const img = document.getElementById("originalSlideImg");
             img.src = `assets/${slideId}/slide_hd.png`;
 
-            // 2. Update Revised slide contents dynamically for all 21 slides
-            const revised = revisedSlides[currentSlide];
-            if (revised) {
-                document.getElementById("revisedBanner").textContent = revised.banner;
-                document.getElementById("revisedContent").innerHTML = revised.content;
-                document.getElementById("revisedRationale").textContent = revised.rationale;
+            // 2. Update Revised 3-Tier slide contents
+            const slide = tierSlides[currentSlide];
+            if (slide) {
+                document.getElementById("revisedBanner").textContent = slide.banner;
+                document.getElementById("revisedBegContent").innerHTML = slide.beg;
+                document.getElementById("revisedIntContent").innerHTML = slide.int;
+                document.getElementById("revisedProContent").innerHTML = slide.pro;
+                document.getElementById("revisedRationale").textContent = slide.rationale;
             }
+
+            applyTierVisibility();
         }
 
         function changeSlide(direction) {
@@ -769,6 +1161,20 @@ public class PlayerController2D : MonoBehaviour {
             goToSlide(0);
         }
 
+        function copyCode(btn) {
+            const pre = btn.previousElementSibling;
+            if (pre) {
+                navigator.clipboard.writeText(pre.innerText).then(() => {
+                    btn.textContent = "Copied!";
+                    btn.classList.add("copied");
+                    setTimeout(() => {
+                        btn.textContent = "Copy";
+                        btn.classList.remove("copied");
+                    }, 1800);
+                });
+            }
+        }
+
         document.addEventListener("keydown", (e) => {
             if (e.key === "ArrowLeft") {
                 changeSlide(-1);
@@ -777,6 +1183,14 @@ public class PlayerController2D : MonoBehaviour {
             } else if (e.key === " ") {
                 e.preventDefault();
                 setMode(!isNewMode);
+            } else if (e.key === "1") {
+                setTierFilter('beg');
+            } else if (e.key === "2") {
+                setTierFilter('int');
+            } else if (e.key === "3") {
+                setTierFilter('pro');
+            } else if (e.key === "0" || e.key === "`") {
+                setTierFilter('all');
             }
         });
 
