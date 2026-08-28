@@ -1950,6 +1950,11 @@ coinPool.Release(gameObject);</pre>
             document.getElementById('tierAdv').className = `tier-btn ${tier === 'adv' ? 'active-adv' : ''}`;
             document.getElementById('tierExp').className = `tier-btn ${tier === 'exp' ? 'active-exp' : ''}`;
 
+            // Auto-switch to lab mode if user selects an extension tier
+            if (tier !== 'core' && currentViewMode === 'projector') {
+                setViewMode('lab');
+            }
+
             applyTierVisibility();
         }
 
@@ -1965,15 +1970,10 @@ coinPool.Release(gameObject);</pre>
                 if (currentTier === 'core') {
                     el.style.display = 'none';
                     el.open = false;
-                } else if (currentTier === 'adv') {
+                } else if (currentTier === 'adv' || currentTier === 'exp' || currentTier === 'all') {
+                    // Show Advanced on both Advanced, Expert, and All Tracks
                     el.style.display = 'block';
                     el.open = true;
-                } else if (currentTier === 'exp') {
-                    el.style.display = 'none';
-                    el.open = false;
-                } else {
-                    el.style.display = 'block';
-                    el.open = false;
                 }
             });
 
@@ -1981,12 +1981,10 @@ coinPool.Release(gameObject);</pre>
                 if (currentTier === 'core' || currentTier === 'adv') {
                     el.style.display = 'none';
                     el.open = false;
-                } else if (currentTier === 'exp') {
+                } else if (currentTier === 'exp' || currentTier === 'all') {
+                    // Show Expert on Expert and All Tracks
                     el.style.display = 'block';
                     el.open = true;
-                } else {
-                    el.style.display = 'block';
-                    el.open = false;
                 }
             });
         }
