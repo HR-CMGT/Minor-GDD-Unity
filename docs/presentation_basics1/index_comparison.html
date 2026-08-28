@@ -450,13 +450,13 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 12px;
+            gap: 10px;
         }
 
         .content-stack {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
         }
 
@@ -484,7 +484,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(1rem, 1.35vw, 1.4rem);
+            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
             margin-bottom: 4px;
         }
 
@@ -493,7 +493,7 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.95rem, 1.25vw, 1.3rem);
+            font-size: clamp(0.92rem, 1.22vw, 1.25rem);
             line-height: 1.5;
             color: #1e293b;
             font-weight: 500;
@@ -509,10 +509,48 @@
             margin-bottom: 4px;
         }
 
+        /* Media & Visual Demo Placeholder Slots */
+        .media-slot {
+            background: #f1f5f9;
+            border: 2px dashed #94a3b8;
+            border-radius: 8px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 4px 0;
+            color: #334155;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .media-slot:hover {
+            border-color: var(--hr-red);
+            background: var(--hr-lightred);
+        }
+
+        .media-slot-badge {
+            background: var(--hr-red);
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .media-slot-text {
+            font-size: clamp(0.82rem, 1.05vw, 1.1rem);
+            font-weight: 700;
+            color: #1e293b;
+        }
+
         /* Monospace Code Boxes */
         .code-box {
             position: relative;
-            margin: 6px 0;
+            margin: 4px 0;
             width: 100%;
         }
 
@@ -521,8 +559,8 @@
             color: #38bdf8;
             overflow-x: auto;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.88rem, 1.18vw, 1.25rem);
-            line-height: 1.45;
+            font-size: clamp(0.85rem, 1.15vw, 1.2rem);
+            line-height: 1.4;
             padding: 10px 14px;
             border-radius: 8px;
         }
@@ -560,15 +598,15 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.95rem, 1.25vw, 1.3rem);
-            padding: 10px 14px;
+            font-size: clamp(0.92rem, 1.2vw, 1.25rem);
+            padding: 8px 12px;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.9rem, 1.2vw, 1.25rem);
-            padding: 10px 14px;
+            font-size: clamp(0.88rem, 1.15vw, 1.2rem);
+            padding: 8px 12px;
             font-weight: 500;
             background: #ffffff;
         }
@@ -604,8 +642,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.85rem, 1.1vw, 1.15rem);
-            padding: 6px 12px;
+            font-size: clamp(0.82rem, 1.05vw, 1.1rem);
+            padding: 5px 10px;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -615,9 +653,9 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.85rem, 1.1vw, 1.15rem);
-            padding: 8px 14px;
-            line-height: 1.45;
+            font-size: clamp(0.82rem, 1.05vw, 1.1rem);
+            padding: 8px 12px;
+            line-height: 1.4;
         }
 
         /* ==========================================================================
@@ -894,7 +932,7 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // Content Matrix: Pure Full-Width Stacked Layouts Across All 21 Slides (No Side-by-Side)
+        // Content Matrix: Pure Full-Width Stacked Layouts with GIF/Media Slots Across All 21 Slides
         const slidesData = [
             // Slide 1: Hero
             {
@@ -1121,6 +1159,10 @@ git checkout -b feature/platformer-controller</pre>
                                 </ol>
                             </div>
                         </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Demo Visual</span>
+                            <span class="media-slot-text">Editor Walkthrough: Assets &gt; Import Package &gt; Custom Package dialog</span>
+                        </div>
                         <div class="content-card primary">
                             <div class="card-title core">Starter Scene Components</div>
                             <div class="card-body">
@@ -1166,6 +1208,10 @@ git checkout -b feature/platformer-controller</pre>
                                     <li>Search for <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
                                 </ol>
                             </div>
+                        </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Screenshot / Demo</span>
+                            <span class="media-slot-text">Package Manager: Unity Registry &gt; Cinemachine Install button</span>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">2. Modern Input System (Pre-Installed)</div>
@@ -1222,6 +1268,10 @@ git checkout -b feature/platformer-controller</pre>
                             <div class="card-body">
                                 Press Play. Run, jump, and collect all coins cleanly without the player tipping over!
                             </div>
+                        </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Target Gameplay GIF</span>
+                            <span class="media-slot-text">Completed Milestone: Player running, jumping, and collecting coin triggers</span>
                         </div>
                     </div>
                     <details class="tier-accordion adv" id="tierAdvBlock">
@@ -1280,6 +1330,10 @@ git checkout -b feature/platformer-controller</pre>
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Inspector UI Screenshot</span>
+                            <span class="media-slot-text">Unity Inspector: Rigidbody2D Constraints &gt; Freeze Rotation Z checkbox</span>
+                        </div>
                     </div>
                     <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
@@ -1319,6 +1373,10 @@ if (jumpRequested) {
 }</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                             </div>
+                        </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Physics Demo GIF</span>
+                            <span class="media-slot-text">Physics comparison: transform.position teleporting vs linearVelocity smooth motion</span>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">Golden Physics Rules</div>
@@ -1470,6 +1528,10 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
                         </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Lifecycle Flowchart</span>
+                            <span class="media-slot-text">Unity Event Loop: Awake &rarr; Start &rarr; Update (Input) &rarr; FixedUpdate (Physics)</span>
+                        </div>
                         <div class="content-card primary">
                             <div class="card-title core">Deterministic Execution Rules</div>
                             <div class="card-body">
@@ -1595,6 +1657,10 @@ public class PlayerController2D : MonoBehaviour {
                                 <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
                             </div>
                         </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Visual Demo GIF</span>
+                            <span class="media-slot-text">Squash & Stretch: Scale child Graphics Transform without deforming root Collider2D</span>
+                        </div>
                         <div class="content-card primary">
                             <div class="card-title core">Architectural Rules</div>
                             <div class="card-body">
@@ -1640,6 +1706,10 @@ public class PlayerController2D : MonoBehaviour {
                                     <li>Adjust <strong>Dead Zone Width/Height</strong> to control smooth lead distance.</li>
                                 </ol>
                             </div>
+                        </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Camera Demo GIF</span>
+                            <span class="media-slot-text">Cinemachine 3 Framing Transposer: Smooth character follow with Dead Zone box</span>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">Camera Polish Features</div>
@@ -1736,6 +1806,10 @@ public class Coin : MonoBehaviour {
                                 <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                             </div>
                         </div>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Trigger Demo GIF</span>
+                            <span class="media-slot-text">Coin trigger collision: Particle burst instantiation before Destroy(gameObject)</span>
+                        </div>
                         <div class="content-card primary">
                             <div class="card-title core">Trigger Checklist</div>
                             <div class="card-body">
@@ -1810,6 +1884,10 @@ coinPool.Release(gameObject);</pre>
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="media-slot">
+                            <span class="media-slot-badge">Discord Community</span>
+                            <span class="media-slot-text">HR CMGT Discord: Join #dev-help for live code debugging</span>
+                        </div>
                     </div>
                     <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
