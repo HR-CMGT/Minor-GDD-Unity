@@ -1066,15 +1066,15 @@
                             <div class="hero-stack">
                                 <div class="hero-pill-card">
                                     <div class="hero-pill-title core">Core Curriculum (Main Lecture)</div>
-                                    <div class="hero-pill-desc">2D component model, deterministic script execution order, and platformer physics with <code>Rigidbody2D.linearVelocity</code>.</div>
+                                    <div class="hero-pill-desc">The foundations: how Unity runs code, how to move a character with 2D physics, and how to build your first playable level.</div>
                                 </div>
                                 <div class="hero-pill-card">
                                     <div class="hero-pill-title adv">Advanced Implementation</div>
-                                    <div class="hero-pill-desc">Jump buffering, coyote time, variable jump cuts, frictionless physics materials, and Cinemachine 3 framing.</div>
+                                    <div class="hero-pill-desc">Juicy game feel: jump buffering, coyote time, variable jump heights, frictionless wall physics, and smart camera tracking.</div>
                                 </div>
                                 <div class="hero-pill-card">
                                     <div class="hero-pill-title exp">Expert Architecture</div>
-                                    <div class="hero-pill-desc">Separation of Concerns, zero-allocation Object Pooling, custom assembly definitions (.asmdef), and ScriptableObject channels.</div>
+                                    <div class="hero-pill-desc">Professional game architecture: clean object hierarchy, zero-lag Object Pooling, custom modules (.asmdef), and decoupled events.</div>
                                 </div>
                             </div>
                         </div>
@@ -1164,25 +1164,25 @@
             },
             // Slide 2: Toolchain
             {
-                title: "Dev Class Intro & Toolchain",
+                title: "Welcome & Course Tools",
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Engine Standard: Unity 6 (6000.x)</div>
+                            <div class="card-title core">1. Game Engine: Unity 6</div>
                             <div class="card-body">
-                                <strong>Unity 6 LTS with 2D Universal Render Pipeline (URP)</strong>. Stable releases, pre-installed packages, zero broken build dependencies.
+                                <strong>Unity 6 (2D Project):</strong> The software where we build our game world, place graphics, set up levels, and test our game.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Recommended IDE: JetBrains Rider</div>
+                            <div class="card-title core">2. Code Editor: JetBrains Rider</div>
                             <div class="card-body">
-                                <strong>JetBrains Rider</strong> (Free student license) or <strong>Visual Studio 2022</strong>. Provides real-time Unity serialization inspections and instant debugging.
+                                <strong>JetBrains Rider</strong> (or Visual Studio): The text editor where we write C# scripts. It highlights mistakes and helps you write code faster.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Community & Live Lecture Support</div>
+                            <div class="card-title core">3. Getting Help & Support</div>
                             <div class="card-body">
-                                Join the official <strong>Discord #dev-help</strong> channel for instant code reviews and teacher assistance during workshops.
+                                Whenever you get stuck, post a screenshot in Discord <strong>#dev-help</strong> for quick help from teachers and fellow students.
                             </div>
                         </div>
                     </div>
@@ -1209,29 +1209,28 @@
             // Slide 3: Overview (Inverted HR Red Slide)
             {
                 isInverted: true,
-                title: "Overview",
+                title: "Lesson Overview",
                 content: `
                     <div class="content-stack">
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Part 1: Course Intro & Project Core</div>
+                            <div class="card-title" style="color:#ffffff;">Part 1: Starting Your First Project</div>
                             <div class="card-body">
                                 <ul>
-                                    <li>Course Portal, GitHub repository & reference manuals</li>
-                                    <li>Unity 6 2D URP Project setup & Package import</li>
-                                    <li>Package Manager & Cinemachine 3 installation</li>
-                                    <li>Assignment: 4-Step StartProject milestones</li>
+                                    <li>Downloading course files and packages from GitHub</li>
+                                    <li>Importing starter assets into your Unity 2D scene</li>
+                                    <li>Adding Cinemachine for automatic camera follow</li>
+                                    <li>Completing the 4 workshop assignment steps</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Part 2: 2D Physics & Architecture</div>
+                            <div class="card-title" style="color:#ffffff;">Part 2: Character Movement & Collectibles</div>
                             <div class="card-body">
                                 <ul>
-                                    <li>Rigidbody2D component simulation & rotation constraints</li>
-                                    <li>Platformer movement scripting with linearVelocity</li>
-                                    <li>Deterministic script execution lifecycles</li>
-                                    <li>Separation of Concerns: Root physics vs Child graphics</li>
-                                    <li>Cinemachine 3 tracking & Trigger coin collection</li>
+                                    <li>Giving your character physics gravity (Rigidbody2D)</li>
+                                    <li>Writing simple C# code to run and jump</li>
+                                    <li>Understanding how Unity runs your code in order</li>
+                                    <li>Making gold coins disappear when touched</li>
                                 </ul>
                             </div>
                         </div>
@@ -1245,26 +1244,24 @@
                 content: `
                     <div class="content-stack">
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Course Intro & Setup</div>
+                            <div class="card-title" style="color:#ffffff;">Step 1: Setting Up Your Workspace</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>GitHub MGDD:</strong> Course repositories & starter assets</li>
-                                    <li><strong>Documentation:</strong> Reference manuals & snippets</li>
-                                    <li><strong>Unity Startproject:</strong> 2D URP project setup</li>
-                                    <li><strong>Unity Package Manager:</strong> Cinemachine 3</li>
-                                    <li><strong>Assignment:</strong> StartProject milestones</li>
+                                    <li><strong>GitHub Portal:</strong> Where to download weekly starter files</li>
+                                    <li><strong>Documentation:</strong> Easy guides and ready-made code examples</li>
+                                    <li><strong>Importing Packages:</strong> Loading the 2D starter scene into Unity</li>
+                                    <li><strong>Camera Tool:</strong> Installing Cinemachine from Package Manager</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Unity 2D Physics Coding</div>
+                            <div class="card-title" style="color:#ffffff;">Step 2: Physics & Code Basics</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>Rigidbody2D:</strong> Component configuration</li>
-                                    <li><strong>Scripting:</strong> linearVelocity arcade movement</li>
-                                    <li><strong>Unity Documentation:</strong> Manual vs Script API</li>
-                                    <li><strong>Unity Learn:</strong> Verified tracks & tutorials</li>
-                                    <li><strong>Script Lifecycle:</strong> Execution order</li>
+                                    <li><strong>Rigidbody2D:</strong> Making objects fall and collide</li>
+                                    <li><strong>Movement Script:</strong> Moving left/right and jumping</li>
+                                    <li><strong>Unity Manual:</strong> Looking up how built-in tools work</li>
+                                    <li><strong>Code Order:</strong> When Unity runs Start, Update, and FixedUpdate</li>
                                 </ul>
                             </div>
                         </div>
@@ -1273,7 +1270,7 @@
             },
             // Slide 5: GitHub MGDD
             {
-                title: "Course Resources & Package Download",
+                title: "Course Files & Starter Downloads",
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
@@ -1283,16 +1280,16 @@
                                 <button class="copy-btn" onclick="copyCode(this)">Copy URL</button>
                             </div>
                             <div class="card-body">
-                                <strong>Direct Browser Download:</strong> Navigate to <a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/projectfiles" target="_blank" rel="noopener noreferrer"><code>projectfiles/</code> on GitHub</a> and download <code>basics1.unitypackage</code> directly.
+                                <strong>Direct Browser Download:</strong> Open <a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/projectfiles" target="_blank" rel="noopener noreferrer"><code>projectfiles/</code> on GitHub</a> and download <code>basics1.unitypackage</code> directly to your computer.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Repository Structure</div>
+                            <div class="card-title core">What's in the Repository?</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/projectfiles" target="_blank" rel="noopener noreferrer"><code>projectfiles/</code></a> &rarr; Downloadable starter packages for each lesson</li>
-                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/docs" target="_blank" rel="noopener noreferrer"><code>docs/</code></a> &rarr; C# snippets, physics formulas & reference manuals</li>
-                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/lessons" target="_blank" rel="noopener noreferrer"><code>lessons/</code></a> &rarr; Weekly structured workshop assignments</li>
+                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/projectfiles" target="_blank" rel="noopener noreferrer"><code>projectfiles/</code></a> &rarr; Starter packages for each weekly class</li>
+                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/docs" target="_blank" rel="noopener noreferrer"><code>docs/</code></a> &rarr; Quick guides, cheat sheets & code snippets</li>
+                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/lessons" target="_blank" rel="noopener noreferrer"><code>lessons/</code></a> &rarr; Workshop assignments and goal checklists</li>
                                 </ul>
                             </div>
                         </div>
@@ -1323,25 +1320,25 @@ git checkout -b feature/platformer-controller</pre>
             },
             // Slide 6: Documentation
             {
-                title: "Course Reference Manuals & Docs",
+                title: "Course Guides & Helpful Resources",
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">1. Reference Manual (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_unity.md" target="_blank" rel="noopener noreferrer">00_unity.md</a>)</div>
                             <div class="card-body">
-                                Comprehensive guide on script lifecycles, transform hierarchies, physics calculations, and Garbage Collection prevention.
+                                Plain-language explanations of Unity basics: how GameObjects work, parent-child links, and physics rules.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Production Snippets (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_codesnippets.md" target="_blank" rel="noopener noreferrer">00_codesnippets.md</a>)</div>
+                            <div class="card-title core">2. Code Snippets (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_codesnippets.md" target="_blank" rel="noopener noreferrer">00_codesnippets.md</a>)</div>
                             <div class="card-body">
-                                Tested C# scripts: 2D platformer physics, framerate-independent timers, raycasting, and event channels.
+                                Copy-paste code examples for 2D platformer movement, jumping, timers, and ground detection.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Curated Free Assets (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_resources.md" target="_blank" rel="noopener noreferrer">00_resources.md</a>)</div>
+                            <div class="card-title core">3. Free Game Assets (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_resources.md" target="_blank" rel="noopener noreferrer">00_resources.md</a>)</div>
                             <div class="card-body">
-                                Curated free game assets: Kenney assets, PolyHaven textures, FreeSound audio effects, and 2D sprite sheets.
+                                Curated free art, sound effects, and music packs you can freely use in your student game projects.
                             </div>
                         </div>
                     </div>
@@ -1367,7 +1364,7 @@ git checkout -b feature/platformer-controller</pre>
             },
             // Slide 7: Startproject (Split Media Layout)
             {
-                title: "Unity Startproject Import Guide",
+                title: "Importing Your Starter Package",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
@@ -1375,21 +1372,21 @@ git checkout -b feature/platformer-controller</pre>
                                 <div class="card-title core">Step-by-Step Package Import</div>
                                 <div class="card-body">
                                     <ol>
-                                        <li>Open your Unity 6 project with <strong>2D (URP)</strong> active.</li>
-                                        <li>Click: <code>Assets > Import Package > Custom Package...</code></li>
-                                        <li>Select <code>projectfiles/basics1.unitypackage</code> & click <strong>Open</strong>.</li>
-                                        <li>In the import dialog, ensure all are checked & click <strong>Import</strong>.</li>
-                                        <li>In Project View, open: <code>Class1/0_STARTSCENE/0_startscene.unity</code>.</li>
+                                        <li>Create a new Unity 6 project with <strong>2D</strong> template.</li>
+                                        <li>Top menu: <code>Assets > Import Package > Custom Package...</code></li>
+                                        <li>Pick <code>basics1.unitypackage</code> and click <strong>Open</strong>.</li>
+                                        <li>In popup window, keep all checked & click <strong>Import</strong>.</li>
+                                        <li>In Project window, open: <code>0_STARTSCENE/0_startscene.unity</code>.</li>
                                     </ol>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Starter Scene Components</div>
+                                <div class="card-title core">What's in the Scene?</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><strong>Environment:</strong> Tilemap ground and hazard colliders.</li>
-                                        <li><strong>Player_Start:</strong> Starter box character with physics.</li>
-                                        <li><strong>Collectibles:</strong> <code>Coin_Start</code> prefab instances.</li>
+                                        <li><strong>Ground Platforms:</strong> Tilemap surfaces to stand on.</li>
+                                        <li><strong>Player Box:</strong> Starter character ready for your script.</li>
+                                        <li><strong>Collectibles:</strong> Gold coins waiting to be collected.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -1431,24 +1428,24 @@ git checkout -b feature/platformer-controller</pre>
             },
             // Slide 8: Package Manager (Split Media Layout - 4:3 Proportion)
             {
-                title: "Package Manager Installation (Cinemachine 3)",
+                title: "Installing Cinemachine Camera Tool",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">1. Installing Cinemachine 3</div>
+                                <div class="card-title core">1. What is Cinemachine?</div>
                                 <div class="card-body">
-                                    <ol>
-                                        <li>In top menu: <code>Window > Package Manager</code>.</li>
-                                        <li>Switch dropdown to <strong>Packages: Unity Registry</strong>.</li>
-                                        <li>Search for <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
-                                    </ol>
+                                    A built-in smart camera tool that automatically tracks your player smoothly without needing any complex code.
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">2. Modern Input System</div>
+                                <div class="card-title core">2. How to Install It</div>
                                 <div class="card-body">
-                                    In <strong>Unity 6</strong>, the new Input System is active by default in all 2D URP templates. No manual installation or backend restart prompt is required!
+                                    <ol>
+                                        <li>Top menu: click <code>Window > Package Manager</code>.</li>
+                                        <li>Change dropdown at top to <strong>Packages: Unity Registry</strong>.</li>
+                                        <li>Search for <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
+                                    </ol>
                                 </div>
                             </div>
                         </div>
@@ -1489,26 +1486,26 @@ git checkout -b feature/platformer-controller</pre>
             },
             // Slide 9: Assignment StartProject (Split Media Layout)
             {
-                title: "Assignment: 4-Step Milestones",
+                title: "Workshop Goals: 4 Clear Steps",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Milestone 1: Player Setup & Physics</div>
+                                <div class="card-title core">Step 1: Make Player Move</div>
                                 <div class="card-body">
-                                    Attach <code>PlayerController2D</code> and <code>PlayerInput</code>. Position child <code>GroundCheck</code> Transform at feet.
+                                    Attach the movement script so arrow keys and Spacebar make your character run and jump.
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Milestone 2: Cinemachine Camera Follow</div>
+                                <div class="card-title core">Step 2: Add Camera Follow</div>
                                 <div class="card-body">
-                                    Create Cinemachine 3 Camera. Drag Player root into the <strong>Tracking Target</strong> slot.
+                                    Create a Cinemachine Camera so the screen smoothly scrolls as your character moves.
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Milestone 3 & 4: Coins & Playtest</div>
+                                <div class="card-title core">Step 3 & 4: Collect Coins & Test</div>
                                 <div class="card-body">
-                                    Place <code>Coin_Start</code> prefab (<code>isTrigger = true</code>). Press Play, jump, and collect all coins cleanly!
+                                    Place gold coins in the level, press Play, and collect them all without tipping over!
                                 </div>
                             </div>
                         </div>
@@ -1549,38 +1546,38 @@ git checkout -b feature/platformer-controller</pre>
             },
             // Slide 10: Rigidbody2D Component (Split Media Layout - Portrait Inspector)
             {
-                title: "Rigidbody2D Component Essentials",
+                title: "Rigidbody2D: Giving Objects Gravity",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <table class="dense-table">
                                 <thead>
                                     <tr>
-                                        <th>Property</th>
                                         <th>Setting</th>
-                                        <th>Purpose</th>
+                                        <th>Value</th>
+                                        <th>What It Does (In Plain English)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td><strong>Body Type</strong></td>
                                         <td><code>Dynamic</code></td>
-                                        <td>Physics gravity & velocity.</td>
+                                        <td>Gives gravity and physics (can fall and push).</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Detection</strong></td>
+                                        <td><strong>Collision</strong></td>
                                         <td><code>Continuous</code></td>
-                                        <td>Prevents tunneling.</td>
+                                        <td>Prevents character falling through thin floors.</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Constraints</strong></td>
-                                        <td><code>Freeze Rot Z</code></td>
-                                        <td>Stops character tipping.</td>
+                                        <td><strong>Freeze Rotation Z</strong></td>
+                                        <td><code>Checked</code></td>
+                                        <td>Keeps character upright so they don't fall over.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Interpolate</strong></td>
                                         <td><code>Interpolate</code></td>
-                                        <td>Smooth 50Hz physics rendering.</td>
+                                        <td>Makes movement look completely smooth on screen.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1622,17 +1619,17 @@ git checkout -b feature/platformer-controller</pre>
             },
             // Slide 11: Rigidbody2D Scripting (Split Media Layout - 16:9 Physics GIF)
             {
-                title: "Rigidbody2D Scripting (linearVelocity)",
+                title: "How to Move Your Character in Code",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Arcade Platformer Movement</div>
+                                <div class="card-title core">The Movement Code</div>
                                 <div class="code-box">
-                                    <pre>// Horizontal Velocity in FixedUpdate
+                                    <pre>// Left/Right Speed in FixedUpdate
 rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
-// Jump Impulse
+// Jump Impulse Boost
 if (jumpRequested) {
     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     jumpRequested = false;
@@ -1641,11 +1638,11 @@ if (jumpRequested) {
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Golden Physics Rules</div>
+                                <div class="card-title core">Two Simple Rules</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><strong>Never modify <code>transform.position</code></strong> on dynamic Rigidbodies.</li>
-                                        <li>Apply physics velocity inside <strong><code>FixedUpdate()</code></strong>.</li>
+                                        <li><strong>Change velocity, not position:</strong> Let Unity physics slide and bounce the character naturally.</li>
+                                        <li><strong>Put physics in <code>FixedUpdate()</code>:</strong> Ensures the character moves at the exact same speed on every computer.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -1698,29 +1695,19 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             },
             // Slide 12: Documentation
             {
-                title: "Unity Manual & API Reference",
+                title: "Where to Look Up Answers",
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/index.html" target="_blank" rel="noopener noreferrer">Unity Manual [link]</a> (Conceptual)</div>
+                            <div class="card-title core">1. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/index.html" target="_blank" rel="noopener noreferrer">Unity Manual [link]</a> (How Things Work)</div>
                             <div class="card-body">
-                                High-level architectural overviews. Use when learning new systems for the first time:
-                                <ul>
-                                    <li>2D Physics engine overview, gravity scale, and mass settings</li>
-                                    <li>Universal Render Pipeline (URP) 2D Lighting configurations</li>
-                                    <li>Canvas Scaler & resolution-independent UI systems</li>
-                                </ul>
+                                High-level guides explaining concepts in plain words: how 2D physics work, setting up cameras, and creating user interfaces.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/ScriptReference/index.html" target="_blank" rel="noopener noreferrer">Script Reference [link]</a> (Code API)</div>
+                            <div class="card-title core">2. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/ScriptReference/index.html" target="_blank" rel="noopener noreferrer">Script Reference [link]</a> (Code Dictionary)</div>
                             <div class="card-body">
-                                Exact technical API signatures, parameter types, and return values:
-                                <ul>
-                                    <li><code>Physics2D.OverlapCircle</code> method signatures and LayerMask arguments</li>
-                                    <li><code>RaycastHit2D</code> struct fields: <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code></li>
-                                    <li><code>Rigidbody2D.linearVelocity</code> vector properties</li>
-                                </ul>
+                                A dictionary of every C# command in Unity. Shows you exactly what code to write with clear code examples.
                             </div>
                         </div>
                     </div>
@@ -1746,25 +1733,25 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             },
             // Slide 13: Unity Learn
             {
-                title: "Unity Learn & Modern Resources",
+                title: "Extra Tutorials & Video Guides",
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">1. <a class="slide-url" href="https://learn.unity.com/" target="_blank" rel="noopener noreferrer">Unity Learn Track [link]</a></div>
                             <div class="card-body">
-                                Official verified learning tracks covering 2D platformers and physics architecture in Unity 6.
+                                Official interactive beginner courses provided for free by Unity. Great for extra practice at home.
                             </div>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">2. Course Video Tutorials (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_tutorials.md" target="_blank" rel="noopener noreferrer">00_tutorials.md</a>)</div>
                             <div class="card-body">
-                                Curated video repository maintained in the course repo, filtered to remove deprecated Built-in Pipeline tutorials.
+                                Step-by-step video recordings made specifically for our course lessons and assignments.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Community Channels</div>
+                            <div class="card-title core">3. Helpful YouTube Creators</div>
                             <div class="card-body">
-                                <strong>Tarodev</strong> (2D platformer math), <strong>Mina Pêcheux</strong> (C# patterns), and <strong>Infallible Code</strong> (clean architecture).
+                                Check out <strong>Tarodev</strong> (how to make platformer jumps feel good) and <strong>Infallible Code</strong> (how to keep code clean).
                             </div>
                         </div>
                     </div>
@@ -1790,25 +1777,25 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             },
             // Slide 14: Script Lifecycle (Split Media Layout - 4:3 Flowchart)
             {
-                title: "Script Execution Order & Lifecycle",
+                title: "How Unity Runs Your Code Step-by-Step",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Execution Sequence</div>
+                                <div class="card-title core">Order of Events</div>
                                 <div class="code-box">
-                                    <pre>[Awake]       -> Cache components
-[Start]       -> Init variables
-[Update]      -> Read Input
-[FixedUpdate] -> Apply physics
-[LateUpdate]  -> Camera follow</pre>
+                                    <pre>[Awake]       -> Find & connect components
+[Start]       -> Set starting values (health)
+[Update]      -> Check player keys (every frame)
+[FixedUpdate] -> Move physics & check collisions
+[LateUpdate]  -> Move camera so it follows smoothly</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Deterministic Rule</div>
+                                <div class="card-title core">The Simple Rule</div>
                                 <div class="card-body">
-                                    Input belongs in <code>Update()</code> (variable FPS). Physics belongs in <code>FixedUpdate()</code> (fixed 50Hz tick).
+                                    Read button presses in <strong><code>Update()</code></strong>. Apply physics speed in <strong><code>FixedUpdate()</code></strong>.
                                 </div>
                             </div>
                         </div>
@@ -1854,23 +1841,23 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                 content: `
                     <div class="content-stack">
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Component Architecture</div>
+                            <div class="card-title" style="color:#ffffff;">Smart Object Structure</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>Component-based workflow:</strong> RequireComponent attributes</li>
-                                    <li><strong>Separation of Concerns:</strong> Root physics vs child graphics</li>
-                                    <li><strong>Referencing Objects:</strong> TryGetComponent syntax</li>
+                                    <li><strong>RequireComponent:</strong> Automatically adding required physics tools</li>
+                                    <li><strong>Root vs Child:</strong> Keeping invisible hitboxes separate from character pictures</li>
+                                    <li><strong>Finding Objects:</strong> How scripts talk to other components</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Gameplay Systems</div>
+                            <div class="card-title" style="color:#ffffff;">Gameplay Elements</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>Cinemachine 3 Camera:</strong> Smooth tracking follow</li>
-                                    <li><strong>Using Prefabs:</strong> Asset vs scene instances & overrides</li>
-                                    <li><strong>Creating & Destroying:</strong> Coin triggers & scoring</li>
-                                    <li><strong>Help & Discord:</strong> Teacher assistance channels</li>
+                                    <li><strong>Smooth Camera:</strong> Setting up Cinemachine to follow the player</li>
+                                    <li><strong>Prefabs:</strong> Making master templates for reusable coins and enemies</li>
+                                    <li><strong>Collectibles:</strong> Making coins disappear and score points on touch</li>
+                                    <li><strong>Discord Help:</strong> Where to get quick assistance</li>
                                 </ul>
                             </div>
                         </div>
@@ -1879,7 +1866,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             },
             // Slide 16: Component-Based Workflow
             {
-                title: "Component Architecture & Requirements",
+                title: "Automatic Component Safety",
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
@@ -1888,17 +1875,17 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                                 <pre>[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour {
-    // Automatically adds Rigidbody2D & Collider2D!
+    // Unity automatically adds Rigidbody2D & Collider2D!
 }</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Engineering Benefits</div>
+                            <div class="card-title core">Why Do This?</div>
                             <div class="card-body">
                                 <ul>
-                                    <li>Prevents missing component errors when team members drop scripts on new GameObjects.</li>
-                                    <li>Guarantees <code>GetComponent&lt;Rigidbody2D&gt;()</code> will never return <code>null</code>.</li>
+                                    <li>Tells Unity: <em>"This script needs physics to work!"</em></li>
+                                    <li>If you drag the script onto a new object, Unity automatically attaches the missing physics box for you so your game never crashes.</li>
                                 </ul>
                             </div>
                         </div>
@@ -1930,23 +1917,23 @@ public class PlayerController2D : MonoBehaviour {
             },
             // Slide 17: Separation of Concerns (Split Media Layout - 16:9 GIF)
             {
-                title: "Separation of Concerns (Root vs Child)",
+                title: "Keeping Art and Physics Separate",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Player Prefab Hierarchy</div>
+                                <div class="card-title core">Player Object Structure</div>
                                 <div class="code-box">
-                                    <pre>[Player] (Root: Rigidbody2D, Collider)
-  └── [Graphics] (Child: Visuals, Flip)
-  └── [GroundCheck] (Child: Feet)</pre>
+                                    <pre>[Player] (Main Object: Physics & Colliders)
+  └── [Graphics] (Child: Visible Character Picture)
+  └── [GroundCheck] (Child: Sensor at Feet)</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Architectural Rules</div>
+                                <div class="card-title core">Why Split Them?</div>
                                 <div class="card-body">
-                                    Scale/flip child Graphics without deforming the physics box collider on Root!
+                                    You can flip, squash, and stretch the character picture during animations without bending or breaking the invisible physics box!
                                 </div>
                             </div>
                         </div>
@@ -1987,25 +1974,25 @@ public class PlayerController2D : MonoBehaviour {
             },
             // Slide 18: Cinemachine 3 (Split Media Layout - 16:9 GIF)
             {
-                title: "Cinemachine 3 Camera Setup",
+                title: "Setting Up Smooth Camera Follow",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Creating a 2D Smooth Camera</div>
+                                <div class="card-title core">Easy 4-Step Setup</div>
                                 <div class="card-body">
                                     <ol>
-                                        <li><code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
-                                        <li>Drag <code>Player_Start</code> into <strong>Tracking Target</strong>.</li>
+                                        <li>Top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
+                                        <li>Drag your <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
                                         <li>Set <strong>Body</strong> to <code>Framing Transposer</code>.</li>
-                                        <li>Adjust <strong>Dead Zone Width/Height</strong>.</li>
+                                        <li>Adjust <strong>Dead Zone</strong> so the camera moves when walking.</li>
                                     </ol>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Camera Polish Features</div>
+                                <div class="card-title core">What Makes it Look Good?</div>
                                 <div class="card-body">
-                                    <strong>Damping:</strong> Smooths out abrupt starts. <strong>Lookahead:</strong> Pans ahead in movement direction.
+                                    <strong>Damping:</strong> Adds a soft, smooth delay so the camera gently glides instead of jerking sharply.
                                 </div>
                             </div>
                         </div>
@@ -2046,25 +2033,25 @@ public class PlayerController2D : MonoBehaviour {
             },
             // Slide 19: Using Prefabs
             {
-                title: "Using Prefabs in Production",
+                title: "Prefabs: Master Reusable Templates",
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Prefab Asset on Disk</div>
+                            <div class="card-title core">1. What is a Prefab?</div>
                             <div class="card-body">
-                                Reusable GameObject template saved on disk. Modifying the asset updates all scene instances automatically.
+                                A master template saved in your project (like a stamp or cookie cutter). If you change the template, every copy in your game updates automatically!
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Prefab Edit Mode</div>
+                            <div class="card-title core">2. Editing a Prefab</div>
                             <div class="card-body">
-                                Double-click any prefab in Project View to open isolated edit mode with an independent scene background.
+                                Double-click any prefab in your Project window to edit it in its own clean workspace.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Scene Overrides</div>
+                            <div class="card-title core">3. Customizing One Copy</div>
                             <div class="card-body">
-                                Customize specific scene instances or click <strong>Apply All</strong> to push changes to all game levels.
+                                You can change a single coin in a level (like making it giant) without changing any of the other normal coins.
                             </div>
                         </div>
                     </div>
@@ -2090,17 +2077,17 @@ public class PlayerController2D : MonoBehaviour {
             },
             // Slide 20: Coins & Destruction (Split Media Layout - 16:9 GIF)
             {
-                title: "Creating & Destroying GameObjects (Coins)",
+                title: "Collecting Coins on Touch",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Trigger Script (Coin.cs)</div>
+                                <div class="card-title core">The Coin Script (Coin.cs)</div>
                                 <div class="code-box">
                                     <pre>public class Coin : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player")) {
-            Destroy(gameObject);
+            Destroy(gameObject); // Disappears!
         }
     }
 }</pre>
@@ -2108,11 +2095,11 @@ public class PlayerController2D : MonoBehaviour {
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Trigger Checklist</div>
+                                <div class="card-title core">Two Checklist Items</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><strong><code>isTrigger = true</code></strong> on Coin collider.</li>
-                                        <li>Player has <strong>"Player" Tag</strong>.</li>
+                                        <li><strong>Check <code>Is Trigger</code> on Coin:</strong> Allows player to walk through the coin without bumping into a solid wall.</li>
+                                        <li><strong>Set Player Tag to "Player":</strong> So the coin knows it was touched by the player, not an enemy.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -2161,33 +2148,33 @@ coinPool.Release(gameObject);</pre>
             },
             // Slide 21: Help / Discord (Split Media Layout - Portrait Discord UI)
             {
-                title: "Help Channels & Troubleshooting Matrix",
+                title: "Quick Fix Guide & Getting Help",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <table class="dense-table">
                                 <thead>
                                     <tr>
-                                        <th>Issue</th>
-                                        <th>Quick Fix</th>
+                                        <th>Common Problem</th>
+                                        <th>How to Fix It</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><strong>Falls through floor</strong></td>
-                                        <td>Attach <code>BoxCollider2D</code> to floor.</td>
+                                        <td><strong>Player falls through floor</strong></td>
+                                        <td>Add a <code>BoxCollider2D</code> to the floor.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Character tips over</strong></td>
-                                        <td>Check <code>Freeze Rotation Z</code>.</td>
+                                        <td>Check <code>Freeze Rotation Z</code> in Rigidbody2D.</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Keys don't respond</strong></td>
-                                        <td>Attach <code>PlayerInput</code> component.</td>
+                                        <td><strong>Keys do not move character</strong></td>
+                                        <td>Attach the <code>PlayerInput</code> component.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Need live help?</strong></td>
-                                        <td>Post in Discord <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a>.</td>
+                                        <td>Post in Discord <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a>!</td>
                                     </tr>
                                 </tbody>
                             </table>
