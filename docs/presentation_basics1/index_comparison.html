@@ -654,6 +654,29 @@
             padding: 10px;
         }
 
+        /* Clickable URLs & References */
+        a.slide-url {
+            color: #0284c7;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 700;
+            transition: color 0.15s ease;
+        }
+
+        a.slide-url:hover {
+            color: var(--hr-red);
+        }
+
+        .code-box a {
+            color: #38bdf8;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .code-box a:hover {
+            color: #ffffff;
+        }
+
         /* Monospace Code Boxes */
         .code-box {
             position: relative;
@@ -919,12 +942,12 @@
 
         <!-- Mode Toggle -->
         <div class="toggle-wrap">
-            <span class="toggle-text active-old" id="labelOld" onclick="setMode(false)">ORIGINAL KEYNOTE (HD)</span>
+            <span class="toggle-text" id="labelOld" onclick="setMode(false)">ORIGINAL KEYNOTE (HD)</span>
             <label class="switch">
-                <input type="checkbox" id="modeSwitch" onchange="handleToggle()">
+                <input type="checkbox" id="modeSwitch" onchange="handleToggle()" checked>
                 <span class="slider"></span>
             </label>
-            <span class="toggle-text" id="labelNew" onclick="setMode(true)">REVISED UNITY 6</span>
+            <span class="toggle-text active-new" id="labelNew" onclick="setMode(true)">REVISED UNITY 6</span>
         </div>
     </div>
 
@@ -1163,20 +1186,20 @@
                         <div class="content-card primary">
                             <div class="card-title core">Course Web Portal</div>
                             <div class="code-box">
-                                <pre>https://github.com/HR-CMGT/Minor-GDD-Unity</pre>
+                                <pre><a href="https://github.com/HR-CMGT/Minor-GDD-Unity" target="_blank" rel="noopener noreferrer">https://github.com/HR-CMGT/Minor-GDD-Unity</a></pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy URL</button>
                             </div>
                             <div class="card-body">
-                                <strong>Direct Browser Download:</strong> Navigate to <code>projectfiles/</code> on GitHub and download <code>basics1.unitypackage</code> directly to your computer.
+                                <strong>Direct Browser Download:</strong> Navigate to <a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/projectfiles" target="_blank" rel="noopener noreferrer"><code>projectfiles/</code> on GitHub</a> and download <code>basics1.unitypackage</code> directly.
                             </div>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">Repository Structure</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><code>projectfiles/</code> &rarr; Downloadable starter packages for each lesson</li>
-                                    <li><code>docs/</code> &rarr; C# snippets, physics formulas & reference manuals</li>
-                                    <li><code>lessons/</code> &rarr; Weekly structured workshop assignments</li>
+                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/projectfiles" target="_blank" rel="noopener noreferrer"><code>projectfiles/</code></a> &rarr; Downloadable starter packages for each lesson</li>
+                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/docs" target="_blank" rel="noopener noreferrer"><code>docs/</code></a> &rarr; C# snippets, physics formulas & reference manuals</li>
+                                    <li><a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/tree/main/lessons" target="_blank" rel="noopener noreferrer"><code>lessons/</code></a> &rarr; Weekly structured workshop assignments</li>
                                 </ul>
                             </div>
                         </div>
@@ -1211,19 +1234,19 @@ git checkout -b feature/platformer-controller</pre>
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Reference Manual (00_unity.md)</div>
+                            <div class="card-title core">1. Reference Manual (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_unity.md" target="_blank" rel="noopener noreferrer">00_unity.md</a>)</div>
                             <div class="card-body">
                                 Comprehensive guide on script lifecycles, transform hierarchies, physics calculations, and Garbage Collection prevention.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Production Snippets (00_codesnippets.md)</div>
+                            <div class="card-title core">2. Production Snippets (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_codesnippets.md" target="_blank" rel="noopener noreferrer">00_codesnippets.md</a>)</div>
                             <div class="card-body">
                                 Tested C# scripts: 2D platformer physics, framerate-independent timers, raycasting, and event channels.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Curated Free Assets (00_resources.md)</div>
+                            <div class="card-title core">3. Curated Free Assets (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_resources.md" target="_blank" rel="noopener noreferrer">00_resources.md</a>)</div>
                             <div class="card-body">
                                 Curated free game assets: Kenney assets, PolyHaven textures, FreeSound audio effects, and 2D sprite sheets.
                             </div>
@@ -1578,7 +1601,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Unity Manual (Conceptual Understanding)</div>
+                            <div class="card-title core">1. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/index.html" target="_blank" rel="noopener noreferrer">Unity Manual [link]</a> (Conceptual)</div>
                             <div class="card-body">
                                 High-level architectural overviews. Use when learning new systems for the first time:
                                 <ul>
@@ -1589,7 +1612,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Script Reference (Code API Signatures)</div>
+                            <div class="card-title core">2. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/ScriptReference/index.html" target="_blank" rel="noopener noreferrer">Script Reference [link]</a> (Code API)</div>
                             <div class="card-body">
                                 Exact technical API signatures, parameter types, and return values:
                                 <ul>
@@ -1615,7 +1638,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Inspect Unity's open-source C# repo on GitHub to see the internal implementation of <code>MonoBehaviour</code>, <code>Transform</code>, and <code>Physics2D</code>.
+                            Inspect <a class="slide-url" href="https://github.com/Unity-Technologies/UnityCsReference" target="_blank" rel="noopener noreferrer">Unity's open-source C# repo on GitHub</a> to see the internal implementation of <code>MonoBehaviour</code>, <code>Transform</code>, and <code>Physics2D</code>.
                         </div>
                     </details>
                 `
@@ -1626,13 +1649,13 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Unity Learn Track</div>
+                            <div class="card-title core">1. <a class="slide-url" href="https://learn.unity.com/" target="_blank" rel="noopener noreferrer">Unity Learn Track [link]</a></div>
                             <div class="card-body">
                                 Official verified learning tracks covering 2D platformers and physics architecture in Unity 6.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Course Video Tutorials (00_tutorials.md)</div>
+                            <div class="card-title core">2. Course Video Tutorials (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_tutorials.md" target="_blank" rel="noopener noreferrer">00_tutorials.md</a>)</div>
                             <div class="card-body">
                                 Curated video repository maintained in the course repo, filtered to remove deprecated Built-in Pipeline tutorials.
                             </div>
@@ -1696,7 +1719,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             <div class="media-canvas-viewport">
                                 <div class="media-placeholder-graphic">
                                     <div class="media-placeholder-title">Unity Execution Loop</div>
-                                    <div class="media-placeholder-sub">Initialization &bull; Physics Cycle (FixedUpdate) &bull; Frame Update &bull; Decommissioning</div>
+                                    <div class="media-placeholder-sub">From: <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/ExecutionOrder.html" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Unity Manual - Order of execution [link]</a></div>
                                 </div>
                             </div>
                         </div>
@@ -2055,7 +2078,7 @@ coinPool.Release(gameObject);</pre>
                                     </tr>
                                     <tr>
                                         <td><strong>Need live help?</strong></td>
-                                        <td>Post in Discord <strong>#dev-help</strong>.</td>
+                                        <td>Post in Discord <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a>.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2068,7 +2091,7 @@ coinPool.Release(gameObject);</pre>
                             <div class="media-canvas-viewport">
                                 <div class="media-placeholder-graphic">
                                     <div class="media-placeholder-title">HR CMGT Discord Server</div>
-                                    <div class="media-placeholder-sub">#dev-help &bull; #general &bull; #announcements &bull; Live Teacher & Student Support</div>
+                                    <div class="media-placeholder-sub"><a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">#dev-help [Discord link]</a> &bull; Live Teacher & Student Support</div>
                                 </div>
                             </div>
                         </div>
@@ -2096,7 +2119,7 @@ coinPool.Release(gameObject);</pre>
         ];
 
         let currentSlide = 0;
-        let isNewMode = false;
+        let isNewMode = true;
         let currentTier = 'all';
         let currentViewMode = 'projector';
 
@@ -2305,7 +2328,7 @@ coinPool.Release(gameObject);</pre>
 
         function updateView() {
             setViewMode('projector');
-            updateModeDisplay();
+            setMode(true);
             goToSlide(0);
         }
 
