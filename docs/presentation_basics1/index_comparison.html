@@ -461,7 +461,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 5px;
+            gap: 8px;
             min-height: 0;
             max-height: 100%;
             overflow: hidden;
@@ -470,7 +470,7 @@
         .content-stack {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
             width: 100%;
             overflow: hidden;
         }
@@ -478,8 +478,8 @@
         .content-card {
             background: #f8fafc;
             border: 1.5px solid var(--border-subtle);
-            border-radius: 6px;
-            padding: 6px 12px;
+            border-radius: 8px;
+            padding: 10px 16px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             width: 100%;
             height: auto;
@@ -501,10 +501,10 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(0.78rem, 0.95vw, 1.05rem);
-            margin-bottom: 2px;
+            font-size: clamp(0.96rem, 1.15vw, 1.25rem);
+            margin-bottom: 4px;
             transition: font-size 0.15s ease;
-            line-height: 1.2;
+            line-height: 1.25;
         }
 
         .card-title.core { color: var(--tier-core); }
@@ -512,21 +512,21 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.74rem, 0.86vw, 0.96rem);
-            line-height: 1.32;
+            font-size: clamp(0.90rem, 1.05vw, 1.12rem);
+            line-height: 1.45;
             color: #1e293b;
             font-weight: 500;
             transition: font-size 0.15s ease;
         }
 
         .card-body ul, .card-body ol {
-            padding-left: 18px;
-            margin-top: 1px;
-            margin-bottom: 1px;
+            padding-left: 20px;
+            margin-top: 3px;
+            margin-bottom: 3px;
         }
 
         .card-body li {
-            margin-bottom: 1px;
+            margin-bottom: 2px;
         }
 
         /* ==========================================================================
@@ -534,9 +534,9 @@
            ========================================================================== */
         .split-media-layout {
             display: grid;
-            grid-template-columns: 1.12fr 0.88fr;
-            gap: 12px;
-            align-items: center;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 16px;
+            align-items: stretch;
             width: 100%;
             min-height: 0;
             flex: 1 1 auto;
@@ -546,17 +546,17 @@
         .split-media-layout .left-column {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            justify-content: center;
+            gap: 8px;
+            justify-content: flex-start;
             min-height: 0;
-            max-height: 100%;
             overflow: hidden;
         }
 
         .split-media-layout .right-column {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
             width: 100%;
             height: 100%;
             min-height: 0;
@@ -573,24 +573,15 @@
             flex-direction: column;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             width: 100%;
+            height: 100%;
+            min-height: 160px;
+            max-height: 100%;
             transition: all 0.15s ease;
         }
 
-        /* Ratio Variations */
-        .media-canvas.ratio-16-9 {
-            aspect-ratio: 16 / 9;
-            max-height: 225px;
-        }
-
-        .media-canvas.ratio-4-3 {
-            aspect-ratio: 4 / 3;
-            max-height: 225px;
-        }
-
+        /* Proportional Variations */
         .media-canvas.ratio-portrait {
-            aspect-ratio: 4 / 5;
-            max-height: 240px;
-            max-width: 210px;
+            max-width: 280px;
             margin: 0 auto;
         }
 
@@ -878,23 +869,23 @@
             white-space: pre-wrap;
             word-break: break-word;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.68rem, 0.84vw, 0.96rem);
-            line-height: 1.3;
-            padding: 5px 8px;
+            font-size: clamp(0.86rem, 1.05vw, 1.08rem);
+            line-height: 1.38;
+            padding: 8px 12px;
             border-radius: 6px;
             margin: 0;
         }
 
         .copy-btn {
             position: absolute;
-            top: 3px;
-            right: 3px;
+            top: 4px;
+            right: 4px;
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #475569;
-            padding: 2px 5px;
+            padding: 3px 7px;
             border-radius: 4px;
-            font-size: 0.62rem;
+            font-size: 0.70rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -918,18 +909,18 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.76rem, 0.90vw, 0.98rem);
-            padding: 4px 8px;
+            font-size: clamp(0.88rem, 1.08vw, 1.10rem);
+            padding: 6px 12px;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.72rem, 0.85vw, 0.92rem);
-            padding: 4px 8px;
+            font-size: clamp(0.85rem, 1.02vw, 1.05rem);
+            padding: 6px 12px;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.25;
+            line-height: 1.35;
         }
 
         table.dense-table tr:nth-child(even) td {
@@ -938,9 +929,9 @@
 
         /* Collapsible Tier Accordions */
         details.tier-accordion {
-            border-radius: 5px;
+            border-radius: 6px;
             overflow: hidden;
-            margin-top: 2px;
+            margin-top: 4px;
             border: 1.5px solid transparent;
             transition: all 0.15s ease;
             width: 100%;
@@ -964,8 +955,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.72rem, 0.84vw, 0.90rem);
-            padding: 3px 8px;
+            font-size: clamp(0.82rem, 0.96vw, 0.98rem);
+            padding: 5px 12px;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -975,91 +966,75 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.70rem, 0.80vw, 0.88rem);
-            padding: 4px 8px;
-            line-height: 1.28;
+            font-size: clamp(0.80rem, 0.92vw, 0.92rem);
+            padding: 6px 12px;
+            line-height: 1.35;
             overflow: hidden;
         }
 
-        /* DYNAMIC AUTO-SHRINK WHEN ACCORDIONS ARE EXPANDED (Zero Scrolling) */
+        /* GENTLE AUTO-COMPACTING ONLY WHEN ACCORDIONS ARE EXPANDED (Zero Scrolling & Crisp Text) */
         .slide-content-area:has(details.tier-accordion[open]),
         body.has-open-accordions .slide-content-area {
-            gap: 3px;
+            gap: 5px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .content-card,
         body.has-open-accordions .content-card {
-            padding: 4px 8px;
-            border-radius: 5px;
+            padding: 6px 12px;
+            border-radius: 6px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-title,
         body.has-open-accordions .card-title {
-            font-size: clamp(0.68rem, 0.78vw, 0.86rem);
-            margin-bottom: 1px;
+            font-size: clamp(0.86rem, 1.02vw, 1.08rem);
+            margin-bottom: 2px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body,
         body.has-open-accordions .card-body {
-            font-size: clamp(0.64rem, 0.74vw, 0.82rem);
-            line-height: 1.20;
+            font-size: clamp(0.82rem, 0.94vw, 0.98rem);
+            line-height: 1.30;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body ul,
         .slide-content-area:has(details.tier-accordion[open]) .card-body ol,
         body.has-open-accordions .card-body ul,
         body.has-open-accordions .card-body ol {
-            padding-left: 14px;
-            margin-top: 1px;
-            margin-bottom: 1px;
+            padding-left: 16px;
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .split-media-layout,
         body.has-open-accordions .split-media-layout {
-            gap: 8px;
+            gap: 10px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .split-media-layout .left-column,
         body.has-open-accordions .split-media-layout .left-column {
-            gap: 2px;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .media-canvas.ratio-16-9,
-        body.has-open-accordions .media-canvas.ratio-16-9 {
-            max-height: 145px;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .media-canvas.ratio-4-3,
-        body.has-open-accordions .media-canvas.ratio-4-3 {
-            max-height: 145px;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .media-canvas.ratio-portrait,
-        body.has-open-accordions .media-canvas.ratio-portrait {
-            max-height: 155px;
-            max-width: 150px;
+            gap: 4px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) pre,
         body.has-open-accordions pre {
-            font-size: clamp(0.60rem, 0.70vw, 0.78rem);
-            padding: 3px 6px;
-            line-height: 1.2;
+            font-size: clamp(0.78rem, 0.90vw, 0.94rem);
+            padding: 5px 8px;
+            line-height: 1.25;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table th,
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table td,
         body.has-open-accordions table.dense-table th,
         body.has-open-accordions table.dense-table td {
-            padding: 2px 6px;
-            font-size: clamp(0.64rem, 0.74vw, 0.80rem);
+            padding: 4px 8px;
+            font-size: clamp(0.78rem, 0.90vw, 0.94rem);
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .accordion-body,
         body.has-open-accordions .accordion-body {
-            padding: 3px 6px;
-            font-size: clamp(0.64rem, 0.74vw, 0.80rem);
-            line-height: 1.2;
+            padding: 4px 8px;
+            font-size: clamp(0.76rem, 0.88vw, 0.88rem);
+            line-height: 1.25;
         }
 
         /* ==========================================================================
@@ -1146,6 +1121,14 @@
 
         body.projector-mode .card-body li {
             margin-bottom: 6px;
+        }
+
+        body.projector-mode .split-media-layout {
+            gap: 24px;
+        }
+
+        body.projector-mode .split-media-layout .left-column {
+            gap: 14px;
         }
 
         body.projector-mode pre {
@@ -2626,9 +2609,12 @@ coinPool.Release(gameObject);</pre>
                 if (currentTier === 'core') {
                     el.style.display = 'none';
                     el.open = false;
-                } else if (currentTier === 'adv' || currentTier === 'exp' || currentTier === 'all') {
+                } else if (currentTier === 'adv') {
                     el.style.display = 'block';
                     el.open = true;
+                } else if (currentTier === 'exp' || currentTier === 'all') {
+                    el.style.display = 'block';
+                    el.open = false;
                 }
             });
 
@@ -2636,9 +2622,12 @@ coinPool.Release(gameObject);</pre>
                 if (currentTier === 'core' || currentTier === 'adv') {
                     el.style.display = 'none';
                     el.open = false;
-                } else if (currentTier === 'exp' || currentTier === 'all') {
+                } else if (currentTier === 'exp') {
                     el.style.display = 'block';
                     el.open = true;
+                } else if (currentTier === 'all') {
+                    el.style.display = 'block';
+                    el.open = false;
                 }
             });
 
