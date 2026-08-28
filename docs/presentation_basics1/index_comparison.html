@@ -19,13 +19,13 @@
             --tier-core-bg: #ecfdf5;
             --tier-core-border: #a7f3d0;
             
-            --tier-levelup: #0284c7;
-            --tier-levelup-bg: #f0f9ff;
-            --tier-levelup-border: #bae6fd;
+            --tier-adv: #0284c7;
+            --tier-adv-bg: #f0f9ff;
+            --tier-adv-border: #bae6fd;
             
-            --tier-boss: #7c3aed;
-            --tier-boss-bg: #f5f3ff;
-            --tier-boss-border: #ddd6fe;
+            --tier-exp: #7c3aed;
+            --tier-exp-bg: #f5f3ff;
+            --tier-exp-border: #ddd6fe;
 
             --code-bg: #090d16;
             --accent-old: #f43f5e;
@@ -94,8 +94,8 @@
         .tier-btn:hover { color: #fff; }
         .tier-btn.active-all { background: #334155; color: #fff; }
         .tier-btn.active-core { background: var(--tier-core); color: #fff; }
-        .tier-btn.active-levelup { background: var(--tier-levelup); color: #fff; }
-        .tier-btn.active-boss { background: var(--tier-boss); color: #fff; }
+        .tier-btn.active-adv { background: var(--tier-adv); color: #fff; }
+        .tier-btn.active-exp { background: var(--tier-exp); color: #fff; }
 
         /* Main View Switch */
         .toggle-wrap {
@@ -212,7 +212,7 @@
             border-radius: 3px;
         }
 
-        /* Stage Area (Locked 16:9 Presentation Canvas) */
+        /* Stage Area (Strict 16:9 Presentation Canvas) */
         .stage-area {
             flex-grow: 1;
             display: flex;
@@ -262,18 +262,18 @@
         }
 
         /* ==========================================================================
-           SCALE-TO-FIT PRESENTATION ENGINE (Massive Screen-Filling Typography)
+           AUTO-FITTING 16:9 PRESENTATION ENGINE (Zero Overflow, Proportional Scaling)
            ========================================================================== */
         .view-interactive {
             width: 100%;
             height: 100%;
             background: #ffffff;
             color: var(--text-dark);
-            padding: clamp(24px, 4vh, 48px) clamp(30px, 4vw, 56px);
+            padding: clamp(14px, 2.5vh, 26px) clamp(20px, 3vw, 36px);
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            overflow-y: auto;
+            overflow: hidden; /* NEVER GOES OFF SCREEN */
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 10;
@@ -290,33 +290,34 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: clamp(30px, 5vh, 60px) clamp(40px, 5vw, 70px);
+            padding: clamp(24px, 4vh, 48px) clamp(32px, 4vw, 56px);
             z-index: 5;
+            overflow: hidden;
         }
 
         .slide-hero::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(15, 23, 42, 0.8) 55%, rgba(226, 0, 73, 0.45) 100%);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.82) 55%, rgba(226, 0, 73, 0.45) 100%);
             z-index: 1;
         }
 
         .hero-inner {
             position: relative;
             z-index: 2;
-            max-width: 920px;
+            max-width: 900px;
             display: flex;
             flex-direction: column;
-            gap: clamp(10px, 1.8vh, 20px);
+            gap: clamp(8px, 1.5vh, 16px);
         }
 
         .hero-tag-badge {
             background: var(--hr-red);
             color: #fff;
-            padding: clamp(8px, 1.5vh, 16px) clamp(20px, 2.5vw, 36px);
+            padding: clamp(6px, 1.2vh, 12px) clamp(16px, 2vw, 28px);
             border-radius: 8px;
-            font-size: clamp(1.8rem, 3.2vw, 3rem);
+            font-size: clamp(1.6rem, 2.8vw, 2.6rem);
             font-weight: 900;
             display: inline-block;
             box-shadow: 0 10px 30px rgba(226, 0, 73, 0.45);
@@ -325,7 +326,7 @@
         }
 
         .hero-sub {
-            font-size: clamp(1.3rem, 2vw, 1.8rem);
+            font-size: clamp(1.15rem, 1.7vw, 1.55rem);
             font-weight: 700;
             color: #f8fafc;
         }
@@ -333,33 +334,33 @@
         .hero-stack {
             display: flex;
             flex-direction: column;
-            gap: clamp(10px, 1.5vh, 18px);
+            gap: clamp(8px, 1.2vh, 14px);
         }
 
         .hero-pill-card {
             background: rgba(30, 41, 59, 0.9);
             backdrop-filter: blur(10px);
             border: 1.5px solid rgba(255,255,255,0.25);
-            border-radius: 10px;
-            padding: clamp(12px, 2vh, 20px) clamp(16px, 2vw, 24px);
+            border-radius: 8px;
+            padding: clamp(10px, 1.5vh, 16px) clamp(14px, 1.8vw, 20px);
             color: #e2e8f0;
         }
 
         .hero-pill-title {
-            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
+            font-size: clamp(0.88rem, 1.2vw, 1.2rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .hero-pill-title.core { color: #34d399; }
-        .hero-pill-title.levelup { color: #38bdf8; }
-        .hero-pill-title.boss { color: #c084fc; }
+        .hero-pill-title.adv { color: #38bdf8; }
+        .hero-pill-title.exp { color: #c084fc; }
 
         .hero-pill-desc {
-            font-size: clamp(1rem, 1.4vw, 1.35rem);
-            line-height: 1.5;
+            font-size: clamp(0.92rem, 1.25vw, 1.2rem);
+            line-height: 1.45;
             color: #e2e8f0;
         }
 
@@ -368,17 +369,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: clamp(12px, 2vh, 20px);
-            border-bottom: 3px solid #f1f5f9;
-            padding-bottom: clamp(8px, 1.2vh, 14px);
+            margin-bottom: clamp(6px, 1.2vh, 12px);
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: clamp(4px, 0.8vh, 8px);
+            flex-shrink: 0;
         }
 
         .slide-title-banner {
             background: var(--hr-red);
             color: #ffffff;
-            padding: clamp(8px, 1.2vh, 14px) clamp(18px, 2vw, 30px);
-            border-radius: 8px;
-            font-size: clamp(1.4rem, 2.3vw, 2.4rem);
+            padding: clamp(5px, 0.9vh, 10px) clamp(14px, 1.6vw, 24px);
+            border-radius: 6px;
+            font-size: clamp(1.25rem, 1.9vw, 1.95rem);
             font-weight: 900;
             display: inline-block;
             letter-spacing: -0.5px;
@@ -386,57 +388,58 @@
 
         .slide-meta-badges {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .badge-pill {
-            font-size: clamp(0.72rem, 1vw, 1rem);
+            font-size: clamp(0.68rem, 0.9vw, 0.88rem);
             font-weight: 800;
             text-transform: uppercase;
-            padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.2vw, 14px);
-            border-radius: 6px;
+            padding: clamp(3px, 0.6vh, 6px) clamp(6px, 1vw, 10px);
+            border-radius: 5px;
             letter-spacing: 0.5px;
         }
 
         .badge-core { background: var(--tier-core-bg); color: var(--tier-core); border: 1.5px solid var(--tier-core-border); }
-        .badge-levelup { background: var(--tier-levelup-bg); color: var(--tier-levelup); border: 1.5px solid var(--tier-levelup-border); }
-        .badge-boss { background: var(--tier-boss-bg); color: var(--tier-boss); border: 1.5px solid var(--tier-boss-border); }
+        .badge-adv { background: var(--tier-adv-bg); color: var(--tier-adv); border: 1.5px solid var(--tier-adv-border); }
+        .badge-exp { background: var(--tier-exp-bg); color: var(--tier-exp); border: 1.5px solid var(--tier-exp-border); }
 
-        /* Slide Content Area (Screen-Filling Vertical Stack) */
+        /* Slide Content Area (Proportional Vertical Fill) */
         .slide-content-area {
-            flex-grow: 1;
+            flex: 1 1 0;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: clamp(12px, 2vh, 22px);
-            margin-bottom: clamp(8px, 1.5vh, 16px);
-            height: 100%;
+            gap: clamp(6px, 1.2vh, 12px);
+            overflow: hidden;
         }
 
         .content-stack {
             display: flex;
             flex-direction: column;
-            gap: clamp(12px, 2vh, 20px);
-            flex-grow: 1;
+            gap: clamp(6px, 1.2vh, 12px);
+            flex: 1 1 0;
+            min-height: 0;
             justify-content: space-evenly;
-            height: 100%;
         }
 
         .content-card {
             background: #f8fafc;
-            border: 2px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: clamp(16px, 2.5vh, 28px) clamp(20px, 2.5vw, 32px);
-            box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: clamp(8px, 1.4vh, 16px) clamp(12px, 1.6vw, 22px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
             width: 100%;
-            flex-grow: 1;
+            flex: 1 1 0;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
         .content-card.primary {
-            border-left: clamp(8px, 1vw, 14px) solid var(--tier-core);
+            border-left: clamp(6px, 0.8vw, 10px) solid var(--tier-core);
             background: #ffffff;
         }
 
@@ -445,36 +448,39 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(1.15rem, 1.7vw, 1.75rem);
-            margin-bottom: clamp(6px, 1vh, 12px);
+            font-size: clamp(1.05rem, 1.4vw, 1.45rem);
+            margin-bottom: clamp(2px, 0.6vh, 6px);
+            flex-shrink: 0;
         }
 
         .card-title.core { color: var(--tier-core); }
-        .card-title.levelup { color: var(--tier-levelup); }
-        .card-title.boss { color: var(--tier-boss); }
+        .card-title.adv { color: var(--tier-adv); }
+        .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(1.15rem, 1.6vw, 1.6rem);
-            line-height: 1.6;
+            font-size: clamp(0.95rem, 1.35vw, 1.4rem);
+            line-height: 1.5;
             color: #1e293b;
             font-weight: 500;
+            overflow: hidden;
         }
 
         .card-body ul, .card-body ol {
-            margin-left: clamp(24px, 3vw, 40px);
-            margin-top: 6px;
-            margin-bottom: 6px;
+            margin-left: clamp(18px, 2.2vw, 30px);
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
 
         .card-body li {
-            margin-bottom: clamp(6px, 1vh, 12px);
+            margin-bottom: clamp(2px, 0.5vh, 6px);
         }
 
         /* Monospace Code Boxes */
         .code-box {
             position: relative;
-            margin: clamp(6px, 1.2vh, 14px) 0;
+            margin: clamp(4px, 0.8vh, 8px) 0;
             width: 100%;
+            flex-shrink: 0;
         }
 
         pre {
@@ -482,22 +488,22 @@
             color: #38bdf8;
             overflow-x: auto;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(1.1rem, 1.55vw, 1.55rem);
-            line-height: 1.5;
-            padding: clamp(14px, 2vh, 24px) clamp(18px, 2vw, 28px);
-            border-radius: 10px;
+            font-size: clamp(0.9rem, 1.25vw, 1.3rem);
+            line-height: 1.42;
+            padding: clamp(8px, 1.2vh, 14px) clamp(12px, 1.5vw, 20px);
+            border-radius: 8px;
         }
 
         .copy-btn {
             position: absolute;
-            top: 8px;
-            right: 8px;
+            top: 6px;
+            right: 6px;
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #475569;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: clamp(0.7rem, 0.9vw, 0.95rem);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: clamp(0.65rem, 0.8vw, 0.85rem);
             font-weight: 800;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -510,7 +516,6 @@
         table.dense-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 6px 0;
             height: 100%;
         }
 
@@ -518,70 +523,99 @@
             background: #f1f5f9;
             color: #0f172a;
             text-align: left;
-            border: 2px solid #cbd5e1;
+            border: 1.5px solid #cbd5e1;
             font-weight: 900;
-            font-size: clamp(1.15rem, 1.6vw, 1.65rem);
-            padding: clamp(10px, 1.8vh, 18px) clamp(14px, 1.8vw, 22px);
+            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
+            padding: clamp(6px, 1.2vh, 12px) clamp(10px, 1.4vw, 16px);
         }
 
         table.dense-table td {
-            border: 2px solid #e2e8f0;
+            border: 1.5px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
-            padding: clamp(10px, 1.8vh, 18px) clamp(14px, 1.8vw, 22px);
+            font-size: clamp(0.9rem, 1.2vw, 1.25rem);
+            padding: clamp(6px, 1.2vh, 12px) clamp(10px, 1.4vw, 16px);
             font-weight: 500;
         }
 
         /* Collapsible Tier Accordions */
         details.tier-accordion {
-            border-radius: 8px;
+            border-radius: 6px;
             overflow: hidden;
-            margin-top: 6px;
-            border: 1.5px solid transparent;
+            margin-top: 3px;
+            border: 1px solid transparent;
             transition: all 0.15s ease;
             width: 100%;
+            flex-shrink: 0;
         }
 
-        details.tier-accordion.levelup {
-            background: var(--tier-levelup-bg);
-            border-color: var(--tier-levelup-border);
+        details.tier-accordion.adv {
+            background: var(--tier-adv-bg);
+            border-color: var(--tier-adv-border);
         }
 
-        details.tier-accordion.boss {
-            background: var(--tier-boss-bg);
-            border-color: var(--tier-boss-border);
+        details.tier-accordion.exp {
+            background: var(--tier-exp-bg);
+            border-color: var(--tier-exp-border);
         }
 
         summary.accordion-header {
-            font-weight: 900;
+            font-weight: 800;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
-            padding: clamp(8px, 1.2vh, 14px) clamp(12px, 1.5vw, 18px);
+            font-size: clamp(0.82rem, 1.1vw, 1.15rem);
+            padding: clamp(5px, 0.8vh, 8px) clamp(10px, 1.2vw, 14px);
         }
 
-        details.levelup summary.accordion-header { color: var(--tier-levelup); }
-        details.boss summary.accordion-header { color: var(--tier-boss); }
+        details.adv summary.accordion-header { color: var(--tier-adv); }
+        details.exp summary.accordion-header { color: var(--tier-exp); }
 
         .accordion-body {
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(1rem, 1.4vw, 1.4rem);
-            padding: clamp(12px, 1.8vh, 20px) clamp(16px, 2vw, 24px);
-            line-height: 1.55;
+            font-size: clamp(0.84rem, 1.1vw, 1.15rem);
+            padding: clamp(6px, 1vh, 10px) clamp(10px, 1.4vw, 16px);
+            line-height: 1.45;
         }
 
-        /* HIDE LEVEL UP & BOSS CHALLENGE IN LECTURE MODE */
+        /* ==========================================================================
+           LECTURE MODE (Core Only): Expanded Large Typography
+           ========================================================================== */
+        body.projector-mode .content-card {
+            padding: clamp(14px, 2.2vh, 24px) clamp(18px, 2.4vw, 30px);
+        }
+
+        body.projector-mode .card-title {
+            font-size: clamp(1.2rem, 1.7vw, 1.75rem);
+            margin-bottom: 6px;
+        }
+
+        body.projector-mode .card-body {
+            font-size: clamp(1.15rem, 1.6vw, 1.65rem);
+            line-height: 1.6;
+        }
+
+        body.projector-mode pre {
+            font-size: clamp(1.1rem, 1.5vw, 1.5rem);
+            padding: clamp(12px, 1.8vh, 20px) clamp(16px, 2vw, 24px);
+        }
+
+        body.projector-mode table.dense-table th,
+        body.projector-mode table.dense-table td {
+            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+            padding: clamp(10px, 1.6vh, 16px) clamp(14px, 1.8vw, 20px);
+        }
+
+        /* HIDE ADVANCED & EXPERT IN LECTURE MODE */
         body.projector-mode .tier-accordion {
             display: none !important;
         }
 
-        body.projector-mode .slide-meta-badges .badge-levelup,
-        body.projector-mode .slide-meta-badges .badge-boss {
+        body.projector-mode .slide-meta-badges .badge-adv,
+        body.projector-mode .slide-meta-badges .badge-exp {
             display: none !important;
         }
 
@@ -591,8 +625,9 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding-top: clamp(6px, 1vh, 12px);
-            border-top: 2px solid #f1f5f9;
+            padding-top: clamp(4px, 0.6vh, 8px);
+            border-top: 1.5px solid #f1f5f9;
+            flex-shrink: 0;
         }
 
         /* Bottom Navigation Bar */
@@ -678,9 +713,9 @@
         <!-- Tier Selector Filter -->
         <div class="tier-selector">
             <button class="tier-btn active-all" id="tierAll" onclick="setTierFilter('all')">All Tracks</button>
-            <button class="tier-btn" id="tierCore" onclick="setTierFilter('core')">Core (Lecture)</button>
-            <button class="tier-btn" id="tierLevelUp" onclick="setTierFilter('levelup')">Level Up (+Feel)</button>
-            <button class="tier-btn" id="tierBoss" onclick="setTierFilter('boss')">Boss Challenge (+Tech)</button>
+            <button class="tier-btn" id="tierCore" onclick="setTierFilter('core')">Core</button>
+            <button class="tier-btn" id="tierAdv" onclick="setTierFilter('adv')">Advanced</button>
+            <button class="tier-btn" id="tierExp" onclick="setTierFilter('exp')">Expert</button>
         </div>
 
         <!-- Mode Toggle -->
@@ -712,19 +747,19 @@
                     <div id="heroLayout" class="slide-hero" style="display: none;">
                         <div class="hero-inner">
                             <div class="hero-tag-badge">Dev - Basics 1 (Unity 6)</div>
-                            <div class="hero-sub">Minor Game Design & Development - Hogeschool Rotterdam</div>
+                            <div class="hero-sub">Minor Game Design & Development &bull; Hogeschool Rotterdam</div>
                             <div class="hero-stack">
                                 <div class="hero-pill-card">
-                                    <div class="hero-pill-title core">Core Track (Live Lecture)</div>
-                                    <div class="hero-pill-desc">2D component model, deterministic script lifecycles, and physics-driven platformer movement with <code>Rigidbody2D.linearVelocity</code>.</div>
+                                    <div class="hero-pill-title core">Core Curriculum (Main Lecture)</div>
+                                    <div class="hero-pill-desc">2D component model, deterministic script execution order, and platformer physics with <code>Rigidbody2D.linearVelocity</code>.</div>
                                 </div>
                                 <div class="hero-pill-card">
-                                    <div class="hero-pill-title levelup">Level Up Track (Self-Service)</div>
-                                    <div class="hero-pill-desc">Jump buffering, coyote time, variable jump cuts, and custom physics material tuning.</div>
+                                    <div class="hero-pill-title adv">Advanced Implementation</div>
+                                    <div class="hero-pill-desc">Jump buffering, coyote time, variable jump cuts, frictionless physics materials, and Cinemachine 3 framing.</div>
                                 </div>
                                 <div class="hero-pill-card">
-                                    <div class="hero-pill-title boss">Boss Challenge (Advanced Architecture)</div>
-                                    <div class="hero-pill-desc">Separation of Concerns, zero-allocation Object Pooling, and decoupled ScriptableObject event channels.</div>
+                                    <div class="hero-pill-title exp">Expert Architecture</div>
+                                    <div class="hero-pill-desc">Separation of Concerns, zero-allocation Object Pooling, custom assembly definitions (.asmdef), and ScriptableObject channels.</div>
                                 </div>
                             </div>
                         </div>
@@ -736,21 +771,21 @@
                             <div class="slide-title-banner" id="slideTitle">Topic Title</div>
                             <div class="slide-meta-badges">
                                 <span class="badge-pill badge-core">Core</span>
-                                <span class="badge-pill badge-levelup">Level Up</span>
-                                <span class="badge-pill badge-boss">Boss Challenge</span>
+                                <span class="badge-pill badge-adv">Advanced</span>
+                                <span class="badge-pill badge-exp">Expert</span>
                             </div>
                         </div>
 
-                        <!-- Dynamic Slide Content Area (Scale-to-Fit Screen Filling) -->
+                        <!-- Dynamic Slide Content Area (Proportional Fit) -->
                         <div class="slide-content-area" id="slideContentArea">
                             <!-- Populated dynamically via JS -->
                         </div>
 
                         <!-- Slide Footer with Official Logo Only -->
                         <div class="slide-footer">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
-                                <img src="assets/HR_Logo.jpg" style="height: 30px; width: 30px; border-radius: 50%; object-fit: cover;" alt="HR Logo">
-                                <span style="font-weight: 900; font-size: 0.85rem; letter-spacing: 0.5px; color: var(--hr-red);">HOGESCHOOL ROTTERDAM</span>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
+                                <img src="assets/HR_Logo.jpg" style="height: 26px; width: 26px; border-radius: 50%; object-fit: cover;" alt="HR Logo">
+                                <span style="font-weight: 900; font-size: 0.8rem; letter-spacing: 0.5px; color: var(--hr-red);">HOGESCHOOL ROTTERDAM</span>
                             </div>
                         </div>
                     </div>
@@ -769,8 +804,8 @@
         
         <!-- View Size Toggle: Projector Mode (Core Only) vs Lab/Student Mode -->
         <div class="viewmode-toggle">
-            <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode (Core Only)</button>
-            <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Student Lab Mode (+Level Up & Boss)</button>
+            <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode (Core)</button>
+            <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode (+Advanced & Expert)</button>
         </div>
 
         <div style="display: flex; align-items: center; gap: 14px;">
@@ -805,7 +840,7 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // Content Matrix: Screen-Filling Vertical Stack Layouts Across All 21 Slides
+        // Content Matrix: Professional Academic Tiers (Core, Advanced, Expert) Across All 21 Slides
         const slidesData = [
             // Slide 1
             {
@@ -820,7 +855,7 @@
                         <div class="content-card primary">
                             <div class="card-title core">1. Engine Standard: Unity 6 (6000.x)</div>
                             <div class="card-body">
-                                We use <strong>Unity 6 LTS with 2D Universal Render Pipeline (URP)</strong>. Stable releases, pre-installed packages, and zero broken build pipelines.
+                                <strong>Unity 6 LTS with 2D Universal Render Pipeline (URP)</strong>. Stable releases, pre-installed packages, zero broken build dependencies.
                             </div>
                         </div>
                         <div class="content-card primary">
@@ -836,19 +871,19 @@
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Performance Profiling in IDE</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] IDE Performance Profiling</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Rider highlights Unity performance warnings directly in code: GC allocations in <code>Update()</code>, inefficient <code>GetComponent()</code> calls, and string-based comparisons.
+                            Rider highlights Unity performance warnings directly in code: GC allocations in <code>Update()</code>, inefficient <code>GetComponent()</code> calls, and string comparisons.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Custom Assembly Definitions (.asmdef)</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Custom Assembly Definitions (.asmdef)</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Split core gameplay systems into separate <code>.asmdef</code> modules to prevent Unity from recompiling entire projects on every script edit.
@@ -885,19 +920,19 @@
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Class Pacing & Self-Testing</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Class Pacing & Self-Testing</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Complete the Core movement loop first. Once your box moves and jumps cleanly, proceed to add jump buffering and coyote time.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Event-Driven Architecture Blueprint</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Event-Driven Architecture Blueprint</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Replace direct script references with C# event broadcasts or ScriptableObject channels to keep systems decoupled.
@@ -929,19 +964,19 @@
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] URP 2D Renderer Data Configuration</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] URP 2D Renderer Data Configuration</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             In <code>Universal Render Pipeline Asset_Renderer</code>, verify <strong>2D Lights</strong> and <strong>Pixel Perfect Camera</strong> support are enabled.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Scoped Registries in Packages/manifest.json</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Scoped Registries in Packages/manifest.json</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Define scoped registries in <code>Packages/manifest.json</code> to distribute shared game tools and utilities across team members automatically.
@@ -962,16 +997,16 @@
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Browser Download (Zero Terminal Required):</div>
+                            <div class="card-title core">Direct Browser Download:</div>
                             <div class="card-body">
                                 Navigate to the <code>projectfiles/</code> folder on GitHub and download <code>basics1.unitypackage</code> directly to your computer.
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Git Clone & Feature Branching</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Git Clone & Feature Branching</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             <div class="code-box">
@@ -981,10 +1016,10 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Git LFS & Binary Scene Merge Conflicts</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Git LFS & Binary Scene Merge Conflicts</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Track assets with Git LFS (<code>git lfs track "*.psd" "*.png" "*.wav"</code>) and configure <code>UnityYAMLMerge</code> to prevent merge conflicts in team projects.
@@ -1000,7 +1035,7 @@ git checkout -b feature/platformer-controller</pre>
                         <div class="content-card primary">
                             <div class="card-title core">1. Reference Manual (00_unity.md)</div>
                             <div class="card-body">
-                                Complete manual on script lifecycles, transform hierarchies, physics calculations, and Garbage Collection prevention.
+                                Comprehensive manual on script lifecycles, transform hierarchies, physics calculations, and Garbage Collection prevention.
                             </div>
                         </div>
                         <div class="content-card primary">
@@ -1016,19 +1051,19 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] ContextMenu Editor Testing</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] ContextMenu Editor Testing</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Add <code>[ContextMenu("Trigger Test")]</code> above C# functions to trigger test behaviors via the Inspector context menu during runtime.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] SelectionBase & Custom Property Drawers</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] SelectionBase & Custom Property Drawers</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Add <code>[SelectionBase]</code> to the root GameObject script so clicking in Scene View always selects the root prefab container.
@@ -1054,19 +1089,19 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Pixel Art Sprite Settings</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Pixel Art Sprite Settings</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             For crisp pixel art: Select sprites in Project View &rarr; Set <strong>Pixels Per Unit</strong> to 16 &rarr; <strong>Filter Mode: Point (no filter)</strong> &rarr; <strong>Compression: None</strong>.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Automated Asset Postprocessors</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Automated Asset Postprocessors</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Write an <code>AssetPostprocessor</code> script to automatically set Point filter mode and 16 PPU whenever any sprite is imported into <code>Textures/</code>.
@@ -1096,19 +1131,19 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Custom Input Action Assets</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Custom Input Action Assets</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Right-click in Project &rarr; <code>Create > Input Actions</code> to define custom Action Maps with bindings for keyboard, gamepad, and touch controls.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] C# Direct Action Subscriptions</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] C# Direct Action Subscriptions</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Subscribe directly to C# actions: <code>controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt;();</code> for zero-reflection performance.
@@ -1146,19 +1181,19 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Juice & Game Feel Challenge</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Feedback & Feel Polish</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Add a camera shake impulse when landing from high jumps, and instantiate a particle burst effect when collecting coins.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Score Event Channel (Decoupled)</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Score Event Channel (Decoupled)</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Create a <code>ScoreManager</code> that listens to a <code>Coin.OnCollected</code> C# static event without holding direct object references.
@@ -1203,19 +1238,19 @@ git checkout -b feature/platformer-controller</pre>
                             </tbody>
                         </table>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Frictionless Wall PhysicsMaterial2D</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Frictionless Wall PhysicsMaterial2D</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Create a <code>PhysicsMaterial2D</code> with <strong>Friction: 0</strong> and attach to player collider so jumping against walls doesn't stick.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Vertical Terminal Velocity Clamping</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Vertical Terminal Velocity Clamping</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Clamp vertical falling velocity in <code>FixedUpdate</code>: <code>float y = Mathf.Max(rb.linearVelocity.y, -maxFallSpeed);</code> to prevent tunnel glitching.
@@ -1249,10 +1284,10 @@ if (jumpRequested) {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Variable Jump Cut (Releasing Jump Early)</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Variable Jump Cut (Releasing Jump Early)</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             <div class="code-box">
@@ -1263,10 +1298,10 @@ if (jumpRequested) {
                             </div>
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Acceleration & Deceleration Smoothing Curves</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Acceleration & Deceleration Smoothing Curves</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             <div class="code-box">
@@ -1298,19 +1333,19 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Reading API Return Signatures</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Reading API Return Signatures</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Methods like <code>Physics2D.Raycast</code> return a <code>RaycastHit2D</code> struct containing <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code>.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Inspecting Open-Source Unity C# Engine Source</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Inspecting Open-Source Unity C# Engine Source</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Inspect Unity's open-source C# repo on GitHub to see the internal implementation of <code>MonoBehaviour</code>, <code>Transform</code>, and <code>Physics2D</code>.
@@ -1342,19 +1377,19 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Recommended Game Feel Talks</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Recommended Game Feel Talks</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Watch "Juice It or Lose It" (Martin Jonasson & Petri Purho) and "The Art of Screenshake" (Jan Willem Nijman / Vlambeer).
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Clean Architecture & Dependency Injection</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Clean Architecture & Dependency Injection</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Explore VContainer and Zenject for inversion of control and decoupled testable service injection in Unity.
@@ -1379,25 +1414,25 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Crucial Rule:</div>
+                            <div class="card-title core">Crucial Execution Rule:</div>
                             <div class="card-body">
                                 Input checks belong in <code>Update()</code> so keystrokes are never missed; physics calculations belong in <code>FixedUpdate()</code>.
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Custom Script Execution Order Settings</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Custom Script Execution Order Settings</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             In <code>Project Settings > Script Execution Order</code>, configure Manager scripts to run at <code>-100</code> before character controllers execute.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Zero-Allocation YieldInstruction Caching</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Zero-Allocation YieldInstruction Caching</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Avoid calling <code>yield return new WaitForSeconds(1f);</code> repeatedly in Coroutines. Cache <code>private readonly WaitForSeconds wait = new(1f);</code> in field definitions.
@@ -1423,19 +1458,19 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Decoupling Audio & VFX from Physics</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Decoupling Audio & VFX from Physics</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Trigger particle and sound events via delegates rather than nesting audio code directly inside character movement logic.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] ScriptableObject Architecture</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] ScriptableObject Architecture</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Use ScriptableObjects to hold shared player configurations (Speed, JumpForce, GravityScale) that update live across all prefabs during runtime.
@@ -1466,10 +1501,10 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Safe TryGetComponent Syntax</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Safe TryGetComponent Syntax</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             <div class="code-box">
@@ -1480,10 +1515,10 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Custom Inspector GUI with Play Mode Buttons</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Custom Inspector GUI with Play Mode Buttons</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Use <code>[CustomEditor(typeof(PlayerController2D))]</code> with <code>GUILayout.Button("Reset Player")</code> for rapid level designer debugging.
@@ -1512,19 +1547,19 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Squash & Stretch Jump Animations</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Squash & Stretch Jump Animations</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Scale the child <code>Graphics</code> Transform (e.g. <code>Vector3(0.8f, 1.2f, 1f)</code>) on takeoff without deforming the physics box collider on Root.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Attachment Sockets Pattern</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Attachment Sockets Pattern</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Create dedicated child Transforms (<code>FootstepSocket</code>, <code>MuzzleSocket</code>) for precise procedural VFX and audio spatial placement.
@@ -1549,19 +1584,19 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Predictive Lookahead Framing</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Predictive Lookahead Framing</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Set <strong>Lookahead Time</strong> to <code>0.2s</code> and <strong>Lookahead Smoothing</strong> to <code>5</code> so the camera pans ahead in movement direction.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Cinemachine Impulse Shake on Landings</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Cinemachine Impulse Shake on Landings</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Attach a <code>CinemachineImpulseSource</code> to Player and trigger screen shake on hard impacts: <code>impulseSource.GenerateImpulse();</code>.
@@ -1587,19 +1622,19 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Prefab Variants Workflow</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Prefab Variants Workflow</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Right-click base <code>Coin_Base</code> &rarr; <code>Create > Prefab Variant</code> to create <code>GoldCoin</code> (10 pts) and <code>GemCoin</code> (50 pts) inheriting all base behaviors.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Nested Prefabs in Team Environments</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Nested Prefabs in Team Environments</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Nest independently authored prefabs (HealthBar HUD, Weapon Socket) inside the character prefab to allow multiple developers to work concurrently.
@@ -1629,19 +1664,19 @@ public class Coin : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Audio Playback Before GameObject Destruction</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Audio Playback Before GameObject Destruction</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             <code>Destroy(gameObject)</code> instantly terminates AudioSources! Use <code>AudioSource.PlayClipAtPoint(clip, transform.position);</code> or disable <code>SpriteRenderer</code> first.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Unity Object Pool Pattern (Zero Garbage Collection)</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Unity Object Pool Pattern (Zero Garbage Collection)</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             <div class="code-box">
@@ -1693,19 +1728,19 @@ coinPool.Release(gameObject);</pre>
                             </tbody>
                         </table>
                     </div>
-                    <details class="tier-accordion levelup" id="tierLevelUpBlock">
+                    <details class="tier-accordion adv" id="tierAdvBlock">
                         <summary class="accordion-header">
-                            <span>[Level Up] Visual Raycast Debugging in Scene View</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Advanced] Visual Raycast Debugging in Scene View</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Draw live gizmo rays in Scene View: <code>Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.green);</code>.
                         </div>
                     </details>
-                    <details class="tier-accordion boss" id="tierBossBlock">
+                    <details class="tier-accordion exp" id="tierExpBlock">
                         <summary class="accordion-header">
-                            <span>[Boss Challenge] Frame-by-Frame Editor Breakpoint Execution</span>
-                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                            <span>[Expert] Frame-by-Frame Editor Breakpoint Execution</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Execute <code>Debug.Break();</code> in C# to pause the Unity Editor on the exact physics tick an unexpected collision or state bug triggers.
@@ -1792,24 +1827,24 @@ coinPool.Release(gameObject);</pre>
             
             document.getElementById('tierAll').className = `tier-btn ${tier === 'all' ? 'active-all' : ''}`;
             document.getElementById('tierCore').className = `tier-btn ${tier === 'core' ? 'active-core' : ''}`;
-            document.getElementById('tierLevelUp').className = `tier-btn ${tier === 'levelup' ? 'active-levelup' : ''}`;
-            document.getElementById('tierBoss').className = `tier-btn ${tier === 'boss' ? 'active-boss' : ''}`;
+            document.getElementById('tierAdv').className = `tier-btn ${tier === 'adv' ? 'active-adv' : ''}`;
+            document.getElementById('tierExp').className = `tier-btn ${tier === 'exp' ? 'active-exp' : ''}`;
 
             applyTierVisibility();
         }
 
         function applyTierVisibility() {
-            const levelUpBlocks = document.querySelectorAll('#tierLevelUpBlock');
-            const bossBlocks = document.querySelectorAll('#tierBossBlock');
+            const advBlocks = document.querySelectorAll('#tierAdvBlock');
+            const expBlocks = document.querySelectorAll('#tierExpBlock');
 
             if (currentViewMode === 'projector') {
                 return;
             }
 
-            levelUpBlocks.forEach(el => {
+            advBlocks.forEach(el => {
                 if (currentTier === 'core') {
                     el.style.display = 'none';
-                } else if (currentTier === 'levelup' || currentTier === 'boss') {
+                } else if (currentTier === 'adv' || currentTier === 'exp') {
                     el.style.display = 'block';
                     el.open = true;
                 } else {
@@ -1818,10 +1853,10 @@ coinPool.Release(gameObject);</pre>
                 }
             });
 
-            bossBlocks.forEach(el => {
-                if (currentTier === 'core' || currentTier === 'levelup') {
+            expBlocks.forEach(el => {
+                if (currentTier === 'core' || currentTier === 'adv') {
                     el.style.display = 'none';
-                } else if (currentTier === 'boss') {
+                } else if (currentTier === 'exp') {
                     el.style.display = 'block';
                     el.open = true;
                 } else {
@@ -1948,9 +1983,9 @@ coinPool.Release(gameObject);</pre>
             } else if (e.key === "1") {
                 setTierFilter('core');
             } else if (e.key === "2") {
-                setTierFilter('levelup');
+                setTierFilter('adv');
             } else if (e.key === "3") {
-                setTierFilter('boss');
+                setTierFilter('exp');
             } else if (e.key === "0") {
                 setTierFilter('all');
             }
