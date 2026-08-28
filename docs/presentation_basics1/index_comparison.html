@@ -764,6 +764,80 @@
             font-weight: 700;
             color: #38bdf8;
         }
+        /* ==========================================================================
+           INTERACTIVE GLOSSARY TOOLTIPS (Dik Gedrukte Woorden)
+           ========================================================================== */
+        .term-tip {
+            cursor: help;
+            font-weight: 800;
+            color: inherit;
+            border-bottom: 1.5px dotted #0284c7;
+            text-underline-offset: 3px;
+            transition: all 0.15s ease;
+            display: inline;
+        }
+
+        .term-tip:hover,
+        .term-tip:focus {
+            color: var(--hr-red) !important;
+            border-bottom-color: var(--hr-red);
+            outline: none;
+        }
+
+        .glossary-tooltip {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            background: #0f172a;
+            color: #f8fafc;
+            border: 1.5px solid #334155;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            line-height: 1.35;
+            font-weight: 500;
+            max-width: 290px;
+            width: max-content;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
+            pointer-events: none;
+            z-index: 99999;
+            opacity: 0;
+            transform: scale(0.96);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+
+        .glossary-tooltip.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .glossary-tooltip .tip-title {
+            font-weight: 900;
+            color: #38bdf8;
+            font-size: 0.80rem;
+            margin-bottom: 3px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 2px;
+            letter-spacing: 0.3px;
+        }
+
+        .glossary-tooltip .tip-body {
+            color: #f1f5f9;
+            margin-bottom: 2px;
+        }
+
+        .glossary-tooltip .tip-diff {
+            margin-top: 4px;
+            padding-top: 3px;
+            border-top: 1px dashed #334155;
+            color: #94a3b8;
+            font-size: 0.68rem;
+            line-height: 1.28;
+        }
+
+        .glossary-tooltip .tip-diff strong {
+            color: #38bdf8;
+        }
 
         /* Clickable URLs & References */
         a.slide-url {
@@ -1388,8 +1462,8 @@
                             <div class="card-title core">2. Code Editor & Language: C# + Rider</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>C# (C-sharp):</strong> The friendly programming language we use to tell Unity what our game objects should do.</li>
-                                    <li><strong>JetBrains Rider</strong> (or Visual Studio): The text editor where we write code. It points out typos and helps you code faster.</li>
+                                    <li><span class="term-tip" data-title="C# (C-Sharp)" data-desc="The friendly programming language Unity uses to give objects instructions." data-diff="vs Visual Scripting: Typed text code gives complete control over physics and gameplay."><strong>C# (C-sharp):</strong></span> The friendly programming language we use to tell Unity what our game objects should do.</li>
+                                    <li><span class="term-tip" data-title="JetBrains Rider" data-desc="The recommended code editor IDE for Unity development." data-diff="vs Visual Studio: Faster startup and built-in Unity code inspections."><strong>JetBrains Rider</strong></span> (or Visual Studio): The text editor where we write code. It points out typos and helps you code faster.</li>
                                 </ul>
                             </div>
                         </div>
@@ -1432,8 +1506,8 @@
                                 <ul>
                                     <li>Downloading course files and packages from GitHub</li>
                                     <li>Importing starter assets into your Unity 2D scene</li>
-                                    <li>Giving your character physics gravity (Rigidbody2D)</li>
-                                    <li>Writing simple C# code to run and jump</li>
+                                    <li>Giving your character physics gravity (<span class="term-tip" data-title="Rigidbody2D" data-desc="Physics engine component adding gravity, weight, and collisions." data-diff="vs Transform: Rigidbody moves via physics simulation; Transform teleports directly."><strong>Rigidbody2D</strong></span>)</li>
+                                    <li>Writing simple <span class="term-tip" data-title="C#" data-desc="Unity's typed programming language for scripts." data-diff="Full control over movement and mechanics."><strong>C#</strong></span> code to run and jump</li>
                                     <li>Understanding how Unity runs your code in order</li>
                                 </ul>
                             </div>
@@ -1443,9 +1517,9 @@
                             <div class="card-body">
                                 <ul>
                                     <li>Keeping character art separate from physics hitboxes</li>
-                                    <li>Adding Cinemachine for automatic smooth camera follow</li>
-                                    <li>Creating reusable master templates (Prefabs)</li>
-                                    <li>Making gold coins disappear on touch with triggers</li>
+                                    <li>Adding <span class="term-tip" data-title="Cinemachine" data-desc="Procedural smart camera suite for Unity." data-diff="vs Normal Camera: Automates smooth tracking and framing with 0 code."><strong>Cinemachine</strong></span> for automatic smooth camera follow</li>
+                                    <li>Creating reusable master templates (<span class="term-tip" data-title="Prefabs" data-desc="Reusable master template assets." data-diff="vs Scene Objects: Editing a prefab updates all scene copies instantly."><strong>Prefabs</strong></span>)</li>
+                                    <li>Making gold coins disappear on touch with <span class="term-tip" data-title="Is Trigger" data-desc="Collider mode that turns off solid walls so objects pass through." data-diff="vs Solid Collider: Solid colliders push; Triggers fire pickup events."><strong>triggers</strong></span></li>
                                     <li>Official documentation & troubleshooting guides</li>
                                 </ul>
                             </div>
@@ -1466,7 +1540,7 @@
                                     <li><strong>GitHub Portal:</strong> Where to download weekly starter files</li>
                                     <li><strong>Documentation:</strong> Easy guides and ready-made code examples</li>
                                     <li><strong>Importing Packages:</strong> Loading the 2D starter scene into Unity</li>
-                                    <li><strong>Camera Tool:</strong> Installing Cinemachine from Package Manager</li>
+                                    <li><strong>Camera Tool:</strong> Installing <span class="term-tip" data-title="Cinemachine" data-desc="Unity smart camera suite that automatically follows player." data-diff="Smooth lag and framing with 0 code."><strong>Cinemachine</strong></span> from <span class="term-tip" data-title="Package Manager" data-desc="Unity's built-in tool to install official packages." data-diff="Downloads engine modules and official tools."><strong>Package Manager</strong></span></li>
                                     <li><strong>Workshop Goals:</strong> 4 clear milestone steps</li>
                                 </ul>
                             </div>
@@ -1475,9 +1549,9 @@
                             <div class="card-title" style="color:#ffffff;">Step 2: Physics & Code Basics</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>Rigidbody2D:</strong> Making objects fall and collide</li>
-                                    <li><strong>Movement Script:</strong> Moving left/right and jumping with Vector2</li>
-                                    <li><strong>Script Lifecycle:</strong> When Unity runs Start, Update, and FixedUpdate</li>
+                                    <li><span class="term-tip" data-title="Rigidbody2D" data-desc="Physics engine component adding gravity and realistic collisions." data-diff="vs Transform: Moves with physics simulation rather than teleporting."><strong>Rigidbody2D:</strong></span> Making objects fall and collide</li>
+                                    <li><strong>Movement Script:</strong> Moving left/right and jumping with <span class="term-tip" data-title="Vector2(X, Y)" data-desc="Pair of X and Y numbers for 2D position or speed." data-diff="vs Vector3: Vector2 is 2D (X, Y); Vector3 adds Z depth (3D)."><strong>Vector2</strong></span></li>
+                                    <li><strong>Script Lifecycle:</strong> When Unity runs <span class="term-tip" data-title="Start()" data-desc="Runs once right before first frame." data-diff="Used for starting values like health."><strong>Start</strong></span>, <span class="term-tip" data-title="Update()" data-desc="Runs every frame for player input." data-diff="vs FixedUpdate: Frame rate varies with PC speed."><strong>Update</strong></span>, and <span class="term-tip" data-title="FixedUpdate()" data-desc="Runs on strict 50Hz physics clock (0.02s)." data-diff="vs Update: Always apply physics forces here."><strong>FixedUpdate</strong></span></li>
                                 </ul>
                             </div>
                         </div>
@@ -1496,7 +1570,7 @@
                                 <button class="copy-btn" onclick="copyCode(this)">Copy Link</button>
                             </div>
                             <div class="card-body">
-                                <strong>Direct Browser Download:</strong> <a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/raw/master/projectfiles/basics1.unitypackage" download="basics1.unitypackage" target="_blank" rel="noopener noreferrer">Click here to Download <code>basics1.unitypackage</code> directly</a>.
+                                <strong>Direct Browser Download:</strong> <a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/raw/master/projectfiles/basics1.unitypackage" download="basics1.unitypackage" target="_blank" rel="noopener noreferrer">Click here to Download <span class="term-tip" data-title=".unitypackage" data-desc="A bundled zip file of scenes, scripts, and art assets for Unity." data-diff="vs Raw Folders: Can be imported in one click without manually copying files."><code>basics1.unitypackage</code></span> directly</a>.
                             </div>
                         </div>
                         <div class="content-card primary">
@@ -1542,7 +1616,7 @@ git checkout -b feature/platformer-controller</pre>
                         <div class="content-card primary">
                             <div class="card-title core">1. Reference Manual (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/master/docs/00_unity.md" target="_blank" rel="noopener noreferrer">00_unity.md</a>)</div>
                             <div class="card-body">
-                                Plain-language explanations of Unity basics: how GameObjects work, parent-child links, and physics rules.
+                                Plain-language explanations of Unity basics: how <span class="term-tip" data-title="GameObjects" data-desc="Containers for everything in a scene (characters, coins, lights)." data-diff="vs Components: GameObjects are empty boxes; Components give them actual features."><strong>GameObjects</strong></span> work, parent-child links, and physics rules.
                             </div>
                         </div>
                         <div class="content-card primary">
@@ -1599,7 +1673,7 @@ git checkout -b feature/platformer-controller</pre>
                             <div class="content-card primary" style="border-left-color: #f59e0b; background: #fffbeb;">
                                 <div class="card-title core" style="color: #d97706;">Pro Tip: Play Mode Color Tint</div>
                                 <div class="card-body">
-                                    Never lose changes! In top menu: <code>Edit > Preferences > Colors > Playmode tint</code> &mdash; pick a light color so you instantly notice when the game is playing.
+                                    Never lose changes! In top menu: <code>Edit > Preferences > Colors > <span class="term-tip" data-title="Play Mode Tint" data-desc="Visual color overlay when testing game in editor." data-diff="Why needed: Changes in Play Mode reset when stopped; tint warns you!"><strong>Playmode tint</strong></span></code> &mdash; pick a light color so you notice when the game is playing.
                                 </div>
                             </div>
                         </div>
@@ -1647,14 +1721,14 @@ git checkout -b feature/platformer-controller</pre>
                             <div class="content-card primary">
                                 <div class="card-title core">1. What is Cinemachine?</div>
                                 <div class="card-body">
-                                    A built-in smart camera tool that automatically tracks your player smoothly without needing any complex code.
+                                    A built-in smart camera tool (<span class="term-tip" data-title="Cinemachine" data-desc="Unity procedural smart camera suite." data-diff="vs Normal Camera: Automates smooth tracking and framing with 0 code."><strong>Cinemachine</strong></span>) that automatically tracks your player smoothly without needing any complex code.
                                 </div>
                             </div>
                             <div class="content-card primary">
                                 <div class="card-title core">2. How to Install It</div>
                                 <div class="card-body">
                                     <ol>
-                                        <li>Top menu: click <code>Window > Package Manager</code>.</li>
+                                        <li>Top menu: click <code>Window > <span class="term-tip" data-title="Package Manager" data-desc="Unity tool to download official packages." data-diff="Downloads engine modules and official tools.">Package Manager</span></code>.</li>
                                         <li>Change dropdown at top to <strong>Packages: Unity Registry</strong>.</li>
                                         <li>Search for <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
                                     </ol>
@@ -1707,8 +1781,8 @@ git checkout -b feature/platformer-controller</pre>
                                 <div class="card-body">
                                     <ol style="padding-left: 18px;">
                                         <li><strong>Make Player Move:</strong> Attach script for arrow keys & jump.</li>
-                                        <li><strong>Add Camera Follow:</strong> Create Cinemachine camera.</li>
-                                        <li><strong>Place Collectibles:</strong> Place coin prefabs with <code>Is Trigger</code> checked.</li>
+                                        <li><strong>Add Camera Follow:</strong> Create <span class="term-tip" data-title="Cinemachine" data-desc="Smart camera suite tracking player automatically." data-diff="Smooth follow with zero math code."><strong>Cinemachine camera</strong></span>.</li>
+                                        <li><strong>Place Collectibles:</strong> Place coin <span class="term-tip" data-title="Prefabs" data-desc="Reusable master template assets." data-diff="Edit once to update all copies in level."><strong>prefabs</strong></span> with <span class="term-tip" data-title="Is Trigger" data-desc="Collider mode that turns off solid walls so player passes through." data-diff="vs Solid Collider: Triggers fire pickup events without blocking."><code><strong>Is Trigger</strong></code></span> checked.</li>
                                         <li><strong>Playtest & Tune:</strong> Jump, run, and collect all coins!</li>
                                     </ol>
                                 </div>
@@ -1765,22 +1839,22 @@ git checkout -b feature/platformer-controller</pre>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><strong>Body Type</strong></td>
+                                        <td><span class="term-tip" data-title="Body Type" data-desc="Defines how physics handles this object." data-diff="Dynamic = moves with gravity; Static = unmovable; Kinematic = script only."><strong>Body Type</strong></span></td>
                                         <td><code>Dynamic</code></td>
                                         <td>Gives gravity and physics (can fall and push).</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Collision</strong></td>
+                                        <td><span class="term-tip" data-title="Collision Detection" data-desc="How physics checks for overlapping colliders." data-diff="Continuous checks full motion path; Discrete checks once per tick."><strong>Collision</strong></span></td>
                                         <td><code>Continuous</code></td>
                                         <td>Prevents character falling through thin floors.</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Freeze Rotation Z</strong></td>
+                                        <td><span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks rotation on the 2D plane." data-diff="Why needed: Keeps character upright so capsule collider never falls over."><strong>Freeze Rotation Z</strong></span></td>
                                         <td><code>Checked</code></td>
                                         <td>Keeps character upright so they don't fall over.</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Interpolate</strong></td>
+                                        <td><span class="term-tip" data-title="Interpolate" data-desc="Smooths movement rendering between physics ticks." data-diff="Why needed: Eliminates visual micro-stutter on high refresh monitors."><strong>Interpolate</strong></span></td>
                                         <td><code>Interpolate</code></td>
                                         <td>Makes movement look completely smooth on screen.</td>
                                     </tr>
@@ -1834,7 +1908,7 @@ git checkout -b feature/platformer-controller</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Movement Code with Vector2 (Speed X, Y)</div>
+                                <div class="card-title core">Movement Code with <span class="term-tip" data-title="Vector2(X, Y)" data-desc="Pair of numbers representing 2D direction/speed." data-diff="X = Left/Right speed, Y = Up/Down jump force.">Vector2</span> (<span class="term-tip" data-title="linearVelocity" data-desc="Unity 6 physics velocity property in units per second." data-diff="vs .velocity: Unity 6 replaced legacy .velocity with linearVelocity.">linearVelocity</span>)</div>
                                 <div class="code-box">
                                     <pre>// FixedUpdate: moveInput & jumpRequested from PlayerInput
 // Unity 6 linearVelocity (formerly .velocity)
@@ -1847,7 +1921,7 @@ if (jumpRequested) {
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                                 <div class="card-body" style="margin-top: 2px; font-size: 0.74rem;">
-                                    <strong>Vector2:</strong> (<code>X</code> = Left/Right speed, <code>Y</code> = Up/Down jump speed).
+                                    <span class="term-tip" data-title="Vector2" data-desc="A pair of 2D numbers (X, Y)." data-diff="X = horizontal speed, Y = vertical jump speed."><strong>Vector2:</strong></span> (<code>X</code> = Left/Right speed, <code>Y</code> = Up/Down jump speed).
                                 </div>
                             </div>
                         </div>
@@ -1906,18 +1980,18 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             <div class="content-card primary">
                                 <div class="card-title core">Order of Events</div>
                                 <div class="code-box">
-                                    <pre>[Awake]       -> Find & connect components
-[Start]       -> Set starting values (health)
-[Update]      -> Check player keys (every frame)
-[FixedUpdate] -> Move physics & check collisions
-[LateUpdate]  -> Move camera so it follows smoothly</pre>
+                                    <pre>[<span class="term-tip" data-title="Awake()" data-desc="Runs once immediately when object loads into memory." data-diff="vs Start: Runs first to connect components before game starts.">Awake</span>]       -> Find & connect components
+[<span class="term-tip" data-title="Start()" data-desc="Runs once right before the very first frame." data-diff="vs Awake: Used for initial starting values (health) after all Awake links exist.">Start</span>]       -> Set starting values (health)
+[<span class="term-tip" data-title="Update()" data-desc="Runs every single frame. Used for reading keys." data-diff="vs FixedUpdate: Frame rate varies based on PC performance.">Update</span>]      -> Check player keys (every frame)
+[<span class="term-tip" data-title="FixedUpdate()" data-desc="Runs on strict 50Hz physics clock (every 0.02s)." data-diff="vs Update: Always apply velocity and physics forces here.">FixedUpdate</span>] -> Move physics & check collisions
+[<span class="term-tip" data-title="LateUpdate()" data-desc="Runs after all Update() functions finish." data-diff="vs Update: Move cameras here so player finishes movement first.">LateUpdate</span>]  -> Move camera so it follows smoothly</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                                 </div>
                             </div>
                             <div class="content-card primary">
                                 <div class="card-title core">The Simple Rule</div>
                                 <div class="card-body">
-                                    Read button presses in <strong><code>Update()</code></strong>. Apply physics speed in <strong><code>FixedUpdate()</code></strong>.
+                                    Read button presses in <span class="term-tip" data-title="Update()" data-desc="Runs every frame to detect key presses instantly." data-diff="Never miss a jump press!"><strong><code>Update()</code></strong></span>. Apply physics speed in <span class="term-tip" data-title="FixedUpdate()" data-desc="Runs on strict 50Hz physics clock." data-diff="Guarantees stable collisions!"><strong><code>FixedUpdate()</code></strong></span>.
                                 </div>
                             </div>
                         </div>
@@ -1966,8 +2040,8 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             <div class="card-title" style="color:#ffffff;">Smart Object Structure</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>RequireComponent:</strong> Automatically adding required physics tools</li>
-                                    <li><strong>Root vs Child:</strong> Keeping invisible hitboxes separate from character pictures</li>
+                                    <li><span class="term-tip" data-title="RequireComponent" data-desc="Script attribute forcing Unity to auto-attach needed components." data-diff="Guarantees physics tools exist so script never crashes."><strong>RequireComponent:</strong></span> Automatically adding required physics tools</li>
+                                    <li><span class="term-tip" data-title="Root vs Child" data-desc="Hierarchy parenting separating physics from visuals." data-diff="Root moves & collides; Child animates & rotates."><strong>Root vs Child:</strong></span> Keeping invisible hitboxes separate from character pictures</li>
                                     <li><strong>Finding Objects:</strong> How scripts safely communicate</li>
                                 </ul>
                             </div>
@@ -1976,8 +2050,8 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             <div class="card-title" style="color:#ffffff;">Gameplay Elements & Reference</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>Smooth Camera:</strong> Setting up Cinemachine to follow the player</li>
-                                    <li><strong>Prefabs:</strong> Making master templates for reusable coins and enemies</li>
+                                    <li><strong>Smooth Camera:</strong> Setting up <span class="term-tip" data-title="Cinemachine" data-desc="Smart camera suite tracking player automatically." data-diff="Smooth follow with zero math code."><strong>Cinemachine</strong></span> to follow the player</li>
+                                    <li><strong>Prefabs:</strong> Making master templates (<span class="term-tip" data-title="Prefabs" data-desc="Reusable master template assets." data-diff="Editing template updates all scene copies."><strong>Prefabs</strong></span>) for reusable coins and enemies</li>
                                     <li><strong>Collectibles:</strong> Making coins disappear and score points on touch</li>
                                     <li><strong>Appendix:</strong> Unity manual, video tutorials & Discord help</li>
                                 </ul>
@@ -1992,7 +2066,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                 content: `
                     <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">RequireComponent Attribute</div>
+                            <div class="card-title core"><span class="term-tip" data-title="RequireComponent" data-desc="Script attribute forcing Unity to auto-attach needed components." data-diff="Why needed: Prevents NullReferenceException crashes by guaranteeing tools exist.">RequireComponent Attribute</span></div>
                             <div class="code-box">
                                 <pre>[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
@@ -2046,9 +2120,9 @@ public class PlayerController2D : MonoBehaviour {
                             <div class="content-card primary">
                                 <div class="card-title core">Player Object Structure</div>
                                 <div class="code-box">
-                                    <pre>[Player] (Main Object: Physics & Colliders)
-  └── [Graphics] (Child: Visible Character Picture)
-  └── [GroundCheck] (Child: Sensor at Feet)</pre>
+                                    <pre>[<span class="term-tip" data-title="Root GameObject" data-desc="Main parent container holding physics and movement script." data-diff="Moves and collides in the game world.">Player</span>] (Main Object: Physics & Colliders)
+  └── [<span class="term-tip" data-title="Child GameObject" data-desc="Nested container holding character art sprite." data-diff="Can be rotated or squashed without warping physics box.">Graphics</span>] (Child: Visible Character Picture)
+  └── [<span class="term-tip" data-title="Child Sensor" data-desc="Nested empty object at character feet." data-diff="Used to check ground contact without affecting body.">GroundCheck</span>] (Child: Sensor at Feet)</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
                                 </div>
                             </div>
@@ -2106,15 +2180,15 @@ public class PlayerController2D : MonoBehaviour {
                                     <ol>
                                         <li>Top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
                                         <li>Drag your <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
-                                        <li>Set <strong>Body</strong> to <code>Framing Transposer</code>.</li>
-                                        <li>Adjust <strong>Dead Zone</strong> so the camera moves when walking.</li>
+                                        <li>Set <strong>Body</strong> to <span class="term-tip" data-title="Framing Transposer" data-desc="Cinemachine algorithm keeping player in defined screen zone." data-diff="vs Hard Lock: Guides camera smoothly without rigid lock-on jitter."><code><strong>Framing Transposer</strong></code></span>.</li>
+                                        <li>Adjust <span class="term-tip" data-title="Dead Zone" data-desc="Center box where player moves without moving camera." data-diff="Why needed: Prevents camera moving on tiny fidgeting steps."><code><strong>Dead Zone</strong></code></span> so the camera moves when walking.</li>
                                     </ol>
                                 </div>
                             </div>
                             <div class="content-card primary">
                                 <div class="card-title core">What Makes it Look Good?</div>
                                 <div class="card-body">
-                                    <strong>Damping:</strong> Adds a soft, smooth delay so the camera gently glides instead of jerking sharply.
+                                    <span class="term-tip" data-title="Damping" data-desc="Camera motion delay factor." data-diff="vs 0 Damping: Creates smooth cinematic glide; 0 damping jerks harshly."><strong>Damping:</strong></span> Adds a soft, smooth delay so the camera gently glides instead of jerking sharply.
                                 </div>
                             </div>
                         </div>
@@ -2161,19 +2235,19 @@ public class PlayerController2D : MonoBehaviour {
                         <div class="content-card primary">
                             <div class="card-title core">1. What is a Prefab?</div>
                             <div class="card-body">
-                                A master template saved in your project (like a stamp or cookie cutter). If you change the template, every copy in your game updates automatically!
+                                A master template (<span class="term-tip" data-title="Prefab" data-desc="Reusable asset template saved in Project view." data-diff="vs Scene Object: Editing the master updates all scene copies instantly."><strong>Prefab</strong></span>) saved in your project (like a cookie cutter). If you change the template, every copy in your game updates automatically!
                             </div>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">2. Editing a Prefab</div>
                             <div class="card-body">
-                                Double-click any prefab in your Project window to edit it in its own clean workspace.
+                                Double-click any prefab in your Project window to edit it in its own clean Prefab Mode workspace.
                             </div>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">3. Customizing One Copy</div>
                             <div class="card-body">
-                                You can change a single coin in a level (like making it giant) without changing any of the other normal coins.
+                                You can change a single coin in a level (like making it giant) using <span class="term-tip" data-title="Prefab Overrides" data-desc="Local changes applied to one specific scene copy." data-diff="Leaves other standard prefabs unchanged."><strong>overrides</strong></span> without changing any other coins.
                             </div>
                         </div>
                     </div>
@@ -2207,10 +2281,10 @@ public class PlayerController2D : MonoBehaviour {
                                 <div class="card-title core">The Coin Script (Coin.cs)</div>
                                 <div class="code-box">
                                     <pre>public class Coin : MonoBehaviour {
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void <span class="term-tip" data-title="OnTriggerEnter2D" data-desc="Event function running when collider enters trigger." data-diff="vs OnCollisionEnter2D: Overlap event for pickups rather than solid physical bounce.">OnTriggerEnter2D</span>(Collider2D other) {
         if (other.CompareTag("Player")) {
             // Trigger fires because Player has Rigidbody2D!
-            Destroy(gameObject); // Coin disappears!
+            <span class="term-tip" data-title="Destroy()" data-desc="Removes GameObject or component from memory." data-diff="vs SetActive(false): Completely deletes object rather than hiding it.">Destroy</span>(gameObject); // Coin disappears!
         }
     }
 }</pre>
@@ -2221,8 +2295,8 @@ public class PlayerController2D : MonoBehaviour {
                                 <div class="card-title core">Trigger Checklist</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><strong>Check <code>Is Trigger</code> on Coin:</strong> Allows player to walk through the coin without bumping into a solid wall.</li>
-                                        <li><strong>Player has Rigidbody2D + "Player" Tag:</strong> At least one object must have a <code>Rigidbody2D</code> for <code>OnTriggerEnter2D</code> to run!</li>
+                                        <li><strong>Check <span class="term-tip" data-title="Is Trigger" data-desc="Turns off solid walls so player passes through." data-diff="vs Solid Collider: Solid colliders bounce; Triggers fire pickup events."><code>Is Trigger</code></span> on Coin:</strong> Allows player to walk through the coin without bumping into a solid wall.</li>
+                                        <li><strong>Player has <span class="term-tip" data-title="Rigidbody2D Requirement" data-desc="At least one object must hold Rigidbody2D for OnTriggerEnter2D to fire." data-diff="Without Rigidbody2D, triggers will not detect overlap."><code>Rigidbody2D</code></span> + "Player" Tag:</strong> At least one object must have a <code>Rigidbody2D</code> for <code>OnTriggerEnter2D</code> to run!</li>
                                         <li><em>Next lesson: We'll connect this to an on-screen score counter!</em></li>
                                     </ul>
                                 </div>
@@ -2368,15 +2442,15 @@ coinPool.Release(gameObject);</pre>
                                 <tbody>
                                     <tr>
                                         <td><strong>Player falls through floor</strong></td>
-                                        <td>Add a <code>BoxCollider2D</code> to the floor.</td>
+                                        <td>Add a <span class="term-tip" data-title="BoxCollider2D" data-desc="Rectangular 2D collision boundary." data-diff="vs CircleCollider2D: Fits flat platforms; Circle fits round balls."><code>BoxCollider2D</code></span> to the floor.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Character tips over</strong></td>
-                                        <td>Check <code>Freeze Rotation Z</code> in Rigidbody2D.</td>
+                                        <td>Check <span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks tilt on the 2D plane." data-diff="Keeps capsule upright on slopes."><code>Freeze Rotation Z</code></span> in Rigidbody2D.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Keys do not move character</strong></td>
-                                        <td>Attach the <code>PlayerInput</code> component.</td>
+                                        <td>Attach the <span class="term-tip" data-title="PlayerInput" data-desc="Unity New Input System component mapping keys to actions." data-diff="vs Input.GetKey: Maps keys, gamepads, and touch through one clean system."><code>PlayerInput</code></span> component.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Need live help?</strong></td>
@@ -2709,6 +2783,78 @@ coinPool.Release(gameObject);</pre>
                 toggleHelpModal(false);
             }
         });
+        // Global Interactive Glossary Tooltip System (Dik Gedrukte Woorden)
+        (function initGlossaryTooltips() {
+            const tipEl = document.createElement('div');
+            tipEl.id = 'glossaryTooltip';
+            tipEl.className = 'glossary-tooltip';
+            tipEl.innerHTML = `<div class="tip-title" id="gtTitle"></div><div class="tip-body" id="gtDesc"></div><div class="tip-diff" id="gtDiff"></div>`;
+            document.body.appendChild(tipEl);
+
+            function showTip(target) {
+                const title = target.getAttribute('data-title');
+                const desc = target.getAttribute('data-desc');
+                const diff = target.getAttribute('data-diff');
+                if (!title && !desc) return;
+
+                document.getElementById('gtTitle').textContent = title || '';
+                document.getElementById('gtDesc').textContent = desc || '';
+                const diffEl = document.getElementById('gtDiff');
+                if (diff) {
+                    diffEl.innerHTML = diff;
+                    diffEl.style.display = 'block';
+                } else {
+                    diffEl.style.display = 'none';
+                }
+
+                tipEl.classList.add('visible');
+                positionTip(target);
+            }
+
+            function hideTip() {
+                tipEl.classList.remove('visible');
+            }
+
+            function positionTip(target) {
+                const rect = target.getBoundingClientRect();
+                const tipRect = tipEl.getBoundingClientRect();
+
+                let top = rect.top - tipRect.height - 8;
+                let left = rect.left + (rect.width / 2) - (tipRect.width / 2);
+
+                if (top < 10) {
+                    top = rect.bottom + 8;
+                }
+
+                if (left < 10) left = 10;
+                if (left + tipRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - tipRect.width - 10;
+                }
+
+                tipEl.style.top = `${top}px`;
+                tipEl.style.left = `${left}px`;
+            }
+
+            document.addEventListener('mouseover', (e) => {
+                const target = e.target.closest('.term-tip');
+                if (target) showTip(target);
+            });
+
+            document.addEventListener('mouseout', (e) => {
+                const target = e.target.closest('.term-tip');
+                if (target) hideTip();
+            });
+
+            document.addEventListener('focusin', (e) => {
+                const target = e.target.closest('.term-tip');
+                if (target) showTip(target);
+            });
+
+            document.addEventListener('focusout', (e) => {
+                const target = e.target.closest('.term-tip');
+                if (target) hideTip();
+            });
+        })();
 
         init();
     </script>
