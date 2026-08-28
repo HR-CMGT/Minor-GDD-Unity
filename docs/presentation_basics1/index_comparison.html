@@ -284,14 +284,14 @@
 
         .view-interactive.active { display: flex; }
 
-        /* Inverted HR Red Slides (Section Dividers: Slides 3, 4, 15) */
+        /* Inverted HR Red Slides (Section Dividers: Slides 3, 4, 13) */
         .view-interactive.hr-inverted-slide {
             background: #d80041 !important;
             color: #ffffff !important;
         }
 
         .view-interactive.hr-inverted-slide .slide-header {
-            border-bottom: 2.5px solid #a00030 !important;
+            border-bottom: 2.5px solid rgba(255, 255, 255, 0.25) !important;
         }
 
         .view-interactive.hr-inverted-slide .slide-meta-badges {
@@ -306,7 +306,7 @@
 
         .view-interactive.hr-inverted-slide .content-card {
             background: #b50036 !important;
-            border: 1.5px solid #8c0029 !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
             border-left: 6px solid #ffffff !important;
             color: #ffffff !important;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
@@ -325,7 +325,7 @@
         }
 
         .view-interactive.hr-inverted-slide .slide-footer {
-            border-top: 1.5px solid #a00030 !important;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.25) !important;
         }
 
         .view-interactive.hr-inverted-slide .footer-brand-text {
@@ -541,6 +541,9 @@
             gap: 10px;
             justify-content: center;
             min-height: 0;
+            max-height: 100%;
+            overflow-y: auto;
+            padding-right: 4px;
         }
 
         .split-media-layout .right-column {
@@ -665,6 +668,92 @@
             font-size: clamp(0.72rem, 0.9vw, 0.9rem);
             color: #94a3b8;
             line-height: 1.35;
+        }
+
+        /* Top Progress Bar */
+        .deck-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--hr-red);
+            width: 0%;
+            transition: width 0.25s ease;
+            z-index: 1000;
+        }
+
+        /* Keyboard Shortcut Help Modal */
+        .help-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .help-modal-content {
+            background: #111726;
+            border: 1.5px solid #2e384d;
+            border-radius: 12px;
+            padding: 24px 28px;
+            max-width: 520px;
+            width: 90%;
+            color: #f8fafc;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+        }
+
+        .help-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1.5px solid #2e384d;
+            padding-bottom: 10px;
+        }
+
+        .help-modal-header h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--hr-red);
+        }
+
+        .help-close-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.6rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .help-close-btn:hover { color: #ffffff; }
+
+        .help-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .help-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        kbd {
+            background: #1e293b;
+            border: 1px solid #475569;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #38bdf8;
         }
 
         /* Clickable URLs & References */
@@ -1052,6 +1141,9 @@
         <!-- Presentation Viewport -->
         <div class="stage-area">
             <div class="slide-viewport" id="viewport">
+                <!-- Deck Progress Bar -->
+                <div class="deck-progress-bar" id="deckProgressBar"></div>
+
                 <!-- Original Full HD 1080p Rendered Slide -->
                 <img id="originalSlideImg" src="" alt="Original Keynote Slide">
 
@@ -1115,6 +1207,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
             <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
             <button class="nav-btn" id="btnFullscreen" onclick="toggleFullScreen()">Fullscreen [F]</button>
+            <button class="nav-btn" id="btnHelp" onclick="toggleHelpModal(true)">[?] Shortcuts</button>
         </div>
         
         <!-- View Size Toggle: Projector Mode (Core Only) vs Lab/Student Mode -->
@@ -1130,29 +1223,49 @@
         </div>
     </div>
 
+    <!-- Keyboard Shortcut Help Modal -->
+    <div id="helpModal" class="help-modal" style="display: none;" onclick="if(event.target===this) toggleHelpModal(false)">
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h3>Keyboard Shortcuts</h3>
+                <button class="help-close-btn" onclick="toggleHelpModal(false)">&times;</button>
+            </div>
+            <div class="help-grid">
+                <div class="help-row"><kbd>Space</kbd> / <kbd>Enter</kbd> / <kbd>&rarr;</kbd><span>Next Slide</span></div>
+                <div class="help-row"><kbd>&larr;</kbd><span>Previous Slide</span></div>
+                <div class="help-row"><kbd>M</kbd><span>Toggle Keynote vs Revised Unity 6</span></div>
+                <div class="help-row"><kbd>P</kbd><span>Toggle Lecture Mode vs Lab Mode</span></div>
+                <div class="help-row"><kbd>F</kbd><span>Toggle Fullscreen</span></div>
+                <div class="help-row"><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd><span>Filter Core / Advanced / Expert</span></div>
+                <div class="help-row"><kbd>0</kbd><span>Show All Tracks</span></div>
+                <div class="help-row"><kbd>?</kbd> / <kbd>H</kbd><span>Toggle This Shortcut Help</span></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const slideIds = [
             "4F337582-3DBF-4064-9E2D-1846DD3ED942", // Slide 1: Unity Basics 1 (Title)
-            "56771E00-0BB9-42F2-B423-9CC09DF229FA", // Slide 2: Dev Class Intro
-            "F2C07FCE-E0AF-49C7-AA54-CF7F166BAB52", // Slide 3: Overview (Part 1 & 2)
+            "56771E00-0BB9-42F2-B423-9CC09DF229FA", // Slide 2: Welcome & Course Tools
+            "F2C07FCE-E0AF-49C7-AA54-CF7F166BAB52", // Slide 3: Lesson Overview
             "B1A40B68-0F4A-4A02-8077-A16AA1B83040", // Slide 4: Part 1 Agenda
-            "EB5E7CF3-DA66-4043-8300-9376F2E3D204", // Slide 5: Github MGDD
-            "1D6DF70F-AFF1-401A-A138-A463A8FC4E1B", // Slide 6: Github Documentation
-            "52CB784F-5777-436F-94EB-C497FC4A675F", // Slide 7: Unity Startproject
-            "2C319609-B18C-4436-B2FC-4A183D25C6F1", // Slide 8: Unity Package Manager
-            "4D720535-647F-4990-89CC-CE1316DCEA7C", // Slide 9: Assignment StartProject
-            "E405F776-18E2-4934-A6A0-8569951CE0F3", // Slide 10: Rigidbody2D - Component
-            "1F345209-407B-4E00-8361-BFC58D33EC3E", // Slide 11: Rigidbody2D - Scripting
-            "9D8FEBD6-1F01-4647-85F8-36F9268E5034", // Slide 12: Unity Documentation
-            "D9869574-ECF8-4987-AA77-DC7B6C2B1852", // Slide 13: Unity Learn
-            "FF5F932E-FE66-4CE5-B9F8-3079B2F58805", // Slide 14: Script Lifecycle
-            "ABDA6BA3-37B6-4351-B8CD-2B13BE0473D9", // Slide 15: Part 2 Agenda
-            "66236B77-CB83-4F0A-8EAC-A1B4B260C1B1", // Slide 16: Component-based Workflow
-            "7ACB1906-13D3-4269-9ED6-C26BE902C38C", // Slide 17: Separation of Concerns
-            "D0C6749D-8C77-4609-996A-8E5343BF49B7", // Slide 18: Cinemachine 3 Camera
-            "99FDEC69-710D-4F21-932B-C32C7B1E8040", // Slide 19: Using Prefabs
-            "4B00CB36-1060-4A51-865D-62A35E3FAF80", // Slide 20: Coins & Destruction
-            "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
+            "EB5E7CF3-DA66-4043-8300-9376F2E3D204", // Slide 5: Course Files & Downloads
+            "1D6DF70F-AFF1-401A-A138-A463A8FC4E1B", // Slide 6: Course Guides & Resources
+            "52CB784F-5777-436F-94EB-C497FC4A675F", // Slide 7: Importing Starter Package
+            "2C319609-B18C-4436-B2FC-4A183D25C6F1", // Slide 8: Package Manager (Cinemachine)
+            "4D720535-647F-4990-89CC-CE1316DCEA7C", // Slide 9: Workshop Goals (4 Steps)
+            "E405F776-18E2-4934-A6A0-8569951CE0F3", // Slide 10: Rigidbody2D Component
+            "1F345209-407B-4E00-8361-BFC58D33EC3E", // Slide 11: Movement Scripting & Vector2
+            "FF5F932E-FE66-4CE5-B9F8-3079B2F58805", // Slide 12: Script Execution Order (Consecutive Technical Flow)
+            "ABDA6BA3-37B6-4351-B8CD-2B13BE0473D9", // Slide 13: Part 2 Agenda
+            "66236B77-CB83-4F0A-8EAC-A1B4B260C1B1", // Slide 14: Component Architecture
+            "7ACB1906-13D3-4269-9ED6-C26BE902C38C", // Slide 15: Separation of Concerns (Root vs Child)
+            "D0C6749D-8C77-4609-996A-8E5343BF49B7", // Slide 16: Cinemachine 3 Camera Setup
+            "99FDEC69-710D-4F21-932B-C32C7B1E8040", // Slide 17: Prefabs & Master Templates
+            "4B00CB36-1060-4A51-865D-62A35E3FAF80", // Slide 18: Collecting Coins & Triggers
+            "9D8FEBD6-1F01-4647-85F8-36F9268E5034", // Slide 19: Unity Manual & Documentation (Appendix)
+            "D9869574-ECF8-4987-AA77-DC7B6C2B1852", // Slide 20: Unity Learn & Video Guides (Appendix)
+            "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Troubleshooting & Discord Help
         ];
 
         // Content Matrix: Pure Full-Width Stacked Layouts & Proportional Split Media Canvases
@@ -1174,9 +1287,12 @@
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Code Editor: JetBrains Rider</div>
+                            <div class="card-title core">2. Code Editor & Language: C# + Rider</div>
                             <div class="card-body">
-                                <strong>JetBrains Rider</strong> (or Visual Studio): The text editor where we write C# scripts. It highlights mistakes and helps you write code faster.
+                                <ul>
+                                    <li><strong>C# (C-sharp):</strong> The friendly programming language we use to tell Unity what our game objects should do.</li>
+                                    <li><strong>JetBrains Rider</strong> (or Visual Studio): The text editor where we write code. It points out typos and helps you code faster.</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="content-card primary">
@@ -1186,7 +1302,7 @@
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] IDE Performance Profiling</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1195,7 +1311,7 @@
                             Rider highlights Unity performance warnings directly in code: GC allocations in <code>Update()</code>, inefficient <code>GetComponent()</code> calls, and string comparisons.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Custom Assembly Definitions (.asmdef)</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1218,19 +1334,21 @@
                                 <ul>
                                     <li>Downloading course files and packages from GitHub</li>
                                     <li>Importing starter assets into your Unity 2D scene</li>
-                                    <li>Adding Cinemachine for automatic camera follow</li>
-                                    <li>Completing the 4 workshop assignment steps</li>
+                                    <li>Giving your character physics gravity (Rigidbody2D)</li>
+                                    <li>Writing simple C# code to run and jump</li>
+                                    <li>Understanding how Unity runs your code in order</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Part 2: Character Movement & Collectibles</div>
+                            <div class="card-title" style="color:#ffffff;">Part 2: Gameplay Features & Documentation</div>
                             <div class="card-body">
                                 <ul>
-                                    <li>Giving your character physics gravity (Rigidbody2D)</li>
-                                    <li>Writing simple C# code to run and jump</li>
-                                    <li>Understanding how Unity runs your code in order</li>
-                                    <li>Making gold coins disappear when touched</li>
+                                    <li>Keeping character art separate from physics hitboxes</li>
+                                    <li>Adding Cinemachine for automatic smooth camera follow</li>
+                                    <li>Creating reusable master templates (Prefabs)</li>
+                                    <li>Making gold coins disappear on touch with triggers</li>
+                                    <li>Official documentation & troubleshooting guides</li>
                                 </ul>
                             </div>
                         </div>
@@ -1251,6 +1369,7 @@
                                     <li><strong>Documentation:</strong> Easy guides and ready-made code examples</li>
                                     <li><strong>Importing Packages:</strong> Loading the 2D starter scene into Unity</li>
                                     <li><strong>Camera Tool:</strong> Installing Cinemachine from Package Manager</li>
+                                    <li><strong>Workshop Goals:</strong> 4 clear milestone steps</li>
                                 </ul>
                             </div>
                         </div>
@@ -1259,9 +1378,8 @@
                             <div class="card-body">
                                 <ul>
                                     <li><strong>Rigidbody2D:</strong> Making objects fall and collide</li>
-                                    <li><strong>Movement Script:</strong> Moving left/right and jumping</li>
-                                    <li><strong>Unity Manual:</strong> Looking up how built-in tools work</li>
-                                    <li><strong>Code Order:</strong> When Unity runs Start, Update, and FixedUpdate</li>
+                                    <li><strong>Movement Script:</strong> Moving left/right and jumping with Vector2</li>
+                                    <li><strong>Script Lifecycle:</strong> When Unity runs Start, Update, and FixedUpdate</li>
                                 </ul>
                             </div>
                         </div>
@@ -1294,7 +1412,7 @@
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Git Clone & Feature Branching</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1307,7 +1425,7 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Git LFS & Binary Scene Merge Conflicts</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1342,7 +1460,7 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] ContextMenu Editor Testing</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1351,7 +1469,7 @@ git checkout -b feature/platformer-controller</pre>
                             Add <code>[ContextMenu("Trigger Test")]</code> above C# functions to trigger test behaviors via the Inspector context menu during runtime.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] SelectionBase & Custom Property Drawers</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1380,14 +1498,10 @@ git checkout -b feature/platformer-controller</pre>
                                     </ol>
                                 </div>
                             </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">What's in the Scene?</div>
+                            <div class="content-card primary" style="border-left-color: #f59e0b; background: #fffbeb;">
+                                <div class="card-title core" style="color: #d97706;">⚠️ Pro Tip: Play Mode Color Tint</div>
                                 <div class="card-body">
-                                    <ul>
-                                        <li><strong>Ground Platforms:</strong> Tilemap surfaces to stand on.</li>
-                                        <li><strong>Player Box:</strong> Starter character ready for your script.</li>
-                                        <li><strong>Collectibles:</strong> Gold coins waiting to be collected.</li>
-                                    </ul>
+                                    Never lose changes! In top menu: <code>Edit > Preferences > Colors > Playmode tint</code> &mdash; pick a light color so you instantly notice when the game is playing.
                                 </div>
                             </div>
                         </div>
@@ -1406,7 +1520,7 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Pixel Art Sprite Settings</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1415,7 +1529,7 @@ git checkout -b feature/platformer-controller</pre>
                             For crisp pixel art: Select sprites in Project View &rarr; Set <strong>Pixels Per Unit</strong> to 16 &rarr; <strong>Filter Mode: Point (no filter)</strong> &rarr; <strong>Compression: None</strong>.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Automated Asset Postprocessors</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1464,7 +1578,7 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Custom Input Action Assets</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1473,7 +1587,7 @@ git checkout -b feature/platformer-controller</pre>
                             Right-click in Project &rarr; <code>Create > Input Actions</code> to define custom Action Maps with bindings for keyboard, gamepad, and touch controls.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] C# Direct Action Subscriptions</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1484,7 +1598,7 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 9: Assignment StartProject (Split Media Layout)
+            // Slide 9: Assignment StartProject (Split Media Layout - 4 Steps)
             {
                 title: "Workshop Goals: 4 Clear Steps",
                 content: `
@@ -1503,9 +1617,15 @@ git checkout -b feature/platformer-controller</pre>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Step 3 & 4: Collect Coins & Test</div>
+                                <div class="card-title core">Step 3: Place Collectibles</div>
                                 <div class="card-body">
-                                    Place gold coins in the level, press Play, and collect them all without tipping over!
+                                    Place gold coin prefabs across the level with <code>Is Trigger</code> checked.
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Step 4: Playtest & Tune Feel</div>
+                                <div class="card-body">
+                                    Press Play, test your jumps, and collect all coins without tipping over!
                                 </div>
                             </div>
                         </div>
@@ -1524,7 +1644,7 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Feedback & Feel Polish</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1533,7 +1653,7 @@ git checkout -b feature/platformer-controller</pre>
                             Add a camera shake impulse when landing from high jumps, and instantiate a particle burst effect when collecting coins.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Score Event Channel (Decoupled)</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1581,6 +1701,11 @@ git checkout -b feature/platformer-controller</pre>
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="content-card primary" style="padding: 8px 12px; margin-top: 4px;">
+                                <div class="card-body" style="font-size: 0.85rem;">
+                                    💡 <strong>Inspector Tip:</strong> Changes made while the game is running (Play Mode) will reset when you press Stop!
+                                </div>
+                            </div>
                         </div>
                         <div class="right-column">
                             <div class="media-canvas ratio-portrait">
@@ -1597,7 +1722,7 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Frictionless Wall PhysicsMaterial2D</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1606,7 +1731,7 @@ git checkout -b feature/platformer-controller</pre>
                             Create a <code>PhysicsMaterial2D</code> with <strong>Friction: 0</strong> and attach to player collider so jumping against walls doesn't stick.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Vertical Terminal Velocity Clamping</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1624,26 +1749,29 @@ git checkout -b feature/platformer-controller</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
+                                <div class="card-title core">Understanding Vector2 Speed</div>
+                                <div class="card-body">
+                                    <strong>Vector2:</strong> A pair of numbers <code>(X, Y)</code> representing 2D direction and speed:
+                                    <ul>
+                                        <li><strong><code>X</code></strong> = Left / Right movement speed</li>
+                                        <li><strong><code>Y</code></strong> = Up / Down jumping speed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
                                 <div class="card-title core">The Movement Code</div>
                                 <div class="code-box">
-                                    <pre>// Left/Right Speed in FixedUpdate
+                                    <pre>// Horizontal Speed in FixedUpdate
+// Unity 6 linearVelocity (formerly .velocity in older tutorials)
+// moveInput & jumpRequested come from the PlayerInput component
 rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
-// Jump Impulse Boost
+// Jump Boost
 if (jumpRequested) {
     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     jumpRequested = false;
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">Two Simple Rules</div>
-                                <div class="card-body">
-                                    <ul>
-                                        <li><strong>Change velocity, not position:</strong> Let Unity physics slide and bounce the character naturally.</li>
-                                        <li><strong>Put physics in <code>FixedUpdate()</code>:</strong> Ensures the character moves at the exact same speed on every computer.</li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -1662,7 +1790,7 @@ if (jumpRequested) {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Variable Jump Cut (Releasing Jump Early)</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1676,7 +1804,7 @@ if (jumpRequested) {
                             </div>
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Acceleration & Deceleration Smoothing Curves</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1693,89 +1821,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                     </details>
                 `
             },
-            // Slide 12: Documentation
-            {
-                title: "Where to Look Up Answers",
-                content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">1. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/index.html" target="_blank" rel="noopener noreferrer">Unity Manual [link]</a> (How Things Work)</div>
-                            <div class="card-body">
-                                High-level guides explaining concepts in plain words: how 2D physics work, setting up cameras, and creating user interfaces.
-                            </div>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">2. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/ScriptReference/index.html" target="_blank" rel="noopener noreferrer">Script Reference [link]</a> (Code Dictionary)</div>
-                            <div class="card-body">
-                                A dictionary of every C# command in Unity. Shows you exactly what code to write with clear code examples.
-                            </div>
-                        </div>
-                    </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
-                        <summary class="accordion-header">
-                            <span>[Advanced] Reading API Return Signatures</span>
-                            <span style="font-size:0.75rem;">Expand ▼</span>
-                        </summary>
-                        <div class="accordion-body">
-                            Methods like <code>Physics2D.Raycast</code> return a <code>RaycastHit2D</code> struct containing <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code>.
-                        </div>
-                    </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
-                        <summary class="accordion-header">
-                            <span>[Expert] Inspecting Open-Source Unity C# Engine Source</span>
-                            <span style="font-size:0.75rem;">Expand ▼</span>
-                        </summary>
-                        <div class="accordion-body">
-                            Inspect <a class="slide-url" href="https://github.com/Unity-Technologies/UnityCsReference" target="_blank" rel="noopener noreferrer">Unity's open-source C# repo on GitHub</a> to see the internal implementation of <code>MonoBehaviour</code>, <code>Transform</code>, and <code>Physics2D</code>.
-                        </div>
-                    </details>
-                `
-            },
-            // Slide 13: Unity Learn
-            {
-                title: "Extra Tutorials & Video Guides",
-                content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">1. <a class="slide-url" href="https://learn.unity.com/" target="_blank" rel="noopener noreferrer">Unity Learn Track [link]</a></div>
-                            <div class="card-body">
-                                Official interactive beginner courses provided for free by Unity. Great for extra practice at home.
-                            </div>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">2. Course Video Tutorials (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/main/docs/00_tutorials.md" target="_blank" rel="noopener noreferrer">00_tutorials.md</a>)</div>
-                            <div class="card-body">
-                                Step-by-step video recordings made specifically for our course lessons and assignments.
-                            </div>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">3. Helpful YouTube Creators</div>
-                            <div class="card-body">
-                                Check out <strong>Tarodev</strong> (how to make platformer jumps feel good) and <strong>Infallible Code</strong> (how to keep code clean).
-                            </div>
-                        </div>
-                    </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
-                        <summary class="accordion-header">
-                            <span>[Advanced] Recommended Game Feel Talks</span>
-                            <span style="font-size:0.75rem;">Expand ▼</span>
-                        </summary>
-                        <div class="accordion-body">
-                            Watch "Juice It or Lose It" (Martin Jonasson & Petri Purho) and "The Art of Screenshake" (Jan Willem Nijman / Vlambeer).
-                        </div>
-                    </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
-                        <summary class="accordion-header">
-                            <span>[Expert] Clean Architecture & Dependency Injection</span>
-                            <span style="font-size:0.75rem;">Expand ▼</span>
-                        </summary>
-                        <div class="accordion-body">
-                            Explore VContainer and Zenject for inversion of control and decoupled testable service injection in Unity.
-                        </div>
-                    </details>
-                `
-            },
-            // Slide 14: Script Lifecycle (Split Media Layout - 4:3 Flowchart)
+            // Slide 12: Script Lifecycle (Moved for technical continuity)
             {
                 title: "How Unity Runs Your Code Step-by-Step",
                 content: `
@@ -1814,7 +1860,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Custom Script Execution Order Settings</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1823,7 +1869,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             In <code>Project Settings > Script Execution Order</code>, configure Manager scripts to run at <code>-100</code> before character controllers execute.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Zero-Allocation YieldInstruction Caching</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1834,7 +1880,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                     </details>
                 `
             },
-            // Slide 15: Part 2 Agenda (Inverted HR Red Slide)
+            // Slide 13: Part 2 Agenda (Inverted HR Red Slide)
             {
                 isInverted: true,
                 title: "Part 2 Agenda",
@@ -1846,25 +1892,25 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                                 <ul>
                                     <li><strong>RequireComponent:</strong> Automatically adding required physics tools</li>
                                     <li><strong>Root vs Child:</strong> Keeping invisible hitboxes separate from character pictures</li>
-                                    <li><strong>Finding Objects:</strong> How scripts talk to other components</li>
+                                    <li><strong>Finding Objects:</strong> How scripts safely communicate</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Gameplay Elements</div>
+                            <div class="card-title" style="color:#ffffff;">Gameplay Elements & Reference</div>
                             <div class="card-body">
                                 <ul>
                                     <li><strong>Smooth Camera:</strong> Setting up Cinemachine to follow the player</li>
                                     <li><strong>Prefabs:</strong> Making master templates for reusable coins and enemies</li>
                                     <li><strong>Collectibles:</strong> Making coins disappear and score points on touch</li>
-                                    <li><strong>Discord Help:</strong> Where to get quick assistance</li>
+                                    <li><strong>Appendix:</strong> Unity manual, video tutorials & Discord help</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 `
             },
-            // Slide 16: Component-Based Workflow
+            // Slide 14: Component-Based Workflow
             {
                 title: "Automatic Component Safety",
                 content: `
@@ -1890,7 +1936,7 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Safe TryGetComponent Syntax</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1904,7 +1950,7 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Custom Inspector GUI with Play Mode Buttons</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1915,7 +1961,7 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 17: Separation of Concerns (Split Media Layout - 16:9 GIF)
+            // Slide 15: Separation of Concerns (Split Media Layout - 16:9 GIF)
             {
                 title: "Keeping Art and Physics Separate",
                 content: `
@@ -1952,7 +1998,7 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Squash & Stretch Jump Animations</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1961,7 +2007,7 @@ public class PlayerController2D : MonoBehaviour {
                             Scale the child <code>Graphics</code> Transform (e.g. <code>Vector3(0.8f, 1.2f, 1f)</code>) on takeoff without deforming the physics box collider on Root.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Attachment Sockets Pattern</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -1972,7 +2018,7 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 18: Cinemachine 3 (Split Media Layout - 16:9 GIF)
+            // Slide 16: Cinemachine 3 (Split Media Layout - 16:9 GIF)
             {
                 title: "Setting Up Smooth Camera Follow",
                 content: `
@@ -2011,7 +2057,7 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Predictive Lookahead Framing</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2020,7 +2066,7 @@ public class PlayerController2D : MonoBehaviour {
                             Set <strong>Lookahead Time</strong> to <code>0.2s</code> and <strong>Lookahead Smoothing</strong> to <code>5</code> so the camera pans ahead in movement direction.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Cinemachine Impulse Shake on Landings</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2031,7 +2077,7 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 19: Using Prefabs
+            // Slide 17: Using Prefabs
             {
                 title: "Prefabs: Master Reusable Templates",
                 content: `
@@ -2055,7 +2101,7 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Prefab Variants Workflow</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2064,7 +2110,7 @@ public class PlayerController2D : MonoBehaviour {
                             Right-click base <code>Coin_Base</code> &rarr; <code>Create > Prefab Variant</code> to create <code>GoldCoin</code> (10 pts) and <code>GemCoin</code> (50 pts) inheriting all base behaviors.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Nested Prefabs in Team Environments</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2075,7 +2121,7 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 20: Coins & Destruction (Split Media Layout - 16:9 GIF)
+            // Slide 18: Coins & Destruction (Split Media Layout - 16:9 GIF)
             {
                 title: "Collecting Coins on Touch",
                 content: `
@@ -2087,7 +2133,8 @@ public class PlayerController2D : MonoBehaviour {
                                     <pre>public class Coin : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player")) {
-            Destroy(gameObject); // Disappears!
+            // Trigger fires because Player has Rigidbody2D!
+            Destroy(gameObject); // Coin disappears!
         }
     }
 }</pre>
@@ -2095,11 +2142,12 @@ public class PlayerController2D : MonoBehaviour {
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Two Checklist Items</div>
+                                <div class="card-title core">Trigger Checklist</div>
                                 <div class="card-body">
                                     <ul>
                                         <li><strong>Check <code>Is Trigger</code> on Coin:</strong> Allows player to walk through the coin without bumping into a solid wall.</li>
-                                        <li><strong>Set Player Tag to "Player":</strong> So the coin knows it was touched by the player, not an enemy.</li>
+                                        <li><strong>Player has Rigidbody2D + "Player" Tag:</strong> At least one object must have a <code>Rigidbody2D</code> for <code>OnTriggerEnter2D</code> to run!</li>
+                                        <li><em>Next lesson: We'll connect this to an on-screen score counter!</em></li>
                                     </ul>
                                 </div>
                             </div>
@@ -2119,7 +2167,7 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Audio Playback Before GameObject Destruction</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2128,7 +2176,7 @@ public class PlayerController2D : MonoBehaviour {
                             <code>Destroy(gameObject)</code> instantly terminates AudioSources! Use <code>AudioSource.PlayClipAtPoint(clip, transform.position);</code> or disable <code>SpriteRenderer</code> first.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Unity Object Pool Pattern (Zero Garbage Collection)</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2142,6 +2190,88 @@ private ObjectPool<GameObject> coinPool;
 coinPool.Release(gameObject);</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
+                        </div>
+                    </details>
+                `
+            },
+            // Slide 19: Documentation (Appendix)
+            {
+                title: "Unity Manual & API Reference",
+                content: `
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">1. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/index.html" target="_blank" rel="noopener noreferrer">Unity Manual [link]</a> (How Things Work)</div>
+                            <div class="card-body">
+                                High-level guides explaining concepts in plain words: how 2D physics work, setting up cameras, and creating user interfaces.
+                            </div>
+                        </div>
+                        <div class="content-card primary">
+                            <div class="card-title core">2. <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/ScriptReference/index.html" target="_blank" rel="noopener noreferrer">Script Reference [link]</a> (Code Dictionary)</div>
+                            <div class="card-body">
+                                A dictionary of every C# command in Unity. Shows you exactly what code to write with clear code examples.
+                            </div>
+                        </div>
+                    </div>
+                    <details class="tier-accordion adv">
+                        <summary class="accordion-header">
+                            <span>[Advanced] Reading API Return Signatures</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Methods like <code>Physics2D.Raycast</code> return a <code>RaycastHit2D</code> struct containing <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code>.
+                        </div>
+                    </details>
+                    <details class="tier-accordion exp">
+                        <summary class="accordion-header">
+                            <span>[Expert] Inspecting Open-Source Unity C# Engine Source</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Inspect <a class="slide-url" href="https://github.com/Unity-Technologies/UnityCsReference" target="_blank" rel="noopener noreferrer">Unity's open-source C# repo on GitHub</a> to see the internal implementation of <code>MonoBehaviour</code>, <code>Transform</code>, and <code>Physics2D</code>.
+                        </div>
+                    </details>
+                `
+            },
+            // Slide 20: Unity Learn (Appendix)
+            {
+                title: "Extra Tutorials & Video Guides",
+                content: `
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">1. <a class="slide-url" href="https://learn.unity.com/" target="_blank" rel="noopener noreferrer">Unity Learn Track [link]</a></div>
+                            <div class="card-body">
+                                Official interactive beginner courses provided for free by Unity. Great for extra practice at home.
+                            </div>
+                        </div>
+                        <div class="content-card primary">
+                            <div class="card-title core">2. Course Video Tutorials (<a class="slide-url" href="https://github.com/HR-CMGT/Minor-GDD-Unity/blob/master/docs/00_tutorials.md" target="_blank" rel="noopener noreferrer">00_tutorials.md</a>)</div>
+                            <div class="card-body">
+                                Step-by-step video recordings made specifically for our course lessons and assignments.
+                            </div>
+                        </div>
+                        <div class="content-card primary">
+                            <div class="card-title core">3. Helpful YouTube Creators</div>
+                            <div class="card-body">
+                                Check out <strong>Tarodev</strong> (how to make platformer jumps feel good) and <strong>Infallible Code</strong> (how to keep code clean).
+                            </div>
+                        </div>
+                    </div>
+                    <details class="tier-accordion adv">
+                        <summary class="accordion-header">
+                            <span>[Advanced] Recommended Game Feel Talks</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Watch "Juice It or Lose It" (Martin Jonasson & Petri Purho) and "The Art of Screenshake" (Jan Willem Nijman / Vlambeer).
+                        </div>
+                    </details>
+                    <details class="tier-accordion exp">
+                        <summary class="accordion-header">
+                            <span>[Expert] Clean Architecture & Dependency Injection</span>
+                            <span style="font-size:0.75rem;">Expand ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Explore VContainer and Zenject for inversion of control and decoupled testable service injection in Unity.
                         </div>
                     </details>
                 `
@@ -2194,7 +2324,7 @@ coinPool.Release(gameObject);</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion adv" id="tierAdvBlock">
+                    <details class="tier-accordion adv">
                         <summary class="accordion-header">
                             <span>[Advanced] Visual Raycast Debugging in Scene View</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2203,7 +2333,7 @@ coinPool.Release(gameObject);</pre>
                             Draw live gizmo rays in Scene View: <code>Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.green);</code>.
                         </div>
                     </details>
-                    <details class="tier-accordion exp" id="tierExpBlock">
+                    <details class="tier-accordion exp">
                         <summary class="accordion-header">
                             <span>[Expert] Frame-by-Frame Editor Breakpoint Execution</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
@@ -2244,7 +2374,19 @@ coinPool.Release(gameObject);</pre>
                 drawer.appendChild(item);
             });
 
-            updateView();
+            // Read starting slide from URL hash if present (#slide-5)
+            let startSlide = 0;
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#slide-')) {
+                const parsed = parseInt(hash.replace('#slide-', ''), 10);
+                if (!isNaN(parsed) && parsed >= 1 && parsed <= slideIds.length) {
+                    startSlide = parsed - 1;
+                }
+            }
+
+            setViewMode('projector');
+            setMode(true);
+            goToSlide(startSlide);
         }
 
         function setViewMode(mode) {
@@ -2288,6 +2430,11 @@ coinPool.Release(gameObject);</pre>
             }
         });
 
+        function toggleHelpModal(show) {
+            const modal = document.getElementById("helpModal");
+            modal.style.display = show ? "flex" : "none";
+        }
+
         function setTierFilter(tier) {
             currentTier = tier;
             
@@ -2305,8 +2452,8 @@ coinPool.Release(gameObject);</pre>
         }
 
         function applyTierVisibility() {
-            const advBlocks = document.querySelectorAll('#tierAdvBlock');
-            const expBlocks = document.querySelectorAll('#tierExpBlock');
+            const advBlocks = document.querySelectorAll('.tier-accordion.adv');
+            const expBlocks = document.querySelectorAll('.tier-accordion.exp');
 
             if (currentViewMode === 'projector') {
                 return;
@@ -2317,7 +2464,6 @@ coinPool.Release(gameObject);</pre>
                     el.style.display = 'none';
                     el.open = false;
                 } else if (currentTier === 'adv' || currentTier === 'exp' || currentTier === 'all') {
-                    // Show Advanced on both Advanced, Expert, and All Tracks
                     el.style.display = 'block';
                     el.open = true;
                 }
@@ -2328,7 +2474,6 @@ coinPool.Release(gameObject);</pre>
                     el.style.display = 'none';
                     el.open = false;
                 } else if (currentTier === 'exp' || currentTier === 'all') {
-                    // Show Expert on Expert and All Tracks
                     el.style.display = 'block';
                     el.open = true;
                 }
@@ -2377,11 +2522,18 @@ coinPool.Release(gameObject);</pre>
             currentSlide = index;
             document.getElementById(`drawer-${currentSlide}`).classList.add("active");
 
-            document.getElementById(`drawer-${currentSlide}`).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            document.getElementById(`drawer-${currentSlide}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             document.getElementById("prevBtn").disabled = (currentSlide === 0);
             document.getElementById("nextBtn").disabled = (currentSlide === slideIds.length - 1);
             document.getElementById("slideCounter").textContent = `Slide ${currentSlide + 1} / ${slideIds.length}`;
+
+            // Update Progress Bar
+            const progress = (currentSlide / (slideIds.length - 1)) * 100;
+            document.getElementById("deckProgressBar").style.width = `${progress}%`;
+
+            // Update URL Hash for direct slide linking
+            window.location.hash = `slide-${currentSlide + 1}`;
 
             renderCurrentSlide();
         }
@@ -2424,20 +2576,15 @@ coinPool.Release(gameObject);</pre>
             goToSlide(currentSlide + direction);
         }
 
-        function updateView() {
-            setViewMode('projector');
-            setMode(true);
-            goToSlide(0);
-        }
-
         function copyCode(btn) {
             const pre = btn.previousElementSibling;
             if (pre) {
+                const originalText = btn.textContent;
                 navigator.clipboard.writeText(pre.innerText).then(() => {
                     btn.textContent = "Copied!";
                     btn.classList.add("copied");
                     setTimeout(() => {
-                        btn.textContent = "Copy";
+                        btn.textContent = originalText;
                         btn.classList.remove("copied");
                     }, 1800);
                 });
@@ -2447,10 +2594,10 @@ coinPool.Release(gameObject);</pre>
         document.addEventListener("keydown", (e) => {
             if (e.key === "ArrowLeft") {
                 changeSlide(-1);
-            } else if (e.key === "ArrowRight") {
-                changeSlide(1);
-            } else if (e.key === " ") {
+            } else if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") {
                 e.preventDefault();
+                changeSlide(1);
+            } else if (e.key.toLowerCase() === "m") {
                 setMode(!isNewMode);
             } else if (e.key.toLowerCase() === "f") {
                 toggleFullScreen();
@@ -2464,6 +2611,11 @@ coinPool.Release(gameObject);</pre>
                 setTierFilter('exp');
             } else if (e.key === "0") {
                 setTierFilter('all');
+            } else if (e.key === "?" || e.key.toLowerCase() === "h") {
+                const modal = document.getElementById("helpModal");
+                toggleHelpModal(modal.style.display === "none");
+            } else if (e.key === "Escape") {
+                toggleHelpModal(false);
             }
         });
 
