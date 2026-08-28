@@ -30,6 +30,7 @@
 
             --code-bg: #090d16;
             --accent-old: #f43f5e;
+            --lecture-font-scale: 1.0;
         }
 
         * {
@@ -548,7 +549,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(1.05rem, 2.5cqh, 1.55rem);
+            font-size: clamp(1.10rem, 2.7cqh, 1.65rem);
             margin-bottom: 0.5cqh;
             transition: font-size 0.15s ease;
             line-height: 1.25;
@@ -556,7 +557,7 @@
         }
 
         .content-stack .card-title {
-            font-size: clamp(1.15rem, 2.8cqh, 1.75rem);
+            font-size: clamp(1.20rem, 3.0cqh, 1.85rem);
             margin-bottom: 0.6cqh;
         }
 
@@ -565,16 +566,16 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.95rem, 2.2cqh, 1.35rem);
-            line-height: 1.52;
+            font-size: clamp(1.00rem, 2.35cqh, 1.42rem);
+            line-height: 1.55;
             color: #1e293b;
             font-weight: 500;
             transition: font-size 0.15s ease;
         }
 
         .content-stack .card-body {
-            font-size: clamp(1.05rem, 2.4cqh, 1.50rem);
-            line-height: 1.58;
+            font-size: clamp(1.10rem, 2.55cqh, 1.55rem);
+            line-height: 1.60;
         }
 
         .card-body ul, .card-body ol {
@@ -983,9 +984,9 @@
             white-space: pre-wrap;
             word-break: break-word;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.85rem, 2.1cqh, 1.20rem);
-            line-height: 1.40;
-            padding: 1.0cqh 1.4cqw;
+            font-size: clamp(0.90rem, 2.2cqh, 1.25rem);
+            line-height: 1.42;
+            padding: 1.0cqh 1.5cqw;
             border-radius: 8px;
             margin: 0;
         }
@@ -1025,21 +1026,21 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.80rem, 2.0cqh, 1.15rem);
-            padding: 0.6cqh 1.0cqw;
+            font-size: clamp(0.85rem, 2.15cqh, 1.20rem);
+            padding: 0.7cqh 1.1cqw;
             display: table-cell !important;
             vertical-align: middle;
-            line-height: 1.20;
+            line-height: 1.22;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.76rem, 1.85cqh, 1.05rem);
-            padding: 0.6cqh 1.0cqw;
+            font-size: clamp(0.80rem, 2.0cqh, 1.12rem);
+            padding: 0.7cqh 1.1cqw;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.28;
+            line-height: 1.34;
             display: table-cell !important;
             vertical-align: middle;
             word-wrap: break-word;
@@ -1213,8 +1214,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.90rem, 2.1cqh, 1.25rem);
-            padding: 0.7cqh 1.4cqw;
+            font-size: clamp(0.95rem, 2.2cqh, 1.30rem);
+            padding: 0.8cqh 1.5cqw;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -1224,88 +1225,17 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.85rem, 1.9cqh, 1.18rem);
-            padding: 0.9cqh 1.4cqw;
-            line-height: 1.45;
+            font-size: clamp(0.90rem, 2.0cqh, 1.22rem);
+            padding: 1.0cqh 1.5cqw;
+            line-height: 1.50;
             overflow: hidden;
         }
 
         .accordion-body pre {
-            font-size: clamp(0.78rem, 1.8cqh, 1.08rem);
+            font-size: clamp(0.82rem, 1.9cqh, 1.12rem);
             padding: 0.8cqh 1.2cqw;
-            line-height: 1.35;
-            margin: 0.4cqh 0;
-        }
-
-        /* GENTLE AUTO-COMPACTING ONLY WHEN ACCORDIONS ARE EXPANDED (Zero Scrolling & Crisp Text) */
-        .slide-content-area:has(details.tier-accordion[open]),
-        body.has-open-accordions .slide-content-area {
-            gap: 0.8cqh;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .content-card,
-        body.has-open-accordions .content-card {
-            padding: 1.0cqh 1.4cqw;
-            border-radius: 8px;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .card-title,
-        body.has-open-accordions .card-title {
-            font-size: clamp(0.92rem, 2.1cqh, 1.35rem);
-            margin-bottom: 0.3cqh;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .card-body,
-        body.has-open-accordions .card-body {
-            font-size: clamp(0.82rem, 1.85cqh, 1.15rem);
             line-height: 1.38;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .card-body ul,
-        .slide-content-area:has(details.tier-accordion[open]) .card-body ol,
-        body.has-open-accordions .card-body ul,
-        body.has-open-accordions .card-body ol {
-            padding-left: 1.8cqw;
-            margin-top: 0.2cqh;
-            margin-bottom: 0.2cqh;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .card-body li,
-        body.has-open-accordions .card-body li {
-            margin-bottom: 0.25cqh;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .split-media-layout,
-        body.has-open-accordions .split-media-layout {
-            gap: 1.4cqw;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .split-media-layout .left-column,
-        body.has-open-accordions .split-media-layout .left-column {
-            gap: 0.8cqh;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) pre,
-        body.has-open-accordions pre {
-            font-size: clamp(0.74rem, 1.70cqh, 1.00rem);
-            padding: 0.6cqh 1.0cqw;
-            line-height: 1.30;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) table.dense-table th,
-        .slide-content-area:has(details.tier-accordion[open]) table.dense-table td,
-        body.has-open-accordions table.dense-table th,
-        body.has-open-accordions table.dense-table td {
-            padding: 0.4cqh 0.8cqw;
-            font-size: clamp(0.72rem, 1.70cqh, 0.98rem);
-            line-height: 1.20;
-        }
-
-        .slide-content-area:has(details.tier-accordion[open]) .accordion-body,
-        body.has-open-accordions .accordion-body {
-            padding: 0.7cqh 1.2cqw;
-            font-size: clamp(0.78rem, 1.75cqh, 1.05rem);
-            line-height: 1.32;
+            margin: 0.4cqh 0;
         }
 
         /* ==========================================================================
@@ -1321,14 +1251,14 @@
         }
 
         body.projector-mode .hero-tag-badge {
-            font-size: clamp(1.8rem, 4.5cqh, 3.2rem);
+            font-size: calc(clamp(1.8rem, 4.5cqh, 3.2rem) * var(--lecture-font-scale, 1.0));
             padding: 1.2cqh 2.8cqw;
             border-radius: 10px;
             letter-spacing: -0.5px;
         }
 
         body.projector-mode .hero-sub {
-            font-size: clamp(1.15rem, 2.6cqh, 1.8rem);
+            font-size: calc(clamp(1.15rem, 2.6cqh, 1.8rem) * var(--lecture-font-scale, 1.0));
             font-weight: 800;
             margin-bottom: 0.5cqh;
         }
@@ -1343,18 +1273,18 @@
         }
 
         body.projector-mode .hero-pill-title {
-            font-size: clamp(1.0rem, 2.4cqh, 1.45rem);
+            font-size: calc(clamp(1.0rem, 2.4cqh, 1.45rem) * var(--lecture-font-scale, 1.0));
             margin-bottom: 0.3cqh;
         }
 
         body.projector-mode .hero-pill-desc {
-            font-size: clamp(0.90rem, 2.0cqh, 1.25rem);
+            font-size: calc(clamp(0.90rem, 2.0cqh, 1.25rem) * var(--lecture-font-scale, 1.0));
             line-height: 1.45;
         }
 
         /* Standard Slides in Lecture Mode */
         body.projector-mode .slide-title-banner {
-            font-size: clamp(1.3rem, 3.2cqh, 2.2rem);
+            font-size: calc(clamp(1.3rem, 3.2cqh, 2.2rem) * var(--lecture-font-scale, 1.0));
             padding: 0.8cqh 2.2cqw;
             border-radius: 8px;
         }
@@ -1385,23 +1315,23 @@
         }
 
         body.projector-mode .content-stack .card-title {
-            font-size: clamp(1.25rem, 3.2cqh, 2.0rem);
+            font-size: calc(clamp(1.25rem, 3.2cqh, 2.0rem) * var(--lecture-font-scale, 1.0));
             margin-bottom: 0.8cqh;
             letter-spacing: 0.5px;
         }
 
         body.projector-mode .content-stack:has(.content-card:nth-child(3)) .card-title {
-            font-size: clamp(1.10rem, 2.6cqh, 1.65rem);
+            font-size: calc(clamp(1.10rem, 2.6cqh, 1.65rem) * var(--lecture-font-scale, 1.0));
             margin-bottom: 0.4cqh;
         }
 
         body.projector-mode .content-stack .card-body {
-            font-size: clamp(1.10rem, 2.6cqh, 1.65rem);
+            font-size: calc(clamp(1.10rem, 2.6cqh, 1.65rem) * var(--lecture-font-scale, 1.0));
             line-height: 1.6;
         }
 
         body.projector-mode .content-stack:has(.content-card:nth-child(3)) .card-body {
-            font-size: clamp(0.98rem, 2.2cqh, 1.40rem);
+            font-size: calc(clamp(0.98rem, 2.2cqh, 1.40rem) * var(--lecture-font-scale, 1.0));
             line-height: 1.48;
         }
 
@@ -1438,29 +1368,29 @@
         }
 
         body.projector-mode .split-media-layout .card-title {
-            font-size: clamp(1.15rem, 2.8cqh, 1.75rem);
+            font-size: calc(clamp(1.15rem, 2.8cqh, 1.75rem) * var(--lecture-font-scale, 1.0));
             margin-bottom: 0.4cqh;
         }
 
         body.projector-mode .split-media-layout .card-body {
-            font-size: clamp(1.02rem, 2.3cqh, 1.45rem);
+            font-size: calc(clamp(1.02rem, 2.3cqh, 1.45rem) * var(--lecture-font-scale, 1.0));
             line-height: 1.55;
         }
 
         body.projector-mode pre {
-            font-size: clamp(0.85rem, 2.1cqh, 1.25rem);
+            font-size: calc(clamp(0.88rem, 2.2cqh, 1.28rem) * var(--lecture-font-scale, 1.0));
             padding: 0.9cqh 1.3cqw;
             line-height: 1.38;
         }
 
         body.projector-mode table.dense-table th {
-            font-size: clamp(0.80rem, 2.0cqh, 1.15rem);
+            font-size: calc(clamp(0.84rem, 2.1cqh, 1.20rem) * var(--lecture-font-scale, 1.0));
             padding: 0.55cqh 0.9cqw;
             display: table-cell !important;
         }
 
         body.projector-mode table.dense-table td {
-            font-size: clamp(0.76rem, 1.85cqh, 1.05rem);
+            font-size: calc(clamp(0.80rem, 1.95cqh, 1.10rem) * var(--lecture-font-scale, 1.0));
             padding: 0.55cqh 0.9cqw;
             display: table-cell !important;
         }
@@ -1684,9 +1614,17 @@
         </div>
         
         <!-- View Size Toggle: Projector Mode (Core Only) vs Lab/Student Mode -->
-        <div class="viewmode-toggle">
-            <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode (Core)</button>
-            <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode (+Advanced & Expert)</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="viewmode-toggle">
+                <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode (Core)</button>
+                <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode (+Advanced & Expert)</button>
+            </div>
+            
+            <div class="lecture-scale-wrap" id="lectureScaleWrap" style="display: flex; align-items: center; gap: 7px; background: #14141e; border: 1px solid #2c2c3e; padding: 3px 10px; border-radius: 6px;" title="Scale Lecture Text Size">
+                <span style="font-size: 0.68rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Text Size:</span>
+                <input type="range" id="lectureFontSlider" min="80" max="160" value="100" step="5" oninput="setLectureScale(this.value)" style="width: 80px; accent-color: var(--hr-red); cursor: pointer;">
+                <span id="lectureScaleVal" style="font-size: 0.72rem; font-weight: 800; color: #38bdf8; min-width: 32px;">100%</span>
+            </div>
         </div>
 
         <div style="display: flex; align-items: center; gap: 14px;">
@@ -2921,9 +2859,27 @@ coinPool.Release(gameObject);</pre>
                 }
             }
 
+            const savedScale = localStorage.getItem('hr_lecture_scale');
+            if (savedScale) {
+                setLectureScale(parseInt(savedScale, 10));
+            } else {
+                setLectureScale(100);
+            }
+
             setViewMode('projector');
             setMode(true);
             goToSlide(startSlide);
+        }
+
+        function setLectureScale(val) {
+            const scale = (val / 100).toFixed(2);
+            document.documentElement.style.setProperty('--lecture-font-scale', scale);
+            const label = document.getElementById('lectureScaleVal');
+            if (label) label.textContent = `${val}%`;
+            const slider = document.getElementById('lectureFontSlider');
+            if (slider) slider.value = val;
+            localStorage.setItem('hr_lecture_scale', val);
+            autoFitSlideElements();
         }
 
         function setViewMode(mode) {
@@ -2992,14 +2948,9 @@ coinPool.Release(gameObject);</pre>
             const accordions = document.querySelectorAll('details.tier-accordion');
             accordions.forEach(acc => {
                 acc.ontoggle = () => {
-                    const anyOpen = Array.from(document.querySelectorAll('details.tier-accordion')).some(a => a.open && a.style.display !== 'none');
-                    document.body.classList.toggle('has-open-accordions', anyOpen);
                     autoFitSlideElements();
                 };
             });
-            const anyOpen = Array.from(accordions).some(a => a.open && a.style.display !== 'none');
-            document.body.classList.toggle('has-open-accordions', anyOpen);
-            autoFitSlideElements();
         }
 
         function autoFitSlideElements() {
