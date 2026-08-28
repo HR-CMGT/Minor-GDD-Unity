@@ -796,9 +796,9 @@
         [data-glossary] {
             cursor: help !important;
             font-weight: 800;
-            border-bottom: 2px dotted #0284c7 !important;
-            text-underline-offset: 3px;
-            transition: all 0.15s ease;
+            border-bottom: 1.5px dotted #0284c7 !important;
+            text-underline-offset: 2px;
+            transition: color 0.15s ease, border-color 0.15s ease;
             display: inline;
         }
 
@@ -808,8 +808,7 @@
         [data-glossary]:focus {
             color: var(--hr-red) !important;
             border-bottom-color: var(--hr-red) !important;
-            background: rgba(226, 0, 73, 0.08);
-            border-radius: 3px;
+            background: transparent !important;
             outline: none;
         }
 
@@ -937,11 +936,13 @@
 
         /* Tables (Branded HR Header) */
         table.dense-table {
-            width: 100%;
-            border-collapse: collapse;
+            width: 100% !important;
+            display: table !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
             border-radius: 6px;
             overflow: hidden;
-            margin: 2px 0;
+            margin: 0;
         }
 
         table.dense-table th {
@@ -950,18 +951,24 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.92rem, 1.15vw, 1.20rem);
-            padding: 8px 14px;
+            font-size: clamp(0.80rem, 0.98vw, 1.05rem);
+            padding: 6px 10px;
+            display: table-cell !important;
+            vertical-align: middle;
+            line-height: 1.25;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.88rem, 1.08vw, 1.12rem);
-            padding: 8px 14px;
+            font-size: clamp(0.78rem, 0.92vw, 0.98rem);
+            padding: 6px 10px;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.45;
+            line-height: 1.35;
+            display: table-cell !important;
+            vertical-align: middle;
+            word-wrap: break-word;
         }
 
         table.dense-table tr:nth-child(even) td {
@@ -1179,13 +1186,15 @@
         }
 
         body.projector-mode table.dense-table th {
-            font-size: clamp(1.15rem, 1.55vw, 1.6rem);
-            padding: 12px 18px;
+            font-size: clamp(0.88rem, 1.10vw, 1.20rem);
+            padding: 8px 12px;
+            display: table-cell !important;
         }
 
         body.projector-mode table.dense-table td {
-            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
-            padding: 12px 18px;
+            font-size: clamp(0.84rem, 1.02vw, 1.10rem);
+            padding: 8px 12px;
+            display: table-cell !important;
         }
 
         body.projector-mode .media-placeholder-title {
@@ -1859,6 +1868,11 @@ git checkout -b feature/platformer-controller</pre>
                             <div class="content-card primary">
                                 <div class="card-title core">Essential Rigidbody2D Settings</div>
                                 <table class="dense-table">
+                                    <colgroup>
+                                        <col style="width: 34%;">
+                                        <col style="width: 24%;">
+                                        <col style="width: 42%;">
+                                    </colgroup>
                                     <thead>
                                         <tr>
                                             <th>Setting</th>
@@ -1883,7 +1897,7 @@ git checkout -b feature/platformer-controller</pre>
                                             <td>Locks 2D tilt so character never tips over.</td>
                                         </tr>
                                         <tr>
-                                            <td><span class="term-tip" data-title="Interpolate" data-desc="Smooths movement rendering between physics ticks." data-diff="Why needed: Eliminates visual micro-stutter on high refresh monitors."><strong>Interpolate</strong></span></td>
+                                            <td><span class="term-tip" data-title="Interpolate" data-desc="Smooths movement rendering between physics ticks." data-diff="Why needed: Eliminates visual micro-stutter on high refresh monitors."><strong>Interpolation</strong></span></td>
                                             <td><code>Interpolate</code></td>
                                             <td>Smooths movement on high-refresh 144Hz+ displays.</td>
                                         </tr>
@@ -2501,6 +2515,10 @@ coinPool.Release(gameObject);</pre>
                             <div class="content-card primary">
                                 <div class="card-title core">Common Troubleshooting Guide</div>
                                 <table class="dense-table">
+                                    <colgroup>
+                                        <col style="width: 38%;">
+                                        <col style="width: 62%;">
+                                    </colgroup>
                                     <thead>
                                         <tr>
                                             <th>Common Problem</th>
@@ -2983,8 +3001,11 @@ coinPool.Release(gameObject);</pre>
             const area = document.getElementById("slideContentArea");
             if (!area) return;
 
-            const candidates = area.querySelectorAll('strong, code, b, .term-tip, th, td');
+            const candidates = area.querySelectorAll('strong, code, b, span.term-tip, [data-title]');
             candidates.forEach(el => {
+                // Never apply to table cell containers or pre containers
+                if (el.tagName === 'TH' || el.tagName === 'TD' || el.tagName === 'PRE') return;
+
                 if (el.getAttribute('data-title')) {
                     el.classList.add('term-tip');
                     return;
@@ -2994,7 +3015,7 @@ coinPool.Release(gameObject);</pre>
                 const cleanKey = rawText.replace(/[()]/g, '').replace(/[:.]/g, '').trim();
                 
                 for (const key in GLOSSARY_TERMS) {
-                    if (cleanKey === key || cleanKey.startsWith(key + ' ') || cleanKey.includes(key)) {
+                    if (cleanKey === key || cleanKey === key + 's') {
                         el.classList.add('term-tip');
                         el.setAttribute('data-glossary', key);
                         break;
@@ -3006,6 +3027,7 @@ coinPool.Release(gameObject);</pre>
         function findGlossaryData(target) {
             const termEl = target.closest('.term-tip, [data-glossary], [data-title], strong, code, b');
             if (!termEl) return null;
+            if (termEl.tagName === 'TH' || termEl.tagName === 'TD' || termEl.tagName === 'PRE') return null;
 
             // 1. Direct attributes
             const title = termEl.getAttribute('data-title');
