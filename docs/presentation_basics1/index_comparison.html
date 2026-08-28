@@ -658,9 +658,10 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: stretch;
+            align-items: center;
             width: 100%;
-            height: 100%;
+            height: auto;
+            max-height: 100%;
             min-height: 0;
             overflow: hidden;
         }
@@ -675,16 +676,21 @@
             flex-direction: column;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             width: 100%;
-            height: 100%;
-            min-height: 0;
+            height: auto;
             max-height: 100%;
+            aspect-ratio: 16 / 9;
+            align-self: center;
             transition: all 0.15s ease;
         }
 
         /* Proportional Variations */
         .media-canvas.ratio-portrait {
             max-width: 320px;
+            aspect-ratio: 9 / 13;
+            height: auto;
+            max-height: 90%;
             margin: 0 auto;
+            align-self: center;
         }
 
         .media-canvas-header {
@@ -1180,10 +1186,11 @@
 
         /* Collapsible Tier Accordions */
         details.tier-accordion {
-            border-radius: 6px;
+            border-radius: 8px;
             overflow: hidden;
-            margin-top: 0.3cqh;
-            border: 1px solid transparent;
+            margin-top: 0.6cqh;
+            border: 1.5px solid transparent;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
             transition: all 0.15s ease;
             width: 100%;
             flex-shrink: 0;
@@ -1206,8 +1213,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.72rem, 1.6cqh, 0.88rem);
-            padding: 0.4cqh 1.0cqw;
+            font-size: clamp(0.90rem, 2.1cqh, 1.25rem);
+            padding: 0.7cqh 1.4cqw;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -1217,88 +1224,88 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.68rem, 1.45cqh, 0.84rem);
-            padding: 0.5cqh 1.0cqw;
-            line-height: 1.28;
+            font-size: clamp(0.85rem, 1.9cqh, 1.18rem);
+            padding: 0.9cqh 1.4cqw;
+            line-height: 1.45;
             overflow: hidden;
         }
 
         .accordion-body pre {
-            font-size: clamp(0.62rem, 1.35cqh, 0.78rem);
-            padding: 0.4cqh 0.6cqw;
-            line-height: 1.20;
-            margin: 0.2cqh 0;
+            font-size: clamp(0.78rem, 1.8cqh, 1.08rem);
+            padding: 0.8cqh 1.2cqw;
+            line-height: 1.35;
+            margin: 0.4cqh 0;
         }
 
         /* GENTLE AUTO-COMPACTING ONLY WHEN ACCORDIONS ARE EXPANDED (Zero Scrolling & Crisp Text) */
         .slide-content-area:has(details.tier-accordion[open]),
         body.has-open-accordions .slide-content-area {
-            gap: 0.5cqh;
+            gap: 0.8cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .content-card,
         body.has-open-accordions .content-card {
-            padding: 0.6cqh 1.0cqw;
-            border-radius: 6px;
+            padding: 1.0cqh 1.4cqw;
+            border-radius: 8px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-title,
         body.has-open-accordions .card-title {
-            font-size: clamp(0.72rem, 1.60cqh, 0.92rem);
-            margin-bottom: 0.2cqh;
+            font-size: clamp(0.92rem, 2.1cqh, 1.35rem);
+            margin-bottom: 0.3cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body,
         body.has-open-accordions .card-body {
-            font-size: clamp(0.66rem, 1.40cqh, 0.82rem);
-            line-height: 1.25;
+            font-size: clamp(0.82rem, 1.85cqh, 1.15rem);
+            line-height: 1.38;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body ul,
         .slide-content-area:has(details.tier-accordion[open]) .card-body ol,
         body.has-open-accordions .card-body ul,
         body.has-open-accordions .card-body ol {
-            padding-left: 1.4cqw;
-            margin-top: 0.1cqh;
-            margin-bottom: 0.1cqh;
+            padding-left: 1.8cqw;
+            margin-top: 0.2cqh;
+            margin-bottom: 0.2cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body li,
         body.has-open-accordions .card-body li {
-            margin-bottom: 0.15cqh;
+            margin-bottom: 0.25cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .split-media-layout,
         body.has-open-accordions .split-media-layout {
-            gap: 1.0cqw;
+            gap: 1.4cqw;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .split-media-layout .left-column,
         body.has-open-accordions .split-media-layout .left-column {
-            gap: 0.4cqh;
+            gap: 0.8cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) pre,
         body.has-open-accordions pre {
-            font-size: clamp(0.58rem, 1.30cqh, 0.74rem);
-            padding: 0.3cqh 0.6cqw;
-            line-height: 1.18;
+            font-size: clamp(0.74rem, 1.70cqh, 1.00rem);
+            padding: 0.6cqh 1.0cqw;
+            line-height: 1.30;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table th,
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table td,
         body.has-open-accordions table.dense-table th,
         body.has-open-accordions table.dense-table td {
-            padding: 0.25cqh 0.6cqw;
-            font-size: clamp(0.58rem, 1.30cqh, 0.74rem);
-            line-height: 1.12;
+            padding: 0.4cqh 0.8cqw;
+            font-size: clamp(0.72rem, 1.70cqh, 0.98rem);
+            line-height: 1.20;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .accordion-body,
         body.has-open-accordions .accordion-body {
-            padding: 0.35cqh 0.8cqw;
-            font-size: clamp(0.64rem, 1.35cqh, 0.78rem);
-            line-height: 1.20;
+            padding: 0.7cqh 1.2cqw;
+            font-size: clamp(0.78rem, 1.75cqh, 1.05rem);
+            line-height: 1.32;
         }
 
         /* ==========================================================================
