@@ -239,6 +239,7 @@
             display: flex;
             flex-direction: column;
             transition: all 0.2s ease;
+            container-type: size;
         }
 
         /* Fullscreen presentation overrides (Strict 16:9 Ratio) */
@@ -253,6 +254,7 @@
             border-radius: 0;
             box-shadow: none;
             border: none;
+            container-type: size;
         }
 
         /* Original Slide Image */
@@ -305,38 +307,38 @@
         }
 
         .view-interactive.hr-inverted-slide .content-stack {
-            gap: 20px;
+            gap: 1.2cqh;
         }
 
         .view-interactive.hr-inverted-slide .content-card {
             background: #b50036 !important;
-            border: 2px solid rgba(255, 255, 255, 0.35) !important;
-            border-left: 8px solid #ffffff !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+            border-left: 6px solid #ffffff !important;
             color: #ffffff !important;
-            padding: 24px 32px;
-            border-radius: 12px;
+            padding: 1.2cqh 1.8cqw;
+            border-radius: 8px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
         }
 
         .view-interactive.hr-inverted-slide .card-title {
             color: #ffffff !important;
-            font-size: clamp(1.25rem, 1.65vw, 1.75rem);
-            margin-bottom: 8px;
+            font-size: clamp(0.92rem, 2.2cqh, 1.35rem);
+            margin-bottom: 0.4cqh;
         }
 
         .view-interactive.hr-inverted-slide .card-body {
             color: #ffffff !important;
-            font-size: clamp(1.05rem, 1.35vw, 1.40rem);
-            line-height: 1.65;
+            font-size: clamp(0.78rem, 1.8cqh, 1.10rem);
+            line-height: 1.45;
         }
 
         .view-interactive.hr-inverted-slide .card-body ul,
         .view-interactive.hr-inverted-slide .card-body ol {
-            padding-left: 28px;
+            padding-left: 2.2cqw;
         }
 
         .view-interactive.hr-inverted-slide .card-body li {
-            margin-bottom: 6px;
+            margin-bottom: 0.3cqh;
         }
 
         .view-interactive.hr-inverted-slide .card-body strong {
@@ -480,7 +482,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 12px;
+            gap: 1.2cqh;
             min-height: 0;
             max-height: 100%;
             overflow: hidden;
@@ -490,7 +492,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 14px;
+            gap: 1.2cqh;
             width: 100%;
             height: 100%;
             min-height: 0;
@@ -501,8 +503,8 @@
         .content-card {
             background: #f8fafc;
             border: 1.5px solid var(--border-subtle);
-            border-radius: 10px;
-            padding: 16px 22px;
+            border-radius: 8px;
+            padding: 1.2cqh 1.5cqw;
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             width: 100%;
             flex: 1 1 0;
@@ -524,10 +526,11 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(1.05rem, 1.35vw, 1.45rem);
-            margin-bottom: 6px;
+            font-size: clamp(0.85rem, 2.0cqh, 1.25rem);
+            margin-bottom: 0.4cqh;
             transition: font-size 0.15s ease;
-            line-height: 1.25;
+            line-height: 1.2;
+            flex-shrink: 0;
         }
 
         .card-title.core { color: var(--tier-core); }
@@ -535,21 +538,21 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.96rem, 1.18vw, 1.25rem);
-            line-height: 1.55;
+            font-size: clamp(0.75rem, 1.75cqh, 1.05rem);
+            line-height: 1.4;
             color: #1e293b;
             font-weight: 500;
             transition: font-size 0.15s ease;
         }
 
         .card-body ul, .card-body ol {
-            padding-left: 24px;
-            margin-top: 4px;
-            margin-bottom: 4px;
+            padding-left: 1.8cqw;
+            margin-top: 0.2cqh;
+            margin-bottom: 0.2cqh;
         }
 
         .card-body li {
-            margin-bottom: 4px;
+            margin-bottom: 0.3cqh;
         }
 
         /* ==========================================================================
@@ -558,7 +561,7 @@
         .split-media-layout {
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
-            gap: 18px;
+            gap: 1.5cqw;
             align-items: stretch;
             width: 100%;
             height: 100%;
@@ -570,7 +573,7 @@
         .split-media-layout .left-column {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 0.9cqh;
             justify-content: space-between;
             min-height: 0;
             height: 100%;
@@ -583,19 +586,27 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 10px 16px;
+            padding: 1.0cqh 1.4cqw;
         }
 
         .split-media-layout .left-column .content-card:has(table),
         .content-card:has(table) {
-            flex: 1.65 1 0;
-            padding: 8px 14px;
+            flex: 1.75 1 0;
+            padding: 0.8cqh 1.2cqw;
             justify-content: flex-start;
         }
 
-        .content-card:has(table) .card-title {
-            margin-bottom: 4px;
-            font-size: clamp(0.92rem, 1.15vw, 1.25rem);
+        .split-media-layout .left-column .content-card:has(pre),
+        .content-card:has(pre) {
+            flex: 1.65 1 0;
+            padding: 0.8cqh 1.2cqw;
+            justify-content: flex-start;
+        }
+
+        .content-card:has(table) .card-title,
+        .content-card:has(pre) .card-title {
+            margin-bottom: 0.3cqh;
+            font-size: clamp(0.82rem, 1.9cqh, 1.15rem);
         }
 
         .split-media-layout .right-column {
@@ -921,9 +932,9 @@
             white-space: pre-wrap;
             word-break: break-word;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.86rem, 1.05vw, 1.08rem);
-            line-height: 1.38;
-            padding: 8px 12px;
+            font-size: clamp(0.68rem, 1.65cqh, 0.90rem);
+            line-height: 1.28;
+            padding: 0.6cqh 0.9cqw;
             border-radius: 6px;
             margin: 0;
         }
@@ -935,9 +946,9 @@
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #475569;
-            padding: 3px 7px;
+            padding: 2px 6px;
             border-radius: 4px;
-            font-size: 0.70rem;
+            font-size: 0.65rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -963,8 +974,8 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.70rem, 0.84vw, 0.92rem);
-            padding: 3.5px 8px;
+            font-size: clamp(0.66rem, 1.60cqh, 0.88rem);
+            padding: 0.35cqh 0.8cqw;
             display: table-cell !important;
             vertical-align: middle;
             line-height: 1.15;
@@ -973,11 +984,11 @@
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.68rem, 0.80vw, 0.86rem);
-            padding: 3.5px 8px;
+            font-size: clamp(0.64rem, 1.50cqh, 0.84rem);
+            padding: 0.35cqh 0.8cqw;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.25;
+            line-height: 1.20;
             display: table-cell !important;
             vertical-align: middle;
             word-wrap: break-word;
@@ -991,17 +1002,17 @@
         .hierarchy-box-tree {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 0.4cqh;
             width: 100%;
-            margin: 2px 0;
+            margin: 0;
         }
 
         .hierarchy-node {
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            border-radius: 8px;
-            padding: 8px 12px;
+            gap: 0.1cqh;
+            border-radius: 6px;
+            padding: 0.4cqh 0.8cqw;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
             position: relative;
             transition: all 0.15s ease;
@@ -1009,38 +1020,38 @@
 
         .hierarchy-node.root-node {
             background: #0f172a;
-            border: 1.5px solid #334155;
-            border-left: 6px solid #38bdf8;
+            border: 1px solid #334155;
+            border-left: 5px solid #38bdf8;
             color: #f8fafc;
         }
 
         .hierarchy-node.child-node {
             background: #ffffff;
-            border: 1.5px solid #cbd5e1;
-            border-left: 5px solid #6366f1;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #6366f1;
             color: #1e293b;
         }
 
         .hierarchy-node.sensor-node {
             background: #ffffff;
-            border: 1.5px solid #cbd5e1;
-            border-left: 5px solid #10b981;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #10b981;
             color: #1e293b;
         }
 
         .hierarchy-node-header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .hierarchy-tag {
-            font-size: 0.65rem;
+            font-size: 0.60rem;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             line-height: 1;
         }
 
@@ -1060,9 +1071,9 @@
         }
 
         .hierarchy-node-title {
-            font-size: clamp(0.88rem, 1.05vw, 1.10rem);
+            font-size: clamp(0.74rem, 1.70cqh, 0.95rem);
             font-weight: 800;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
         }
 
         .hierarchy-node.root-node .hierarchy-node-title {
@@ -1075,9 +1086,9 @@
         }
 
         .hierarchy-node-desc {
-            font-size: clamp(0.75rem, 0.88vw, 0.92rem);
+            font-size: clamp(0.64rem, 1.40cqh, 0.82rem);
             font-weight: 500;
-            line-height: 1.35;
+            line-height: 1.25;
         }
 
         .hierarchy-node.root-node .hierarchy-node-desc {
@@ -1091,43 +1102,43 @@
 
         .hierarchy-tree-branch {
             position: relative;
-            padding-left: 20px;
-            margin-left: 14px;
-            border-left: 2.5px dashed #94a3b8;
+            padding-left: 1.2cqw;
+            margin-left: 0.8cqw;
+            border-left: 2px dashed #94a3b8;
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-top: 2px;
+            gap: 0.35cqh;
+            margin-top: 0;
         }
 
         .hierarchy-tree-branch .hierarchy-node::before {
             content: "";
             position: absolute;
             top: 50%;
-            left: -20px;
-            width: 16px;
-            height: 2.5px;
-            border-top: 2.5px dashed #94a3b8;
+            left: -1.2cqw;
+            width: 1.0cqw;
+            height: 2px;
+            border-top: 2px dashed #94a3b8;
         }
 
         body.projector-mode .hierarchy-node {
-            padding: 10px 14px;
+            padding: 0.6cqh 1.0cqw;
         }
 
         body.projector-mode .hierarchy-node-title {
-            font-size: clamp(1.0rem, 1.25vw, 1.30rem);
+            font-size: clamp(0.80rem, 1.8cqh, 1.05rem);
         }
 
         body.projector-mode .hierarchy-node-desc {
-            font-size: clamp(0.85rem, 1.05vw, 1.10rem);
+            font-size: clamp(0.70rem, 1.5cqh, 0.90rem);
         }
 
         /* Collapsible Tier Accordions */
         details.tier-accordion {
             border-radius: 6px;
             overflow: hidden;
-            margin-top: 4px;
-            border: 1.5px solid transparent;
+            margin-top: 0.3cqh;
+            border: 1px solid transparent;
             transition: all 0.15s ease;
             width: 100%;
             flex-shrink: 0;
@@ -1150,8 +1161,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.82rem, 0.96vw, 0.98rem);
-            padding: 5px 12px;
+            font-size: clamp(0.72rem, 1.6cqh, 0.88rem);
+            padding: 0.4cqh 1.0cqw;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -1161,75 +1172,88 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.80rem, 0.92vw, 0.92rem);
-            padding: 6px 12px;
-            line-height: 1.35;
+            font-size: clamp(0.68rem, 1.45cqh, 0.84rem);
+            padding: 0.5cqh 1.0cqw;
+            line-height: 1.28;
             overflow: hidden;
+        }
+
+        .accordion-body pre {
+            font-size: clamp(0.62rem, 1.35cqh, 0.78rem);
+            padding: 0.4cqh 0.6cqw;
+            line-height: 1.20;
+            margin: 0.2cqh 0;
         }
 
         /* GENTLE AUTO-COMPACTING ONLY WHEN ACCORDIONS ARE EXPANDED (Zero Scrolling & Crisp Text) */
         .slide-content-area:has(details.tier-accordion[open]),
         body.has-open-accordions .slide-content-area {
-            gap: 5px;
+            gap: 0.5cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .content-card,
         body.has-open-accordions .content-card {
-            padding: 6px 12px;
+            padding: 0.6cqh 1.0cqw;
             border-radius: 6px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-title,
         body.has-open-accordions .card-title {
-            font-size: clamp(0.86rem, 1.02vw, 1.08rem);
-            margin-bottom: 2px;
+            font-size: clamp(0.72rem, 1.60cqh, 0.92rem);
+            margin-bottom: 0.2cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body,
         body.has-open-accordions .card-body {
-            font-size: clamp(0.82rem, 0.94vw, 0.98rem);
-            line-height: 1.30;
+            font-size: clamp(0.66rem, 1.40cqh, 0.82rem);
+            line-height: 1.25;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body ul,
         .slide-content-area:has(details.tier-accordion[open]) .card-body ol,
         body.has-open-accordions .card-body ul,
         body.has-open-accordions .card-body ol {
-            padding-left: 16px;
-            margin-top: 2px;
-            margin-bottom: 2px;
+            padding-left: 1.4cqw;
+            margin-top: 0.1cqh;
+            margin-bottom: 0.1cqh;
+        }
+
+        .slide-content-area:has(details.tier-accordion[open]) .card-body li,
+        body.has-open-accordions .card-body li {
+            margin-bottom: 0.15cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .split-media-layout,
         body.has-open-accordions .split-media-layout {
-            gap: 10px;
+            gap: 1.0cqw;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .split-media-layout .left-column,
         body.has-open-accordions .split-media-layout .left-column {
-            gap: 4px;
+            gap: 0.4cqh;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) pre,
         body.has-open-accordions pre {
-            font-size: clamp(0.78rem, 0.90vw, 0.94rem);
-            padding: 5px 8px;
-            line-height: 1.25;
+            font-size: clamp(0.58rem, 1.30cqh, 0.74rem);
+            padding: 0.3cqh 0.6cqw;
+            line-height: 1.18;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table th,
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table td,
         body.has-open-accordions table.dense-table th,
         body.has-open-accordions table.dense-table td {
-            padding: 4px 8px;
-            font-size: clamp(0.78rem, 0.90vw, 0.94rem);
+            padding: 0.25cqh 0.6cqw;
+            font-size: clamp(0.58rem, 1.30cqh, 0.74rem);
+            line-height: 1.12;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .accordion-body,
         body.has-open-accordions .accordion-body {
-            padding: 4px 8px;
-            font-size: clamp(0.76rem, 0.88vw, 0.88rem);
-            line-height: 1.25;
+            padding: 0.35cqh 0.8cqw;
+            font-size: clamp(0.64rem, 1.35cqh, 0.78rem);
+            line-height: 1.20;
         }
 
         /* ==========================================================================
@@ -1278,18 +1302,18 @@
 
         /* Standard Slides in Lecture Mode */
         body.projector-mode .slide-title-banner {
-            font-size: clamp(1.45rem, 2.3vw, 2.3rem);
-            padding: 8px 24px;
+            font-size: clamp(1.2rem, 2.8cqh, 2.0rem);
+            padding: 0.8cqh 2.0cqw;
             border-radius: 8px;
         }
 
         body.projector-mode .content-stack {
-            gap: 14px;
+            gap: 1.4cqh;
         }
 
         body.projector-mode .content-card {
-            padding: 18px 24px;
-            border-radius: 10px;
+            padding: 1.5cqh 1.8cqw;
+            border-radius: 8px;
         }
 
         body.projector-mode .content-card.primary {
@@ -1297,50 +1321,50 @@
         }
 
         body.projector-mode .card-title {
-            font-size: clamp(1.2rem, 1.7vw, 1.75rem);
-            margin-bottom: 6px;
+            font-size: clamp(0.95rem, 2.3cqh, 1.35rem);
+            margin-bottom: 0.5cqh;
             letter-spacing: 0.5px;
         }
 
         body.projector-mode .card-body {
-            font-size: clamp(1.15rem, 1.55vw, 1.6rem);
-            line-height: 1.6;
+            font-size: clamp(0.82rem, 1.95cqh, 1.15rem);
+            line-height: 1.45;
         }
 
         body.projector-mode .card-body ul,
         body.projector-mode .card-body ol {
-            padding-left: 28px;
-            margin-top: 6px;
-            margin-bottom: 6px;
+            padding-left: 2.2cqw;
+            margin-top: 0.3cqh;
+            margin-bottom: 0.3cqh;
         }
 
         body.projector-mode .card-body li {
-            margin-bottom: 6px;
+            margin-bottom: 0.3cqh;
         }
 
         body.projector-mode .split-media-layout {
-            gap: 24px;
+            gap: 1.8cqw;
         }
 
         body.projector-mode .split-media-layout .left-column {
-            gap: 14px;
+            gap: 1.0cqh;
         }
 
         body.projector-mode pre {
-            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
-            padding: 14px 20px;
-            line-height: 1.5;
+            font-size: clamp(0.72rem, 1.8cqh, 0.95rem);
+            padding: 0.8cqh 1.2cqw;
+            line-height: 1.32;
         }
 
         body.projector-mode table.dense-table th {
-            font-size: clamp(0.88rem, 1.10vw, 1.20rem);
-            padding: 8px 12px;
+            font-size: clamp(0.70rem, 1.8cqh, 0.96rem);
+            padding: 0.4cqh 0.8cqw;
             display: table-cell !important;
         }
 
         body.projector-mode table.dense-table td {
-            font-size: clamp(0.84rem, 1.02vw, 1.10rem);
-            padding: 8px 12px;
+            font-size: clamp(0.66rem, 1.65cqh, 0.88rem);
+            padding: 0.4cqh 0.8cqw;
             display: table-cell !important;
         }
 
@@ -2873,11 +2897,66 @@ coinPool.Release(gameObject);</pre>
                 acc.ontoggle = () => {
                     const anyOpen = Array.from(document.querySelectorAll('details.tier-accordion')).some(a => a.open && a.style.display !== 'none');
                     document.body.classList.toggle('has-open-accordions', anyOpen);
+                    autoFitSlideElements();
                 };
             });
             const anyOpen = Array.from(accordions).some(a => a.open && a.style.display !== 'none');
             document.body.classList.toggle('has-open-accordions', anyOpen);
+            autoFitSlideElements();
         }
+
+        function autoFitSlideElements() {
+            const area = document.getElementById("slideContentArea");
+            if (!area) return;
+
+            // Reset dynamic scaling
+            area.querySelectorAll('.content-card, pre, table.dense-table, .hierarchy-box-tree, .card-body, .split-media-layout, .content-stack').forEach(el => {
+                el.style.transform = '';
+                el.style.transformOrigin = '';
+                el.style.width = '';
+                el.style.height = '';
+                el.style.maxHeight = '';
+            });
+
+            // 1. Fit each card's internal content
+            const cards = area.querySelectorAll('.content-card');
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title');
+                const pre = card.querySelector('pre');
+                const table = card.querySelector('table.dense-table');
+                const tree = card.querySelector('.hierarchy-box-tree');
+                const body = card.querySelector('.card-body');
+
+                const target = pre || table || tree || body;
+                if (target && card.scrollHeight > card.clientHeight + 0.5) {
+                    const titleH = title ? title.offsetHeight : 0;
+                    const availH = card.clientHeight - titleH - 8;
+                    if (availH > 0 && target.scrollHeight > availH) {
+                        const ratio = Math.max(0.40, Math.min(0.99, availH / target.scrollHeight));
+                        target.style.transform = `scale(${ratio})`;
+                        target.style.transformOrigin = 'top left';
+                        target.style.width = `${(100 / ratio).toFixed(1)}%`;
+                        target.style.maxHeight = `${(availH / ratio).toFixed(1)}px`;
+                    }
+                }
+            });
+
+            // 2. Fit overall slideContentArea container
+            if (area.scrollHeight > area.clientHeight + 0.5) {
+                const ratio = Math.max(0.45, Math.min(0.99, area.clientHeight / area.scrollHeight));
+                const mainLayout = area.querySelector('.content-stack') || area.querySelector('.split-media-layout');
+                if (mainLayout) {
+                    mainLayout.style.transform = `scale(${ratio})`;
+                    mainLayout.style.transformOrigin = 'top left';
+                    mainLayout.style.width = `${(100 / ratio).toFixed(1)}%`;
+                    mainLayout.style.height = `${(100 / ratio).toFixed(1)}%`;
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (typeof autoFitSlideElements === 'function') autoFitSlideElements();
+        });
 
         function applyTierVisibility() {
             const advBlocks = document.querySelectorAll('.tier-accordion.adv');
@@ -2885,6 +2964,7 @@ coinPool.Release(gameObject);</pre>
 
             if (currentViewMode === 'projector') {
                 syncAccordionState();
+                autoFitSlideElements();
                 return;
             }
 
@@ -2915,6 +2995,7 @@ coinPool.Release(gameObject);</pre>
             });
 
             syncAccordionState();
+            autoFitSlideElements();
         }
 
         function handleToggle() {
@@ -3254,6 +3335,7 @@ coinPool.Release(gameObject);</pre>
 
             enhanceGlossaryElements();
             applyTierVisibility();
+            requestAnimationFrame(() => autoFitSlideElements());
         }
 
         function changeSlide(direction) {
