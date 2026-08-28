@@ -265,18 +265,18 @@
         }
 
         /* ==========================================================================
-           REVISED SLIDE VIEWPORT (100% Guaranteed In-Frame Fit)
+           REVISED SLIDE VIEWPORT (Full Width Vertical Stack - No Side-by-Side)
            ========================================================================== */
         .view-interactive {
             width: 100%;
             height: 100%;
             background: #ffffff;
             color: var(--text-dark);
-            padding: 20px 32px;
+            padding: 22px 36px;
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            overflow: hidden;
+            overflow-y: auto;
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 10;
@@ -300,8 +300,8 @@
         }
 
         .view-interactive.hr-inverted-slide .content-card {
-            background: rgba(0, 0, 0, 0.18) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            background: rgba(0, 0, 0, 0.2) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
             color: #ffffff !important;
         }
 
@@ -409,16 +409,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-bottom: 2.5px solid #f1f5f9;
-            padding-bottom: 6px;
+            padding-bottom: 8px;
             flex-shrink: 0;
         }
 
         .slide-title-banner {
             background: var(--hr-red);
             color: #ffffff;
-            padding: 6px 18px;
+            padding: 6px 20px;
             border-radius: 6px;
             font-size: clamp(1.2rem, 1.7vw, 1.7rem);
             font-weight: 900;
@@ -444,50 +444,20 @@
         .badge-adv { background: var(--tier-adv-bg); color: var(--tier-adv); border: 1.5px solid var(--tier-adv-border); }
         .badge-exp { background: var(--tier-exp-bg); color: var(--tier-exp); border: 1.5px solid var(--tier-exp-border); }
 
-        /* Slide Content Area (Elastic Flex Fitting) */
+        /* Slide Content Area (Stacked Top-to-Bottom, Content-Fitted Cards) */
         .slide-content-area {
-            flex: 1 1 0;
-            min-height: 0;
+            flex: 1 1 auto;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        /* Balanced Split Grid Layout (2-Column) */
-        .content-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            flex: 1 1 0;
-            min-height: 0;
-        }
-
-        /* 3-Column Grid Layout */
-        .content-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            justify-content: flex-start;
             gap: 12px;
-            flex: 1 1 0;
-            min-height: 0;
-        }
-
-        /* 4-Column Step Grid */
-        .content-grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            flex: 1 1 0;
-            min-height: 0;
         }
 
         .content-stack {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            flex: 1 1 0;
-            min-height: 0;
-            justify-content: space-evenly;
+            gap: 12px;
+            width: 100%;
         }
 
         .content-card {
@@ -495,13 +465,13 @@
             border: 1.5px solid var(--border-subtle);
             border-radius: 8px;
             padding: 12px 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             width: 100%;
-            flex: 1 1 0;
-            min-height: 0;
+            height: auto;
+            flex: 0 0 auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
         }
 
         .content-card.primary {
@@ -514,9 +484,8 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
+            font-size: clamp(1rem, 1.35vw, 1.4rem);
             margin-bottom: 4px;
-            flex-shrink: 0;
         }
 
         .card-title.core { color: var(--tier-core); }
@@ -524,16 +493,16 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.9rem, 1.25vw, 1.3rem);
-            line-height: 1.48;
+            font-size: clamp(0.95rem, 1.25vw, 1.3rem);
+            line-height: 1.5;
             color: #1e293b;
             font-weight: 500;
         }
 
         .card-body ul, .card-body ol {
             padding-left: 24px;
-            margin-top: 3px;
-            margin-bottom: 3px;
+            margin-top: 4px;
+            margin-bottom: 4px;
         }
 
         .card-body li {
@@ -543,9 +512,8 @@
         /* Monospace Code Boxes */
         .code-box {
             position: relative;
-            margin: 4px 0;
+            margin: 6px 0;
             width: 100%;
-            flex-shrink: 0;
         }
 
         pre {
@@ -553,8 +521,8 @@
             color: #38bdf8;
             overflow-x: auto;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.85rem, 1.15vw, 1.25rem);
-            line-height: 1.4;
+            font-size: clamp(0.88rem, 1.18vw, 1.25rem);
+            line-height: 1.45;
             padding: 10px 14px;
             border-radius: 8px;
         }
@@ -581,9 +549,9 @@
         table.dense-table {
             width: 100%;
             border-collapse: collapse;
-            height: 100%;
             border-radius: 8px;
             overflow: hidden;
+            margin: 4px 0;
         }
 
         table.dense-table th {
@@ -592,15 +560,15 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.9rem, 1.2vw, 1.25rem);
-            padding: 8px 12px;
+            font-size: clamp(0.95rem, 1.25vw, 1.3rem);
+            padding: 10px 14px;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.88rem, 1.15vw, 1.2rem);
-            padding: 8px 12px;
+            font-size: clamp(0.9rem, 1.2vw, 1.25rem);
+            padding: 10px 14px;
             font-weight: 500;
             background: #ffffff;
         }
@@ -617,7 +585,6 @@
             border: 1.5px solid transparent;
             transition: all 0.15s ease;
             width: 100%;
-            flex-shrink: 0;
         }
 
         details.tier-accordion.adv {
@@ -637,8 +604,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.8rem, 1.05vw, 1.1rem);
-            padding: 5px 10px;
+            font-size: clamp(0.85rem, 1.1vw, 1.15rem);
+            padding: 6px 12px;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -648,16 +615,16 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.82rem, 1.05vw, 1.1rem);
-            padding: 8px 12px;
-            line-height: 1.4;
+            font-size: clamp(0.85rem, 1.1vw, 1.15rem);
+            padding: 8px 14px;
+            line-height: 1.45;
         }
 
         /* ==========================================================================
-           LECTURE MODE (Strict Core Only): Expands with Large Typography
+           LECTURE MODE (Strict Core Only): Large Typography, Content-Fitted Cards
            ========================================================================== */
         body.projector-mode .view-interactive {
-            padding: 26px 40px;
+            padding: 26px 42px;
         }
 
         body.projector-mode .slide-title-banner {
@@ -666,7 +633,7 @@
         }
 
         body.projector-mode .content-card {
-            padding: clamp(14px, 2.2vh, 26px) clamp(18px, 2.4vw, 30px);
+            padding: 16px 22px;
             border-radius: 10px;
         }
 
@@ -711,7 +678,7 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding-top: 6px;
+            padding-top: 8px;
             border-top: 1.5px solid #f1f5f9;
             flex-shrink: 0;
         }
@@ -863,7 +830,7 @@
                             </div>
                         </div>
 
-                        <!-- Dynamic Slide Content Area (Guaranteed In-Frame Fit) -->
+                        <!-- Dynamic Slide Content Area (Stacked Top-to-Bottom) -->
                         <div class="slide-content-area" id="slideContentArea">
                             <!-- Populated dynamically via JS -->
                         </div>
@@ -927,7 +894,7 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // Content Matrix: High Density, Tailored 16:9 Layouts Across All 21 Slides
+        // Content Matrix: Pure Full-Width Stacked Layouts Across All 21 Slides (No Side-by-Side)
         const slidesData = [
             // Slide 1: Hero
             {
@@ -938,23 +905,23 @@
             {
                 title: "Dev Class Intro & Toolchain",
                 content: `
-                    <div class="content-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Engine Standard</div>
+                            <div class="card-title core">1. Engine Standard: Unity 6 (6000.x)</div>
                             <div class="card-body">
-                                <strong>Unity 6 LTS (6000.x)</strong> with 2D URP. Stable LTS releases, pre-configured packages, zero broken build pipelines.
+                                <strong>Unity 6 LTS with 2D Universal Render Pipeline (URP)</strong>. Stable releases, pre-installed packages, zero broken build dependencies.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Recommended IDE</div>
+                            <div class="card-title core">2. Recommended IDE: JetBrains Rider</div>
                             <div class="card-body">
                                 <strong>JetBrains Rider</strong> (Free student license) or <strong>Visual Studio 2022</strong>. Provides real-time Unity serialization inspections and instant debugging.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Community & Help</div>
+                            <div class="card-title core">3. Community & Live Lecture Support</div>
                             <div class="card-body">
-                                Official <strong>Discord #dev-help</strong> channel for instant code reviews and teacher assistance during workshops.
+                                Join the official <strong>Discord #dev-help</strong> channel for instant code reviews and teacher assistance during workshops.
                             </div>
                         </div>
                     </div>
@@ -983,12 +950,12 @@
                 isInverted: true,
                 title: "Overview",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff; font-size:1.3rem;">Part 1: Course Intro & Project Core</div>
-                            <div class="card-body" style="font-size:1.1rem; line-height:1.6;">
+                            <div class="card-title" style="color:#ffffff;">Part 1: Course Intro & Project Core</div>
+                            <div class="card-body">
                                 <ul>
-                                    <li>Course Portal, GitHub repository & docs</li>
+                                    <li>Course Portal, GitHub repository & reference manuals</li>
                                     <li>Unity 6 2D URP Project setup & Package import</li>
                                     <li>Package Manager & Cinemachine 3 installation</li>
                                     <li>Assignment: 4-Step StartProject milestones</li>
@@ -996,13 +963,13 @@
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff; font-size:1.3rem;">Part 2: 2D Physics & Architecture</div>
-                            <div class="card-body" style="font-size:1.1rem; line-height:1.6;">
+                            <div class="card-title" style="color:#ffffff;">Part 2: 2D Physics & Architecture</div>
+                            <div class="card-body">
                                 <ul>
-                                    <li>Rigidbody2D component simulation & constraints</li>
+                                    <li>Rigidbody2D component simulation & rotation constraints</li>
                                     <li>Platformer movement scripting with linearVelocity</li>
                                     <li>Deterministic script execution lifecycles</li>
-                                    <li>Separation of Concerns: Root vs Child visual</li>
+                                    <li>Separation of Concerns: Root physics vs Child graphics</li>
                                     <li>Cinemachine 3 tracking & Trigger coin collection</li>
                                 </ul>
                             </div>
@@ -1015,10 +982,10 @@
                 isInverted: true,
                 title: "Part 1 Agenda",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff; font-size:1.25rem;">Course Intro & Setup</div>
-                            <div class="card-body" style="font-size:1.1rem; line-height:1.6;">
+                            <div class="card-title" style="color:#ffffff;">Course Intro & Setup</div>
+                            <div class="card-body">
                                 <ul>
                                     <li><strong>GitHub MGDD:</strong> Course repositories & starter assets</li>
                                     <li><strong>Documentation:</strong> Reference manuals & snippets</li>
@@ -1029,8 +996,8 @@
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff; font-size:1.25rem;">Unity 2D Physics Coding</div>
-                            <div class="card-body" style="font-size:1.1rem; line-height:1.6;">
+                            <div class="card-title" style="color:#ffffff;">Unity 2D Physics Coding</div>
+                            <div class="card-body">
                                 <ul>
                                     <li><strong>Rigidbody2D:</strong> Component configuration</li>
                                     <li><strong>Scripting:</strong> linearVelocity arcade movement</li>
@@ -1047,7 +1014,7 @@
             {
                 title: "Course Resources & Package Download",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">Course Web Portal</div>
                             <div class="code-box">
@@ -1062,8 +1029,8 @@
                             <div class="card-title core">Repository Structure</div>
                             <div class="card-body">
                                 <ul>
-                                    <li><code>projectfiles/</code> &rarr; Downloadable starter packages</li>
-                                    <li><code>docs/</code> &rarr; C# snippets, physics formulas & tutorials</li>
+                                    <li><code>projectfiles/</code> &rarr; Downloadable starter packages for each lesson</li>
+                                    <li><code>docs/</code> &rarr; C# snippets, physics formulas & reference manuals</li>
                                     <li><code>lessons/</code> &rarr; Weekly structured workshop assignments</li>
                                 </ul>
                             </div>
@@ -1097,25 +1064,22 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Course Reference Manuals & Docs",
                 content: `
-                    <div class="content-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Reference Manual</div>
+                            <div class="card-title core">1. Reference Manual (00_unity.md)</div>
                             <div class="card-body">
-                                <strong>00_unity.md</strong><br>
                                 Comprehensive guide on script lifecycles, transform hierarchies, physics calculations, and Garbage Collection prevention.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Production Snippets</div>
+                            <div class="card-title core">2. Production Snippets (00_codesnippets.md)</div>
                             <div class="card-body">
-                                <strong>00_codesnippets.md</strong><br>
                                 Tested C# scripts: 2D platformer physics, framerate-independent timers, raycasting, and event channels.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Curated Free Assets</div>
+                            <div class="card-title core">3. Curated Free Assets (00_resources.md)</div>
                             <div class="card-body">
-                                <strong>00_resources.md</strong><br>
                                 Curated free game assets: Kenney assets, PolyHaven textures, FreeSound audio effects, and 2D sprite sheets.
                             </div>
                         </div>
@@ -1144,7 +1108,7 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Unity Startproject Import Guide",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">Step-by-Step Package Import</div>
                             <div class="card-body">
@@ -1158,7 +1122,7 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Starter Scene Contents</div>
+                            <div class="card-title core">Starter Scene Components</div>
                             <div class="card-body">
                                 <ul>
                                     <li><strong>Environment:</strong> Tilemap ground and hazard colliders.</li>
@@ -1192,9 +1156,9 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Package Manager Installation (Cinemachine 3)",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Installing Cinemachine 3</div>
+                            <div class="card-title core">1. Installing Cinemachine 3 (Camera Tracking)</div>
                             <div class="card-body">
                                 <ol>
                                     <li>In top menu: <code>Window > Package Manager</code>.</li>
@@ -1204,9 +1168,9 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Modern Input System</div>
+                            <div class="card-title core">2. Modern Input System (Pre-Installed)</div>
                             <div class="card-body">
-                                In <strong>Unity 6</strong>, the modern Input System is active by default in all 2D URP templates. No manual installation or backend restart prompt is required!
+                                In <strong>Unity 6</strong>, the new Input System is active by default in all 2D URP templates. No manual installation or backend restart prompt is required!
                             </div>
                         </div>
                     </div>
@@ -1234,27 +1198,27 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Assignment: 4-Step Milestones",
                 content: `
-                    <div class="content-grid-4">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Player Setup</div>
+                            <div class="card-title core">Milestone 1: Player Setup & Physics</div>
                             <div class="card-body">
                                 Attach <code>PlayerController2D</code> and <code>PlayerInput</code>. Position child <code>GroundCheck</code> Transform at feet.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Cinemachine</div>
+                            <div class="card-title core">Milestone 2: Cinemachine Camera Follow</div>
                             <div class="card-body">
                                 Create Cinemachine 3 Camera. Drag Player root into the <strong>Tracking Target</strong> slot.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Coins</div>
+                            <div class="card-title core">Milestone 3: Collectible Coin Triggers</div>
                             <div class="card-body">
                                 Place <code>Coin_Start</code> prefab in scene with <code>CircleCollider2D</code> (<code>isTrigger = true</code>).
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">4. Playtest</div>
+                            <div class="card-title core">Milestone 4: Playtest & Verification</div>
                             <div class="card-body">
                                 Press Play. Run, jump, and collect all coins cleanly without the player tipping over!
                             </div>
@@ -1341,7 +1305,7 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Rigidbody2D Scripting (linearVelocity)",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">Arcade Platformer Movement</div>
                             <div class="code-box">
@@ -1402,26 +1366,26 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Unity Manual & API Reference",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Unity Manual</div>
+                            <div class="card-title core">1. Unity Manual (Conceptual Understanding)</div>
                             <div class="card-body">
                                 High-level architectural overviews. Use when learning new systems for the first time:
                                 <ul>
-                                    <li>2D Physics engine overview</li>
-                                    <li>Universal Render Pipeline 2D Lighting</li>
-                                    <li>Canvas Scaler & UI systems</li>
+                                    <li>2D Physics engine overview, gravity scale, and mass settings</li>
+                                    <li>Universal Render Pipeline (URP) 2D Lighting configurations</li>
+                                    <li>Canvas Scaler & resolution-independent UI systems</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Script Reference</div>
+                            <div class="card-title core">2. Script Reference (Code API Signatures)</div>
                             <div class="card-body">
                                 Exact technical API signatures, parameter types, and return values:
                                 <ul>
-                                    <li><code>Physics2D.OverlapCircle</code> signatures</li>
-                                    <li><code>RaycastHit2D</code> struct fields</li>
-                                    <li><code>Rigidbody2D.linearVelocity</code> properties</li>
+                                    <li><code>Physics2D.OverlapCircle</code> method signatures and LayerMask arguments</li>
+                                    <li><code>RaycastHit2D</code> struct fields: <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code></li>
+                                    <li><code>Rigidbody2D.linearVelocity</code> vector properties</li>
                                 </ul>
                             </div>
                         </div>
@@ -1450,17 +1414,16 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Unity Learn & Modern Resources",
                 content: `
-                    <div class="content-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Unity Learn</div>
+                            <div class="card-title core">1. Unity Learn Track</div>
                             <div class="card-body">
                                 Official verified learning tracks covering 2D platformers and physics architecture in Unity 6.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Course Tutorials</div>
+                            <div class="card-title core">2. Course Video Tutorials (00_tutorials.md)</div>
                             <div class="card-body">
-                                <strong>00_tutorials.md</strong><br>
                                 Curated video repository maintained in the course repo, filtered to remove deprecated Built-in Pipeline tutorials.
                             </div>
                         </div>
@@ -1495,7 +1458,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Script Execution Order & Lifecycle",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">Execution Order Sequence</div>
                             <div class="code-box">
@@ -1508,7 +1471,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Deterministic Rule</div>
+                            <div class="card-title core">Deterministic Execution Rules</div>
                             <div class="card-body">
                                 <ul>
                                     <li><strong>Input Checks:</strong> Belong in <code>Update()</code> (variable frame rate) so button presses are never missed.</li>
@@ -1542,10 +1505,10 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                 isInverted: true,
                 title: "Part 2 Agenda",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff; font-size:1.25rem;">Component Architecture</div>
-                            <div class="card-body" style="font-size:1.1rem; line-height:1.6;">
+                            <div class="card-title" style="color:#ffffff;">Component Architecture</div>
+                            <div class="card-body">
                                 <ul>
                                     <li><strong>Component-based workflow:</strong> RequireComponent attributes</li>
                                     <li><strong>Separation of Concerns:</strong> Root physics vs child graphics</li>
@@ -1554,8 +1517,8 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff; font-size:1.25rem;">Gameplay Systems</div>
-                            <div class="card-body" style="font-size:1.1rem; line-height:1.6;">
+                            <div class="card-title" style="color:#ffffff;">Gameplay Systems</div>
+                            <div class="card-body">
                                 <ul>
                                     <li><strong>Cinemachine 3 Camera:</strong> Smooth tracking follow</li>
                                     <li><strong>Using Prefabs:</strong> Asset vs scene instances & overrides</li>
@@ -1571,7 +1534,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
             {
                 title: "Component Architecture & Requirements",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">RequireComponent Attribute</div>
                             <div class="code-box">
@@ -1622,18 +1585,18 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Separation of Concerns (Root vs Child)",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">Player Prefab Hierarchy</div>
                             <div class="code-box">
                                 <pre>[Player] (Root: Rigidbody2D, BoxCollider2D)
   └── [Graphics] (Child: SpriteRenderer, Animator)
   └── [GroundCheck] (Child: Feet Transform)</pre>
-                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">Architectural Rule</div>
+                            <div class="card-title core">Architectural Rules</div>
                             <div class="card-body">
                                 <ul>
                                     <li><strong>Root GameObject:</strong> Contains physics components and movement scripts.</li>
@@ -1666,13 +1629,13 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Cinemachine 3 Camera Setup",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">Creating a 2D Smooth Camera</div>
                             <div class="card-body">
                                 <ol>
                                     <li>In top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
-                                    <li>Drag <code>Player_Start</code> into <strong>Tracking Target</strong>.</li>
+                                    <li>Drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
                                     <li>Set <strong>Body</strong> to <code>Framing Transposer</code>.</li>
                                     <li>Adjust <strong>Dead Zone Width/Height</strong> to control smooth lead distance.</li>
                                 </ol>
@@ -1712,21 +1675,21 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Using Prefabs in Production",
                 content: `
-                    <div class="content-grid-3">
+                    <div class="content-stack">
                         <div class="content-card primary">
-                            <div class="card-title core">1. Prefab Asset</div>
+                            <div class="card-title core">1. Prefab Asset on Disk</div>
                             <div class="card-body">
                                 Reusable GameObject template saved on disk. Modifying the asset updates all scene instances automatically.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Prefab Mode</div>
+                            <div class="card-title core">2. Prefab Edit Mode</div>
                             <div class="card-body">
                                 Double-click any prefab in Project View to open isolated edit mode with an independent scene background.
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Overrides</div>
+                            <div class="card-title core">3. Scene Overrides</div>
                             <div class="card-body">
                                 Customize specific scene instances or click <strong>Apply All</strong> to push changes to all game levels.
                             </div>
@@ -1756,7 +1719,7 @@ public class PlayerController2D : MonoBehaviour {
             {
                 title: "Creating & Destroying GameObjects (Coins)",
                 content: `
-                    <div class="content-grid-2">
+                    <div class="content-stack">
                         <div class="content-card primary">
                             <div class="card-title core">Collectible Trigger Script (Coin.cs)</div>
                             <div class="code-box">
