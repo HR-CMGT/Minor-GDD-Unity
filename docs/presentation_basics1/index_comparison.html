@@ -265,7 +265,7 @@
         }
 
         /* ==========================================================================
-           REVISED SLIDE VIEWPORT (Full Width Vertical Stack - No Side-by-Side)
+           REVISED SLIDE VIEWPORT (Full Width Stack / Split Media Architecture)
            ========================================================================== */
         .view-interactive {
             width: 100%;
@@ -520,42 +520,138 @@
             margin-bottom: 4px;
         }
 
-        /* Media & Visual Demo Placeholder Slots */
-        .media-slot {
-            background: #f1f5f9;
-            border: 2px dashed #94a3b8;
-            border-radius: 8px;
-            padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 4px 0;
-            color: #334155;
-            transition: all 0.2s ease;
+        /* ==========================================================================
+           SPLIT MEDIA LAYOUT (Left Content + Right Dedicated Visual Canvas)
+           ========================================================================== */
+        .split-media-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 16px;
+            align-items: stretch;
             width: 100%;
+            flex: 1 1 auto;
         }
 
-        .media-slot:hover {
-            border-color: var(--hr-red);
-            background: var(--hr-lightred);
+        .split-media-layout .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: flex-start;
         }
 
-        .media-slot-badge {
-            background: var(--hr-red);
-            color: #ffffff;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 4px;
-            letter-spacing: 0.5px;
+        /* Dedicated Visual / GIF Canvas Container */
+        .media-canvas {
+            background: #090d16;
+            border: 1.5px solid #242c3d;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            height: 100%;
+            min-height: 180px;
+        }
+
+        .media-canvas-header {
+            background: #111726;
+            border-bottom: 1px solid #242c3d;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             flex-shrink: 0;
         }
 
-        .media-slot-text {
-            font-size: clamp(0.82rem, 1.05vw, 1.1rem);
+        .media-canvas-badge {
+            background: var(--hr-red);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .media-canvas-dim {
+            font-size: 0.7rem;
             font-weight: 700;
-            color: #1e293b;
+            color: #94a3b8;
+            font-family: monospace;
+            background: #1e293b;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .media-canvas-viewport {
+            flex: 1 1 auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #111827 0%, #080c14 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-canvas-viewport img,
+        .media-canvas-viewport video {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .media-placeholder-graphic {
+            border: 2px dashed #334155;
+            border-radius: 6px;
+            width: 90%;
+            height: 85%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .media-placeholder-graphic:hover {
+            border-color: var(--hr-red);
+            background: rgba(226, 0, 73, 0.05);
+        }
+
+        .media-placeholder-title {
+            font-size: clamp(0.85rem, 1.1vw, 1.15rem);
+            font-weight: 800;
+            color: #f1f5f9;
+        }
+
+        .media-placeholder-sub {
+            font-size: clamp(0.75rem, 0.95vw, 0.95rem);
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* Inline Media Frame for single stack slides */
+        .inline-media-canvas {
+            background: #090d16;
+            border: 1.5px solid #242c3d;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin: 6px 0;
+            width: 100%;
+        }
+
+        .inline-media-canvas .media-canvas-viewport {
+            min-height: 85px;
+            padding: 10px;
         }
 
         /* Monospace Code Boxes */
@@ -943,7 +1039,7 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // Content Matrix: Pure Full-Width Stacked Layouts with GIF/Media Slots Across All 21 Slides
+        // Content Matrix: Pure Full-Width Stacked Layouts & Split Media Mockups Across All 21 Slides
         const slidesData = [
             // Slide 1: Hero
             {
@@ -1170,9 +1266,17 @@ git checkout -b feature/platformer-controller</pre>
                                 </ol>
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Demo Visual</span>
-                            <span class="media-slot-text">Editor Walkthrough: Assets &gt; Import Package &gt; Custom Package dialog</span>
+                        <div class="inline-media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Walkthrough GIF</span>
+                                <span class="media-canvas-dim">16:9 &bull; 1920 &times; 1080</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Package Import & Scene Load Demonstration</div>
+                                    <div class="media-placeholder-sub">Assets &gt; Import Package &gt; Custom Package dialog &bull; Opening 0_startscene.unity</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="content-card primary">
                             <div class="card-title core">Starter Scene Components</div>
@@ -1205,29 +1309,39 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 8: Package Manager
+            // Slide 8: Package Manager (Split Media Layout)
             {
                 title: "Package Manager Installation (Cinemachine 3)",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">1. Installing Cinemachine 3 (Camera Tracking)</div>
-                            <div class="card-body">
-                                <ol>
-                                    <li>In top menu: <code>Window > Package Manager</code>.</li>
-                                    <li>Switch dropdown to <strong>Packages: Unity Registry</strong>.</li>
-                                    <li>Search for <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
-                                </ol>
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">1. Installing Cinemachine 3</div>
+                                <div class="card-body">
+                                    <ol>
+                                        <li>In top menu: <code>Window > Package Manager</code>.</li>
+                                        <li>Switch dropdown to <strong>Packages: Unity Registry</strong>.</li>
+                                        <li>Search for <strong>Cinemachine</strong> &rarr; Click <strong>Install</strong>.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">2. Modern Input System</div>
+                                <div class="card-body">
+                                    In <strong>Unity 6</strong>, the new Input System is active by default in all 2D URP templates. No manual installation or backend restart prompt is required!
+                                </div>
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Screenshot / Demo</span>
-                            <span class="media-slot-text">Package Manager: Unity Registry &gt; Cinemachine Install button</span>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">2. Modern Input System (Pre-Installed)</div>
-                            <div class="card-body">
-                                In <strong>Unity 6</strong>, the new Input System is active by default in all 2D URP templates. No manual installation or backend restart prompt is required!
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Package UI Screenshot</span>
+                                <span class="media-canvas-dim">540 &times; 380 px</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Unity Package Manager</div>
+                                    <div class="media-placeholder-sub">Unity Registry &gt; Cinemachine 3.x &gt; Install Button</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1280,9 +1394,17 @@ git checkout -b feature/platformer-controller</pre>
                                 Press Play. Run, jump, and collect all coins cleanly without the player tipping over!
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Target Gameplay GIF</span>
-                            <span class="media-slot-text">Completed Milestone: Player running, jumping, and collecting coin triggers</span>
+                        <div class="inline-media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Target Gameplay GIF</span>
+                                <span class="media-canvas-dim">16:9 &bull; 1920 &times; 1080</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Finished Milestone Gameplay Target</div>
+                                    <div class="media-placeholder-sub">Player runs, jumps on platforms, triggers coins, and smooth camera pans</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion adv" id="tierAdvBlock">
@@ -1305,45 +1427,55 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 10: Rigidbody2D Component
+            // Slide 10: Rigidbody2D Component (Split Media Layout)
             {
                 title: "Rigidbody2D Component Essentials",
                 content: `
-                    <div class="content-stack">
-                        <table class="dense-table">
-                            <thead>
-                                <tr>
-                                    <th>Property</th>
-                                    <th>Recommended Setting</th>
-                                    <th>Engineering Purpose</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Body Type</strong></td>
-                                    <td><code>Dynamic</code></td>
-                                    <td>Simulated by physics engine with gravity and velocity calculations.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Collision Detection</strong></td>
-                                    <td><code>Continuous</code></td>
-                                    <td>Prevents tunneling (passing through thin ground colliders at high speeds).</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Constraints</strong></td>
-                                    <td><code>Freeze Rotation Z</code></td>
-                                    <td><strong>Mandatory:</strong> Prevents player capsule from tipping over when walking!</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Interpolate</strong></td>
-                                    <td><code>Interpolate</code></td>
-                                    <td>Smooths visual rendering between fixed 50Hz physics calculation ticks.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Inspector UI Screenshot</span>
-                            <span class="media-slot-text">Unity Inspector: Rigidbody2D Constraints &gt; Freeze Rotation Z checkbox</span>
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <table class="dense-table">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th>Setting</th>
+                                        <th>Purpose</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Body Type</strong></td>
+                                        <td><code>Dynamic</code></td>
+                                        <td>Physics gravity & velocity.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Detection</strong></td>
+                                        <td><code>Continuous</code></td>
+                                        <td>Prevents tunneling.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Constraints</strong></td>
+                                        <td><code>Freeze Rot Z</code></td>
+                                        <td>Stops character tipping.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Interpolate</strong></td>
+                                        <td><code>Interpolate</code></td>
+                                        <td>Smooth 50Hz physics rendering.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Inspector Screenshot</span>
+                                <span class="media-canvas-dim">380 &times; 580 px</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Rigidbody2D Inspector</div>
+                                    <div class="media-placeholder-sub">Body Type: Dynamic &bull; Constraints: Freeze Rotation Z &bull; Interpolate: Interpolate</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion adv" id="tierAdvBlock">
@@ -1366,15 +1498,16 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 11: Rigidbody2D Scripting
+            // Slide 11: Rigidbody2D Scripting (Split Media Layout)
             {
                 title: "Rigidbody2D Scripting (linearVelocity)",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">Arcade Platformer Movement</div>
-                            <div class="code-box">
-                                <pre>// Horizontal Velocity in FixedUpdate
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Arcade Platformer Movement</div>
+                                <div class="code-box">
+                                    <pre>// Horizontal Velocity in FixedUpdate
 rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
 // Jump Impulse
@@ -1382,21 +1515,29 @@ if (jumpRequested) {
     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     jumpRequested = false;
 }</pre>
-                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Golden Physics Rules</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li><strong>Never modify <code>transform.position</code></strong> on dynamic Rigidbodies.</li>
+                                        <li>Apply physics velocity inside <strong><code>FixedUpdate()</code></strong>.</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Physics Demo GIF</span>
-                            <span class="media-slot-text">Physics comparison: transform.position teleporting vs linearVelocity smooth motion</span>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Golden Physics Rules</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><strong>Never modify <code>transform.position</code></strong> directly on dynamic Rigidbodies (breaks interpolation).</li>
-                                    <li>Always apply physics velocities inside <strong><code>FixedUpdate()</code></strong>.</li>
-                                    <li>Read keyboard inputs inside <strong><code>Update()</code></strong>.</li>
-                                </ul>
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Physics Demo GIF</span>
+                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">linearVelocity Physics Motion</div>
+                                    <div class="media-placeholder-sub">Smooth acceleration & jump arc vs stuttering transform teleportation</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1523,33 +1664,40 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                     </details>
                 `
             },
-            // Slide 14: Script Lifecycle
+            // Slide 14: Script Lifecycle (Split Media Layout)
             {
                 title: "Script Execution Order & Lifecycle",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">Execution Order Sequence</div>
-                            <div class="code-box">
-                                <pre>[Awake]       -> Component cache (GetComponent)
-[Start]       -> Initialize runtime variables
-[Update]      -> Read Input & GroundCheck
-[FixedUpdate] -> Apply Rigidbody linearVelocity
-[LateUpdate]  -> Camera tracking follow logic</pre>
-                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Execution Sequence</div>
+                                <div class="code-box">
+                                    <pre>[Awake]       -> Cache components
+[Start]       -> Init variables
+[Update]      -> Read Input
+[FixedUpdate] -> Apply physics
+[LateUpdate]  -> Camera follow</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Deterministic Rule</div>
+                                <div class="card-body">
+                                    Input belongs in <code>Update()</code> (variable FPS). Physics belongs in <code>FixedUpdate()</code> (fixed 50Hz tick).
+                                </div>
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Lifecycle Flowchart</span>
-                            <span class="media-slot-text">Unity Event Loop: Awake &rarr; Start &rarr; Update (Input) &rarr; FixedUpdate (Physics)</span>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Deterministic Execution Rules</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><strong>Input Checks:</strong> Belong in <code>Update()</code> (variable frame rate) so button presses are never missed.</li>
-                                    <li><strong>Physics Calculations:</strong> Belong in <code>FixedUpdate()</code> (fixed 50Hz physics tick).</li>
-                                </ul>
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Lifecycle Flowchart</span>
+                                <span class="media-canvas-dim">620 &times; 420 px</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Unity Execution Loop</div>
+                                    <div class="media-placeholder-sub">Initialization &bull; Physics Cycle (FixedUpdate) &bull; Frame Update &bull; Decommissioning</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1654,31 +1802,38 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 17: Separation of Concerns
+            // Slide 17: Separation of Concerns (Split Media Layout)
             {
                 title: "Separation of Concerns (Root vs Child)",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">Player Prefab Hierarchy</div>
-                            <div class="code-box">
-                                <pre>[Player] (Root: Rigidbody2D, BoxCollider2D)
-  └── [Graphics] (Child: SpriteRenderer, Animator)
-  └── [GroundCheck] (Child: Feet Transform)</pre>
-                                <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Player Prefab Hierarchy</div>
+                                <div class="code-box">
+                                    <pre>[Player] (Root: Rigidbody2D, Collider)
+  └── [Graphics] (Child: Visuals, Flip)
+  └── [GroundCheck] (Child: Feet)</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy Hierarchy</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Architectural Rules</div>
+                                <div class="card-body">
+                                    Scale/flip child Graphics without deforming the physics box collider on Root!
+                                </div>
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Visual Demo GIF</span>
-                            <span class="media-slot-text">Squash & Stretch: Scale child Graphics Transform without deforming root Collider2D</span>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Architectural Rules</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><strong>Root GameObject:</strong> Contains physics components and movement scripts.</li>
-                                    <li><strong>Child Graphics:</strong> Contains visuals, sprite flips, and animations so hitboxes never deform.</li>
-                                </ul>
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Squash & Stretch GIF</span>
+                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Child Transform Animation</div>
+                                    <div class="media-placeholder-sub">Squashing child visual sprite on jump takeoff while BoxCollider2D stays rigid</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1702,33 +1857,40 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 18: Cinemachine 3
+            // Slide 18: Cinemachine 3 (Split Media Layout)
             {
                 title: "Cinemachine 3 Camera Setup",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">Creating a 2D Smooth Camera</div>
-                            <div class="card-body">
-                                <ol>
-                                    <li>In top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
-                                    <li>Drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
-                                    <li>Set <strong>Body</strong> to <code>Framing Transposer</code>.</li>
-                                    <li>Adjust <strong>Dead Zone Width/Height</strong> to control smooth lead distance.</li>
-                                </ol>
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Creating a 2D Smooth Camera</div>
+                                <div class="card-body">
+                                    <ol>
+                                        <li><code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
+                                        <li>Drag <code>Player_Start</code> into <strong>Tracking Target</strong>.</li>
+                                        <li>Set <strong>Body</strong> to <code>Framing Transposer</code>.</li>
+                                        <li>Adjust <strong>Dead Zone Width/Height</strong>.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Camera Polish Features</div>
+                                <div class="card-body">
+                                    <strong>Damping:</strong> Smooths out abrupt starts. <strong>Lookahead:</strong> Pans ahead in movement direction.
+                                </div>
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Camera Demo GIF</span>
-                            <span class="media-slot-text">Cinemachine 3 Framing Transposer: Smooth character follow with Dead Zone box</span>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Camera Polish Features</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><strong>Damping:</strong> Smooths out sudden player stops and starts.</li>
-                                    <li><strong>Lookahead:</strong> Panning ahead in the direction of character motion.</li>
-                                </ul>
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Cinemachine Follow GIF</span>
+                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Framing Transposer In Action</div>
+                                    <div class="media-placeholder-sub">Smooth camera lag, dead-zone box preview, and lookahead leading</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1796,39 +1958,45 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 20: Coins & Destruction
+            // Slide 20: Coins & Destruction (Split Media Layout)
             {
                 title: "Creating & Destroying GameObjects (Coins)",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">Collectible Trigger Script (Coin.cs)</div>
-                            <div class="code-box">
-                                <pre>using UnityEngine;
-
-public class Coin : MonoBehaviour {
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Trigger Script (Coin.cs)</div>
+                                <div class="code-box">
+                                    <pre>public class Coin : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player")) {
-            // Play sound / add score
             Destroy(gameObject);
         }
     }
 }</pre>
-                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Trigger Checklist</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li><strong><code>isTrigger = true</code></strong> on Coin collider.</li>
+                                        <li>Player has <strong>"Player" Tag</strong>.</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Trigger Demo GIF</span>
-                            <span class="media-slot-text">Coin trigger collision: Particle burst instantiation before Destroy(gameObject)</span>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Trigger Checklist</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li>Ensure <strong><code>isTrigger = true</code></strong> on the Coin's <code>CircleCollider2D</code>.</li>
-                                    <li>Ensure the Player has the <strong>"Player" Tag</strong> assigned in the Inspector.</li>
-                                    <li>At least one object must have a <code>Rigidbody2D</code> for triggers to fire.</li>
-                                </ul>
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Trigger Pickup GIF</span>
+                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">Coin Trigger Interaction</div>
+                                    <div class="media-placeholder-sub">Player box collides with trigger &bull; Instant pickup particle & object destruction</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1859,45 +2027,50 @@ coinPool.Release(gameObject);</pre>
                     </details>
                 `
             },
-            // Slide 21: Help / Discord
+            // Slide 21: Help / Discord (Split Media Layout)
             {
                 title: "Help Channels & Troubleshooting Matrix",
                 content: `
-                    <div class="content-stack">
-                        <table class="dense-table">
-                            <thead>
-                                <tr>
-                                    <th>Issue</th>
-                                    <th>Root Cause</th>
-                                    <th>One-Click Fix</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Falls through floor</strong></td>
-                                    <td>Missing collider or layer mismatch</td>
-                                    <td>Attach <code>BoxCollider2D</code> to floor and assign Ground Layer.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Character tips over</strong></td>
-                                    <td>Physics torque on Z axis</td>
-                                    <td>Check <code>Constraints > Freeze Rotation Z</code> on Rigidbody2D.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Keys don't respond</strong></td>
-                                    <td>Missing PlayerInput</td>
-                                    <td>Attach <code>PlayerInput</code> component set to <code>Send Messages</code>.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Need live help?</strong></td>
-                                    <td>Questions during class</td>
-                                    <td>Post in Discord <strong>#dev-help</strong> channel.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="media-slot">
-                            <span class="media-slot-badge">Discord Community</span>
-                            <span class="media-slot-text">HR CMGT Discord: Join #dev-help for live code debugging</span>
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <table class="dense-table">
+                                <thead>
+                                    <tr>
+                                        <th>Issue</th>
+                                        <th>Quick Fix</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Falls through floor</strong></td>
+                                        <td>Attach <code>BoxCollider2D</code> to floor.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Character tips over</strong></td>
+                                        <td>Check <code>Freeze Rotation Z</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Keys don't respond</strong></td>
+                                        <td>Attach <code>PlayerInput</code> component.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Need live help?</strong></td>
+                                        <td>Post in Discord <strong>#dev-help</strong>.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="media-canvas">
+                            <div class="media-canvas-header">
+                                <span class="media-canvas-badge">Discord Community UI</span>
+                                <span class="media-canvas-dim">340 &times; 560 px</span>
+                            </div>
+                            <div class="media-canvas-viewport">
+                                <div class="media-placeholder-graphic">
+                                    <div class="media-placeholder-title">HR CMGT Discord Server</div>
+                                    <div class="media-placeholder-sub">#dev-help &bull; #general &bull; #announcements &bull; Live Teacher & Student Support</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <details class="tier-accordion adv" id="tierAdvBlock">
