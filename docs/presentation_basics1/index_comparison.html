@@ -455,32 +455,31 @@
         .badge-adv { background: var(--tier-adv-bg); color: var(--tier-adv); border: 1.5px solid var(--tier-adv-border); }
         .badge-exp { background: var(--tier-exp-bg); color: var(--tier-exp); border: 1.5px solid var(--tier-exp-border); }
 
-        /* Slide Content Area (Stacked Top-to-Bottom, Scrollable & Content-Fitted) */
+        /* Slide Content Area (Stacked Top-to-Bottom, Content-Fitted & No-Scroll) */
         .slide-content-area {
             flex: 1 1 auto;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 6px;
+            gap: 5px;
             min-height: 0;
             max-height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding-right: 4px;
+            overflow: hidden;
         }
 
         .content-stack {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             width: 100%;
+            overflow: hidden;
         }
 
         .content-card {
             background: #f8fafc;
             border: 1.5px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 8px 14px;
+            border-radius: 6px;
+            padding: 6px 12px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
             width: 100%;
             height: auto;
@@ -488,7 +487,8 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            transition: padding 0.15s ease, margin 0.15s ease;
+            transition: all 0.15s ease;
+            overflow: hidden;
         }
 
         .content-card.primary {
@@ -501,9 +501,10 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(0.85rem, 1.08vw, 1.15rem);
+            font-size: clamp(0.78rem, 0.95vw, 1.05rem);
             margin-bottom: 2px;
             transition: font-size 0.15s ease;
+            line-height: 1.2;
         }
 
         .card-title.core { color: var(--tier-core); }
@@ -511,21 +512,21 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.80rem, 0.96vw, 1.05rem);
-            line-height: 1.38;
+            font-size: clamp(0.74rem, 0.86vw, 0.96rem);
+            line-height: 1.32;
             color: #1e293b;
             font-weight: 500;
             transition: font-size 0.15s ease;
         }
 
         .card-body ul, .card-body ol {
-            padding-left: 20px;
-            margin-top: 2px;
-            margin-bottom: 2px;
+            padding-left: 18px;
+            margin-top: 1px;
+            margin-bottom: 1px;
         }
 
         .card-body li {
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         /* ==========================================================================
@@ -533,23 +534,23 @@
            ========================================================================== */
         .split-media-layout {
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 14px;
+            grid-template-columns: 1.12fr 0.88fr;
+            gap: 12px;
             align-items: center;
             width: 100%;
             min-height: 0;
             flex: 1 1 auto;
+            overflow: hidden;
         }
 
         .split-media-layout .left-column {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             justify-content: center;
             min-height: 0;
             max-height: 100%;
-            overflow-y: auto;
-            padding-right: 4px;
+            overflow: hidden;
         }
 
         .split-media-layout .right-column {
@@ -559,6 +560,7 @@
             width: 100%;
             height: 100%;
             min-height: 0;
+            overflow: hidden;
         }
 
         /* Dedicated Visual / GIF Canvas Container with Exact Proportions */
@@ -577,56 +579,56 @@
         /* Ratio Variations */
         .media-canvas.ratio-16-9 {
             aspect-ratio: 16 / 9;
-            max-height: 250px;
+            max-height: 225px;
         }
 
         .media-canvas.ratio-4-3 {
             aspect-ratio: 4 / 3;
-            max-height: 250px;
+            max-height: 225px;
         }
 
         .media-canvas.ratio-portrait {
             aspect-ratio: 4 / 5;
-            max-height: 260px;
-            max-width: 240px;
+            max-height: 240px;
+            max-width: 210px;
             margin: 0 auto;
         }
 
         .media-canvas-header {
             background: #111726;
             border-bottom: 1px solid #242c3d;
-            padding: 4px 10px;
+            padding: 3px 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            height: 28px;
+            height: 26px;
         }
 
         .media-canvas-badge {
             background: var(--hr-red);
             color: #ffffff;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 900;
             text-transform: uppercase;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             letter-spacing: 0.5px;
         }
 
         .media-canvas-dim {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-weight: 700;
             color: #94a3b8;
             font-family: monospace;
             background: #1e293b;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
         }
 
         .media-canvas-viewport {
             flex: 1 1 auto;
-            padding: 8px;
+            padding: 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -654,8 +656,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            padding: 6px;
+            gap: 3px;
+            padding: 4px;
             text-align: center;
             transition: all 0.2s ease;
         }
@@ -666,15 +668,15 @@
         }
 
         .media-placeholder-title {
-            font-size: clamp(0.78rem, 0.95vw, 1.0rem);
+            font-size: clamp(0.74rem, 0.88vw, 0.95rem);
             font-weight: 800;
             color: #f1f5f9;
         }
 
         .media-placeholder-sub {
-            font-size: clamp(0.70rem, 0.85vw, 0.85rem);
+            font-size: clamp(0.66rem, 0.78vw, 0.82rem);
             color: #94a3b8;
-            line-height: 1.3;
+            line-height: 1.25;
         }
 
         /* Top Progress Bar */
@@ -780,40 +782,45 @@
             color: #38bdf8;
             text-decoration: underline;
             text-underline-offset: 3px;
+            word-break: break-all;
         }
 
         .code-box a:hover {
             color: #ffffff;
         }
 
-        /* Monospace Code Boxes */
+        /* Monospace Code Boxes - Never Scroll, Auto-Fit */
         .code-box {
             position: relative;
             margin: 2px 0;
             width: 100%;
+            overflow: hidden;
         }
 
         pre {
             background: var(--code-bg);
             color: #38bdf8;
-            overflow-x: auto;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-break: break-word;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.78rem, 0.98vw, 1.05rem);
-            line-height: 1.35;
-            padding: 8px 12px;
+            font-size: clamp(0.68rem, 0.84vw, 0.96rem);
+            line-height: 1.3;
+            padding: 5px 8px;
             border-radius: 6px;
+            margin: 0;
         }
 
         .copy-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
+            top: 3px;
+            right: 3px;
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #475569;
-            padding: 2px 6px;
+            padding: 2px 5px;
             border-radius: 4px;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -837,17 +844,18 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.82rem, 1.0vw, 1.08rem);
-            padding: 6px 10px;
+            font-size: clamp(0.76rem, 0.90vw, 0.98rem);
+            padding: 4px 8px;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.78rem, 0.95vw, 1.02rem);
-            padding: 6px 10px;
+            font-size: clamp(0.72rem, 0.85vw, 0.92rem);
+            padding: 4px 8px;
             font-weight: 500;
             background: #ffffff;
+            line-height: 1.25;
         }
 
         table.dense-table tr:nth-child(even) td {
@@ -856,9 +864,9 @@
 
         /* Collapsible Tier Accordions */
         details.tier-accordion {
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
-            margin-top: 3px;
+            margin-top: 2px;
             border: 1.5px solid transparent;
             transition: all 0.15s ease;
             width: 100%;
@@ -882,8 +890,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.76rem, 0.88vw, 0.94rem);
-            padding: 4px 10px;
+            font-size: clamp(0.72rem, 0.84vw, 0.90rem);
+            padding: 3px 8px;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -893,42 +901,41 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.74rem, 0.86vw, 0.90rem);
-            padding: 6px 12px;
-            line-height: 1.35;
-            max-height: 180px;
-            overflow-y: auto;
+            font-size: clamp(0.70rem, 0.80vw, 0.88rem);
+            padding: 4px 8px;
+            line-height: 1.28;
+            overflow: hidden;
         }
 
-        /* DYNAMIC AUTO-SHRINK WHEN ACCORDIONS ARE EXPANDED */
+        /* DYNAMIC AUTO-SHRINK WHEN ACCORDIONS ARE EXPANDED (Zero Scrolling) */
         .slide-content-area:has(details.tier-accordion[open]),
         body.has-open-accordions .slide-content-area {
-            gap: 4px;
+            gap: 3px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .content-card,
         body.has-open-accordions .content-card {
             padding: 4px 8px;
-            border-radius: 6px;
+            border-radius: 5px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-title,
         body.has-open-accordions .card-title {
-            font-size: clamp(0.72rem, 0.85vw, 0.92rem);
+            font-size: clamp(0.68rem, 0.78vw, 0.86rem);
             margin-bottom: 1px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body,
         body.has-open-accordions .card-body {
-            font-size: clamp(0.68rem, 0.80vw, 0.86rem);
-            line-height: 1.24;
+            font-size: clamp(0.64rem, 0.74vw, 0.82rem);
+            line-height: 1.20;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .card-body ul,
         .slide-content-area:has(details.tier-accordion[open]) .card-body ol,
         body.has-open-accordions .card-body ul,
         body.has-open-accordions .card-body ol {
-            padding-left: 16px;
+            padding-left: 14px;
             margin-top: 1px;
             margin-bottom: 1px;
         }
@@ -940,62 +947,45 @@
 
         .slide-content-area:has(details.tier-accordion[open]) .split-media-layout .left-column,
         body.has-open-accordions .split-media-layout .left-column {
-            gap: 3px;
+            gap: 2px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .media-canvas.ratio-16-9,
         body.has-open-accordions .media-canvas.ratio-16-9 {
-            max-height: 175px;
+            max-height: 145px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .media-canvas.ratio-4-3,
         body.has-open-accordions .media-canvas.ratio-4-3 {
-            max-height: 175px;
+            max-height: 145px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) .media-canvas.ratio-portrait,
         body.has-open-accordions .media-canvas.ratio-portrait {
-            max-height: 185px;
-            max-width: 180px;
+            max-height: 155px;
+            max-width: 150px;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) pre,
         body.has-open-accordions pre {
-            font-size: clamp(0.66rem, 0.78vw, 0.82rem);
-            padding: 4px 8px;
-            line-height: 1.25;
+            font-size: clamp(0.60rem, 0.70vw, 0.78rem);
+            padding: 3px 6px;
+            line-height: 1.2;
         }
 
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table th,
         .slide-content-area:has(details.tier-accordion[open]) table.dense-table td,
         body.has-open-accordions table.dense-table th,
         body.has-open-accordions table.dense-table td {
+            padding: 2px 6px;
+            font-size: clamp(0.64rem, 0.74vw, 0.80rem);
+        }
+
+        .slide-content-area:has(details.tier-accordion[open]) .accordion-body,
+        body.has-open-accordions .accordion-body {
             padding: 3px 6px;
-            font-size: clamp(0.68rem, 0.78vw, 0.82rem);
-        }
-
-        /* Slim Custom Scrollbars */
-        .slide-content-area::-webkit-scrollbar,
-        .left-column::-webkit-scrollbar,
-        .accordion-body::-webkit-scrollbar,
-        .view-interactive::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-
-        .slide-content-area::-webkit-scrollbar-thumb,
-        .left-column::-webkit-scrollbar-thumb,
-        .accordion-body::-webkit-scrollbar-thumb,
-        .view-interactive::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .slide-content-area::-webkit-scrollbar-track,
-        .left-column::-webkit-scrollbar-track,
-        .accordion-body::-webkit-scrollbar-track,
-        .view-interactive::-webkit-scrollbar-track {
-            background: transparent;
+            font-size: clamp(0.64rem, 0.74vw, 0.80rem);
+            line-height: 1.2;
         }
 
         /* ==========================================================================
@@ -1713,27 +1703,14 @@ git checkout -b feature/platformer-controller</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Step 1: Make Player Move</div>
+                                <div class="card-title core">Workshop Goals (4 Milestones)</div>
                                 <div class="card-body">
-                                    Attach the movement script so arrow keys and Spacebar make your character run and jump.
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">Step 2: Add Camera Follow</div>
-                                <div class="card-body">
-                                    Create a Cinemachine Camera so the screen smoothly scrolls as your character moves.
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">Step 3: Place Collectibles</div>
-                                <div class="card-body">
-                                    Place gold coin prefabs across the level with <code>Is Trigger</code> checked.
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">Step 4: Playtest & Tune Feel</div>
-                                <div class="card-body">
-                                    Press Play, test your jumps, and collect all coins without tipping over!
+                                    <ol style="padding-left: 18px;">
+                                        <li><strong>Make Player Move:</strong> Attach script for arrow keys & jump.</li>
+                                        <li><strong>Add Camera Follow:</strong> Create Cinemachine camera.</li>
+                                        <li><strong>Place Collectibles:</strong> Place coin prefabs with <code>Is Trigger</code> checked.</li>
+                                        <li><strong>Playtest & Tune:</strong> Jump, run, and collect all coins!</li>
+                                    </ol>
                                 </div>
                             </div>
                         </div>
@@ -1809,8 +1786,8 @@ git checkout -b feature/platformer-controller</pre>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="content-card primary" style="padding: 8px 12px; margin-top: 4px;">
-                                <div class="card-body" style="font-size: 0.85rem;">
+                            <div class="content-card primary" style="padding: 4px 8px; margin-top: 2px;">
+                                <div class="card-body" style="font-size: 0.76rem;">
                                     <strong>Inspector Tip:</strong> Changes made while the game is running (Play Mode) will reset when you press Stop!
                                 </div>
                             </div>
@@ -1857,29 +1834,20 @@ git checkout -b feature/platformer-controller</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Understanding Vector2 Speed</div>
-                                <div class="card-body">
-                                    <strong>Vector2:</strong> A pair of numbers <code>(X, Y)</code> representing 2D direction and speed:
-                                    <ul>
-                                        <li><strong><code>X</code></strong> = Left / Right movement speed</li>
-                                        <li><strong><code>Y</code></strong> = Up / Down jumping speed</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">The Movement Code</div>
+                                <div class="card-title core">Movement Code with Vector2 (Speed X, Y)</div>
                                 <div class="code-box">
-                                    <pre>// Horizontal Speed in FixedUpdate
-// Unity 6 linearVelocity (formerly .velocity in older tutorials)
-// moveInput & jumpRequested come from the PlayerInput component
+                                    <pre>// FixedUpdate: moveInput & jumpRequested from PlayerInput
+// Unity 6 linearVelocity (formerly .velocity)
 rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
 
-// Jump Boost
 if (jumpRequested) {
     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     jumpRequested = false;
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                                <div class="card-body" style="margin-top: 2px; font-size: 0.74rem;">
+                                    <strong>Vector2:</strong> (<code>X</code> = Left/Right speed, <code>Y</code> = Up/Down jump speed).
                                 </div>
                             </div>
                         </div>
@@ -2293,7 +2261,7 @@ public class PlayerController2D : MonoBehaviour {
                             <div class="code-box">
                                 <pre>using UnityEngine.Pool;
 
-private ObjectPool<GameObject> coinPool;
+private ObjectPool&lt;GameObject&gt; coinPool;
 // Deactivate back to pool instead of Destroy():
 coinPool.Release(gameObject);</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
