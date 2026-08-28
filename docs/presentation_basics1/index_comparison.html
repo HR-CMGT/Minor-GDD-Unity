@@ -212,26 +212,25 @@
             border-radius: 3px;
         }
 
-        /* Stage Area */
+        /* Stage Area (Locked 16:9 Presentation Canvas) */
         .stage-area {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 12px;
+            padding: 16px;
             background: #040406;
             position: relative;
+            overflow: hidden;
         }
 
         .slide-viewport {
-            width: 100%;
-            max-width: 1180px;
-            height: 100%;
-            max-height: 664px;
             aspect-ratio: 16 / 9;
+            width: min(100%, calc((100vh - 52px - 46px - 32px) * (16 / 9)));
+            height: min(calc((100vw - 210px - 32px) * (9 / 16)), calc(100vh - 52px - 46px - 32px));
             background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.95);
             overflow: hidden;
             position: relative;
             display: flex;
@@ -239,16 +238,18 @@
             transition: all 0.2s ease;
         }
 
-        /* Fullscreen presentation overrides */
+        /* Fullscreen presentation overrides (Strict 16:9 Ratio) */
         body.is-fullscreen .top-bar { display: none; }
         body.is-fullscreen .slide-drawer { display: none; }
-        body.is-fullscreen .stage-area { padding: 0; }
+        body.is-fullscreen .stage-area { padding: 0; background: #000; }
         body.is-fullscreen .main-workspace { height: calc(100vh - 46px); }
         body.is-fullscreen .slide-viewport {
-            max-width: 100vw;
-            max-height: calc(100vh - 46px);
+            aspect-ratio: 16 / 9;
+            width: min(100vw, calc((100vh - 46px) * (16 / 9)));
+            height: min(calc(100vh - 46px), calc(100vw * (9 / 16)));
             border-radius: 0;
             box-shadow: none;
+            border: none;
         }
 
         /* Original Slide Image */
