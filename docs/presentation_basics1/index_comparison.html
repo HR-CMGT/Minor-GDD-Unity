@@ -758,20 +758,24 @@
         /* ==========================================================================
            INTERACTIVE GLOSSARY TOOLTIPS (Dik Gedrukte Woorden)
            ========================================================================== */
-        .term-tip {
-            cursor: help;
+        .term-tip,
+        [data-glossary] {
+            cursor: help !important;
             font-weight: 800;
-            color: inherit;
-            border-bottom: 1.5px dotted #0284c7;
+            border-bottom: 2px dotted #0284c7 !important;
             text-underline-offset: 3px;
             transition: all 0.15s ease;
             display: inline;
         }
 
         .term-tip:hover,
-        .term-tip:focus {
+        .term-tip:focus,
+        [data-glossary]:hover,
+        [data-glossary]:focus {
             color: var(--hr-red) !important;
-            border-bottom-color: var(--hr-red);
+            border-bottom-color: var(--hr-red) !important;
+            background: rgba(226, 0, 73, 0.08);
+            border-radius: 3px;
             outline: none;
         }
 
@@ -779,55 +783,58 @@
             position: fixed;
             top: -9999px;
             left: -9999px;
-            background: #0f172a;
-            color: #f8fafc;
-            border: 1.5px solid #334155;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 0.75rem;
-            line-height: 1.35;
-            font-weight: 500;
-            max-width: 290px;
-            width: max-content;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
-            pointer-events: none;
-            z-index: 99999;
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border: 2px solid #38bdf8 !important;
+            border-radius: 8px !important;
+            padding: 10px 14px !important;
+            font-size: 0.84rem !important;
+            line-height: 1.4 !important;
+            font-weight: 500 !important;
+            max-width: 320px !important;
+            width: max-content !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), 0 0 15px rgba(56, 189, 248, 0.25) !important;
+            pointer-events: none !important;
+            z-index: 999999 !important;
             opacity: 0;
-            transform: scale(0.96);
-            transition: opacity 0.15s ease, transform 0.15s ease;
+            visibility: hidden;
+            transform: translateY(6px);
+            transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
         }
 
         .glossary-tooltip.visible {
-            opacity: 1;
-            transform: scale(1);
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
         }
 
         .glossary-tooltip .tip-title {
-            font-weight: 900;
-            color: #38bdf8;
-            font-size: 0.80rem;
-            margin-bottom: 3px;
-            border-bottom: 1px solid #1e293b;
-            padding-bottom: 2px;
-            letter-spacing: 0.3px;
+            font-weight: 900 !important;
+            color: #38bdf8 !important;
+            font-size: 0.92rem !important;
+            margin-bottom: 4px !important;
+            border-bottom: 1px solid #334155 !important;
+            padding-bottom: 3px !important;
+            letter-spacing: 0.3px !important;
         }
 
         .glossary-tooltip .tip-body {
-            color: #f1f5f9;
-            margin-bottom: 2px;
+            color: #f1f5f9 !important;
+            font-size: 0.82rem !important;
+            margin-bottom: 4px !important;
         }
 
         .glossary-tooltip .tip-diff {
-            margin-top: 4px;
-            padding-top: 3px;
-            border-top: 1px dashed #334155;
-            color: #94a3b8;
-            font-size: 0.68rem;
-            line-height: 1.28;
+            margin-top: 6px !important;
+            padding-top: 5px !important;
+            border-top: 1px dashed #475569 !important;
+            color: #cbd5e1 !important;
+            font-size: 0.78rem !important;
+            line-height: 1.35 !important;
         }
 
         .glossary-tooltip .tip-diff strong {
-            color: #38bdf8;
+            color: #facc15 !important;
         }
 
         /* Clickable URLs & References */
@@ -2692,6 +2699,248 @@ coinPool.Release(gameObject);</pre>
             renderCurrentSlide();
         }
 
+        const GLOSSARY_TERMS = {
+            "update": {
+                title: "Update()",
+                desc: "Runs every single frame. Used to read player keyboard and mouse inputs.",
+                diff: "<strong>vs FixedUpdate:</strong> Update frame rate varies with FPS; FixedUpdate runs on strict 50Hz physics clock."
+            },
+            "fixedupdate": {
+                title: "FixedUpdate()",
+                desc: "Runs on a strict 50Hz physics clock (every 0.02 seconds).",
+                diff: "<strong>vs Update:</strong> Always apply velocity, forces, and Rigidbody physics here for glitch-free collisions."
+            },
+            "awake": {
+                title: "Awake()",
+                desc: "Runs once immediately when an object is loaded into memory.",
+                diff: "<strong>vs Start:</strong> Awake runs first to connect components; Start runs right before frame 1."
+            },
+            "start": {
+                title: "Start()",
+                desc: "Runs once right before the very first frame.",
+                diff: "<strong>vs Awake:</strong> Used to assign initial values (health, speed) after all Awake links exist."
+            },
+            "lateupdate": {
+                title: "LateUpdate()",
+                desc: "Runs after all Update() functions have finished executing.",
+                diff: "<strong>vs Update:</strong> Perfect for camera follow scripts so player finishes moving first."
+            },
+            "rigidbody2d": {
+                title: "Rigidbody2D",
+                desc: "Physics engine component that adds gravity, weight, and realistic collision response.",
+                diff: "<strong>vs Transform:</strong> Rigidbody moves via physics simulation; Transform teleports directly."
+            },
+            "vector2": {
+                title: "Vector2(X, Y)",
+                desc: "A pair of numbers representing 2D direction and speed.",
+                diff: "<strong>vs Vector3:</strong> Vector2 only has X & Y (2D); Vector3 adds Z depth (3D)."
+            },
+            "linearvelocity": {
+                title: "linearVelocity",
+                desc: "Unity 6 physics velocity property measured in units per second.",
+                diff: "<strong>vs .velocity:</strong> Unity 6 replaced legacy .velocity with linearVelocity."
+            },
+            "cinemachine": {
+                title: "Cinemachine",
+                desc: "Unity's procedural smart camera suite that automatically tracks targets.",
+                diff: "<strong>vs Normal Camera:</strong> Automates smooth lag, lookahead, and framing with 0 code."
+            },
+            "cinemachine camera": {
+                title: "Cinemachine Camera",
+                desc: "Smart virtual camera that drives the main Unity camera smoothly.",
+                diff: "<strong>vs Normal Camera:</strong> Eliminates manual camera math scripts."
+            },
+            "prefab": {
+                title: "Prefab",
+                desc: "A reusable master template asset saved in your Project window.",
+                diff: "<strong>vs Scene Object:</strong> Editing the master prefab updates every copy in your game instantly."
+            },
+            "prefabs": {
+                title: "Prefabs",
+                desc: "Reusable master template assets saved in your Project window.",
+                diff: "<strong>vs Scene Objects:</strong> Editing the master prefab updates all scene copies instantly."
+            },
+            "prefab variant": {
+                title: "Prefab Variant",
+                desc: "A child prefab that inherits from a master base prefab.",
+                diff: "<strong>vs Duplicate:</strong> Inherits base prefab changes while allowing unique property overrides."
+            },
+            "is trigger": {
+                title: "Is Trigger",
+                desc: "Collider mode that turns off solid physical walls so objects pass through.",
+                diff: "<strong>vs Solid Collider:</strong> Solid colliders bounce/block; Triggers detect overlap and fire pickup events."
+            },
+            "triggers": {
+                title: "Trigger Colliders",
+                desc: "Non-solid colliders used for coins, checkpoints, and zone detection.",
+                diff: "<strong>vs Solid Collider:</strong> Objects pass freely through triggers without bumping."
+            },
+            "ontriggerenter2d": {
+                title: "OnTriggerEnter2D()",
+                desc: "Physics event function that executes when a 2D collider enters a trigger zone.",
+                diff: "<strong>vs OnCollisionEnter2D:</strong> Trigger fires on ghost overlap; Collision fires on solid wall hit."
+            },
+            "destroy": {
+                title: "Destroy(gameObject)",
+                desc: "Removes a GameObject or component completely from memory.",
+                diff: "<strong>vs SetActive(false):</strong> Destroy deletes object; SetActive(false) temporarily hides it."
+            },
+            "requirecomponent": {
+                title: "RequireComponent",
+                desc: "Class attribute that automatically attaches required dependencies to a GameObject.",
+                diff: "<strong>Why needed:</strong> Prevents NullReferenceException crashes by guaranteeing tools exist."
+            },
+            "body type": {
+                title: "Rigidbody2D Body Type",
+                desc: "Defines how the physics engine interacts with this GameObject.",
+                diff: "<strong>Options:</strong> Dynamic (gravity/physics), Static (unmovable floors), Kinematic (script-driven)."
+            },
+            "dynamic": {
+                title: "Dynamic Body Type",
+                desc: "Full physics simulation affected by gravity and forces.",
+                diff: "<strong>vs Static / Kinematic:</strong> Static never moves (floors); Kinematic moves only via script."
+            },
+            "continuous": {
+                title: "Continuous Collision",
+                desc: "Calculates full trajectory sweep to prevent high-speed objects tunneling through walls.",
+                diff: "<strong>vs Discrete:</strong> Discrete checks once per frame and can miss thin platforms."
+            },
+            "freeze rotation z": {
+                title: "Freeze Rotation Z",
+                desc: "Locks rotation on the 2D Z-axis.",
+                diff: "<strong>Why needed:</strong> Keeps player upright so capsule collider never tips over on slopes."
+            },
+            "interpolate": {
+                title: "Interpolate",
+                desc: "Smooths physics movement rendering between fixed physics ticks.",
+                diff: "<strong>Why needed:</strong> Eliminates micro-stutter on high refresh rate displays (144Hz+)."
+            },
+            "boxcollider2d": {
+                title: "BoxCollider2D",
+                desc: "A rectangular 2D collision boundary.",
+                diff: "<strong>vs CircleCollider2D:</strong> Box fits platforms and tiles; Circle fits balls and wheels."
+            },
+            "playerinput": {
+                title: "PlayerInput",
+                desc: "Unity New Input System component mapping keys, gamepad, and touch to actions.",
+                diff: "<strong>vs Input.GetKey:</strong> Clean cross-platform mapping without hardcoding keys."
+            },
+            "playmode tint": {
+                title: "Play Mode Tint",
+                desc: "Editor color tint overlay when running the game in Play Mode.",
+                diff: "<strong>Why needed:</strong> Changes made in Play Mode reset when stopped; tint warns you!"
+            },
+            "c#": {
+                title: "C# (C-Sharp)",
+                desc: "Modern typed programming language used in Unity to control gameplay.",
+                diff: "<strong>vs Visual Scripting:</strong> Typed text scripts provide complete control over performance."
+            },
+            "rider": {
+                title: "JetBrains Rider",
+                desc: "The premier IDE code editor for Unity C# development.",
+                diff: "<strong>vs Visual Studio:</strong> Faster startup, deeper Unity integration, and built-in code analysis."
+            },
+            "package manager": {
+                title: "Package Manager",
+                desc: "Unity's built-in package installer for official modules like Cinemachine.",
+                diff: "<strong>vs Asset Store:</strong> Package Manager manages official engine tools and extensions."
+            },
+            "framing transposer": {
+                title: "Framing Transposer",
+                desc: "Cinemachine algorithm keeping camera target within a screen frame zone.",
+                diff: "<strong>vs Hard Lock:</strong> Softly guides the camera without rigid lock-on jitter."
+            },
+            "damping": {
+                title: "Damping",
+                desc: "Camera response delay factor that creates smooth motion lag.",
+                diff: "<strong>vs 0 Damping:</strong> High damping creates cinematic glide; 0 damping jerks harshly."
+            },
+            "dead zone": {
+                title: "Dead Zone",
+                desc: "Screen zone where player can move freely without moving the camera.",
+                diff: "<strong>Why needed:</strong> Prevents nauseating micro-camera movements on small player adjustments."
+            },
+            "root vs child": {
+                title: "Root vs Child",
+                desc: "GameObject hierarchy structure separating physics body from visual graphics.",
+                diff: "<strong>Why needed:</strong> Allows squashing art during jump animations without deforming physics hitboxes."
+            },
+            "gameobjects": {
+                title: "GameObjects",
+                desc: "Containers for everything in a scene (characters, coins, lights, cameras).",
+                diff: "<strong>vs Components:</strong> GameObjects are empty boxes; Components give them actual abilities."
+            },
+            "gameobject": {
+                title: "GameObject",
+                desc: "A container in your scene holding components, transform, and scripts.",
+                diff: "<strong>vs Component:</strong> GameObjects are empty containers; Components add functionality."
+            },
+            "components": {
+                title: "Components",
+                desc: "Modular scripts and features attached to GameObjects (colliders, sprites, physics).",
+                diff: "<strong>vs GameObject:</strong> GameObjects hold components; components do the actual work."
+            },
+            "monobehaviour": {
+                title: "MonoBehaviour",
+                desc: "The base class every Unity script inherits from to receive Start, Update, etc.",
+                diff: "<strong>Why needed:</strong> Gives your C# script access to Unity engine lifecycle events."
+            }
+        };
+
+        function enhanceGlossaryElements() {
+            const area = document.getElementById("slideContentArea");
+            if (!area) return;
+
+            const candidates = area.querySelectorAll('strong, code, b, .term-tip, th, td');
+            candidates.forEach(el => {
+                if (el.getAttribute('data-title')) {
+                    el.classList.add('term-tip');
+                    return;
+                }
+
+                const rawText = el.textContent.trim().toLowerCase();
+                const cleanKey = rawText.replace(/[()]/g, '').replace(/[:.]/g, '').trim();
+                
+                for (const key in GLOSSARY_TERMS) {
+                    if (cleanKey === key || cleanKey.startsWith(key + ' ') || cleanKey.includes(key)) {
+                        el.classList.add('term-tip');
+                        el.setAttribute('data-glossary', key);
+                        break;
+                    }
+                }
+            });
+        }
+
+        function findGlossaryData(target) {
+            const termEl = target.closest('.term-tip, [data-glossary], [data-title], strong, code, b');
+            if (!termEl) return null;
+
+            // 1. Direct attributes
+            const title = termEl.getAttribute('data-title');
+            const desc = termEl.getAttribute('data-desc');
+            const diff = termEl.getAttribute('data-diff');
+            if (title && desc) {
+                return { title, desc, diff, el: termEl };
+            }
+
+            // 2. data-glossary key
+            const glossKey = termEl.getAttribute('data-glossary');
+            if (glossKey && GLOSSARY_TERMS[glossKey]) {
+                return { ...GLOSSARY_TERMS[glossKey], el: termEl };
+            }
+
+            // 3. Normalized text matching
+            const rawText = termEl.textContent.trim().toLowerCase();
+            const cleanKey = rawText.replace(/[()]/g, '').replace(/[:.]/g, '').trim();
+            for (const key in GLOSSARY_TERMS) {
+                if (cleanKey === key || cleanKey.startsWith(key + ' ') || cleanKey.includes(key)) {
+                    return { ...GLOSSARY_TERMS[key], el: termEl };
+                }
+            }
+
+            return null;
+        }
+
         function renderCurrentSlide() {
             const slideId = slideIds[currentSlide];
 
@@ -2723,6 +2972,7 @@ coinPool.Release(gameObject);</pre>
                 document.getElementById("slideContentArea").innerHTML = slide.content;
             }
 
+            enhanceGlossaryElements();
             applyTierVisibility();
         }
 
@@ -2772,52 +3022,56 @@ coinPool.Release(gameObject);</pre>
                 toggleHelpModal(false);
             }
         });
+
         // Global Interactive Glossary Tooltip System (Dik Gedrukte Woorden)
         (function initGlossaryTooltips() {
-            const tipEl = document.createElement('div');
-            tipEl.id = 'glossaryTooltip';
-            tipEl.className = 'glossary-tooltip';
-            tipEl.innerHTML = `<div class="tip-title" id="gtTitle"></div><div class="tip-body" id="gtDesc"></div><div class="tip-diff" id="gtDiff"></div>`;
-            document.body.appendChild(tipEl);
+            let tipEl = document.getElementById('glossaryTooltip');
+            if (!tipEl) {
+                tipEl = document.createElement('div');
+                tipEl.id = 'glossaryTooltip';
+                tipEl.className = 'glossary-tooltip';
+                tipEl.innerHTML = `<div class="tip-title" id="gtTitle"></div><div class="tip-body" id="gtDesc"></div><div class="tip-diff" id="gtDiff"></div>`;
+                document.body.appendChild(tipEl);
+            }
 
-            function showTip(target) {
-                const title = target.getAttribute('data-title');
-                const desc = target.getAttribute('data-desc');
-                const diff = target.getAttribute('data-diff');
-                if (!title && !desc) return;
+            let activeEl = null;
 
-                document.getElementById('gtTitle').textContent = title || '';
-                document.getElementById('gtDesc').textContent = desc || '';
+            function showTip(data) {
+                activeEl = data.el;
+                document.getElementById('gtTitle').textContent = data.title || '';
+                document.getElementById('gtDesc').textContent = data.desc || '';
                 const diffEl = document.getElementById('gtDiff');
-                if (diff) {
-                    diffEl.innerHTML = diff;
+                if (data.diff) {
+                    diffEl.innerHTML = data.diff;
                     diffEl.style.display = 'block';
                 } else {
                     diffEl.style.display = 'none';
                 }
 
+                positionTip(data.el);
                 tipEl.classList.add('visible');
-                positionTip(target);
             }
 
             function hideTip() {
+                activeEl = null;
                 tipEl.classList.remove('visible');
             }
 
-            function positionTip(target) {
-                const rect = target.getBoundingClientRect();
+            function positionTip(targetEl) {
+                if (!targetEl) return;
+                const rect = targetEl.getBoundingClientRect();
                 const tipRect = tipEl.getBoundingClientRect();
 
-                let top = rect.top - tipRect.height - 8;
+                let top = rect.top - tipRect.height - 10;
                 let left = rect.left + (rect.width / 2) - (tipRect.width / 2);
 
-                if (top < 10) {
-                    top = rect.bottom + 8;
+                if (top < 12) {
+                    top = rect.bottom + 10;
                 }
 
-                if (left < 10) left = 10;
-                if (left + tipRect.width > window.innerWidth - 10) {
-                    left = window.innerWidth - tipRect.width - 10;
+                if (left < 12) left = 12;
+                if (left + tipRect.width > window.innerWidth - 12) {
+                    left = window.innerWidth - tipRect.width - 12;
                 }
 
                 tipEl.style.top = `${top}px`;
@@ -2825,23 +3079,30 @@ coinPool.Release(gameObject);</pre>
             }
 
             document.addEventListener('mouseover', (e) => {
-                const target = e.target.closest('.term-tip');
-                if (target) showTip(target);
+                const data = findGlossaryData(e.target);
+                if (data) {
+                    showTip(data);
+                } else {
+                    hideTip();
+                }
             });
 
             document.addEventListener('mouseout', (e) => {
-                const target = e.target.closest('.term-tip');
-                if (target) hideTip();
+                const termEl = e.target.closest('.term-tip, [data-glossary], [data-title], strong, code, b');
+                if (termEl && termEl === activeEl) {
+                    hideTip();
+                }
             });
 
             document.addEventListener('focusin', (e) => {
-                const target = e.target.closest('.term-tip');
-                if (target) showTip(target);
+                const data = findGlossaryData(e.target);
+                if (data) {
+                    showTip(data);
+                }
             });
 
-            document.addEventListener('focusout', (e) => {
-                const target = e.target.closest('.term-tip');
-                if (target) hideTip();
+            document.addEventListener('focusout', () => {
+                hideTip();
             });
         })();
 
