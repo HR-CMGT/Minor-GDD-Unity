@@ -802,19 +802,62 @@
         }
 
         /* ==========================================================================
-           LECTURE MODE (Strict Core Only): Large Typography, Content-Fitted Cards
+           LECTURE MODE (Strict Core Only): Large Screen-Filling Typography & Cards
            ========================================================================== */
         body.projector-mode .view-interactive {
-            padding: 26px 42px;
+            padding: 24px 40px;
         }
 
+        /* Slide 1 Hero in Lecture Mode */
+        body.projector-mode .slide-hero {
+            padding: 36px 54px;
+        }
+
+        body.projector-mode .hero-tag-badge {
+            font-size: clamp(2rem, 3.2vw, 3.4rem);
+            padding: 12px 32px;
+            border-radius: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        body.projector-mode .hero-sub {
+            font-size: clamp(1.25rem, 1.8vw, 1.85rem);
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        body.projector-mode .hero-stack {
+            gap: 12px;
+        }
+
+        body.projector-mode .hero-pill-card {
+            padding: 14px 22px;
+            border-radius: 10px;
+        }
+
+        body.projector-mode .hero-pill-title {
+            font-size: clamp(1.05rem, 1.45vw, 1.5rem);
+            margin-bottom: 4px;
+        }
+
+        body.projector-mode .hero-pill-desc {
+            font-size: clamp(1.02rem, 1.35vw, 1.38rem);
+            line-height: 1.5;
+        }
+
+        /* Standard Slides in Lecture Mode */
         body.projector-mode .slide-title-banner {
-            font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+            font-size: clamp(1.45rem, 2.3vw, 2.3rem);
             padding: 8px 24px;
+            border-radius: 8px;
+        }
+
+        body.projector-mode .content-stack {
+            gap: 14px;
         }
 
         body.projector-mode .content-card {
-            padding: 16px 22px;
+            padding: 18px 24px;
             border-radius: 10px;
         }
 
@@ -823,24 +866,61 @@
         }
 
         body.projector-mode .card-title {
-            font-size: clamp(1.15rem, 1.6vw, 1.65rem);
+            font-size: clamp(1.2rem, 1.7vw, 1.75rem);
             margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
 
         body.projector-mode .card-body {
-            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
-            line-height: 1.55;
+            font-size: clamp(1.15rem, 1.55vw, 1.6rem);
+            line-height: 1.6;
+        }
+
+        body.projector-mode .card-body ul,
+        body.projector-mode .card-body ol {
+            padding-left: 28px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        body.projector-mode .card-body li {
+            margin-bottom: 6px;
         }
 
         body.projector-mode pre {
-            font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+            padding: 14px 20px;
+            line-height: 1.5;
+        }
+
+        body.projector-mode table.dense-table th {
+            font-size: clamp(1.15rem, 1.55vw, 1.6rem);
             padding: 12px 18px;
         }
 
-        body.projector-mode table.dense-table th,
         body.projector-mode table.dense-table td {
-            font-size: clamp(1.05rem, 1.45vw, 1.45rem);
-            padding: 10px 16px;
+            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+            padding: 12px 18px;
+        }
+
+        body.projector-mode .media-placeholder-title {
+            font-size: clamp(1.05rem, 1.4vw, 1.45rem);
+            font-weight: 900;
+        }
+
+        body.projector-mode .media-placeholder-sub {
+            font-size: clamp(0.9rem, 1.15vw, 1.2rem);
+            line-height: 1.45;
+        }
+
+        body.projector-mode .media-canvas-badge {
+            font-size: 0.78rem;
+            padding: 3px 8px;
+        }
+
+        body.projector-mode .media-canvas-dim {
+            font-size: 0.78rem;
+            padding: 3px 8px;
         }
 
         /* HIDE ADVANCED & EXPERT IN LECTURE MODE */
