@@ -8,12 +8,12 @@
         :root {
             --hr-red: #e20049;
             --hr-darkred: #b8003b;
-            --bg-stage: #0a0a0d;
+            --bg-stage: #08080b;
+            --bg-topbar: #121216;
             --bg-slide: #ffffff;
-            --bg-slide-dark: #0f172a;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --border-subtle: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --border-subtle: #cbd5e1;
             
             --tier-beg: #059669;
             --tier-beg-bg: #ecfdf5;
@@ -50,7 +50,7 @@
         /* Top Bar */
         .top-bar {
             height: 52px;
-            background: #141418;
+            background: var(--bg-topbar);
             border-bottom: 1px solid #24242e;
             display: flex;
             justify-content: space-between;
@@ -222,9 +222,9 @@
 
         .slide-viewport {
             width: 100%;
-            max-width: 1160px;
+            max-width: 1180px;
             height: 100%;
-            max-height: 652px;
+            max-height: 664px;
             aspect-ratio: 16 / 9;
             background: #ffffff;
             border-radius: 12px;
@@ -250,7 +250,7 @@
             height: 100%;
             background: #ffffff;
             color: var(--text-dark);
-            padding: 28px 36px;
+            padding: 26px 36px;
             display: none;
             flex-direction: column;
             overflow-y: auto;
@@ -285,7 +285,7 @@
         .hero-inner {
             position: relative;
             z-index: 2;
-            max-width: 780px;
+            max-width: 820px;
         }
 
         .hero-tag-badge {
@@ -345,7 +345,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             border-bottom: 2px solid #f1f5f9;
             padding-bottom: 8px;
         }
@@ -384,7 +384,39 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+        }
+
+        /* Projector Mode Styling (Big, High-Contrast, Lecture Readability) */
+        body.projector-mode .slide-viewport {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        body.projector-mode .slide-title-banner {
+            font-size: 1.55rem;
+            padding: 8px 20px;
+        }
+
+        body.projector-mode .card-title {
+            font-size: 1.05rem;
+        }
+
+        body.projector-mode .card-body {
+            font-size: 1.12rem;
+            line-height: 1.55;
+        }
+
+        body.projector-mode pre {
+            font-size: 1.02rem;
+            padding: 12px 16px;
+            line-height: 1.45;
+        }
+
+        body.projector-mode table.dense-table th, 
+        body.projector-mode table.dense-table td {
+            font-size: 1.05rem;
+            padding: 8px 12px;
         }
 
         /* High-Density Grid Cards */
@@ -447,7 +479,7 @@
 
         .card-body li { margin-bottom: 3px; }
 
-        /* Collapsible Tier Accordions */
+        /* Collapsible Tier Accordions (Intermediate & Pro) */
         details.tier-accordion {
             border-radius: 6px;
             overflow: hidden;
@@ -584,6 +616,32 @@
         .nav-btn:hover:not(:disabled) { background: #334155; border-color: #475569; }
         .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+        /* View Mode Toggle Pill in Bottom Bar */
+        .viewmode-toggle {
+            display: flex;
+            align-items: center;
+            background: #1e1e26;
+            border: 1px solid #2e2e3a;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .viewmode-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .viewmode-btn.active {
+            background: #334155;
+            color: #ffffff;
+        }
+
         .slide-counter {
             font-size: 0.8rem;
             font-weight: 700;
@@ -699,6 +757,13 @@
     <!-- Bottom Controls -->
     <div class="bottom-bar">
         <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+        
+        <!-- View Size Toggle: Projector Mode vs Lab/Student Mode -->
+        <div class="viewmode-toggle">
+            <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Projector Mode (Big & Readable)</button>
+            <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Student / Lab Mode (Detailed)</button>
+        </div>
+
         <div style="display: flex; align-items: center; gap: 16px;">
             <span class="slide-counter" id="slideCounter">Slide 1 / 21</span>
             <span class="mode-indicator old" id="modeBadge">Original Keynote (HD)</span>
@@ -731,7 +796,7 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // Content Matrix Crafted for High Density, Direct Downloads for Beginners, and Advanced Git Workflows
+        // Content Matrix: Every Single Slide Includes Explicit Beginner, Intermediate, and Pro Tiers
         const slidesData = [
             // Slide 1
             {
@@ -821,6 +886,15 @@
                             Complete the beginner movement loop first. Once your box moves and jumps cleanly, proceed to add jump buffering and coyote time.
                         </div>
                     </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Event-Driven Architecture Blueprint</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Replace direct script references with C# event broadcasts or ScriptableObject channels to keep systems decoupled.
+                        </div>
+                    </details>
                 `
             },
             // Slide 4
@@ -847,12 +921,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content-card" style="margin-top: 6px;">
-                        <div class="card-title beg">Expected Part 1 Deliverable:</div>
-                        <div class="card-body">
-                            Working Unity 6 editor scene with imported starter assets, Cinemachine 3 installed, and <code>0_startscene.unity</code> open.
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] URP 2D Renderer Data Configuration</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            In <code>Universal Render Pipeline Asset_Renderer</code>, verify <strong>2D Lights</strong> and <strong>Pixel Perfect Camera</strong> support are enabled.
                         </div>
-                    </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Scoped Registries in Packages/manifest.json</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Define scoped registries in <code>Packages/manifest.json</code> to distribute shared game tools and utilities across team members automatically.
+                        </div>
+                    </details>
                 `
             },
             // Slide 5
@@ -926,6 +1012,15 @@ git checkout -b feature/platformer-controller</pre>
                             Add <code>[ContextMenu("Trigger Test")]</code> above C# functions to trigger test behaviors via the Inspector context menu during runtime.
                         </div>
                     </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] SelectionBase & Custom Property Drawers</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Add <code>[SelectionBase]</code> to the root GameObject script so clicking in Scene View always selects the root prefab container.
+                        </div>
+                    </details>
                 `
             },
             // Slide 7
@@ -953,6 +1048,15 @@ git checkout -b feature/platformer-controller</pre>
                             For crisp pixel art: Select sprites in Project View &rarr; Set <strong>Pixels Per Unit</strong> to 16 &rarr; <strong>Filter Mode: Point (no filter)</strong> &rarr; <strong>Compression: None</strong>.
                         </div>
                     </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Automated Asset Postprocessors</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Write an <code>AssetPostprocessor</code> script to automatically set Point filter mode and 16 PPU whenever any sprite is imported into <code>Textures/</code>.
+                        </div>
+                    </details>
                 `
             },
             // Slide 8
@@ -978,13 +1082,22 @@ git checkout -b feature/platformer-controller</pre>
                             </div>
                         </div>
                     </div>
-                    <details class="tier-accordion pro" id="tierProBlock">
+                    <details class="tier-accordion int" id="tierIntBlock">
                         <summary class="accordion-header">
-                            <span>[Pro] Custom Input Action Assets</span>
+                            <span>[Intermediate] Custom Input Action Assets</span>
                             <span style="font-size:0.75rem;">Click to Open ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Right-click in Project &rarr; <code>Create > Input Actions</code> to define custom Action Maps with bindings for keyboard, gamepad, and touch controls.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] C# Direct Action Subscriptions</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Subscribe directly to C# actions: <code>controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt;();</code> for zero-reflection performance.
                         </div>
                     </details>
                 `
@@ -1030,7 +1143,7 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                     <details class="tier-accordion pro" id="tierProBlock">
                         <summary class="accordion-header">
-                            <span>[Pro] Score Event Channel</span>
+                            <span>[Pro] Score Event Channel (Decoupled)</span>
                             <span style="font-size:0.75rem;">Click to Open ▼</span>
                         </summary>
                         <div class="accordion-body">
@@ -1076,11 +1189,20 @@ git checkout -b feature/platformer-controller</pre>
                     </table>
                     <details class="tier-accordion int" id="tierIntBlock">
                         <summary class="accordion-header">
-                            <span>[Intermediate] Frictionless Wall Material</span>
+                            <span>[Intermediate] Frictionless Wall PhysicsMaterial2D</span>
                             <span style="font-size:0.75rem;">Click to Open ▼</span>
                         </summary>
                         <div class="accordion-body">
                             Create a <code>PhysicsMaterial2D</code> with <strong>Friction: 0</strong> and attach to player collider so jumping against walls doesn't stick.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Vertical Terminal Velocity Clamping</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Clamp vertical falling velocity in <code>FixedUpdate</code>: <code>float y = Mathf.Max(rb.linearVelocity.y, -maxFallSpeed);</code> to prevent tunnel glitching.
                         </div>
                     </details>
                 `
@@ -1120,6 +1242,21 @@ if (jumpRequested) {
                             </div>
                         </div>
                     </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Acceleration & Deceleration Smoothing Curves</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            <div class="code-box">
+                                <pre>float targetSpeed = moveInput.x * moveSpeed;
+float accel = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
+float newSpeedX = Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed, accel * Time.fixedDeltaTime);
+rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                        </div>
+                    </details>
                 `
             },
             // Slide 12
@@ -1149,6 +1286,15 @@ if (jumpRequested) {
                             Methods like <code>Physics2D.Raycast</code> return a <code>RaycastHit2D</code> struct containing <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code>.
                         </div>
                     </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Inspecting Open-Source Unity C# Engine Source</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Inspect Unity's open-source C# repo on GitHub to see the internal implementation of `MonoBehaviour`, `Transform`, and `Physics2D`.
+                        </div>
+                    </details>
                 `
             },
             // Slide 13
@@ -1175,6 +1321,24 @@ if (jumpRequested) {
                             </div>
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Recommended Game Feel Talks</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Watch "Juice It or Lose It" (Martin Jonasson & Petri Purho) and "The Art of Screenshake" (Jan Willem Nijman / Vlambeer).
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Clean Architecture & Dependency Injection</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Explore VContainer and Zenject for inversion of control and decoupled testable service injection in Unity.
+                        </div>
+                    </details>
                 `
             },
             // Slide 14
@@ -1195,6 +1359,24 @@ if (jumpRequested) {
                             <strong>Crucial Rule:</strong> Input checks belong in <code>Update()</code> so keystrokes are never missed; physics calculations belong in <code>FixedUpdate()</code>.
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Custom Script Execution Order Settings</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            In <code>Project Settings > Script Execution Order</code>, configure Manager scripts to run at <code>-100</code> before character controllers execute.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Zero-Allocation YieldInstruction Caching</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Avoid calling <code>yield return new WaitForSeconds(1f);</code> repeatedly in Coroutines. Cache <code>private readonly WaitForSeconds wait = new(1f);</code> in field definitions.
+                        </div>
+                    </details>
                 `
             },
             // Slide 15
@@ -1223,6 +1405,24 @@ if (jumpRequested) {
                             </div>
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Decoupling Audio & VFX from Physics</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Trigger particle and sound events via delegates rather than nesting audio code directly inside character movement logic.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] ScriptableObject Architecture</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Use ScriptableObjects to hold shared player configurations (Speed, JumpForce, GravityScale) that update live across all prefabs during runtime.
+                        </div>
+                    </details>
                 `
             },
             // Slide 16
@@ -1243,6 +1443,29 @@ public class PlayerController2D : MonoBehaviour {
                             Attaching this script automatically validates and adds required components in the Inspector.
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Safe TryGetComponent Syntax</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            <div class="code-box">
+                                <pre>if (other.TryGetComponent&lt;ICollectible&gt;(out var item)) {
+    item.Collect();
+}</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Custom Inspector GUI with Play Mode Buttons</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Use <code>[CustomEditor(typeof(PlayerController2D))]</code> with <code>GUILayout.Button("Reset Player")</code> for rapid level designer debugging.
+                        </div>
+                    </details>
                 `
             },
             // Slide 17
@@ -1261,6 +1484,24 @@ public class PlayerController2D : MonoBehaviour {
                             <strong>Golden Rule:</strong> Keep physics colliders on the Root. Put sprite flips and squash-and-stretch animations on the Graphics child so physics hitboxes never deform!
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Squash & Stretch Jump Animations</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Scale the child <code>Graphics</code> Transform (e.g. <code>Vector3(0.8f, 1.2f, 1f)</code>) on takeoff without deforming the physics box collider on Root.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Attachment Sockets Pattern</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Create dedicated child Transforms (<code>FootstepSocket</code>, <code>MuzzleSocket</code>) for precise procedural VFX and audio spatial placement.
+                        </div>
+                    </details>
                 `
             },
             // Slide 18
@@ -1278,6 +1519,24 @@ public class PlayerController2D : MonoBehaviour {
                             </ol>
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Predictive Lookahead Framing</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Set <strong>Lookahead Time</strong> to <code>0.2s</code> and <strong>Lookahead Smoothing</strong> to <code>5</code> so the camera pans ahead in movement direction.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Cinemachine Impulse Shake on Landings</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Attach a <code>CinemachineImpulseSource</code> to Player and trigger screen shake on hard impacts: <code>impulseSource.GenerateImpulse();</code>.
+                        </div>
+                    </details>
                 `
             },
             // Slide 19
@@ -1304,6 +1563,24 @@ public class PlayerController2D : MonoBehaviour {
                             </div>
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Prefab Variants Workflow</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Right-click base <code>Coin_Base</code> &rarr; <code>Create > Prefab Variant</code> to create <code>GoldCoin</code> (10 pts) and <code>GemCoin</code> (50 pts) inheriting all base behaviors.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Nested Prefabs in Team Environments</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Nest independently authored prefabs (HealthBar HUD, Weapon Socket) inside the character prefab to allow multiple developers to work concurrently.
+                        </div>
+                    </details>
                 `
             },
             // Slide 20
@@ -1326,6 +1603,15 @@ public class Coin : MonoBehaviour {
                             <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                         </div>
                     </div>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Audio Playback Before GameObject Destruction</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            <code>Destroy(gameObject)</code> instantly terminates AudioSources! Use <code>AudioSource.PlayClipAtPoint(clip, transform.position);</code> or disable <code>SpriteRenderer</code> first.
+                        </div>
+                    </details>
                     <details class="tier-accordion pro" id="tierProBlock">
                         <summary class="accordion-header">
                             <span>[Pro] Unity Object Pool Pattern (Zero Garbage Collection)</span>
@@ -1379,6 +1665,24 @@ coinPool.Release(gameObject);</pre>
                             </tr>
                         </tbody>
                     </table>
+                    <details class="tier-accordion int" id="tierIntBlock">
+                        <summary class="accordion-header">
+                            <span>[Intermediate] Visual Raycast Debugging in Scene View</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Draw live gizmo rays in Scene View: <code>Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.green);</code>.
+                        </div>
+                    </details>
+                    <details class="tier-accordion pro" id="tierProBlock">
+                        <summary class="accordion-header">
+                            <span>[Pro] Frame-by-Frame Editor Breakpoint Execution</span>
+                            <span style="font-size:0.75rem;">Click to Open ▼</span>
+                        </summary>
+                        <div class="accordion-body">
+                            Execute <code>Debug.Break();</code> in C# to pause the Unity Editor on the exact physics tick an unexpected collision or state bug triggers.
+                        </div>
+                    </details>
                 `
             }
         ];
@@ -1386,6 +1690,7 @@ coinPool.Release(gameObject);</pre>
         let currentSlide = 0;
         let isNewMode = false;
         let currentTier = 'all';
+        let currentViewMode = 'projector'; // 'projector' or 'lab'
 
         function init() {
             const drawer = document.getElementById("slideDrawer");
@@ -1411,6 +1716,19 @@ coinPool.Release(gameObject);</pre>
             });
 
             updateView();
+        }
+
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            if (mode === 'projector') {
+                document.body.classList.add('projector-mode');
+                document.getElementById('btnModeProjector').classList.add('active');
+                document.getElementById('btnModeLab').classList.remove('active');
+            } else {
+                document.body.classList.remove('projector-mode');
+                document.getElementById('btnModeProjector').classList.remove('active');
+                document.getElementById('btnModeLab').classList.add('active');
+            }
         }
 
         function setTierFilter(tier) {
@@ -1536,6 +1854,7 @@ coinPool.Release(gameObject);</pre>
         }
 
         function updateView() {
+            setViewMode('projector');
             updateModeDisplay();
             goToSlide(0);
         }
@@ -1562,6 +1881,8 @@ coinPool.Release(gameObject);</pre>
             } else if (e.key === " ") {
                 e.preventDefault();
                 setMode(!isNewMode);
+            } else if (e.key.toLowerCase() === "p") {
+                setViewMode(currentViewMode === 'projector' ? 'lab' : 'projector');
             } else if (e.key === "1") {
                 setTierFilter('beg');
             } else if (e.key === "2") {
