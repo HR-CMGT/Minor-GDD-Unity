@@ -57,6 +57,7 @@
             align-items: center;
             padding: 0 20px;
             z-index: 100;
+            flex-shrink: 0;
             transition: all 0.25s ease;
         }
 
@@ -170,6 +171,7 @@
             flex-direction: column;
             gap: 8px;
             padding: 10px;
+            flex-shrink: 0;
             transition: all 0.25s ease;
         }
 
@@ -218,7 +220,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 14px;
             background: #040406;
             position: relative;
             overflow: hidden;
@@ -226,8 +228,8 @@
 
         .slide-viewport {
             aspect-ratio: 16 / 9;
-            width: min(100%, calc((100vh - 52px - 46px - 32px) * (16 / 9)));
-            height: min(calc((100vw - 210px - 32px) * (9 / 16)), calc(100vh - 52px - 46px - 32px));
+            width: min(100%, calc((100vh - 52px - 46px - 28px) * (16 / 9)));
+            height: min(calc((100vw - 210px - 28px) * (9 / 16)), calc(100vh - 52px - 46px - 28px));
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 24px 64px rgba(0, 0, 0, 0.95);
@@ -262,18 +264,18 @@
         }
 
         /* ==========================================================================
-           AUTO-FITTING 16:9 PRESENTATION ENGINE (Zero Overflow, Proportional Scaling)
+           REVISED SLIDE VIEWPORT (100% Guaranteed In-Frame Fit)
            ========================================================================== */
         .view-interactive {
             width: 100%;
             height: 100%;
             background: #ffffff;
             color: var(--text-dark);
-            padding: clamp(14px, 2.5vh, 26px) clamp(20px, 3vw, 36px);
+            padding: 16px 28px;
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            overflow: hidden; /* NEVER GOES OFF SCREEN */
+            overflow: hidden; /* ABSOLUTELY ZERO OVERFLOW / CUTOFF */
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 10;
@@ -290,7 +292,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: clamp(24px, 4vh, 48px) clamp(32px, 4vw, 56px);
+            padding: 24px 36px;
             z-index: 5;
             overflow: hidden;
         }
@@ -309,15 +311,15 @@
             max-width: 900px;
             display: flex;
             flex-direction: column;
-            gap: clamp(8px, 1.5vh, 16px);
+            gap: 10px;
         }
 
         .hero-tag-badge {
             background: var(--hr-red);
             color: #fff;
-            padding: clamp(6px, 1.2vh, 12px) clamp(16px, 2vw, 28px);
+            padding: 8px 20px;
             border-radius: 8px;
-            font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+            font-size: clamp(1.4rem, 2.2vw, 2.2rem);
             font-weight: 900;
             display: inline-block;
             box-shadow: 0 10px 30px rgba(226, 0, 73, 0.45);
@@ -326,7 +328,7 @@
         }
 
         .hero-sub {
-            font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+            font-size: clamp(1.05rem, 1.4vw, 1.4rem);
             font-weight: 700;
             color: #f8fafc;
         }
@@ -334,7 +336,7 @@
         .hero-stack {
             display: flex;
             flex-direction: column;
-            gap: clamp(8px, 1.2vh, 14px);
+            gap: 8px;
         }
 
         .hero-pill-card {
@@ -342,12 +344,12 @@
             backdrop-filter: blur(10px);
             border: 1.5px solid rgba(255,255,255,0.25);
             border-radius: 8px;
-            padding: clamp(10px, 1.5vh, 16px) clamp(14px, 1.8vw, 20px);
+            padding: 8px 14px;
             color: #e2e8f0;
         }
 
         .hero-pill-title {
-            font-size: clamp(0.88rem, 1.2vw, 1.2rem);
+            font-size: clamp(0.82rem, 1vw, 1rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -359,8 +361,8 @@
         .hero-pill-title.exp { color: #c084fc; }
 
         .hero-pill-desc {
-            font-size: clamp(0.92rem, 1.25vw, 1.2rem);
-            line-height: 1.45;
+            font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+            line-height: 1.4;
             color: #e2e8f0;
         }
 
@@ -369,18 +371,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: clamp(6px, 1.2vh, 12px);
+            margin-bottom: 6px;
             border-bottom: 2px solid #f1f5f9;
-            padding-bottom: clamp(4px, 0.8vh, 8px);
+            padding-bottom: 4px;
             flex-shrink: 0;
         }
 
         .slide-title-banner {
             background: var(--hr-red);
             color: #ffffff;
-            padding: clamp(5px, 0.9vh, 10px) clamp(14px, 1.6vw, 24px);
+            padding: 4px 16px;
             border-radius: 6px;
-            font-size: clamp(1.25rem, 1.9vw, 1.95rem);
+            font-size: clamp(1.15rem, 1.6vw, 1.6rem);
             font-weight: 900;
             display: inline-block;
             letter-spacing: -0.5px;
@@ -392,11 +394,11 @@
         }
 
         .badge-pill {
-            font-size: clamp(0.68rem, 0.9vw, 0.88rem);
+            font-size: clamp(0.65rem, 0.8vw, 0.8rem);
             font-weight: 800;
             text-transform: uppercase;
-            padding: clamp(3px, 0.6vh, 6px) clamp(6px, 1vw, 10px);
-            border-radius: 5px;
+            padding: 3px 8px;
+            border-radius: 4px;
             letter-spacing: 0.5px;
         }
 
@@ -404,21 +406,21 @@
         .badge-adv { background: var(--tier-adv-bg); color: var(--tier-adv); border: 1.5px solid var(--tier-adv-border); }
         .badge-exp { background: var(--tier-exp-bg); color: var(--tier-exp); border: 1.5px solid var(--tier-exp-border); }
 
-        /* Slide Content Area (Proportional Vertical Fill) */
+        /* Slide Content Area (Proportional Elastic Sizing) */
         .slide-content-area {
             flex: 1 1 0;
             min-height: 0;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: clamp(6px, 1.2vh, 12px);
+            gap: 6px;
             overflow: hidden;
         }
 
         .content-stack {
             display: flex;
             flex-direction: column;
-            gap: clamp(6px, 1.2vh, 12px);
+            gap: 6px;
             flex: 1 1 0;
             min-height: 0;
             justify-content: space-evenly;
@@ -428,7 +430,7 @@
             background: #f8fafc;
             border: 1.5px solid var(--border-subtle);
             border-radius: 8px;
-            padding: clamp(8px, 1.4vh, 16px) clamp(12px, 1.6vw, 22px);
+            padding: 8px 14px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
             width: 100%;
             flex: 1 1 0;
@@ -436,10 +438,11 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            overflow: hidden;
         }
 
         .content-card.primary {
-            border-left: clamp(6px, 0.8vw, 10px) solid var(--tier-core);
+            border-left: 6px solid var(--tier-core);
             background: #ffffff;
         }
 
@@ -448,8 +451,8 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(1.05rem, 1.4vw, 1.45rem);
-            margin-bottom: clamp(2px, 0.6vh, 6px);
+            font-size: clamp(0.9rem, 1.2vw, 1.25rem);
+            margin-bottom: 2px;
             flex-shrink: 0;
         }
 
@@ -458,27 +461,27 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.95rem, 1.35vw, 1.4rem);
-            line-height: 1.5;
+            font-size: clamp(0.85rem, 1.15vw, 1.2rem);
+            line-height: 1.42;
             color: #1e293b;
             font-weight: 500;
             overflow: hidden;
         }
 
         .card-body ul, .card-body ol {
-            margin-left: clamp(18px, 2.2vw, 30px);
+            margin-left: 18px;
             margin-top: 2px;
             margin-bottom: 2px;
         }
 
         .card-body li {
-            margin-bottom: clamp(2px, 0.5vh, 6px);
+            margin-bottom: 2px;
         }
 
         /* Monospace Code Boxes */
         .code-box {
             position: relative;
-            margin: clamp(4px, 0.8vh, 8px) 0;
+            margin: 3px 0;
             width: 100%;
             flex-shrink: 0;
         }
@@ -488,22 +491,22 @@
             color: #38bdf8;
             overflow-x: auto;
             font-family: Consolas, Monaco, "Courier New", Courier, monospace;
-            font-size: clamp(0.9rem, 1.25vw, 1.3rem);
-            line-height: 1.42;
-            padding: clamp(8px, 1.2vh, 14px) clamp(12px, 1.5vw, 20px);
-            border-radius: 8px;
+            font-size: clamp(0.82rem, 1.05vw, 1.15rem);
+            line-height: 1.35;
+            padding: 8px 12px;
+            border-radius: 6px;
         }
 
         .copy-btn {
             position: absolute;
-            top: 6px;
-            right: 6px;
+            top: 5px;
+            right: 5px;
             background: #1e293b;
             color: #cbd5e1;
             border: 1px solid #475569;
-            padding: 3px 8px;
-            border-radius: 5px;
-            font-size: clamp(0.65rem, 0.8vw, 0.85rem);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -525,15 +528,15 @@
             text-align: left;
             border: 1.5px solid #cbd5e1;
             font-weight: 900;
-            font-size: clamp(0.95rem, 1.3vw, 1.35rem);
-            padding: clamp(6px, 1.2vh, 12px) clamp(10px, 1.4vw, 16px);
+            font-size: clamp(0.85rem, 1.1vw, 1.15rem);
+            padding: 5px 10px;
         }
 
         table.dense-table td {
             border: 1.5px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.9rem, 1.2vw, 1.25rem);
-            padding: clamp(6px, 1.2vh, 12px) clamp(10px, 1.4vw, 16px);
+            font-size: clamp(0.82rem, 1.05vw, 1.1rem);
+            padding: 5px 10px;
             font-weight: 500;
         }
 
@@ -565,8 +568,8 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
-            font-size: clamp(0.82rem, 1.1vw, 1.15rem);
-            padding: clamp(5px, 0.8vh, 8px) clamp(10px, 1.2vw, 14px);
+            font-size: clamp(0.78rem, 1vw, 1.05rem);
+            padding: 4px 8px;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -576,37 +579,51 @@
             color: #1e293b;
             background: #ffffff;
             border-top: 1px solid rgba(0,0,0,0.06);
-            font-size: clamp(0.84rem, 1.1vw, 1.15rem);
-            padding: clamp(6px, 1vh, 10px) clamp(10px, 1.4vw, 16px);
-            line-height: 1.45;
+            font-size: clamp(0.78rem, 0.95vw, 1rem);
+            padding: 6px 10px;
+            line-height: 1.35;
         }
 
         /* ==========================================================================
-           LECTURE MODE (Core Only): Expanded Large Typography
+           LECTURE MODE (Strict Core Only): Expands with Large Typography
            ========================================================================== */
+        body.projector-mode .view-interactive {
+            padding: 24px 36px;
+        }
+
+        body.projector-mode .slide-title-banner {
+            font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+            padding: 6px 20px;
+        }
+
         body.projector-mode .content-card {
-            padding: clamp(14px, 2.2vh, 24px) clamp(18px, 2.4vw, 30px);
+            padding: clamp(12px, 2vh, 22px) clamp(16px, 2.2vw, 28px);
+            border-radius: 10px;
+        }
+
+        body.projector-mode .content-card.primary {
+            border-left: 8px solid var(--tier-core);
         }
 
         body.projector-mode .card-title {
-            font-size: clamp(1.2rem, 1.7vw, 1.75rem);
-            margin-bottom: 6px;
+            font-size: clamp(1.15rem, 1.6vw, 1.65rem);
+            margin-bottom: 4px;
         }
 
         body.projector-mode .card-body {
-            font-size: clamp(1.15rem, 1.6vw, 1.65rem);
-            line-height: 1.6;
+            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
+            line-height: 1.55;
         }
 
         body.projector-mode pre {
-            font-size: clamp(1.1rem, 1.5vw, 1.5rem);
-            padding: clamp(12px, 1.8vh, 20px) clamp(16px, 2vw, 24px);
+            font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+            padding: 12px 18px;
         }
 
         body.projector-mode table.dense-table th,
         body.projector-mode table.dense-table td {
-            font-size: clamp(1.1rem, 1.5vw, 1.55rem);
-            padding: clamp(10px, 1.6vh, 16px) clamp(14px, 1.8vw, 20px);
+            font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+            padding: 8px 14px;
         }
 
         /* HIDE ADVANCED & EXPERT IN LECTURE MODE */
@@ -625,7 +642,7 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding-top: clamp(4px, 0.6vh, 8px);
+            padding-top: 4px;
             border-top: 1.5px solid #f1f5f9;
             flex-shrink: 0;
         }
@@ -640,6 +657,7 @@
             align-items: center;
             padding: 0 20px;
             z-index: 100;
+            flex-shrink: 0;
         }
 
         .nav-btn {
@@ -776,7 +794,7 @@
                             </div>
                         </div>
 
-                        <!-- Dynamic Slide Content Area (Proportional Fit) -->
+                        <!-- Dynamic Slide Content Area (Guaranteed In-Frame Fit) -->
                         <div class="slide-content-area" id="slideContentArea">
                             <!-- Populated dynamically via JS -->
                         </div>
@@ -1844,10 +1862,15 @@ coinPool.Release(gameObject);</pre>
             advBlocks.forEach(el => {
                 if (currentTier === 'core') {
                     el.style.display = 'none';
-                } else if (currentTier === 'adv' || currentTier === 'exp') {
+                    el.open = false;
+                } else if (currentTier === 'adv') {
                     el.style.display = 'block';
                     el.open = true;
+                } else if (currentTier === 'exp') {
+                    el.style.display = 'none';
+                    el.open = false;
                 } else {
+                    // 'all' mode: show collapsed by default so zero overflow occurs
                     el.style.display = 'block';
                     el.open = false;
                 }
@@ -1856,10 +1879,12 @@ coinPool.Release(gameObject);</pre>
             expBlocks.forEach(el => {
                 if (currentTier === 'core' || currentTier === 'adv') {
                     el.style.display = 'none';
+                    el.open = false;
                 } else if (currentTier === 'exp') {
                     el.style.display = 'block';
                     el.open = true;
                 } else {
+                    // 'all' mode: show collapsed by default so zero overflow occurs
                     el.style.display = 'block';
                     el.open = false;
                 }
