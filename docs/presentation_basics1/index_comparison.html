@@ -462,6 +462,7 @@
             flex-direction: column;
             justify-content: flex-start;
             gap: 10px;
+            min-height: 0;
         }
 
         .content-stack {
@@ -525,10 +526,12 @@
            ========================================================================== */
         .split-media-layout {
             display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 16px;
-            align-items: stretch;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 18px;
+            align-items: center; /* Vertically center media to maintain true aspect ratio */
             width: 100%;
+            height: 100%;
+            min-height: 0;
             flex: 1 1 auto;
         }
 
@@ -536,10 +539,20 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            justify-content: flex-start;
+            justify-content: center;
+            min-height: 0;
         }
 
-        /* Dedicated Visual / GIF Canvas Container */
+        .split-media-layout .right-column {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+        }
+
+        /* Dedicated Visual / GIF Canvas Container with Exact Proportions */
         .media-canvas {
             background: #090d16;
             border: 1.5px solid #242c3d;
@@ -549,8 +562,24 @@
             flex-direction: column;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             width: 100%;
-            height: 100%;
-            min-height: 180px;
+        }
+
+        /* Ratio Variations */
+        .media-canvas.ratio-16-9 {
+            aspect-ratio: 16 / 9;
+            max-height: 330px;
+        }
+
+        .media-canvas.ratio-4-3 {
+            aspect-ratio: 4 / 3;
+            max-height: 330px;
+        }
+
+        .media-canvas.ratio-portrait {
+            aspect-ratio: 4 / 5;
+            max-height: 340px;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
         .media-canvas-header {
@@ -561,6 +590,7 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            height: 32px;
         }
 
         .media-canvas-badge {
@@ -586,7 +616,7 @@
 
         .media-canvas-viewport {
             flex: 1 1 auto;
-            padding: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -594,6 +624,7 @@
             background: radial-gradient(circle at center, #111827 0%, #080c14 100%);
             position: relative;
             overflow: hidden;
+            min-height: 0;
         }
 
         .media-canvas-viewport img,
@@ -602,20 +633,19 @@
             max-height: 100%;
             object-fit: contain;
             border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .media-placeholder-graphic {
             border: 2px dashed #334155;
             border-radius: 6px;
-            width: 90%;
-            height: 85%;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 12px;
+            gap: 6px;
+            padding: 8px;
             text-align: center;
             transition: all 0.2s ease;
         }
@@ -626,32 +656,15 @@
         }
 
         .media-placeholder-title {
-            font-size: clamp(0.85rem, 1.1vw, 1.15rem);
+            font-size: clamp(0.82rem, 1.05vw, 1.1rem);
             font-weight: 800;
             color: #f1f5f9;
         }
 
         .media-placeholder-sub {
-            font-size: clamp(0.75rem, 0.95vw, 0.95rem);
+            font-size: clamp(0.72rem, 0.9vw, 0.9rem);
             color: #94a3b8;
-            line-height: 1.4;
-        }
-
-        /* Inline Media Frame for single stack slides */
-        .inline-media-canvas {
-            background: #090d16;
-            border: 1.5px solid #242c3d;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            margin: 6px 0;
-            width: 100%;
-        }
-
-        .inline-media-canvas .media-canvas-viewport {
-            min-height: 85px;
-            padding: 10px;
+            line-height: 1.35;
         }
 
         /* Clickable URLs & References */
@@ -1062,7 +1075,7 @@
             "2CF49E2A-36C4-4B06-BD47-09ABC3C5A47D"  // Slide 21: Help? Discord!
         ];
 
-        // Content Matrix: Pure Full-Width Stacked Layouts & Split Media Mockups Across All 21 Slides
+        // Content Matrix: Pure Full-Width Stacked Layouts & Proportional Split Media Canvases
         const slidesData = [
             // Slide 1: Hero
             {
@@ -1272,43 +1285,47 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 7: Startproject
+            // Slide 7: Startproject (Split Media Layout)
             {
                 title: "Unity Startproject Import Guide",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">Step-by-Step Package Import</div>
-                            <div class="card-body">
-                                <ol>
-                                    <li>Open your Unity 6 project with <strong>2D (URP)</strong> active.</li>
-                                    <li>Click: <code>Assets > Import Package > Custom Package...</code></li>
-                                    <li>Select <code>projectfiles/basics1.unitypackage</code> & click <strong>Open</strong>.</li>
-                                    <li>In the import dialog, ensure all are checked & click <strong>Import</strong>.</li>
-                                    <li>In Project View, open: <code>Class1/0_STARTSCENE/0_startscene.unity</code>.</li>
-                                </ol>
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Step-by-Step Package Import</div>
+                                <div class="card-body">
+                                    <ol>
+                                        <li>Open your Unity 6 project with <strong>2D (URP)</strong> active.</li>
+                                        <li>Click: <code>Assets > Import Package > Custom Package...</code></li>
+                                        <li>Select <code>projectfiles/basics1.unitypackage</code> & click <strong>Open</strong>.</li>
+                                        <li>In the import dialog, ensure all are checked & click <strong>Import</strong>.</li>
+                                        <li>In Project View, open: <code>Class1/0_STARTSCENE/0_startscene.unity</code>.</li>
+                                    </ol>
+                                </div>
                             </div>
-                        </div>
-                        <div class="inline-media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Walkthrough GIF</span>
-                                <span class="media-canvas-dim">16:9 &bull; 1920 &times; 1080</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Package Import & Scene Load Demonstration</div>
-                                    <div class="media-placeholder-sub">Assets &gt; Import Package &gt; Custom Package dialog &bull; Opening 0_startscene.unity</div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Starter Scene Components</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li><strong>Environment:</strong> Tilemap ground and hazard colliders.</li>
+                                        <li><strong>Player_Start:</strong> Starter box character with physics.</li>
+                                        <li><strong>Collectibles:</strong> <code>Coin_Start</code> prefab instances.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Starter Scene Components</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><strong>Environment:</strong> Tilemap ground and hazard colliders.</li>
-                                    <li><strong>Player_Start:</strong> Starter box character with physics.</li>
-                                    <li><strong>Collectibles:</strong> <code>Coin_Start</code> prefab instances.</li>
-                                </ul>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-16-9">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Walkthrough GIF</span>
+                                    <span class="media-canvas-dim">16:9 &bull; 1920 &times; 1080</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Package Import & Scene Load</div>
+                                        <div class="media-placeholder-sub">Assets &gt; Import Package &gt; Custom Package dialog &bull; Opening 0_startscene.unity</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1332,7 +1349,7 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 8: Package Manager (Split Media Layout)
+            // Slide 8: Package Manager (Split Media Layout - 4:3 Proportion)
             {
                 title: "Package Manager Installation (Cinemachine 3)",
                 content: `
@@ -1355,15 +1372,17 @@ git checkout -b feature/platformer-controller</pre>
                                 </div>
                             </div>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Package UI Screenshot</span>
-                                <span class="media-canvas-dim">540 &times; 380 px</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Unity Package Manager</div>
-                                    <div class="media-placeholder-sub">Unity Registry &gt; Cinemachine 3.x &gt; Install Button</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-4-3">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Package UI Screenshot</span>
+                                    <span class="media-canvas-dim">4:3 &bull; 540 &times; 400</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Unity Package Manager</div>
+                                        <div class="media-placeholder-sub">Unity Registry &gt; Cinemachine 3.x &gt; Install Button</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1388,44 +1407,42 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 9: Assignment StartProject
+            // Slide 9: Assignment StartProject (Split Media Layout)
             {
                 title: "Assignment: 4-Step Milestones",
                 content: `
-                    <div class="content-stack">
-                        <div class="content-card primary">
-                            <div class="card-title core">Milestone 1: Player Setup & Physics</div>
-                            <div class="card-body">
-                                Attach <code>PlayerController2D</code> and <code>PlayerInput</code>. Position child <code>GroundCheck</code> Transform at feet.
+                    <div class="split-media-layout">
+                        <div class="left-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Milestone 1: Player Setup & Physics</div>
+                                <div class="card-body">
+                                    Attach <code>PlayerController2D</code> and <code>PlayerInput</code>. Position child <code>GroundCheck</code> Transform at feet.
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Milestone 2: Cinemachine Camera Follow</div>
+                                <div class="card-body">
+                                    Create Cinemachine 3 Camera. Drag Player root into the <strong>Tracking Target</strong> slot.
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Milestone 3 & 4: Coins & Playtest</div>
+                                <div class="card-body">
+                                    Place <code>Coin_Start</code> prefab (<code>isTrigger = true</code>). Press Play, jump, and collect all coins cleanly!
+                                </div>
                             </div>
                         </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Milestone 2: Cinemachine Camera Follow</div>
-                            <div class="card-body">
-                                Create Cinemachine 3 Camera. Drag Player root into the <strong>Tracking Target</strong> slot.
-                            </div>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Milestone 3: Collectible Coin Triggers</div>
-                            <div class="card-body">
-                                Place <code>Coin_Start</code> prefab in scene with <code>CircleCollider2D</code> (<code>isTrigger = true</code>).
-                            </div>
-                        </div>
-                        <div class="content-card primary">
-                            <div class="card-title core">Milestone 4: Playtest & Verification</div>
-                            <div class="card-body">
-                                Press Play. Run, jump, and collect all coins cleanly without the player tipping over!
-                            </div>
-                        </div>
-                        <div class="inline-media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Target Gameplay GIF</span>
-                                <span class="media-canvas-dim">16:9 &bull; 1920 &times; 1080</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Finished Milestone Gameplay Target</div>
-                                    <div class="media-placeholder-sub">Player runs, jumps on platforms, triggers coins, and smooth camera pans</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-16-9">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Target Gameplay GIF</span>
+                                    <span class="media-canvas-dim">16:9 &bull; 1920 &times; 1080</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Finished Milestone Gameplay</div>
+                                        <div class="media-placeholder-sub">Player runs, jumps on platforms, triggers coins, and smooth camera pans</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1450,7 +1467,7 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 10: Rigidbody2D Component (Split Media Layout)
+            // Slide 10: Rigidbody2D Component (Split Media Layout - Portrait Inspector)
             {
                 title: "Rigidbody2D Component Essentials",
                 content: `
@@ -1488,15 +1505,17 @@ git checkout -b feature/platformer-controller</pre>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Inspector Screenshot</span>
-                                <span class="media-canvas-dim">380 &times; 580 px</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Rigidbody2D Inspector</div>
-                                    <div class="media-placeholder-sub">Body Type: Dynamic &bull; Constraints: Freeze Rotation Z &bull; Interpolate: Interpolate</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-portrait">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Inspector Screenshot</span>
+                                    <span class="media-canvas-dim">380 &times; 580 px</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Rigidbody2D Inspector</div>
+                                        <div class="media-placeholder-sub">Body Type: Dynamic &bull; Constraints: Freeze Rotation Z &bull; Interpolate: Interpolate</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1521,7 +1540,7 @@ git checkout -b feature/platformer-controller</pre>
                     </details>
                 `
             },
-            // Slide 11: Rigidbody2D Scripting (Split Media Layout)
+            // Slide 11: Rigidbody2D Scripting (Split Media Layout - 16:9 Physics GIF)
             {
                 title: "Rigidbody2D Scripting (linearVelocity)",
                 content: `
@@ -1551,15 +1570,17 @@ if (jumpRequested) {
                                 </div>
                             </div>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Physics Demo GIF</span>
-                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">linearVelocity Physics Motion</div>
-                                    <div class="media-placeholder-sub">Smooth acceleration & jump arc vs stuttering transform teleportation</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-16-9">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Physics Demo GIF</span>
+                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">linearVelocity Physics Motion</div>
+                                        <div class="media-placeholder-sub">Smooth acceleration & jump arc vs stuttering transform teleportation</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1687,7 +1708,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                     </details>
                 `
             },
-            // Slide 14: Script Lifecycle (Split Media Layout)
+            // Slide 14: Script Lifecycle (Split Media Layout - 4:3 Flowchart)
             {
                 title: "Script Execution Order & Lifecycle",
                 content: `
@@ -1711,15 +1732,17 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                                 </div>
                             </div>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Lifecycle Flowchart</span>
-                                <span class="media-canvas-dim">620 &times; 420 px</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Unity Execution Loop</div>
-                                    <div class="media-placeholder-sub">From: <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/ExecutionOrder.html" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Unity Manual - Order of execution [link]</a></div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-4-3">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Lifecycle Flowchart</span>
+                                    <span class="media-canvas-dim">4:3 &bull; 620 &times; 420</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Unity Execution Loop</div>
+                                        <div class="media-placeholder-sub">From: <a class="slide-url" href="https://docs.unity.com/6000.0/Documentation/Manual/ExecutionOrder.html" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Unity Manual - Execution Order [link]</a></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1825,7 +1848,7 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 17: Separation of Concerns (Split Media Layout)
+            // Slide 17: Separation of Concerns (Split Media Layout - 16:9 GIF)
             {
                 title: "Separation of Concerns (Root vs Child)",
                 content: `
@@ -1847,15 +1870,17 @@ public class PlayerController2D : MonoBehaviour {
                                 </div>
                             </div>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Squash & Stretch GIF</span>
-                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Child Transform Animation</div>
-                                    <div class="media-placeholder-sub">Squashing child visual sprite on jump takeoff while BoxCollider2D stays rigid</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-16-9">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Squash & Stretch GIF</span>
+                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Child Transform Animation</div>
+                                        <div class="media-placeholder-sub">Squashing child visual sprite on jump takeoff while BoxCollider2D stays rigid</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1880,7 +1905,7 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 18: Cinemachine 3 (Split Media Layout)
+            // Slide 18: Cinemachine 3 (Split Media Layout - 16:9 GIF)
             {
                 title: "Cinemachine 3 Camera Setup",
                 content: `
@@ -1904,15 +1929,17 @@ public class PlayerController2D : MonoBehaviour {
                                 </div>
                             </div>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Cinemachine Follow GIF</span>
-                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Framing Transposer In Action</div>
-                                    <div class="media-placeholder-sub">Smooth camera lag, dead-zone box preview, and lookahead leading</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-16-9">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Cinemachine Follow GIF</span>
+                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Framing Transposer Follow</div>
+                                        <div class="media-placeholder-sub">Smooth camera lag, dead-zone box preview, and lookahead leading</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1981,7 +2008,7 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                 `
             },
-            // Slide 20: Coins & Destruction (Split Media Layout)
+            // Slide 20: Coins & Destruction (Split Media Layout - 16:9 GIF)
             {
                 title: "Creating & Destroying GameObjects (Coins)",
                 content: `
@@ -2010,15 +2037,17 @@ public class PlayerController2D : MonoBehaviour {
                                 </div>
                             </div>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Trigger Pickup GIF</span>
-                                <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">Coin Trigger Interaction</div>
-                                    <div class="media-placeholder-sub">Player box collides with trigger &bull; Instant pickup particle & object destruction</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-16-9">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Trigger Pickup GIF</span>
+                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">Coin Trigger Interaction</div>
+                                        <div class="media-placeholder-sub">Player box collides with trigger &bull; Instant pickup particle & object destruction</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2050,7 +2079,7 @@ coinPool.Release(gameObject);</pre>
                     </details>
                 `
             },
-            // Slide 21: Help / Discord (Split Media Layout)
+            // Slide 21: Help / Discord (Split Media Layout - Portrait Discord UI)
             {
                 title: "Help Channels & Troubleshooting Matrix",
                 content: `
@@ -2083,15 +2112,17 @@ coinPool.Release(gameObject);</pre>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="media-canvas">
-                            <div class="media-canvas-header">
-                                <span class="media-canvas-badge">Discord Community UI</span>
-                                <span class="media-canvas-dim">340 &times; 560 px</span>
-                            </div>
-                            <div class="media-canvas-viewport">
-                                <div class="media-placeholder-graphic">
-                                    <div class="media-placeholder-title">HR CMGT Discord Server</div>
-                                    <div class="media-placeholder-sub"><a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">#dev-help [Discord link]</a> &bull; Live Teacher & Student Support</div>
+                        <div class="right-column">
+                            <div class="media-canvas ratio-portrait">
+                                <div class="media-canvas-header">
+                                    <span class="media-canvas-badge">Discord Community UI</span>
+                                    <span class="media-canvas-dim">340 &times; 560 px</span>
+                                </div>
+                                <div class="media-canvas-viewport">
+                                    <div class="media-placeholder-graphic">
+                                        <div class="media-placeholder-title">HR CMGT Discord Server</div>
+                                        <div class="media-placeholder-sub"><a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">#dev-help [Discord link]</a> &bull; Live Teacher & Student Support</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
