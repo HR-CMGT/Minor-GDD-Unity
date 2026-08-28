@@ -304,20 +304,39 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
+        .view-interactive.hr-inverted-slide .content-stack {
+            gap: 20px;
+        }
+
         .view-interactive.hr-inverted-slide .content-card {
             background: #b50036 !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            border-left: 6px solid #ffffff !important;
+            border: 2px solid rgba(255, 255, 255, 0.35) !important;
+            border-left: 8px solid #ffffff !important;
             color: #ffffff !important;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+            padding: 24px 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
         }
 
         .view-interactive.hr-inverted-slide .card-title {
             color: #ffffff !important;
+            font-size: clamp(1.25rem, 1.65vw, 1.75rem);
+            margin-bottom: 8px;
         }
 
         .view-interactive.hr-inverted-slide .card-body {
             color: #ffffff !important;
+            font-size: clamp(1.05rem, 1.35vw, 1.40rem);
+            line-height: 1.65;
+        }
+
+        .view-interactive.hr-inverted-slide .card-body ul,
+        .view-interactive.hr-inverted-slide .card-body ol {
+            padding-left: 28px;
+        }
+
+        .view-interactive.hr-inverted-slide .card-body li {
+            margin-bottom: 6px;
         }
 
         .view-interactive.hr-inverted-slide .card-body strong {
@@ -460,8 +479,8 @@
             flex: 1 1 auto;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            gap: 8px;
+            justify-content: space-between;
+            gap: 12px;
             min-height: 0;
             max-height: 100%;
             overflow: hidden;
@@ -470,29 +489,33 @@
         .content-stack {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            justify-content: space-between;
+            gap: 14px;
             width: 100%;
+            height: 100%;
+            min-height: 0;
+            flex: 1 1 auto;
             overflow: hidden;
         }
 
         .content-card {
             background: #f8fafc;
             border: 1.5px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 10px 16px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            border-radius: 10px;
+            padding: 16px 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             width: 100%;
-            height: auto;
-            flex: 0 0 auto;
+            flex: 1 1 0;
+            min-height: 0;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             transition: all 0.15s ease;
             overflow: hidden;
         }
 
         .content-card.primary {
-            border-left: 5px solid var(--tier-core);
+            border-left: 6px solid var(--tier-core);
             background: #ffffff;
         }
 
@@ -501,8 +524,8 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #0f172a;
-            font-size: clamp(0.96rem, 1.15vw, 1.25rem);
-            margin-bottom: 4px;
+            font-size: clamp(1.05rem, 1.35vw, 1.45rem);
+            margin-bottom: 6px;
             transition: font-size 0.15s ease;
             line-height: 1.25;
         }
@@ -512,21 +535,21 @@
         .card-title.exp { color: var(--tier-exp); }
 
         .card-body {
-            font-size: clamp(0.90rem, 1.05vw, 1.12rem);
-            line-height: 1.45;
+            font-size: clamp(0.96rem, 1.18vw, 1.25rem);
+            line-height: 1.55;
             color: #1e293b;
             font-weight: 500;
             transition: font-size 0.15s ease;
         }
 
         .card-body ul, .card-body ol {
-            padding-left: 20px;
-            margin-top: 3px;
-            margin-bottom: 3px;
+            padding-left: 24px;
+            margin-top: 4px;
+            margin-bottom: 4px;
         }
 
         .card-body li {
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
 
         /* ==========================================================================
@@ -535,9 +558,10 @@
         .split-media-layout {
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
-            gap: 16px;
+            gap: 18px;
             align-items: stretch;
             width: 100%;
+            height: 100%;
             min-height: 0;
             flex: 1 1 auto;
             overflow: hidden;
@@ -546,16 +570,26 @@
         .split-media-layout .left-column {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            justify-content: flex-start;
+            gap: 12px;
+            justify-content: space-between;
             min-height: 0;
+            height: 100%;
             overflow: hidden;
+        }
+
+        .split-media-layout .left-column .content-card {
+            flex: 1 1 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 12px 18px;
         }
 
         .split-media-layout .right-column {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: stretch;
             width: 100%;
             height: 100%;
@@ -574,14 +608,14 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             width: 100%;
             height: 100%;
-            min-height: 160px;
+            min-height: 0;
             max-height: 100%;
             transition: all 0.15s ease;
         }
 
         /* Proportional Variations */
         .media-canvas.ratio-portrait {
-            max-width: 280px;
+            max-width: 320px;
             margin: 0 auto;
         }
 
@@ -916,18 +950,18 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.88rem, 1.08vw, 1.10rem);
-            padding: 6px 12px;
+            font-size: clamp(0.92rem, 1.15vw, 1.20rem);
+            padding: 8px 14px;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.85rem, 1.02vw, 1.05rem);
-            padding: 6px 12px;
+            font-size: clamp(0.88rem, 1.08vw, 1.12rem);
+            padding: 8px 14px;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.35;
+            line-height: 1.45;
         }
 
         table.dense-table tr:nth-child(even) td {
@@ -1711,7 +1745,10 @@ git checkout -b feature/platformer-controller</pre>
                             <div class="content-card primary">
                                 <div class="card-title core">1. What is Cinemachine?</div>
                                 <div class="card-body">
-                                    A built-in smart camera tool (<span class="term-tip" data-title="Cinemachine" data-desc="Unity procedural smart camera suite." data-diff="vs Normal Camera: Automates smooth tracking and framing with 0 code."><strong>Cinemachine</strong></span>) that automatically tracks your player smoothly without needing any complex code.
+                                    <ul>
+                                        <li>A built-in smart camera suite (<span class="term-tip" data-title="Cinemachine" data-desc="Unity procedural smart camera suite." data-diff="vs Normal Camera: Automates smooth tracking and framing with 0 code."><strong>Cinemachine</strong></span>) that follows your player automatically without needing manual camera math code.</li>
+                                        <li><strong>Smooth Motion:</strong> Automates camera lead, damping, and viewport framing.</li>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="content-card primary">
@@ -1819,40 +1856,53 @@ git checkout -b feature/platformer-controller</pre>
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
-                            <table class="dense-table">
-                                <thead>
-                                    <tr>
-                                        <th>Setting</th>
-                                        <th>Value</th>
-                                        <th>What It Does (In Plain English)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><span class="term-tip" data-title="Body Type" data-desc="Defines how physics handles this object." data-diff="Dynamic = moves with gravity; Static = unmovable; Kinematic = script only."><strong>Body Type</strong></span></td>
-                                        <td><code>Dynamic</code></td>
-                                        <td>Gives gravity and physics (can fall and push).</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="term-tip" data-title="Collision Detection" data-desc="How physics checks for overlapping colliders." data-diff="Continuous checks full motion path; Discrete checks once per tick."><strong>Collision</strong></span></td>
-                                        <td><code>Continuous</code></td>
-                                        <td>Prevents character falling through thin floors.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks rotation on the 2D plane." data-diff="Why needed: Keeps character upright so capsule collider never falls over."><strong>Freeze Rotation Z</strong></span></td>
-                                        <td><code>Checked</code></td>
-                                        <td>Keeps character upright so they don't fall over.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="term-tip" data-title="Interpolate" data-desc="Smooths movement rendering between physics ticks." data-diff="Why needed: Eliminates visual micro-stutter on high refresh monitors."><strong>Interpolate</strong></span></td>
-                                        <td><code>Interpolate</code></td>
-                                        <td>Makes movement look completely smooth on screen.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="content-card primary" style="padding: 4px 8px; margin-top: 2px;">
-                                <div class="card-body" style="font-size: 0.76rem;">
-                                    <strong>Inspector Tip:</strong> Changes made while the game is running (Play Mode) will reset when you press Stop!
+                            <div class="content-card primary">
+                                <div class="card-title core">Essential Rigidbody2D Settings</div>
+                                <table class="dense-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Setting</th>
+                                            <th>Value</th>
+                                            <th>What It Does</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="term-tip" data-title="Body Type" data-desc="Defines how physics handles this object." data-diff="Dynamic = moves with gravity; Static = unmovable; Kinematic = script only."><strong>Body Type</strong></span></td>
+                                            <td><code>Dynamic</code></td>
+                                            <td>Enables gravity and physics collisions.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="term-tip" data-title="Collision Detection" data-desc="How physics checks for overlapping colliders." data-diff="Continuous checks full motion path; Discrete checks once per tick."><strong>Collision</strong></span></td>
+                                            <td><code>Continuous</code></td>
+                                            <td>Prevents high-speed tunneling through thin floors.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks rotation on the 2D plane." data-diff="Why needed: Keeps character upright so capsule collider never falls over."><strong>Freeze Rotation Z</strong></span></td>
+                                            <td><code>Checked</code></td>
+                                            <td>Locks 2D tilt so character never tips over.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="term-tip" data-title="Interpolate" data-desc="Smooths movement rendering between physics ticks." data-diff="Why needed: Eliminates visual micro-stutter on high refresh monitors."><strong>Interpolate</strong></span></td>
+                                            <td><code>Interpolate</code></td>
+                                            <td>Smooths movement on high-refresh 144Hz+ displays.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="term-tip" data-title="Gravity Scale" data-desc="Multiplier for gravity acceleration." data-diff="Default is 1; 3 creates snappy responsive platformer jump feel."><strong>Gravity Scale</strong></span></td>
+                                            <td><code>2.5 - 3.5</code></td>
+                                            <td>Gives snappy, responsive platformer jumps (no floatiness).</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="content-card primary" style="border-left-color: #f59e0b; background: #fffbeb;">
+                                <div class="card-title core" style="color: #d97706;">Play Mode Safety Tip</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li><strong>Play Mode Reset:</strong> Changes made while the game runs are discarded upon exit!</li>
+                                        <li><strong>Safe Workflow:</strong> Copy component values during play mode &rarr; Stop &rarr; Paste Component Values.</li>
+                                        <li><strong>Visual Tint:</strong> Enable in <code>Edit > Preferences > Colors > Playmode tint</code>.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -1910,8 +1960,14 @@ if (jumpRequested) {
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
-                                <div class="card-body" style="margin-top: 2px; font-size: 0.74rem;">
-                                    <span class="term-tip" data-title="Vector2" data-desc="A pair of 2D numbers (X, Y)." data-diff="X = horizontal speed, Y = vertical jump speed."><strong>Vector2:</strong></span> (<code>X</code> = Left/Right speed, <code>Y</code> = Up/Down jump speed).
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Physics Breakdown</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li><span class="term-tip" data-title="Vector2" data-desc="A pair of 2D numbers (X, Y)." data-diff="X = horizontal speed, Y = vertical jump speed."><strong>Vector2(X, Y):</strong></span> <code>X</code> sets left/right speed; <code>Y</code> preserves falling gravity or applies upward jump impulse.</li>
+                                        <li><span class="term-tip" data-title="linearVelocity" data-desc="Unity 6 physics velocity property in units per second." data-diff="vs .velocity: Unity 6 replaced legacy .velocity with linearVelocity."><strong>linearVelocity:</strong></span> Modern Unity 6 property for stable, glitch-free character movement.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -1979,9 +2035,14 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">The Simple Rule</div>
+                                <div class="card-title core">Execution Rules by Function</div>
                                 <div class="card-body">
-                                    Read button presses in <span class="term-tip" data-title="Update()" data-desc="Runs every frame to detect key presses instantly." data-diff="Never miss a jump press!"><strong><code>Update()</code></strong></span>. Apply physics speed in <span class="term-tip" data-title="FixedUpdate()" data-desc="Runs on strict 50Hz physics clock." data-diff="Guarantees stable collisions!"><strong><code>FixedUpdate()</code></strong></span>.
+                                    <ul>
+                                        <li><span class="term-tip" data-title="Awake()" data-desc="Runs first to connect components." data-diff="Link components here."><strong><code>Awake()</code>:</strong></span> Link references and singletons before game loops begin.</li>
+                                        <li><span class="term-tip" data-title="Update()" data-desc="Runs every frame to detect key presses instantly." data-diff="Never miss a jump press!"><strong><code>Update()</code>:</strong></span> Read keyboard and mouse input every single frame.</li>
+                                        <li><span class="term-tip" data-title="FixedUpdate()" data-desc="Runs on strict 50Hz physics clock." data-diff="Guarantees stable collisions!"><strong><code>FixedUpdate()</code>:</strong></span> Apply velocities and forces on the steady 50Hz clock.</li>
+                                        <li><span class="term-tip" data-title="LateUpdate()" data-desc="Runs after all Update functions finish." data-diff="Smooth camera follow."><strong><code>LateUpdate()</code>:</strong></span> Update camera positions after character moves.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -2119,7 +2180,10 @@ public class PlayerController2D : MonoBehaviour {
                             <div class="content-card primary">
                                 <div class="card-title core">Why Split Them?</div>
                                 <div class="card-body">
-                                    You can flip, squash, and stretch the character picture during animations without bending or breaking the invisible physics box!
+                                    <ul>
+                                        <li><strong>Rigid Collision Box:</strong> The root <code>Rigidbody2D</code> and <code>BoxCollider2D</code> always stay upright and unwarped.</li>
+                                        <li><strong>Juicy Art Animations:</strong> The child <code>Graphics</code> object can squash, stretch, and flip horizontally on jump/land without breaking wall collisions!</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -2176,9 +2240,12 @@ public class PlayerController2D : MonoBehaviour {
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">What Makes it Look Good?</div>
+                                <div class="card-title core">What Makes It Look Great?</div>
                                 <div class="card-body">
-                                    <span class="term-tip" data-title="Damping" data-desc="Camera motion delay factor." data-diff="vs 0 Damping: Creates smooth cinematic glide; 0 damping jerks harshly."><strong>Damping:</strong></span> Adds a soft, smooth delay so the camera gently glides instead of jerking sharply.
+                                    <ul>
+                                        <li><span class="term-tip" data-title="Damping" data-desc="Camera motion delay factor." data-diff="vs 0 Damping: Creates smooth cinematic glide; 0 damping jerks harshly."><strong>Damping:</strong></span> Adds a smooth motion delay so the camera glides instead of jerking rigidly.</li>
+                                        <li><span class="term-tip" data-title="Dead Zone" data-desc="Screen zone where player moves without camera moving." data-diff="Prevents nauseating micro-camera jitter."><strong>Dead Zone:</strong></span> Prevents dizzying camera micro-movements on small player adjustments.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -2225,19 +2292,28 @@ public class PlayerController2D : MonoBehaviour {
                         <div class="content-card primary">
                             <div class="card-title core">1. What is a Prefab?</div>
                             <div class="card-body">
-                                A master template (<span class="term-tip" data-title="Prefab" data-desc="Reusable asset template saved in Project view." data-diff="vs Scene Object: Editing the master updates all scene copies instantly."><strong>Prefab</strong></span>) saved in your project (like a cookie cutter). If you change the template, every copy in your game updates automatically!
+                                <ul>
+                                    <li>A reusable master template (<span class="term-tip" data-title="Prefab" data-desc="Reusable asset template saved in Project view." data-diff="vs Scene Object: Editing the master updates all scene copies instantly."><strong>Prefab</strong></span>) stored in your Project assets (like a cookie cutter).</li>
+                                    <li>Updating the master prefab asset instantly synchronizes changes to every copy placed in all game scenes.</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">2. Editing a Prefab</div>
+                            <div class="card-title core">2. Editing in Prefab Mode</div>
                             <div class="card-body">
-                                Double-click any prefab in your Project window to edit it in its own clean Prefab Mode workspace.
+                                <ul>
+                                    <li>Double-click any prefab asset in the Project window to enter dedicated <strong>Prefab Mode</strong>.</li>
+                                    <li>Safely tweak collision boxes, sprite colors, and script values in an isolated sandbox without affecting the scene.</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="content-card primary">
-                            <div class="card-title core">3. Customizing One Copy</div>
+                            <div class="card-title core">3. Customizing Individual Instances</div>
                             <div class="card-body">
-                                You can change a single coin in a level (like making it giant) using <span class="term-tip" data-title="Prefab Overrides" data-desc="Local changes applied to one specific scene copy." data-diff="Leaves other standard prefabs unchanged."><strong>overrides</strong></span> without changing any other coins.
+                                <ul>
+                                    <li>Modify a single copy in a level using <span class="term-tip" data-title="Prefab Overrides" data-desc="Local changes applied to one specific scene copy." data-diff="Leaves other standard prefabs unchanged."><strong>overrides</strong></span> (bold blue markers) without affecting other copies.</li>
+                                    <li>Create a <strong>Prefab Variant</strong> to make specialized enemy or coin subtypes from a single base template.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -2422,32 +2498,48 @@ coinPool.Release(gameObject);</pre>
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
-                            <table class="dense-table">
-                                <thead>
-                                    <tr>
-                                        <th>Common Problem</th>
-                                        <th>How to Fix It</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Player falls through floor</strong></td>
-                                        <td>Add a <span class="term-tip" data-title="BoxCollider2D" data-desc="Rectangular 2D collision boundary." data-diff="vs CircleCollider2D: Fits flat platforms; Circle fits round balls."><code>BoxCollider2D</code></span> to the floor.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Character tips over</strong></td>
-                                        <td>Check <span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks tilt on the 2D plane." data-diff="Keeps capsule upright on slopes."><code>Freeze Rotation Z</code></span> in Rigidbody2D.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Keys do not move character</strong></td>
-                                        <td>Attach the <span class="term-tip" data-title="PlayerInput" data-desc="Unity New Input System component mapping keys to actions." data-diff="vs Input.GetKey: Maps keys, gamepads, and touch through one clean system."><code>PlayerInput</code></span> component.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Need live help?</strong></td>
-                                        <td>Post in Discord <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a>!</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="content-card primary">
+                                <div class="card-title core">Common Troubleshooting Guide</div>
+                                <table class="dense-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Common Problem</th>
+                                            <th>How to Fix It</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Player falls through floor</strong></td>
+                                            <td>Add a <span class="term-tip" data-title="BoxCollider2D" data-desc="Rectangular 2D collision boundary." data-diff="vs CircleCollider2D: Fits flat platforms; Circle fits round balls."><code>BoxCollider2D</code></span> to the floor.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Character tips over on slopes</strong></td>
+                                            <td>Check <span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks tilt on the 2D plane." data-diff="Keeps capsule upright on slopes."><code>Freeze Rotation Z</code></span> in Rigidbody2D.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Keys do not move character</strong></td>
+                                            <td>Attach the <span class="term-tip" data-title="PlayerInput" data-desc="Unity New Input System component mapping keys to actions." data-diff="vs Input.GetKey: Maps keys, gamepads, and touch through one clean system."><code>PlayerInput</code></span> component.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Coins do not collect</strong></td>
+                                            <td>Check <span class="term-tip" data-title="Is Trigger" data-desc="Pass-through collider mode." data-diff="Fires pickup event."><code>Is Trigger</code></span> on coin collider.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Camera does not follow</strong></td>
+                                            <td>Drag <code>Player_Start</code> to <strong>Tracking Target</strong>.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="content-card primary" style="border-left-color: #0284c7; background: #f0f9ff;">
+                                <div class="card-title core" style="color: #0284c7;">Need Live Support?</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li><strong>Official Discord:</strong> Post in <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a> for live teacher & peer support!</li>
+                                        <li><strong>Fast Fixes:</strong> Include a screenshot of your Inspector and Console error message.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                         <div class="right-column">
                             <div class="media-canvas ratio-portrait">
