@@ -286,23 +286,30 @@
 
         /* Inverted HR Red Slides (Section Dividers: Slides 3, 4, 15) */
         .view-interactive.hr-inverted-slide {
-            background: var(--hr-red) !important;
+            background: #d80041 !important;
             color: #ffffff !important;
         }
 
         .view-interactive.hr-inverted-slide .slide-header {
-            border-bottom-color: rgba(255, 255, 255, 0.3) !important;
+            border-bottom: 2.5px solid #a00030 !important;
+        }
+
+        .view-interactive.hr-inverted-slide .slide-meta-badges {
+            display: none !important;
         }
 
         .view-interactive.hr-inverted-slide .slide-title-banner {
             background: #ffffff !important;
-            color: var(--hr-red) !important;
+            color: #d80041 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .view-interactive.hr-inverted-slide .content-card {
-            background: rgba(0, 0, 0, 0.2) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+            background: #b50036 !important;
+            border: 1.5px solid #8c0029 !important;
+            border-left: 6px solid #ffffff !important;
             color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
         }
 
         .view-interactive.hr-inverted-slide .card-title {
@@ -310,11 +317,15 @@
         }
 
         .view-interactive.hr-inverted-slide .card-body {
-            color: #f8fafc !important;
+            color: #ffffff !important;
+        }
+
+        .view-interactive.hr-inverted-slide .card-body strong {
+            color: #ffffff !important;
         }
 
         .view-interactive.hr-inverted-slide .slide-footer {
-            border-top-color: rgba(255, 255, 255, 0.25) !important;
+            border-top: 1.5px solid #a00030 !important;
         }
 
         .view-interactive.hr-inverted-slide .footer-brand-text {
