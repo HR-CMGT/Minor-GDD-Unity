@@ -283,7 +283,7 @@
             background: #ffffff;
             color: var(--text-dark);
             padding: 16px 28px 12px 28px;
-            display: none;
+            display: flex !important;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
@@ -291,8 +291,6 @@
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 10;
         }
-
-        .view-interactive.active { display: flex; }
 
         /* Inverted HR Red Slides (Section Dividers: Slides 3, 4, 13) */
         .view-interactive.hr-inverted-slide {
@@ -380,8 +378,7 @@
         .slide-hero {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #090e1a 0%, #151022 60%, #200a18 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -394,7 +391,7 @@
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.82) 55%, rgba(226, 0, 73, 0.45) 100%);
+            background: radial-gradient(circle at 80% 20%, rgba(226, 0, 73, 0.25) 0%, transparent 60%);
             z-index: 1;
         }
 

@@ -102,7 +102,7 @@
             border: 2px solid var(--hr-red);
             border-radius: 14px;
             padding: 28px;
-            box-shadow: 0 12px 32px rgba(214, 0, 66, 0.15);
+            box-shadow: 0 12px 32px rgba(214, 0, 66, 0.2);
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -126,16 +126,16 @@
         }
 
         .featured-title {
-            font-size: 1.55rem;
+            font-size: 1.6rem;
             font-weight: 900;
             color: #ffffff;
             line-height: 1.25;
         }
 
         .featured-desc {
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             color: #cbd5e1;
-            line-height: 1.5;
+            line-height: 1.55;
             max-width: 850px;
         }
 
@@ -166,14 +166,6 @@
             font-size: 0.75rem;
         }
 
-        .btn-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 8px;
-        }
-
         .btn-launch {
             display: inline-flex;
             align-items: center;
@@ -181,41 +173,21 @@
             gap: 10px;
             background: var(--hr-red);
             color: #ffffff;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 800;
-            padding: 13px 26px;
+            padding: 15px 32px;
             border-radius: 8px;
             text-decoration: none;
             transition: all 0.2s ease;
             box-shadow: 0 4px 16px rgba(214, 0, 66, 0.4);
+            align-self: flex-start;
+            margin-top: 8px;
         }
 
         .btn-launch:hover {
             background: var(--hr-red-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(214, 0, 66, 0.6);
-        }
-
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #1e293b;
-            color: #cbd5e1;
-            border: 1px solid #334155;
-            font-size: 0.92rem;
-            font-weight: 700;
-            padding: 13px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .btn-secondary:hover {
-            background: #334155;
-            color: #ffffff;
-            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(214, 0, 66, 0.6);
         }
 
         /* Section Title */
@@ -341,9 +313,9 @@
         <!-- Featured Hero Card: Unity Basics 1 Revamp -->
         <div class="featured-card">
             <div class="featured-tag">★ Featured Presentation</div>
-            <h2 class="featured-title">Lesson 1: Unity Basics 1 (Unity 6 Interactive Presentation)</h2>
+            <h2 class="featured-title">Lesson 1: Unity Basics 1 (Getting Started)</h2>
             <p class="featured-desc">
-                Production-ready interactive presentation deck for classroom instruction. Includes 3-tier curriculum tracks (Core Lecture, Advanced Implementation, and Expert Architecture), high-contrast responsive code blocks, interactive hover tooltips, and real-time Lecture Mode typography scaling.
+                Interactive presentation deck for classroom lectures and lab study. Includes 3-tier tracks (Core Lecture, Advanced Implementation, and Expert Architecture), responsive code blocks with 1-click copying, hover glossaries, and real-time Lecture Mode typography scaling.
             </p>
 
             <div class="featured-features">
@@ -361,14 +333,9 @@
                 </div>
             </div>
 
-            <div class="btn-group">
-                <a class="btn-launch" href="presentation_basics1/presentation_unity6_basics1.html">
-                    Open Class Presentation &rarr;
-                </a>
-                <a class="btn-secondary" href="presentation_basics1/index_comparison.html">
-                    Open Keynote Old vs New Comparison
-                </a>
-            </div>
+            <a class="btn-launch" href="presentation_basics1/presentation_unity6_basics1.html">
+                Launch Lesson 1 Presentation &rarr;
+            </a>
         </div>
 
         <!-- Section: All Presentations (Legacy & Core) -->
@@ -377,11 +344,11 @@
         </div>
 
         <div class="grid-decks">
-            <a class="deck-card" href="presentation_basics1/index.html">
+            <a class="deck-card" href="presentation_basics1/presentation_unity6_basics1.html">
                 <div>
                     <div class="deck-header">
                         <span class="deck-num">Lesson 01</span>
-                        <span class="deck-badge">Keynote HD</span>
+                        <span class="deck-badge" style="color: #10b981; border: 1px solid #10b981;">Unity 6 Interactive</span>
                     </div>
                     <div class="deck-title" style="margin-top: 6px;">Basics 1: Getting Started</div>
                 </div>

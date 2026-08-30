@@ -2,11 +2,422 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=docs/index.html">
-    <title>Redirecting to HR Minor GDD Presentations...</title>
-    <script>window.location.href = "docs/index.html";</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Minor GDD • Unity Course Presentations</title>
+    <link rel="icon" type="image/jpeg" href="docs/HR_Logo.jpg">
+    <style>
+        :root {
+            --bg-dark: #07090e;
+            --bg-card: #0f1523;
+            --bg-card-hover: #151d30;
+            --border-card: #1e293b;
+            --hr-red: #d60042;
+            --hr-red-hover: #b50036;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --tier-core: #10b981;
+            --tier-adv: #0284c7;
+            --tier-exp: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--hr-red);
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .header-badge {
+            background: rgba(214, 0, 66, 0.15);
+            color: #ff4d79;
+            border: 1px solid rgba(214, 0, 66, 0.4);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Hero Featured Card: Basics 1 Class Presentation */
+        .featured-card {
+            background: linear-gradient(135deg, #131b2e 0%, #1a0f20 100%);
+            border: 2px solid var(--hr-red);
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 12px 32px rgba(214, 0, 66, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--hr-red);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .featured-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.25;
+        }
+
+        .featured-desc {
+            font-size: 0.98rem;
+            color: #cbd5e1;
+            line-height: 1.55;
+            max-width: 850px;
+        }
+
+        .featured-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .feature-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .feature-pill strong {
+            color: #f8fafc;
+        }
+
+        .feature-pill span {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--hr-red);
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 800;
+            padding: 15px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(214, 0, 66, 0.4);
+            align-self: flex-start;
+            margin-top: 8px;
+        }
+
+        .btn-launch:hover {
+            background: var(--hr-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(214, 0, 66, 0.6);
+        }
+
+        /* Section Title */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #e2e8f0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Presentations Grid */
+        .grid-decks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .deck-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            padding: 18px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .deck-card:hover {
+            background: var(--bg-card-hover);
+            border-color: #334155;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        .deck-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .deck-num {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .deck-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        .deck-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .deck-link-text {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #1e293b;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        footer a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body style="background:#07090e; color:#f8fafc; font-family:sans-serif; text-align:center; padding-top:50px;">
-    <p>Loading Course Portal... <a href="docs/index.html" style="color:#38bdf8;">Click here if not redirected</a></p>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="brand-group">
+                <img class="brand-logo" src="docs/HR_Logo.jpg" alt="Hogeschool Rotterdam Logo">
+                <div class="brand-text">
+                    <h1>Minor Game Design & Development</h1>
+                    <p>Hogeschool Rotterdam • Unity Course Portal</p>
+                </div>
+            </div>
+            <div class="header-badge">Unity 6 Curated</div>
+        </header>
+
+        <!-- Featured Hero Card: Unity Basics 1 Revamp -->
+        <div class="featured-card">
+            <div class="featured-tag">★ Featured Presentation</div>
+            <h2 class="featured-title">Lesson 1: Unity Basics 1 (Getting Started)</h2>
+            <p class="featured-desc">
+                Interactive presentation deck for classroom lectures and lab study. Includes 3-tier tracks (Core Lecture, Advanced Implementation, and Expert Architecture), responsive code blocks with 1-click copying, hover glossaries, and real-time Lecture Mode typography scaling.
+            </p>
+
+            <div class="featured-features">
+                <div class="feature-pill">
+                    <strong>3-Tier Track Architecture</strong>
+                    <span>Core (Lecture), Advanced & Expert (Lab tracks)</span>
+                </div>
+                <div class="feature-pill">
+                    <strong>Lecture Mode Text Scaling</strong>
+                    <span>Real-time dynamic text slider for projectors</span>
+                </div>
+                <div class="feature-pill">
+                    <strong>Interactive Code & Tables</strong>
+                    <span>One-click copy, exact Unity 6 syntax, zero scroll</span>
+                </div>
+            </div>
+
+            <a class="btn-launch" href="docs/presentation_basics1/presentation_unity6_basics1.html">
+                Launch Lesson 1 Presentation &rarr;
+            </a>
+        </div>
+
+        <!-- Section: All Presentations (Legacy & Core) -->
+        <div class="section-header">
+            <h3 class="section-title">All Course Presentations</h3>
+        </div>
+
+        <div class="grid-decks">
+            <a class="deck-card" href="docs/presentation_basics1/presentation_unity6_basics1.html">
+                <div>
+                    <div class="deck-header">
+                        <span class="deck-num">Lesson 01</span>
+                        <span class="deck-badge" style="color: #10b981; border: 1px solid #10b981;">Unity 6 Interactive</span>
+                    </div>
+                    <div class="deck-title" style="margin-top: 6px;">Basics 1: Getting Started</div>
+                </div>
+                <div class="deck-link-text">Open Presentation &rarr;</div>
+            </a>
+
+            <a class="deck-card" href="docs/presentation_basics2/index.html">
+                <div>
+                    <div class="deck-header">
+                        <span class="deck-num">Lesson 02</span>
+                        <span class="deck-badge">Keynote HD</span>
+                    </div>
+                    <div class="deck-title" style="margin-top: 6px;">Basics 2: Core Architecture</div>
+                </div>
+                <div class="deck-link-text">Open Presentation &rarr;</div>
+            </a>
+
+            <a class="deck-card" href="docs/presentation_uisaving/index.html">
+                <div>
+                    <div class="deck-header">
+                        <span class="deck-num">Lesson 03</span>
+                        <span class="deck-badge">Keynote HD</span>
+                    </div>
+                    <div class="deck-title" style="margin-top: 6px;">UI & Saving Systems</div>
+                </div>
+                <div class="deck-link-text">Open Presentation &rarr;</div>
+            </a>
+
+            <a class="deck-card" href="docs/presentation_blockprototyping/index.html">
+                <div>
+                    <div class="deck-header">
+                        <span class="deck-num">Lesson 07</span>
+                        <span class="deck-badge">Keynote HD</span>
+                    </div>
+                    <div class="deck-title" style="margin-top: 6px;">Block Prototyping</div>
+                </div>
+                <div class="deck-link-text">Open Presentation &rarr;</div>
+            </a>
+
+            <a class="deck-card" href="docs/presentation_optimization/index.html">
+                <div>
+                    <div class="deck-header">
+                        <span class="deck-num">Lesson 21</span>
+                        <span class="deck-badge">Keynote HD</span>
+                    </div>
+                    <div class="deck-title" style="margin-top: 6px;">Performance & Optimization</div>
+                </div>
+                <div class="deck-link-text">Open Presentation &rarr;</div>
+            </a>
+
+            <a class="deck-card" href="docs/presentation_animation/index.html">
+                <div>
+                    <div class="deck-header">
+                        <span class="deck-num">Lesson 24</span>
+                        <span class="deck-badge">Keynote HD</span>
+                    </div>
+                    <div class="deck-title" style="margin-top: 6px;">3D Animation Systems</div>
+                </div>
+                <div class="deck-link-text">Open Presentation &rarr;</div>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <span>Hogeschool Rotterdam • Creative Media and Game Technologies</span>
+            <div>
+                <a href="https://github.com/HR-CMGT/Minor-GDD-Unity-Private/raw/master/projectfiles/basics1.unitypackage" target="_blank" rel="noopener">Download Starter Unitypackage</a>
+            </div>
+        </footer>
+    </div>
 </body>
 </html>
