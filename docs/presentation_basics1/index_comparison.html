@@ -1578,7 +1578,7 @@
         body:not(.projector-mode) .btn-flag-pace { display: inline-block !important; }
     </style>
 </head>
-<body class="projector-mode">
+<body class="lab-mode">
 
     <!-- Little Orange Dot Counter (Bottom-Left) -->
     <div class="pace-speed-bubble" id="paceSpeedBubble">0</div>
@@ -1592,8 +1592,8 @@
 
         <!-- Tier Selector Filter -->
         <div class="tier-selector">
-            <button class="tier-btn active-all" id="tierAll" onclick="setTierFilter('all')">All Tracks</button>
-            <button class="tier-btn" id="tierCore" onclick="setTierFilter('core')">Core</button>
+            <button class="tier-btn" id="tierAll" onclick="setTierFilter('all')">All Tracks</button>
+            <button class="tier-btn active-core" id="tierCore" onclick="setTierFilter('core')">Core</button>
             <button class="tier-btn" id="tierAdv" onclick="setTierFilter('adv')">Advanced</button>
             <button class="tier-btn" id="tierExp" onclick="setTierFilter('exp')">Expert</button>
         </div>
@@ -1689,8 +1689,8 @@
         <!-- View Size Toggle: Projector Mode (Core Only) vs Lab/Student Mode -->
         <div style="display: flex; align-items: center; gap: 10px;">
             <div class="viewmode-toggle">
-                <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode</button>
-                <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode</button>
+                <button class="viewmode-btn" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode</button>
+                <button class="viewmode-btn active" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode</button>
             </div>
 
             <!-- Student Simple Flag Button (Shown in Lab Mode) -->
@@ -2901,8 +2901,8 @@ coinPool.Release(gameObject);</pre>
 
         let currentSlide = 0;
         let isNewMode = true;
-        let currentTier = 'all';
-        let currentViewMode = 'projector';
+        let currentTier = 'core';
+        let currentViewMode = 'lab';
 
         function init() {
             const drawer = document.getElementById("slideDrawer");
@@ -2944,7 +2944,8 @@ coinPool.Release(gameObject);</pre>
                 setLectureScale(100);
             }
 
-            setViewMode('projector');
+            setViewMode('lab');
+            setTierFilter('core');
             setMode(true);
             goToSlide(startSlide);
         }
