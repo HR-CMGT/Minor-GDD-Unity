@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unity Basics 1 (HR Minor GDD)</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --hr-red: #e20049;
@@ -1508,6 +1510,192 @@
 
         .mode-indicator.old { background: rgba(244, 63, 94, 0.15); color: var(--accent-old); border: 1px solid var(--accent-old); }
         .mode-indicator.new { background: rgba(16, 185, 129, 0.15); color: var(--tier-core); border: 1px solid var(--tier-core); }
+
+        /* Live Student Pace Monitor */
+        .pace-monitor {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #141a29;
+            border: 1px solid #243049;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .pace-monitor:hover {
+            border-color: #38bdf8;
+            background: #1a233a;
+        }
+
+        .pace-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 6px #10b981;
+        }
+
+        .pace-monitor.warning {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: #f59e0b;
+        }
+
+        .pace-monitor.warning .pace-dot {
+            background: #f59e0b;
+            box-shadow: 0 0 8px #f59e0b;
+        }
+
+        .pace-monitor.alert {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
+        .pace-monitor.alert .pace-dot {
+            background: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .pace-label {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .pace-status {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: #10b981;
+            text-transform: uppercase;
+        }
+
+        .pace-monitor.warning .pace-status { color: #f59e0b; }
+        .pace-monitor.alert .pace-status { color: #ef4444; }
+
+        .pace-count {
+            background: #1e293b;
+            color: #ffffff;
+            font-size: 0.70rem;
+            font-weight: 900;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        .pace-monitor.warning .pace-count { background: #f59e0b; color: #000000; }
+        .pace-monitor.alert .pace-count { background: #ef4444; color: #ffffff; }
+
+        /* QR Feedback Modal */
+        .qr-modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-modal-backdrop.open { display: flex; }
+
+        .qr-modal-box {
+            background: #0f1524;
+            border: 2px solid var(--hr-red);
+            border-radius: 12px;
+            padding: 28px;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+        }
+
+        .qr-modal-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .qr-modal-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.45;
+        }
+
+        .qr-code-wrapper {
+            background: #ffffff;
+            padding: 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4px 0;
+        }
+
+        .qr-url-pill {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            color: #38bdf8;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .qr-close-btn {
+            background: var(--hr-red);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 24px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.15s ease;
+        }
+
+        .qr-close-btn:hover {
+            background: #b50036;
+        }
+
+        /* Toast Alert */
+        .live-toast {
+            position: fixed;
+            bottom: 58px;
+            right: 24px;
+            background: #111827;
+            border: 1.5px solid #0284c7;
+            border-left: 5px solid #0284c7;
+            color: #f8fafc;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            z-index: 8000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .live-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -1525,6 +1713,15 @@
             <button class="tier-btn" id="tierCore" onclick="setTierFilter('core')">Core</button>
             <button class="tier-btn" id="tierAdv" onclick="setTierFilter('adv')">Advanced</button>
             <button class="tier-btn" id="tierExp" onclick="setTierFilter('exp')">Expert</button>
+        </div>
+
+        <!-- Live Student Pace Monitor -->
+        <div class="pace-monitor" id="paceMonitorBtn" onclick="toggleQrModal()" title="Live Student Pace Monitor (Click or Press Q for QR Code)">
+            <span class="pace-dot" id="paceDot"></span>
+            <span class="pace-label">Pace:</span>
+            <span class="pace-status" id="paceStatus">Good</span>
+            <span class="pace-count" id="paceCount" style="display: none;">0</span>
+            <span style="font-size: 0.70rem; color: #64748b; margin-left: 2px;">[Q]</span>
         </div>
 
         <!-- Mode Toggle -->
@@ -1646,6 +1843,7 @@
             <div class="help-grid">
                 <div class="help-row"><kbd>Space</kbd> / <kbd>Enter</kbd> / <kbd>&rarr;</kbd><span>Next Slide</span></div>
                 <div class="help-row"><kbd>&larr;</kbd><span>Previous Slide</span></div>
+                <div class="help-row"><kbd>Q</kbd><span>Show Student Feedback QR Code</span></div>
                 <div class="help-row"><kbd>M</kbd><span>Toggle Keynote vs Revised Unity 6</span></div>
                 <div class="help-row"><kbd>P</kbd><span>Toggle Lecture Mode vs Lab Mode</span></div>
                 <div class="help-row"><kbd>F</kbd><span>Toggle Fullscreen</span></div>
@@ -1654,6 +1852,23 @@
                 <div class="help-row"><kbd>?</kbd> / <kbd>H</kbd><span>Toggle This Shortcut Help</span></div>
             </div>
         </div>
+    </div>
+
+    <!-- Student Feedback QR Modal -->
+    <div class="qr-modal-backdrop" id="qrModal" onclick="if(event.target===this) toggleQrModal(false)">
+        <div class="qr-modal-box">
+            <h3 class="qr-modal-title">Live Student Feedback</h3>
+            <p class="qr-modal-desc">Scan with phone to send real-time pace feedback (Too Fast / Questions) directly to presenter screen.</p>
+            <div class="qr-code-wrapper" id="qrCodeContainer"></div>
+            <div class="qr-url-pill" id="qrUrlText"></div>
+            <button class="qr-close-btn" onclick="toggleQrModal(false)">Close [Esc]</button>
+        </div>
+    </div>
+
+    <!-- Live Student Toast Notification -->
+    <div class="live-toast" id="liveToast">
+        <span style="color: #38bdf8; font-weight: 900;">[!]</span>
+        <span id="toastText">Student requested clarification</span>
     </div>
 
     <script>
@@ -3393,6 +3608,10 @@ coinPool.Release(gameObject);</pre>
         }
 
         function changeSlide(direction) {
+            if (typeof tooFastVotes !== 'undefined') {
+                tooFastVotes.clear();
+                updatePaceDisplay();
+            }
             goToSlide(currentSlide + direction);
         }
 
@@ -3421,6 +3640,8 @@ coinPool.Release(gameObject);</pre>
                 setMode(!isNewMode);
             } else if (e.key.toLowerCase() === "f") {
                 toggleFullScreen();
+            } else if (e.key.toLowerCase() === "q") {
+                toggleQrModal();
             } else if (e.key.toLowerCase() === "p") {
                 setViewMode(currentViewMode === 'projector' ? 'lab' : 'projector');
             } else if (e.key === "1") {
@@ -3435,9 +3656,163 @@ coinPool.Release(gameObject);</pre>
                 const modal = document.getElementById("helpModal");
                 toggleHelpModal(modal.style.display === "none");
             } else if (e.key === "Escape") {
+                toggleQrModal(false);
                 toggleHelpModal(false);
             }
         });
+
+        // ==========================================
+        // REALTIME STUDENT PACE FEEDBACK (MQTT)
+        // ==========================================
+        const roomId = 'basics1';
+        const topic = `hr-cmgt/gdd/${roomId}/feedback`;
+        const brokerUrl = 'wss://broker.emqx.io:8084/mqtt';
+        
+        const tooFastVotes = new Map(); // studentId -> timestamp
+        let toastTimeout = null;
+        let qrGenerated = false;
+
+        function initPaceFeedback() {
+            try {
+                if (typeof mqtt === 'undefined') {
+                    console.warn('MQTT library not loaded');
+                    return;
+                }
+                const clientId = 'pres_cmp_' + Math.random().toString(16).substring(2, 8);
+                const client = mqtt.connect(brokerUrl, {
+                    clientId: clientId,
+                    clean: true,
+                    connectTimeout: 5000,
+                    reconnectPeriod: 3000
+                });
+
+                client.on('connect', () => {
+                    client.subscribe(topic, (err) => {
+                        if (!err) console.log('Subscribed to student feedback room:', roomId);
+                    });
+                });
+
+                client.on('message', (t, msg) => {
+                    try {
+                        const data = JSON.parse(msg.toString());
+                        handleFeedbackMessage(data);
+                    } catch (e) {
+                        console.error('Failed to parse feedback msg:', e);
+                    }
+                });
+            } catch (e) {
+                console.warn('MQTT init error:', e);
+            }
+
+            // Interval to prune votes older than 45 seconds
+            setInterval(() => {
+                const now = Date.now();
+                let changed = false;
+                for (const [id, time] of tooFastVotes.entries()) {
+                    if (now - time > 45000) {
+                        tooFastVotes.delete(id);
+                        changed = true;
+                    }
+                }
+                if (changed) updatePaceDisplay();
+            }, 5000);
+        }
+
+        function handleFeedbackMessage(data) {
+            if (!data || !data.type) return;
+            const now = Date.now();
+
+            if (data.type === 'too_fast') {
+                tooFastVotes.set(data.studentId || 'anon_' + now, now);
+                updatePaceDisplay();
+            } else if (data.type === 'good_pace') {
+                if (data.studentId) tooFastVotes.delete(data.studentId);
+                updatePaceDisplay();
+            } else if (data.type === 'question') {
+                showToast('Student requested clarification on current slide');
+            }
+        }
+
+        function updatePaceDisplay() {
+            const count = tooFastVotes.size;
+            const btn = document.getElementById('paceMonitorBtn');
+            const status = document.getElementById('paceStatus');
+            const countEl = document.getElementById('paceCount');
+
+            if (!btn || !status || !countEl) return;
+
+            if (count === 0) {
+                btn.className = 'pace-monitor';
+                status.textContent = 'Good';
+                countEl.style.display = 'none';
+            } else if (count < 3) {
+                btn.className = 'pace-monitor warning';
+                status.textContent = 'Slow Down';
+                countEl.textContent = count;
+                countEl.style.display = 'inline-block';
+            } else {
+                btn.className = 'pace-monitor alert';
+                status.textContent = 'Too Fast (' + count + ')';
+                countEl.textContent = count;
+                countEl.style.display = 'inline-block';
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('liveToast');
+            const text = document.getElementById('toastText');
+            if (!toast || !text) return;
+
+            text.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        function toggleQrModal(forceState) {
+            const modal = document.getElementById('qrModal');
+            if (!modal) return;
+
+            const shouldOpen = forceState !== undefined ? forceState : !modal.classList.contains('open');
+            if (shouldOpen) {
+                modal.classList.add('open');
+                generateFeedbackQr();
+            } else {
+                modal.classList.remove('open');
+            }
+        }
+
+        function generateFeedbackQr() {
+            if (qrGenerated) return;
+            const container = document.getElementById('qrCodeContainer');
+            const urlText = document.getElementById('qrUrlText');
+            if (!container) return;
+
+            const feedbackUrl = new URL('../feedback.html?room=' + roomId, window.location.href).href;
+            if (urlText) urlText.textContent = feedbackUrl;
+
+            container.innerHTML = '';
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(container, {
+                    text: feedbackUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#090c14",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                qrGenerated = true;
+            } else {
+                const img = document.createElement('img');
+                img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(feedbackUrl);
+                img.style.width = '200px';
+                img.style.height = '200px';
+                container.appendChild(img);
+                qrGenerated = true;
+            }
+        }
 
         // Global Interactive Glossary Tooltip System (Dik Gedrukte Woorden)
         (function initGlossaryTooltips() {
@@ -3514,6 +3889,8 @@ coinPool.Release(gameObject);</pre>
                 const data = findGlossaryData(e.target);
                 if (data) {
                     showTip(data);
+                } else {
+                    hideTip();
                 }
             });
 
@@ -3523,6 +3900,7 @@ coinPool.Release(gameObject);</pre>
         })();
 
         init();
+        initPaceFeedback();
     </script>
 </body>
 </html>
