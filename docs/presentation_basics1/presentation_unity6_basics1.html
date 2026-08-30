@@ -1506,220 +1506,40 @@
             color: #94a3b8;
         }
 
-        /* Live Student Pace Monitor */
-        .pace-monitor {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #141a29;
-            border: 1px solid #243049;
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .pace-monitor:hover {
-            border-color: #38bdf8;
-            background: #1a233a;
-        }
-
-        .pace-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10b981;
-            box-shadow: 0 0 6px #10b981;
-        }
-
-        .pace-monitor.warning {
-            background: rgba(245, 158, 11, 0.15);
-            border-color: #f59e0b;
-        }
-
-        .pace-monitor.warning .pace-dot {
-            background: #f59e0b;
-            box-shadow: 0 0 8px #f59e0b;
-        }
-
-        .pace-monitor.alert {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: #ef4444;
-        }
-
-        .pace-monitor.alert .pace-dot {
-            background: #ef4444;
-            box-shadow: 0 0 10px #ef4444;
-        }
-
-        .pace-label {
-            font-size: 0.76rem;
-            font-weight: 800;
-            color: #cbd5e1;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .pace-status {
-            font-size: 0.76rem;
-            font-weight: 800;
-            color: #10b981;
-            text-transform: uppercase;
-        }
-
-        .pace-monitor.warning .pace-status { color: #f59e0b; }
-        .pace-monitor.alert .pace-status { color: #ef4444; }
-
-        .pace-count {
-            background: #1e293b;
-            color: #ffffff;
-            font-size: 0.70rem;
-            font-weight: 900;
-            padding: 1px 6px;
-            border-radius: 4px;
-        }
-
-        .pace-monitor.warning .pace-count { background: #f59e0b; color: #000000; }
-        .pace-monitor.alert .pace-count { background: #ef4444; color: #ffffff; }
-
-        /* QR Feedback Modal */
-        .qr-modal-backdrop {
+        /* Floating Little Orange Dot Counter (Bottom-Left) */
+        .pace-speed-bubble {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 9999;
+            bottom: 20px;
+            left: 20px;
+            background: #f59e0b;
+            color: #000000;
+            min-width: 32px;
+            height: 32px;
+            padding: 0 8px;
+            border-radius: 9999px;
             display: none;
             align-items: center;
             justify-content: center;
-        }
-
-        .qr-modal-backdrop.open { display: flex; }
-
-        .qr-modal-box {
-            background: #0f1524;
-            border: 2px solid var(--hr-red);
-            border-radius: 12px;
-            padding: 28px;
-            max-width: 440px;
-            width: 90%;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
-        }
-
-        .qr-modal-title {
-            font-size: 1.25rem;
-            font-weight: 900;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .qr-modal-desc {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            line-height: 1.45;
-        }
-
-        .qr-code-wrapper {
-            background: #ffffff;
-            padding: 14px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 4px 0;
-        }
-
-        .qr-url-pill {
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.78rem;
-            color: #38bdf8;
-            font-family: monospace;
-            word-break: break-all;
-        }
-
-        .qr-close-btn {
-            background: var(--hr-red);
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 24px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.15s ease;
-        }
-
-        .qr-close-btn:hover {
-            background: #b50036;
-        }
-
-        /* Toast Alert */
-        .live-toast {
-            position: fixed;
-            bottom: 58px;
-            right: 24px;
-            background: #111827;
-            border: 1.5px solid #0284c7;
-            border-left: 5px solid #0284c7;
-            color: #f8fafc;
-            padding: 12px 18px;
-            border-radius: 8px;
             font-size: 0.88rem;
-            font-weight: 700;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            z-index: 8000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 900;
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.75), 0 4px 12px rgba(0, 0, 0, 0.6);
+            z-index: 99999;
             pointer-events: none;
+            user-select: none;
+            animation: pulsePaceBubble 2s infinite ease-in-out;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .live-toast.show {
-            transform: translateY(0);
-            opacity: 1;
+        .pace-speed-bubble.visible {
+            display: inline-flex !important;
         }
 
-        /* Teacher Pace Pill & Student Flag Button Mode Visibility */
-        .teacher-pace-pill {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: #141a29;
-            border: 1px solid #243049;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.74rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            color: #cbd5e1;
+        @keyframes pulsePaceBubble {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(245, 158, 11, 0.6); }
+            50% { transform: scale(1.12); box-shadow: 0 0 18px rgba(245, 158, 11, 0.95); }
         }
 
-        .teacher-pace-pill.warning {
-            background: rgba(245, 158, 11, 0.15);
-            border-color: #f59e0b;
-            color: #f59e0b;
-        }
-
-        .teacher-pace-pill.alert {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: #ef4444;
-            color: #ef4444;
-        }
-
+        /* Simple Student Flag Button (Shown in Lab Mode) */
         .btn-flag-pace {
             background: #1e293b;
             border: 1.5px solid #334155;
@@ -1748,14 +1568,14 @@
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
         }
 
-        body.projector-mode .teacher-pace-pill { display: flex !important; }
         body.projector-mode .btn-flag-pace { display: none !important; }
-
-        body:not(.projector-mode) .teacher-pace-pill { display: none !important; }
         body:not(.projector-mode) .btn-flag-pace { display: inline-block !important; }
     </style>
 </head>
 <body class="projector-mode">
+
+    <!-- Little Orange Dot Counter (Bottom-Left) -->
+    <div class="pace-speed-bubble" id="paceSpeedBubble">0</div>
 
     <!-- Top Bar -->
     <div class="top-bar">
@@ -1772,16 +1592,7 @@
             <button class="tier-btn" id="tierExp" onclick="setTierFilter('exp')">Expert</button>
         </div>
 
-        <!-- Live Student Pace Monitor & Portal Link -->
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="pace-monitor" id="paceMonitorBtn" onclick="toggleQrModal()" title="Live Student Pace Monitor (Click or Press Q for QR Code)">
-                <span class="pace-dot" id="paceDot"></span>
-                <span class="pace-label">Pace:</span>
-                <span class="pace-status" id="paceStatus">Good</span>
-                <span class="pace-count" id="paceCount" style="display: none;">0</span>
-                <span style="font-size: 0.70rem; color: #64748b; margin-left: 2px;">[Q]</span>
-            </div>
-
+        <div>
             <a href="../index.html" style="color: #94a3b8; text-decoration: none; font-size: 0.82rem; font-weight: 700; background: #14141e; border: 1px solid #28283c; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease;">
                 &larr; Course Portal
             </a>
@@ -1868,12 +1679,6 @@
                 <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode</button>
                 <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode</button>
             </div>
-            
-            <!-- Teacher Live Pace Indicator (Shown in Lecture Mode) -->
-            <div class="teacher-pace-pill" id="teacherPacePill" title="Live student flags on current slide">
-                <span class="pace-dot" id="teacherPaceDot"></span>
-                <span id="teacherPaceText">Pace: Good</span>
-            </div>
 
             <!-- Student Simple Flag Button (Shown in Lab Mode) -->
             <button class="btn-flag-pace" id="btnStudentTooFast" onclick="toggleStudentTooFast()" title="Click to flag presenter if going too fast">
@@ -1903,7 +1708,6 @@
             <div class="help-grid">
                 <div class="help-row"><kbd>Space</kbd> / <kbd>Enter</kbd> / <kbd>&rarr;</kbd><span>Next Slide</span></div>
                 <div class="help-row"><kbd>&larr;</kbd><span>Previous Slide</span></div>
-                <div class="help-row"><kbd>Q</kbd><span>Show Student Feedback QR Code</span></div>
                 <div class="help-row"><kbd>P</kbd><span>Toggle Lecture Mode vs Lab Mode</span></div>
                 <div class="help-row"><kbd>F</kbd><span>Toggle Fullscreen</span></div>
                 <div class="help-row"><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd><span>Filter Core / Advanced / Expert</span></div>
@@ -1911,23 +1715,6 @@
                 <div class="help-row"><kbd>?</kbd> / <kbd>H</kbd><span>Toggle This Shortcut Help</span></div>
             </div>
         </div>
-    </div>
-
-    <!-- Student Feedback QR Modal -->
-    <div class="qr-modal-backdrop" id="qrModal" onclick="if(event.target===this) toggleQrModal(false)">
-        <div class="qr-modal-box">
-            <h3 class="qr-modal-title">Live Student Feedback</h3>
-            <p class="qr-modal-desc">Scan with phone to send real-time pace feedback (Too Fast / Questions) directly to presenter screen.</p>
-            <div class="qr-code-wrapper" id="qrCodeContainer"></div>
-            <div class="qr-url-pill" id="qrUrlText"></div>
-            <button class="qr-close-btn" onclick="toggleQrModal(false)">Close [Esc]</button>
-        </div>
-    </div>
-
-    <!-- Live Student Toast Notification -->
-    <div class="live-toast" id="liveToast">
-        <span style="color: #38bdf8; font-weight: 900;">[!]</span>
-        <span id="toastText">Student requested clarification</span>
     </div>
 
     <script>
@@ -3646,7 +3433,6 @@ coinPool.Release(gameObject);</pre>
                 const modal = document.getElementById("helpModal");
                 toggleHelpModal(modal.style.display === "none");
             } else if (e.key === "Escape") {
-                toggleQrModal(false);
                 toggleHelpModal(false);
             }
         });
@@ -3667,8 +3453,6 @@ coinPool.Release(gameObject);</pre>
         let isFlaggedTooFast = false;
 
         const tooFastVotes = new Map(); // studentId -> timestamp
-        let toastTimeout = null;
-        let qrGenerated = false;
 
         function initPaceFeedback() {
             try {
@@ -3756,108 +3540,14 @@ coinPool.Release(gameObject);</pre>
 
         function updatePaceDisplay() {
             const count = tooFastVotes.size;
-            
-            // 1. Update Teacher Bottom Pill
-            const pill = document.getElementById('teacherPacePill');
-            const pillText = document.getElementById('teacherPaceText');
-            const pillDot = document.getElementById('teacherPaceDot');
-
-            if (pill && pillText && pillDot) {
-                if (count === 0) {
-                    pill.className = 'teacher-pace-pill';
-                    pillText.textContent = 'Pace: Good';
-                    pillDot.style.background = '#10b981';
-                    pillDot.style.boxShadow = '0 0 6px #10b981';
-                } else if (count < 3) {
-                    pill.className = 'teacher-pace-pill warning';
-                    pillText.textContent = 'Slow Down (' + count + ')';
-                    pillDot.style.background = '#f59e0b';
-                    pillDot.style.boxShadow = '0 0 8px #f59e0b';
+            const bubble = document.getElementById('paceSpeedBubble');
+            if (bubble) {
+                if (count > 0) {
+                    bubble.textContent = count;
+                    bubble.classList.add('visible');
                 } else {
-                    pill.className = 'teacher-pace-pill alert';
-                    pillText.textContent = 'Too Fast (' + count + ')';
-                    pillDot.style.background = '#ef4444';
-                    pillDot.style.boxShadow = '0 0 10px #ef4444';
+                    bubble.classList.remove('visible');
                 }
-            }
-
-            // 2. Update Top Bar Monitor if present
-            const btn = document.getElementById('paceMonitorBtn');
-            const status = document.getElementById('paceStatus');
-            const countEl = document.getElementById('paceCount');
-
-            if (btn && status && countEl) {
-                if (count === 0) {
-                    btn.className = 'pace-monitor';
-                    status.textContent = 'Good';
-                    countEl.style.display = 'none';
-                } else if (count < 3) {
-                    btn.className = 'pace-monitor warning';
-                    status.textContent = 'Slow Down';
-                    countEl.textContent = count;
-                    countEl.style.display = 'inline-block';
-                } else {
-                    btn.className = 'pace-monitor alert';
-                    status.textContent = 'Too Fast (' + count + ')';
-                    countEl.textContent = count;
-                    countEl.style.display = 'inline-block';
-                }
-            }
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('liveToast');
-            const text = document.getElementById('toastText');
-            if (!toast || !text) return;
-
-            text.textContent = msg;
-            toast.classList.add('show');
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 5000);
-        }
-
-        function toggleQrModal(forceState) {
-            const modal = document.getElementById('qrModal');
-            if (!modal) return;
-
-            const shouldOpen = forceState !== undefined ? forceState : !modal.classList.contains('open');
-            if (shouldOpen) {
-                modal.classList.add('open');
-                generateFeedbackQr();
-            } else {
-                modal.classList.remove('open');
-            }
-        }
-
-        function generateFeedbackQr() {
-            if (qrGenerated) return;
-            const container = document.getElementById('qrCodeContainer');
-            const urlText = document.getElementById('qrUrlText');
-            if (!container) return;
-
-            const feedbackUrl = new URL('../feedback.html?room=' + roomId, window.location.href).href;
-            if (urlText) urlText.textContent = feedbackUrl;
-
-            container.innerHTML = '';
-            if (typeof QRCode !== 'undefined') {
-                new QRCode(container, {
-                    text: feedbackUrl,
-                    width: 200,
-                    height: 200,
-                    colorDark: "#090c14",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.M
-                });
-                qrGenerated = true;
-            } else {
-                const img = document.createElement('img');
-                img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(feedbackUrl);
-                img.style.width = '200px';
-                img.style.height = '200px';
-                container.appendChild(img);
-                qrGenerated = true;
             }
         }
 
