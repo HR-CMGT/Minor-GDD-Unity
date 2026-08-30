@@ -373,22 +373,17 @@
         .slide-hero {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-size: cover;
-            background-position: center;
+            background: #080b12;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 28px 42px;
+            padding: 3.5cqh 4.5cqw;
             z-index: 5;
             overflow: hidden;
         }
 
         .slide-hero::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.82) 55%, rgba(226, 0, 73, 0.45) 100%);
-            z-index: 1;
+            display: none;
         }
 
         .hero-inner {
@@ -397,49 +392,55 @@
             max-width: 900px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 1.6cqh;
         }
 
         .hero-tag-badge {
             background: var(--hr-red);
-            color: #fff;
-            padding: 8px 24px;
+            color: #ffffff;
+            padding: 1.0cqh 2.4cqw;
             border-radius: 8px;
-            font-size: clamp(1.5rem, 2.4vw, 2.4rem);
+            font-size: clamp(1.6rem, 4.2cqh, 2.8rem);
             font-weight: 900;
             display: inline-block;
-            box-shadow: 0 10px 30px rgba(226, 0, 73, 0.45);
+            box-shadow: 0 8px 24px rgba(214, 0, 66, 0.4);
             letter-spacing: -0.5px;
             width: fit-content;
         }
 
         .hero-sub {
-            font-size: clamp(1.1rem, 1.5vw, 1.5rem);
-            font-weight: 700;
-            color: #f8fafc;
+            font-size: clamp(1.1rem, 2.6cqh, 1.6rem);
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.2px;
         }
 
         .hero-stack {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 1.2cqh;
+            margin-top: 0.5cqh;
         }
 
         .hero-pill-card {
-            background: rgba(30, 41, 59, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1.5px solid rgba(255,255,255,0.25);
+            background: #111827;
+            border: 1.5px solid #1f2937;
+            border-left: 5px solid #3b82f6;
             border-radius: 8px;
-            padding: 10px 16px;
-            color: #e2e8f0;
+            padding: 1.2cqh 1.8cqw;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
+        .hero-pill-card:nth-child(1) { border-left-color: #10b981; }
+        .hero-pill-card:nth-child(2) { border-left-color: #0284c7; }
+        .hero-pill-card:nth-child(3) { border-left-color: #8b5cf6; }
+
         .hero-pill-title {
-            font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+            font-size: clamp(0.95rem, 2.2cqh, 1.35rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 2px;
+            margin-bottom: 0.3cqh;
         }
 
         .hero-pill-title.core { color: #34d399; }
@@ -447,9 +448,10 @@
         .hero-pill-title.exp { color: #c084fc; }
 
         .hero-pill-desc {
-            font-size: clamp(0.9rem, 1.2vw, 1.15rem);
-            line-height: 1.45;
-            color: #e2e8f0;
+            font-size: clamp(0.88rem, 2.0cqh, 1.22rem);
+            line-height: 1.55;
+            color: #f1f5f9;
+            font-weight: 500;
         }
 
         /* Standard Slide Header */
@@ -3371,7 +3373,11 @@ coinPool.Release(gameObject);</pre>
 
             if (slide && slide.isHero) {
                 heroLayout.style.display = "flex";
-                heroLayout.style.backgroundImage = `url('${slide.bgImage}')`;
+                if (slide.bgImage) {
+                    heroLayout.style.background = `linear-gradient(135deg, rgba(8, 11, 20, 0.90) 0%, rgba(15, 23, 42, 0.85) 60%, rgba(30, 10, 20, 0.85) 100%), url('${slide.bgImage}') center / cover no-repeat`;
+                } else {
+                    heroLayout.style.background = '#080b12';
+                }
                 standardLayout.style.display = "none";
             } else if (slide) {
                 heroLayout.style.display = "none";
