@@ -252,15 +252,16 @@
             container-type: size;
         }
 
-        /* Fullscreen presentation overrides (Strict 16:9 Ratio) */
-        body.is-fullscreen .top-bar { display: none; }
-        body.is-fullscreen .slide-drawer { display: none; }
-        body.is-fullscreen .stage-area { padding: 0; background: #000; }
-        body.is-fullscreen .main-workspace { height: calc(100vh - 46px); }
+        /* Fullscreen presentation overrides (Strict 16:9 Ratio, No Bars) */
+        body.is-fullscreen .top-bar { display: none !important; }
+        body.is-fullscreen .bottom-bar { display: none !important; }
+        body.is-fullscreen .slide-drawer { display: none !important; }
+        body.is-fullscreen .stage-area { padding: 0 !important; background: #000 !important; }
+        body.is-fullscreen .main-workspace { height: 100vh !important; }
         body.is-fullscreen .slide-viewport {
             aspect-ratio: 16 / 9;
-            width: min(100vw, calc((100vh - 46px) * (16 / 9)));
-            height: min(calc(100vh - 46px), calc(100vw * (9 / 16)));
+            width: min(100vw, calc(100vh * (16 / 9)));
+            height: min(100vh, calc(100vw * (9 / 16)));
             border-radius: 0;
             box-shadow: none;
             border: none;
@@ -1690,9 +1691,71 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        /* Teacher Pace Pill & Student Flag Button Mode Visibility */
+        .teacher-pace-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #141a29;
+            border: 1px solid #243049;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #cbd5e1;
+        }
+
+        .teacher-pace-pill.warning {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .teacher-pace-pill.alert {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .btn-flag-pace {
+            background: #1e293b;
+            border: 1.5px solid #334155;
+            color: #cbd5e1;
+            font-size: 0.74rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: none;
+        }
+
+        .btn-flag-pace:hover {
+            border-color: #f59e0b;
+            color: #ffffff;
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .btn-flag-pace.active {
+            background: #d97706;
+            border-color: #f59e0b;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        body.projector-mode .teacher-pace-pill { display: flex !important; }
+        body.projector-mode .btn-flag-pace { display: none !important; }
+
+        body:not(.projector-mode) .teacher-pace-pill { display: none !important; }
+        body:not(.projector-mode) .btn-flag-pace { display: inline-block !important; }
     </style>
 </head>
-<body>
+<body class="projector-mode">
 
     <!-- Top Bar -->
     <div class="top-bar">
@@ -1802,10 +1865,21 @@
         <!-- View Size Toggle: Projector Mode (Core Only) vs Lab/Student Mode -->
         <div style="display: flex; align-items: center; gap: 10px;">
             <div class="viewmode-toggle">
-                <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode (Core)</button>
-                <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode (+Advanced & Expert)</button>
+                <button class="viewmode-btn active" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode</button>
+                <button class="viewmode-btn" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode</button>
             </div>
             
+            <!-- Teacher Live Pace Indicator (Shown in Lecture Mode) -->
+            <div class="teacher-pace-pill" id="teacherPacePill" title="Live student flags on current slide">
+                <span class="pace-dot" id="teacherPaceDot"></span>
+                <span id="teacherPaceText">Pace: Good</span>
+            </div>
+
+            <!-- Student Simple Flag Button (Shown in Lab Mode) -->
+            <button class="btn-flag-pace" id="btnStudentTooFast" onclick="toggleStudentTooFast()" title="Click to flag presenter if going too fast">
+                Flag: Too Fast
+            </button>
+
             <div class="lecture-scale-wrap" id="lectureScaleWrap" style="display: flex; align-items: center; gap: 7px; background: #14141e; border: 1px solid #2c2c3e; padding: 3px 10px; border-radius: 6px;" title="Scale Lecture Text Size">
                 <span style="font-size: 0.68rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Text Size:</span>
                 <input type="range" id="lectureFontSlider" min="80" max="160" value="100" step="5" oninput="setLectureScale(this.value)" style="width: 80px; accent-color: var(--hr-red); cursor: pointer;">
@@ -3584,6 +3658,14 @@ coinPool.Release(gameObject);</pre>
         const topic = `hr-cmgt/gdd/${roomId}/feedback`;
         const brokerUrl = 'wss://broker.emqx.io:8084/mqtt';
         
+        let mqttClient = null;
+        let myStudentId = sessionStorage.getItem('gdd_student_id');
+        if (!myStudentId) {
+            myStudentId = 'std_' + Math.random().toString(36).substring(2, 9);
+            sessionStorage.setItem('gdd_student_id', myStudentId);
+        }
+        let isFlaggedTooFast = false;
+
         const tooFastVotes = new Map(); // studentId -> timestamp
         let toastTimeout = null;
         let qrGenerated = false;
@@ -3595,20 +3677,20 @@ coinPool.Release(gameObject);</pre>
                     return;
                 }
                 const clientId = 'pres_' + Math.random().toString(16).substring(2, 8);
-                const client = mqtt.connect(brokerUrl, {
+                mqttClient = mqtt.connect(brokerUrl, {
                     clientId: clientId,
                     clean: true,
                     connectTimeout: 5000,
                     reconnectPeriod: 3000
                 });
 
-                client.on('connect', () => {
-                    client.subscribe(topic, (err) => {
+                mqttClient.on('connect', () => {
+                    mqttClient.subscribe(topic, (err) => {
                         if (!err) console.log('Subscribed to student feedback room:', roomId);
                     });
                 });
 
-                client.on('message', (t, msg) => {
+                mqttClient.on('message', (t, msg) => {
                     try {
                         const data = JSON.parse(msg.toString());
                         handleFeedbackMessage(data);
@@ -3634,6 +3716,29 @@ coinPool.Release(gameObject);</pre>
             }, 5000);
         }
 
+        function toggleStudentTooFast() {
+            isFlaggedTooFast = !isFlaggedTooFast;
+            const btn = document.getElementById('btnStudentTooFast');
+            if (btn) {
+                if (isFlaggedTooFast) {
+                    btn.classList.add('active');
+                    btn.textContent = 'Marked: Too Fast (Active)';
+                } else {
+                    btn.classList.remove('active');
+                    btn.textContent = 'Flag: Too Fast';
+                }
+            }
+
+            if (mqttClient) {
+                const payload = JSON.stringify({
+                    type: isFlaggedTooFast ? 'too_fast' : 'good_pace',
+                    studentId: myStudentId,
+                    timestamp: Date.now()
+                });
+                mqttClient.publish(topic, payload, { qos: 0 });
+            }
+        }
+
         function handleFeedbackMessage(data) {
             if (!data || !data.type) return;
             const now = Date.now();
@@ -3651,26 +3756,52 @@ coinPool.Release(gameObject);</pre>
 
         function updatePaceDisplay() {
             const count = tooFastVotes.size;
+            
+            // 1. Update Teacher Bottom Pill
+            const pill = document.getElementById('teacherPacePill');
+            const pillText = document.getElementById('teacherPaceText');
+            const pillDot = document.getElementById('teacherPaceDot');
+
+            if (pill && pillText && pillDot) {
+                if (count === 0) {
+                    pill.className = 'teacher-pace-pill';
+                    pillText.textContent = 'Pace: Good';
+                    pillDot.style.background = '#10b981';
+                    pillDot.style.boxShadow = '0 0 6px #10b981';
+                } else if (count < 3) {
+                    pill.className = 'teacher-pace-pill warning';
+                    pillText.textContent = 'Slow Down (' + count + ')';
+                    pillDot.style.background = '#f59e0b';
+                    pillDot.style.boxShadow = '0 0 8px #f59e0b';
+                } else {
+                    pill.className = 'teacher-pace-pill alert';
+                    pillText.textContent = 'Too Fast (' + count + ')';
+                    pillDot.style.background = '#ef4444';
+                    pillDot.style.boxShadow = '0 0 10px #ef4444';
+                }
+            }
+
+            // 2. Update Top Bar Monitor if present
             const btn = document.getElementById('paceMonitorBtn');
             const status = document.getElementById('paceStatus');
             const countEl = document.getElementById('paceCount');
 
-            if (!btn || !status || !countEl) return;
-
-            if (count === 0) {
-                btn.className = 'pace-monitor';
-                status.textContent = 'Good';
-                countEl.style.display = 'none';
-            } else if (count < 3) {
-                btn.className = 'pace-monitor warning';
-                status.textContent = 'Slow Down';
-                countEl.textContent = count;
-                countEl.style.display = 'inline-block';
-            } else {
-                btn.className = 'pace-monitor alert';
-                status.textContent = 'Too Fast (' + count + ')';
-                countEl.textContent = count;
-                countEl.style.display = 'inline-block';
+            if (btn && status && countEl) {
+                if (count === 0) {
+                    btn.className = 'pace-monitor';
+                    status.textContent = 'Good';
+                    countEl.style.display = 'none';
+                } else if (count < 3) {
+                    btn.className = 'pace-monitor warning';
+                    status.textContent = 'Slow Down';
+                    countEl.textContent = count;
+                    countEl.style.display = 'inline-block';
+                } else {
+                    btn.className = 'pace-monitor alert';
+                    status.textContent = 'Too Fast (' + count + ')';
+                    countEl.textContent = count;
+                    countEl.style.display = 'inline-block';
+                }
             }
         }
 

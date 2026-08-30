@@ -245,15 +245,16 @@
             container-type: size;
         }
 
-        /* Fullscreen presentation overrides (Strict 16:9 Ratio) */
-        body.is-fullscreen .top-bar { display: none; }
-        body.is-fullscreen .slide-drawer { display: none; }
-        body.is-fullscreen .stage-area { padding: 0; background: #000; }
-        body.is-fullscreen .main-workspace { height: calc(100vh - 46px); }
+        /* Fullscreen presentation overrides (Strict 16:9 Ratio, No Bars) */
+        body.is-fullscreen .top-bar { display: none !important; }
+        body.is-fullscreen .bottom-bar { display: none !important; }
+        body.is-fullscreen .slide-drawer { display: none !important; }
+        body.is-fullscreen .stage-area { padding: 0 !important; background: #000 !important; }
+        body.is-fullscreen .main-workspace { height: 100vh !important; }
         body.is-fullscreen .slide-viewport {
             aspect-ratio: 16 / 9;
-            width: min(100vw, calc((100vh - 46px) * (16 / 9)));
-            height: min(calc(100vh - 46px), calc(100vw * (9 / 16)));
+            width: min(100vw, calc(100vh * (16 / 9)));
+            height: min(100vh, calc(100vw * (9 / 16)));
             border-radius: 0;
             box-shadow: none;
             border: none;
