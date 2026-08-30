@@ -1506,10 +1506,10 @@
             color: #94a3b8;
         }
 
-        /* Floating Little Orange Dot Counter (Middle-Bottom, Lecture Mode Only) */
+        /* Floating Little Orange Dot Counter (Locked to Slide Canvas Bottom-Middle) */
         .pace-speed-bubble {
-            position: fixed;
-            bottom: 24px;
+            position: absolute;
+            bottom: 18px;
             left: 50%;
             transform: translateX(-50%);
             background: #f59e0b;
@@ -1518,25 +1518,26 @@
             height: 32px;
             padding: 0 9px;
             border-radius: 9999px;
-            display: none;
+            display: none !important;
             align-items: center;
             justify-content: center;
             font-size: 0.88rem;
             font-weight: 900;
             box-shadow: 0 0 16px rgba(245, 158, 11, 0.8), 0 4px 14px rgba(0, 0, 0, 0.6);
-            z-index: 99999;
+            z-index: 999;
             pointer-events: none;
             user-select: none;
             animation: pulsePaceBubble 2s infinite ease-in-out;
             transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ONLY show counter in Lecture / Projector Mode */
+        /* ONLY show counter when in Lecture / Projector Mode AND marked visible */
         body.projector-mode .pace-speed-bubble.visible {
             display: inline-flex !important;
         }
 
-        body:not(.projector-mode) .pace-speed-bubble {
+        body:not(.projector-mode) .pace-speed-bubble,
+        body:not(.projector-mode) .pace-speed-bubble.visible {
             display: none !important;
         }
 
@@ -1545,10 +1546,13 @@
             50% { transform: translateX(-50%) scale(1.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.95); }
         }
 
-        /* Simple Student Flag Button (Shown in Lab Mode) */
+        /* Clean Student Flag Button with Light Dot (Shown in Lab Mode) */
         .btn-flag-pace {
-            background: #1e293b;
-            border: 1.5px solid #334155;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #141a29;
+            border: 1px solid #243049;
             color: #cbd5e1;
             font-size: 0.74rem;
             font-weight: 800;
@@ -1557,31 +1561,41 @@
             padding: 5px 12px;
             border-radius: 6px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
+            user-select: none;
             display: none;
         }
 
         .btn-flag-pace:hover {
             border-color: #f59e0b;
             color: #ffffff;
-            background: rgba(245, 158, 11, 0.15);
+            background: #1a233a;
+        }
+
+        .flag-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #475569;
+            transition: all 0.2s ease;
         }
 
         .btn-flag-pace.active {
-            background: #d97706;
             border-color: #f59e0b;
             color: #ffffff;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            background: #1e2638;
+        }
+
+        .btn-flag-pace.active .flag-dot {
+            background: #f59e0b;
+            box-shadow: 0 0 8px #f59e0b;
         }
 
         body.projector-mode .btn-flag-pace { display: none !important; }
-        body:not(.projector-mode) .btn-flag-pace { display: inline-block !important; }
+        body:not(.projector-mode) .btn-flag-pace { display: inline-flex !important; }
     </style>
 </head>
 <body class="lab-mode">
-
-    <!-- Little Orange Dot Counter (Bottom-Left) -->
-    <div class="pace-speed-bubble" id="paceSpeedBubble">0</div>
 
     <!-- Top Bar -->
     <div class="top-bar">
@@ -1615,6 +1629,9 @@
             <div class="slide-viewport" id="viewport">
                 <!-- Deck Progress Bar -->
                 <div class="deck-progress-bar" id="deckProgressBar"></div>
+
+                <!-- Floating Little Orange Dot Counter (Slide Canvas Bottom-Middle) -->
+                <div class="pace-speed-bubble" id="paceSpeedBubble">0</div>
 
                 <!-- Interactive Revised Presentation Slide -->
                 <div id="interactiveSlide" class="view-interactive">
@@ -1687,8 +1704,9 @@
             </div>
 
             <!-- Student Simple Flag Button (Shown in Lab Mode) -->
-            <button class="btn-flag-pace" id="btnStudentTooFast" onclick="toggleStudentTooFast()" title="Click to flag presenter if going too fast">
-                Flag: Too Fast
+            <button class="btn-flag-pace" id="btnStudentTooFast" onclick="toggleStudentTooFast()" title="Flag presenter if going too fast">
+                <span class="flag-dot" id="flagDot"></span>
+                <span>Flag: Too Fast</span>
             </button>
 
             <div class="lecture-scale-wrap" id="lectureScaleWrap" style="display: flex; align-items: center; gap: 7px; background: #14141e; border: 1px solid #2c2c3e; padding: 3px 10px; border-radius: 6px;" title="Scale Lecture Text Size">
@@ -2931,14 +2949,19 @@ coinPool.Release(gameObject);</pre>
             currentViewMode = mode;
             if (mode === 'projector') {
                 document.body.classList.add('projector-mode');
+                document.body.classList.remove('lab-mode');
                 document.getElementById('btnModeProjector').classList.add('active');
                 document.getElementById('btnModeLab').classList.remove('active');
             } else {
                 document.body.classList.remove('projector-mode');
+                document.body.classList.add('lab-mode');
                 document.getElementById('btnModeProjector').classList.remove('active');
                 document.getElementById('btnModeLab').classList.add('active');
             }
             applyTierVisibility();
+            if (typeof updatePaceDisplay === 'function') {
+                updatePaceDisplay();
+            }
         }
 
         function toggleFullScreen() {
@@ -3527,10 +3550,8 @@ coinPool.Release(gameObject);</pre>
             if (btn) {
                 if (isFlaggedTooFast) {
                     btn.classList.add('active');
-                    btn.textContent = 'Marked: Too Fast (Active)';
                 } else {
                     btn.classList.remove('active');
-                    btn.textContent = 'Flag: Too Fast';
                 }
             }
 
@@ -3563,7 +3584,7 @@ coinPool.Release(gameObject);</pre>
             const count = tooFastVotes.size;
             const bubble = document.getElementById('paceSpeedBubble');
             if (bubble) {
-                if (count > 0) {
+                if (count > 0 && currentViewMode === 'projector') {
                     bubble.textContent = count;
                     bubble.classList.add('visible');
                 } else {
