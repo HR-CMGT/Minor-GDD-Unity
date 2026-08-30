@@ -1512,37 +1512,43 @@
         .mode-indicator.old { background: rgba(244, 63, 94, 0.15); color: var(--accent-old); border: 1px solid var(--accent-old); }
         .mode-indicator.new { background: rgba(16, 185, 129, 0.15); color: var(--tier-core); border: 1px solid var(--tier-core); }
 
-        /* Floating Little Orange Dot Counter (Bottom-Left) */
+        /* Floating Little Orange Dot Counter (Middle-Bottom, Lecture Mode Only) */
         .pace-speed-bubble {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
             background: #f59e0b;
             color: #000000;
             min-width: 32px;
             height: 32px;
-            padding: 0 8px;
+            padding: 0 9px;
             border-radius: 9999px;
             display: none;
             align-items: center;
             justify-content: center;
             font-size: 0.88rem;
             font-weight: 900;
-            box-shadow: 0 0 14px rgba(245, 158, 11, 0.75), 0 4px 12px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.8), 0 4px 14px rgba(0, 0, 0, 0.6);
             z-index: 99999;
             pointer-events: none;
             user-select: none;
             animation: pulsePaceBubble 2s infinite ease-in-out;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .pace-speed-bubble.visible {
+        /* ONLY show counter in Lecture / Projector Mode */
+        body.projector-mode .pace-speed-bubble.visible {
             display: inline-flex !important;
         }
 
+        body:not(.projector-mode) .pace-speed-bubble {
+            display: none !important;
+        }
+
         @keyframes pulsePaceBubble {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(245, 158, 11, 0.6); }
-            50% { transform: scale(1.12); box-shadow: 0 0 18px rgba(245, 158, 11, 0.95); }
+            0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 12px rgba(245, 158, 11, 0.6); }
+            50% { transform: translateX(-50%) scale(1.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.95); }
         }
 
         /* Simple Student Flag Button (Shown in Lab Mode) */
@@ -3162,6 +3168,20 @@ coinPool.Release(gameObject);</pre>
 
         function goToSlide(index) {
             if (index < 0 || index >= slideIds.length) return;
+
+            // Auto-clear pace flags on slide change
+            if (typeof isFlaggedTooFast !== 'undefined' && isFlaggedTooFast) {
+                isFlaggedTooFast = false;
+                const btn = document.getElementById('btnStudentTooFast');
+                if (btn) {
+                    btn.classList.remove('active');
+                    btn.textContent = 'Flag: Too Fast';
+                }
+            }
+            if (typeof tooFastVotes !== 'undefined') {
+                tooFastVotes.clear();
+                updatePaceDisplay();
+            }
 
             document.getElementById(`drawer-${currentSlide}`).classList.remove("active");
             currentSlide = index;
