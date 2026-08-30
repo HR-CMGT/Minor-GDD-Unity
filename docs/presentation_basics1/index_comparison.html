@@ -1531,10 +1531,17 @@
             font-weight: 900;
             box-shadow: 0 0 16px rgba(245, 158, 11, 0.8), 0 4px 14px rgba(0, 0, 0, 0.6);
             z-index: 999;
-            pointer-events: none;
+            pointer-events: auto;
+            cursor: pointer;
             user-select: none;
             animation: pulsePaceBubble 2s infinite ease-in-out;
-            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s ease;
+        }
+
+        .pace-speed-bubble:hover {
+            transform: translateX(-50%) scale(1.15);
+            background: #fbbf24;
+            box-shadow: 0 0 22px rgba(245, 158, 11, 1);
         }
 
         /* ONLY show counter when in Lecture / Projector Mode AND marked visible */
@@ -1551,6 +1558,32 @@
             0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 12px rgba(245, 158, 11, 0.6); }
             50% { transform: translateX(-50%) scale(1.12); box-shadow: 0 0 20px rgba(245, 158, 11, 0.95); }
         }
+
+        /* Teacher Clear Flags Button (Shown in Lecture Mode when flags present) */
+        .btn-clear-flags {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid #f59e0b;
+            color: #f59e0b;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            display: none;
+        }
+
+        .btn-clear-flags:hover {
+            background: #f59e0b;
+            color: #000000;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+        }
+
+        body.projector-mode .btn-clear-flags.visible { display: inline-block !important; }
+        body:not(.projector-mode) .btn-clear-flags { display: none !important; }
 
         /* Clean Student Flag Button with Light Dot (Shown in Lab Mode) */
         .btn-flag-pace {
@@ -1640,8 +1673,8 @@
                 <!-- Deck Progress Bar -->
                 <div class="deck-progress-bar" id="deckProgressBar"></div>
 
-                <!-- Floating Little Orange Dot Counter (Slide Canvas Bottom-Middle) -->
-                <div class="pace-speed-bubble" id="paceSpeedBubble">0</div>
+                <!-- Floating Little Orange Dot Counter (Slide Canvas Bottom-Middle, Click to Clear) -->
+                <div class="pace-speed-bubble" id="paceSpeedBubble" onclick="clearAllPaceFlags()" title="Click to clear all student flags">0</div>
 
                 <!-- Original Full HD 1080p Rendered Slide -->
                 <img id="originalSlideImg" src="" alt="Original Keynote Slide">
@@ -1715,6 +1748,11 @@
                 <button class="viewmode-btn" id="btnModeProjector" onclick="setViewMode('projector')">Lecture Mode</button>
                 <button class="viewmode-btn active" id="btnModeLab" onclick="setViewMode('lab')">Lab Mode</button>
             </div>
+
+            <!-- Teacher Clear Flags Button (Shown in Lecture Mode when flags present) -->
+            <button class="btn-clear-flags" id="btnClearFlags" onclick="clearAllPaceFlags()" title="Clear all student flags">
+                Clear Flags
+            </button>
 
             <!-- Student Simple Flag Button (Shown in Lab Mode) -->
             <button class="btn-flag-pace" id="btnStudentTooFast" onclick="toggleStudentTooFast()" title="Flag presenter if going too fast">
@@ -3193,17 +3231,8 @@ coinPool.Release(gameObject);</pre>
             if (index < 0 || index >= slideIds.length) return;
 
             // Auto-clear pace flags on slide change
-            if (typeof isFlaggedTooFast !== 'undefined' && isFlaggedTooFast) {
-                isFlaggedTooFast = false;
-                const btn = document.getElementById('btnStudentTooFast');
-                if (btn) {
-                    btn.classList.remove('active');
-                    btn.textContent = 'Flag: Too Fast';
-                }
-            }
-            if (typeof tooFastVotes !== 'undefined') {
-                tooFastVotes.clear();
-                updatePaceDisplay();
+            if (typeof clearAllPaceFlags === 'function') {
+                clearAllPaceFlags();
             }
 
             document.getElementById(`drawer-${currentSlide}`).classList.remove("active");
@@ -3579,6 +3608,7 @@ coinPool.Release(gameObject);</pre>
             sessionStorage.setItem('gdd_student_id', myStudentId);
         }
         let isFlaggedTooFast = false;
+        let studentFlagTimeout = null;
 
         const tooFastVotes = new Map(); // studentId -> timestamp
 
@@ -3614,29 +3644,42 @@ coinPool.Release(gameObject);</pre>
                 console.warn('MQTT init error:', e);
             }
 
-            // Interval to prune votes older than 45 seconds
+            // Interval to prune votes older than 10 seconds
             setInterval(() => {
                 const now = Date.now();
                 let changed = false;
                 for (const [id, time] of tooFastVotes.entries()) {
-                    if (now - time > 45000) {
+                    if (now - time > 10000) {
                         tooFastVotes.delete(id);
                         changed = true;
                     }
                 }
                 if (changed) updatePaceDisplay();
-            }, 5000);
+            }, 1000);
         }
 
         function toggleStudentTooFast() {
             isFlaggedTooFast = !isFlaggedTooFast;
-            const btn = document.getElementById('btnStudentTooFast');
-            if (btn) {
-                if (isFlaggedTooFast) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+            applyStudentFlagUI(isFlaggedTooFast);
+
+            if (isFlaggedTooFast) {
+                // Auto turn off after 10 seconds
+                clearTimeout(studentFlagTimeout);
+                studentFlagTimeout = setTimeout(() => {
+                    if (isFlaggedTooFast) {
+                        isFlaggedTooFast = false;
+                        applyStudentFlagUI(false);
+                        if (mqttClient) {
+                            mqttClient.publish(topic, JSON.stringify({
+                                type: 'good_pace',
+                                studentId: myStudentId,
+                                timestamp: Date.now()
+                            }), { qos: 0 });
+                        }
+                    }
+                }, 10000);
+            } else {
+                clearTimeout(studentFlagTimeout);
             }
 
             if (mqttClient) {
@@ -3646,6 +3689,28 @@ coinPool.Release(gameObject);</pre>
                     timestamp: Date.now()
                 });
                 mqttClient.publish(topic, payload, { qos: 0 });
+            }
+        }
+
+        function applyStudentFlagUI(active) {
+            const btn = document.getElementById('btnStudentTooFast');
+            if (btn) {
+                if (active) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+        }
+
+        function clearAllPaceFlags() {
+            tooFastVotes.clear();
+            updatePaceDisplay();
+            if (mqttClient) {
+                mqttClient.publish(topic, JSON.stringify({
+                    type: 'reset_all_flags',
+                    timestamp: Date.now()
+                }), { qos: 0 });
             }
         }
 
@@ -3659,18 +3724,34 @@ coinPool.Release(gameObject);</pre>
             } else if (data.type === 'good_pace') {
                 if (data.studentId) tooFastVotes.delete(data.studentId);
                 updatePaceDisplay();
+            } else if (data.type === 'reset_all_flags') {
+                isFlaggedTooFast = false;
+                clearTimeout(studentFlagTimeout);
+                applyStudentFlagUI(false);
+                tooFastVotes.clear();
+                updatePaceDisplay();
             }
         }
 
         function updatePaceDisplay() {
             const count = tooFastVotes.size;
             const bubble = document.getElementById('paceSpeedBubble');
+            const clearBtn = document.getElementById('btnClearFlags');
+            
+            const showPace = (count > 0 && currentViewMode === 'projector');
             if (bubble) {
-                if (count > 0 && currentViewMode === 'projector') {
+                if (showPace) {
                     bubble.textContent = count;
                     bubble.classList.add('visible');
                 } else {
                     bubble.classList.remove('visible');
+                }
+            }
+            if (clearBtn) {
+                if (showPace) {
+                    clearBtn.classList.add('visible');
+                } else {
+                    clearBtn.classList.remove('visible');
                 }
             }
         }
