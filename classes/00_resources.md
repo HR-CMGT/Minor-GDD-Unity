@@ -28,7 +28,7 @@ A curated collection of free, high-quality assets, tools, open-source repositori
 
 - [Freesound.org](https://freesound.org/) - Extensive database of sound effects under Creative Commons licenses.
 - [sfxr.me (jsfxr)](https://sfxr.me/) - 8-bit retro sound generator in your browser.
-- [Sonniss GDC Audio Archives](https://sonniss.com/gameaudioarchive) - Commercial-grade audio packs released during GDC.
+- [Itch.io Free Game Audio](https://itch.io/game-assets/free/tag-sound-effects) - Free community sound effect libraries and music tracks.
 - [Incompetech (Kevin MacLeod)](https://incompetech.com/music/royalty-free/music.html) - Royalty-free background music.
 - [Audacity](https://www.audacityteam.org/) - Free, open-source audio editor and recorder.
 
