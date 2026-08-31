@@ -2451,22 +2451,26 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core"><span class="term-tip" data-title="RequireComponent" data-desc="Script attribute forcing Unity to auto-attach needed components." data-diff="Why needed: Prevents NullReferenceException crashes by guaranteeing tools exist.">RequireComponent Attribute</span></div>
+                                <div class="card-title core"><span class="term-tip" data-title="RequireComponent" data-desc="Script attribute requiring necessary components on GameObject." data-diff="Why needed: Prevents NullReferenceException crashes and protects component dependencies.">RequireComponent Rules</span></div>
                                 <div class="code-box">
-                                    <pre>[RequireComponent(typeof(Rigidbody2D))]
+                                    <pre>// Concrete type: Unity auto-adds Rigidbody2D!
+[RequireComponent(typeof(Rigidbody2D))]
+
+// Base type: Unity guards & prompts you to pick a collider
 [RequireComponent(typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour {
-    // Unity automatically adds Rigidbody2D & Collider2D!
+    // Cannot delete required components while script is attached!
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Why Do This?</div>
+                                <div class="card-title core">How It Works in Unity</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li>Tells Unity: <em>"This script needs physics to work!"</em></li>
-                                        <li>If you attach the script without a Collider, Unity guards against null errors and prompts you to attach required physics components.</li>
+                                        <li><strong>Concrete Type (<code>Rigidbody2D</code>, <code>BoxCollider2D</code>):</strong> Unity <strong>auto-adds</strong> the component immediately if missing.</li>
+                                        <li><strong>Base Class (<code>Collider2D</code>):</strong> Unity shows the safety dialog (right) so you choose the exact shape (Box, Circle, Capsule).</li>
+                                        <li><strong>Removal Lock:</strong> Prevents accidentally deleting required components in the Inspector.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -2474,8 +2478,8 @@ public class PlayerController2D : MonoBehaviour {
                         <div class="right-column">
                             <div class="media-canvas ratio-16-9">
                                 <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Unity Safety Dialog</span>
-                                    <span class="media-canvas-dim">Unity Editor Error Guard</span>
+                                    <span class="media-canvas-badge">Unity Safety Guard</span>
+                                    <span class="media-canvas-dim">Collider2D Base Class Dialog</span>
                                 </div>
                                 <div class="media-canvas-viewport">
                                     <img src="require_component_error.png" alt="RequireComponent Unity Warning Dialog" style="width:100%; height:100%; object-fit:contain; border-radius:4px;">
