@@ -40,6 +40,9 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
@@ -49,6 +52,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* Top Bar */
@@ -1238,8 +1242,14 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
+            -webkit-user-select: none;
             font-size: clamp(0.95rem, 2.2cqh, 1.30rem);
             padding: 0.8cqh 1.5cqw;
+            list-style: none;
+        }
+
+        summary.accordion-header::-webkit-details-marker {
+            display: none;
         }
 
         details.adv summary.accordion-header { color: var(--tier-adv); }
@@ -2995,30 +3005,47 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
         }
 
         function toggleFullScreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().then(() => {
-                    document.body.classList.add('is-fullscreen');
-                }).catch(err => {
-                    console.log(`Fullscreen error: ${err.message}`);
-                });
+            const doc = document;
+            const docEl = doc.documentElement;
+            const isFull = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+
+            if (!isFull) {
+                const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+                if (req) {
+                    req.call(docEl).then(() => {
+                        document.body.classList.add('is-fullscreen');
+                    }).catch(() => {
+                        document.body.classList.toggle('is-fullscreen');
+                    });
+                } else {
+                    document.body.classList.toggle('is-fullscreen');
+                }
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen().then(() => {
+                const exit = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
+                if (exit) {
+                    exit.call(doc).then(() => {
+                        document.body.classList.remove('is-fullscreen');
+                    }).catch(() => {
                         document.body.classList.remove('is-fullscreen');
                     });
+                } else {
+                    document.body.classList.remove('is-fullscreen');
                 }
             }
         }
 
-        document.addEventListener('fullscreenchange', () => {
-            const btn = document.getElementById('btnFullscreen');
-            if (document.fullscreenElement) {
-                document.body.classList.add('is-fullscreen');
-                btn.textContent = "Exit Fullscreen [F]";
-            } else {
-                document.body.classList.remove('is-fullscreen');
-                btn.textContent = "Fullscreen [F]";
-            }
+        ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+            document.addEventListener(evt, () => {
+                const btn = document.getElementById('btnFullscreen');
+                const isFull = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+                if (isFull) {
+                    document.body.classList.add('is-fullscreen');
+                    if (btn) btn.textContent = "Exit Fullscreen [F]";
+                } else {
+                    document.body.classList.remove('is-fullscreen');
+                    if (btn) btn.textContent = "Fullscreen [F]";
+                }
+            });
         });
 
         function toggleHelpModal(show) {
@@ -3471,42 +3498,95 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
         function copyCode(btn) {
             const pre = btn.previousElementSibling;
             if (pre) {
+                const textToCopy = pre.innerText || pre.textContent;
                 const originalText = btn.textContent;
-                navigator.clipboard.writeText(pre.innerText).then(() => {
+
+                const showSuccess = () => {
                     btn.textContent = "Copied!";
                     btn.classList.add("copied");
                     setTimeout(() => {
                         btn.textContent = originalText;
                         btn.classList.remove("copied");
                     }, 1800);
-                });
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy).then(showSuccess).catch(() => {
+                        fallbackCopyText(textToCopy, showSuccess);
+                    });
+                } else {
+                    fallbackCopyText(textToCopy, showSuccess);
+                }
             }
         }
 
+        function fallbackCopyText(text, cb) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                if (cb) cb();
+            } catch (err) {
+                console.error('Fallback copy error:', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Mobile & Tablet Touch Swipe Support (iOS Safari & Android Chrome)
+        let touchStartX = 0;
+        let touchStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches[0]) {
+                touchStartX = e.touches[0].screenX;
+                touchStartY = e.touches[0].screenY;
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            if (e.changedTouches && e.changedTouches[0]) {
+                const diffX = e.changedTouches[0].screenX - touchStartX;
+                const diffY = e.changedTouches[0].screenY - touchStartY;
+                if (Math.abs(diffX) > 60 && Math.abs(diffY) < 50) {
+                    if (diffX < 0) {
+                        changeSlide(1); // Swipe Left -> Next
+                    } else {
+                        changeSlide(-1); // Swipe Right -> Prev
+                    }
+                }
+            }
+        }, { passive: true });
+
         document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowLeft") {
+            const key = e.key;
+            if (key === "ArrowLeft" || key === "Left") {
                 changeSlide(-1);
-            } else if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") {
+            } else if (key === "ArrowRight" || key === "Right" || key === " " || key === "Enter" || key === "Spacebar") {
                 e.preventDefault();
                 changeSlide(1);
-            } else if (e.key.toLowerCase() === "f") {
+            } else if (key.toLowerCase() === "f") {
                 toggleFullScreen();
-            } else if (e.key.toLowerCase() === "q") {
+            } else if (key.toLowerCase() === "q") {
                 toggleQrModal();
-            } else if (e.key.toLowerCase() === "p") {
+            } else if (key.toLowerCase() === "p") {
                 setViewMode(currentViewMode === 'projector' ? 'lab' : 'projector');
-            } else if (e.key === "1") {
+            } else if (key === "1") {
                 setTierFilter('core');
-            } else if (e.key === "2") {
+            } else if (key === "2") {
                 setTierFilter('adv');
-            } else if (e.key === "3") {
+            } else if (key === "3") {
                 setTierFilter('exp');
-            } else if (e.key === "0") {
+            } else if (key === "0") {
                 setTierFilter('all');
-            } else if (e.key === "?" || e.key.toLowerCase() === "h") {
+            } else if (key === "?" || key.toLowerCase() === "h") {
                 const modal = document.getElementById("helpModal");
                 toggleHelpModal(modal.style.display === "none");
-            } else if (e.key === "Escape") {
+            } else if (key === "Escape" || key === "Esc") {
                 toggleHelpModal(false);
             }
         });
