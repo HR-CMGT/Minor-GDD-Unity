@@ -10,8 +10,8 @@
 This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD-Unity/presentation_basics1)
 
 ## Resources
-- Our own [tips, tricks and best practices](00_unity.md) for working with Unity, with a bunch of gifs
-- A list of [external tutorials](00_tutorials.md#basics-1-tutorials) to help you with specific topics, from learning the basics to creating a certain effect.
+- Our own [tips, tricks and best practices](00_unity.md) for working with Unity
+- A list of [external tutorials](00_tutorials.md) to help you with specific topics, from learning the basics to creating a certain effect.
 - Get graphics, sounds, code and other free stuff from the [resources](00_resources.md) page
 
 ## Assignment

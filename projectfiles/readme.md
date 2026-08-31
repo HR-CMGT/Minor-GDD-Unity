@@ -10,7 +10,7 @@ Second method:
 3. In the file browser, select the file you want to import and click Open.
 4. The Import Unity Package window displays all the items in the package already selected, ready to install.
 
-Reference: [Unity Manual - Import Local Asset Packages](https://docs.unity3d.com/2023.2/Documentation/Manual/AssetPackagesImport.html)
+Reference: [Unity Manual - Import Local Asset Packages](https://docs.unity3d.com/Manual/AssetPackagesImport.html)
 
 ![](../img/general/CustomPackageInstallDialog.png)
 
