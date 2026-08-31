@@ -33,15 +33,15 @@ This curriculum guides students from foundational 2D game prototyping to advance
 | Week | Lesson Code | Topic & Content | Material & Assignment |
 | :--- | :--- | :--- | :--- |
 | **1.1** | `01_basics1` | **Introduction Unity 2D (Workshop)**<br>• GameObjects, Components, Prefabs<br>• Script Lifecycle (`Awake`, `Start`, `Update`, `FixedUpdate`)<br>• 2D Physics (`Rigidbody2D`, `Collider2D`, Physics Materials)<br>• New Input System & Cinemachine 2D Camera Follow | [Lesson 1.1 Material](classes/01_basics1.md) |
-| **1.2** | `02_basics2` | **Object Communication & Data Structures**<br>• `GetComponent` vs direct serialized references<br>• C# Events & `UnityEvent`<br>• Collections (`List<T>`, `Dictionary<TKey, TValue>`)<br>• `ScriptableObject` Data Containers & Coroutines | [Lesson 1.2 Material](classes/02_basics2.md) |
-| **1.3** | `03_UI` | **UI Layouting & Data Persistence**<br>• Canvas Scaler, Anchors, Pivots & Responsive UI<br>• EventSystem & Button bindings<br>• Data Persistence with `JsonUtility` & `Application.persistentDataPath` | [Lesson 1.3 Material](classes/03_UI.md) |
-| **1.4** | `04_architecture1` | **Game Architecture 1: Decoupling & Prefab API**<br>• Prefab as an API pattern<br>• ScriptableObject Event Channels (Decoupling)<br>• Singleton pattern: do's & don'ts<br>• Multi-Scene Additive Loading (`DontDestroyOnLoad`) | [Lesson 1.4 Material](classes/04_architecture1.md) |
-| **1.5** | `05_gamejam` | **Rapid Prototyping & Game Feel (Juice)**<br>• DOTween (Tweening for visuals and UI)<br>• Game Feel: Screenshake, Hitstop/Freeze frames, Squash & Stretch<br>• Fast Debugging with `[ContextMenu]` & `Debug.DrawRay`<br>• WebGL build & Itch.io deployment | [Lesson 1.5 Material](classes/05_gamejam.md) |
+| **1.2** | `02_basics2` | **Object Communication & Data Structures** | *Coming Soon* |
+| **1.3** | `03_UI` | **UI Layouting & Data Persistence** | *Coming Soon* |
+| **1.4** | `04_architecture1` | **Game Architecture 1: Decoupling & Prefab API** | *Coming Soon* |
+| **1.5** | `05_gamejam` | **Rapid Prototyping & Game Feel (Juice)** | *Coming Soon* |
 | **1.6** | `--` | *Concept Presentations 2D Project & Feedback* | `--` |
-| **1.7** | `07_blockprototyping` | **3D Block Prototyping & Greyboxing**<br>• ProBuilder level greyboxing & vertex editing<br>• Grid & Vertex Snapping workflows<br>• 3D Movement: `CharacterController` vs `Rigidbody 3D`<br>• NavMesh AI pathfinding basics | [Lesson 1.7 Material](classes/07_blockprototyping.md) |
-| **1.8** | `08_gamejam2` | *Blocktober Demo & Midterm Milestone Playtests* | [Lesson 1.8 Material](classes/08_gamejam2.md) |
-| **1.9** | `09_problemsolving` | **Debugging, Profiling & Problem Solving**<br>• Analyzing Stacktraces and Console errors<br>• Visual Studio Breakpoints & Watchers<br>• Unity Profiler: CPU Bottlenecks & Reducing GC Allocations<br>• Structured troubleshooting protocol | [Lesson 1.9 Material](classes/09_problemsolving.md) |
-| **1.10**| `10_architecture2` | **Game Architecture 2: Finite State Machines & Refactoring**<br>• Generic C# Finite State Machine (FSM) pattern<br>• Game States (Menu, Play, Pause, GameOver)<br>• Enemy State logic (Patrol, Chase, Attack)<br>• Refactoring monolithic 'God Classes' | [Lesson 1.10 Material](classes/10_architecture2.md) |
+| **1.7** | `07_blockprototyping` | **3D Block Prototyping & Greyboxing** | *Coming Soon* |
+| **1.8** | `08_gamejam2` | *Blocktober Demo & Midterm Milestone Playtests* | *Coming Soon* |
+| **1.9** | `09_problemsolving` | **Debugging, Profiling & Problem Solving** | *Coming Soon* |
+| **1.10**| `10_architecture2` | **Game Architecture 2: Finite State Machines & Refactoring** | *Coming Soon* |
 
 ---
 
@@ -49,13 +49,13 @@ This curriculum guides students from foundational 2D game prototyping to advance
 
 | Week | Lesson Code | Topic & Content | Material & Assignment |
 | :--- | :--- | :--- | :--- |
-| **2.1** | `21_optimization` | **Performance Optimization & Rendering**<br>• Draw Calls, SetPass Calls & Batching (SRP Batcher, Static/Dynamic)<br>• Overdraw and Fillrate reduction<br>• Level of Detail (LOD) & Occlusion Culling | [Lesson 2.1 Material](classes/21_optimization.md) |
-| **2.2** | `22_materialsandshaders` | **URP Materials & Shader Graph**<br>• Physically Based Rendering (PBR) texture maps<br>• Shader Graph introduction (Nodes, Master Stack)<br>• Custom Shaders: Fresnel Shield, Dissolve effect, UV scrolling | [Lesson 2.2 Material](classes/22_materialsandshaders.md) |
+| **2.1** | `21_optimization` | **Performance Optimization & Rendering** | *Coming Soon* |
+| **2.2** | `22_materialsandshaders` | **URP Materials & Shader Graph** | *Coming Soon* |
 | **2.3** | `--` | *Concept Presentations 3D Project & Review* | `--` |
-| **2.4** | `24_3Danimation` | **3D Character Animation & Rigging**<br>• Humanoid Rigs & Mixamo workflow<br>• Animator Controller: BlendTrees (1D/2D walk/run)<br>• Responsive Transitions (zero input lag setup)<br>• Animation Events & Inverse Kinematics (IK) | [Lesson 2.4 Material](classes/24_3Danimation.md) |
+| **2.4** | `24_3Danimation` | **3D Character Animation & Rigging** | *Coming Soon* |
 | **2.5** | `--` | *Milestone Playtesting & Polishing* | `--` |
-| **2.6** | `26_VFX` | **Visual Effects & Post-Processing (URP)**<br>• URP Particle System (Emission Bursts, Curves, Noise, Sub-emitters)<br>• Global & Local Post-Processing Volumes<br>• ACES Tonemapping, Bloom, Vignette, Decals | [Lesson 2.6 Material](classes/26_VFX.md) |
-| **2.7** | `27_audio` | **Audio Systems & Dynamic Sound**<br>• AudioMixer routing (Master, Music, SFX)<br>• Exposed Parameters & logarithmic decibel sliders<br>• 3D Spatial Sound Settings & Pitch Randomization helpers | [Lesson 2.7 Material](classes/27_audio.md) |
+| **2.6** | `26_VFX` | **Visual Effects & Post-Processing (URP)** | *Coming Soon* |
+| **2.7** | `27_audio` | **Audio Systems & Dynamic Sound** | *Coming Soon* |
 | **2.8** | `--` | *Final Project Polish & Profiling* | `--` |
 | **2.9** | `--` | *Final Presentations & Expo 3D Project* | `--` |
 

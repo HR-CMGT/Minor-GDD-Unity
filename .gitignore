@@ -79,3 +79,8 @@ crashlytics-build.properties
 
 # because Mac.
 .DS_Store
+
+# Local comparison and export artifacts
+docs/presentation_basics1/index_comparison.html
+exported_slides/
+scripts/
