@@ -609,7 +609,7 @@
         .split-media-layout {
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
-            gap: 1.8cqw;
+            gap: 1.6cqw;
             align-items: center;
             width: 100%;
             height: 100%;
@@ -621,11 +621,11 @@
         .split-media-layout .left-column {
             display: flex;
             flex-direction: column;
-            gap: 1.4cqh;
-            justify-content: center;
+            gap: 0.9cqh;
+            justify-content: flex-start;
             min-height: 0;
             height: 100%;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .split-media-layout .left-column .content-card {
@@ -635,14 +635,14 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 1.5cqh 2.0cqw;
+            padding: 1.1cqh 1.6cqw;
         }
 
         .split-media-layout .left-column .content-card:has(table),
         .content-card:has(table) {
             flex: 0 0 auto !important;
             height: auto !important;
-            padding: 1.2cqh 1.6cqw;
+            padding: 0.8cqh 1.2cqw;
             justify-content: center;
         }
 
@@ -650,14 +650,28 @@
         .content-card:has(pre) {
             flex: 0 0 auto !important;
             height: auto !important;
-            padding: 1.2cqh 1.6cqw;
+            padding: 0.8cqh 1.2cqw;
             justify-content: center;
+        }
+
+        .split-media-layout .left-column .content-card:nth-child(2) {
+            padding: 0.7cqh 1.2cqw;
+        }
+
+        .split-media-layout .left-column .content-card:nth-child(2) .card-title {
+            font-size: clamp(0.92rem, 2.0cqh, 1.25rem);
+            margin-bottom: 0.2cqh;
+        }
+
+        .split-media-layout .left-column .content-card:nth-child(2) .card-body {
+            font-size: clamp(0.82rem, 1.85cqh, 1.15rem);
+            line-height: 1.40;
         }
 
         .content-card:has(table) .card-title,
         .content-card:has(pre) .card-title {
-            margin-bottom: 0.5cqh;
-            font-size: clamp(1.0rem, 2.4cqh, 1.45rem);
+            margin-bottom: 0.35cqh;
+            font-size: clamp(0.95rem, 2.15cqh, 1.35rem);
         }
 
         .split-media-layout .right-column {
@@ -1031,21 +1045,21 @@
             text-align: left;
             border: 1px solid #b8003b;
             font-weight: 900;
-            font-size: clamp(0.85rem, 2.15cqh, 1.20rem);
-            padding: 0.7cqh 1.1cqw;
+            font-size: clamp(0.78rem, 1.8cqh, 1.10rem);
+            padding: 0.45cqh 0.8cqw;
             display: table-cell !important;
             vertical-align: middle;
-            line-height: 1.22;
+            line-height: 1.20;
         }
 
         table.dense-table td {
             border: 1px solid #e2e8f0;
             color: #1e293b;
-            font-size: clamp(0.80rem, 2.0cqh, 1.12rem);
-            padding: 0.7cqh 1.1cqw;
+            font-size: clamp(0.75rem, 1.65cqh, 1.05rem);
+            padding: 0.42cqh 0.8cqw;
             font-weight: 500;
             background: #ffffff;
-            line-height: 1.34;
+            line-height: 1.25;
             display: table-cell !important;
             vertical-align: middle;
             word-wrap: break-word;
@@ -3086,7 +3100,7 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
             if (!area) return;
 
             // Reset dynamic scaling
-            area.querySelectorAll('.content-card, pre, table.dense-table, .hierarchy-box-tree, .card-body, .split-media-layout, .content-stack').forEach(el => {
+            area.querySelectorAll('.content-card, pre, table.dense-table, .hierarchy-box-tree, .card-body, .split-media-layout, .content-stack, .left-column').forEach(el => {
                 el.style.transform = '';
                 el.style.transformOrigin = '';
                 el.style.width = '';
@@ -3106,7 +3120,7 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
                 const target = pre || table || tree || body;
                 if (target && card.scrollHeight > card.clientHeight + 0.5) {
                     const titleH = title ? title.offsetHeight : 0;
-                    const availH = card.clientHeight - titleH - 8;
+                    const availH = card.clientHeight - titleH - 6;
                     if (availH > 0 && target.scrollHeight > availH) {
                         const ratio = Math.max(0.40, Math.min(0.99, availH / target.scrollHeight));
                         target.style.transform = `scale(${ratio})`;
@@ -3117,9 +3131,18 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
                 }
             });
 
-            // 2. Fit overall slideContentArea container
+            // 2. Fit left-column if multiple cards cause column overflow
+            const leftCol = area.querySelector('.split-media-layout .left-column');
+            if (leftCol && leftCol.scrollHeight > leftCol.clientHeight + 0.5) {
+                const ratio = Math.max(0.50, Math.min(0.99, (leftCol.clientHeight - 4) / leftCol.scrollHeight));
+                leftCol.style.transform = `scale(${ratio})`;
+                leftCol.style.transformOrigin = 'top center';
+                leftCol.style.width = `${(100 / ratio).toFixed(1)}%`;
+            }
+
+            // 3. Fit overall slideContentArea container
             if (area.scrollHeight > area.clientHeight + 0.5) {
-                const ratio = Math.max(0.45, Math.min(0.99, area.clientHeight / area.scrollHeight));
+                const ratio = Math.max(0.45, Math.min(0.99, (area.clientHeight - 2) / area.scrollHeight));
                 const mainLayout = area.querySelector('.content-stack') || area.querySelector('.split-media-layout');
                 if (mainLayout) {
                     mainLayout.style.transform = `scale(${ratio})`;
