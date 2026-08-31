@@ -3297,8 +3297,20 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
         }
 
         window.addEventListener('resize', () => {
-            if (typeof autoFitSlideElements === 'function') autoFitSlideElements();
+            requestAnimationFrame(() => {
+                if (typeof autoFitSlideElements === 'function') autoFitSlideElements();
+            });
         });
+
+        if (window.ResizeObserver) {
+            const ro = new ResizeObserver(() => {
+                requestAnimationFrame(() => {
+                    if (typeof autoFitSlideElements === 'function') autoFitSlideElements();
+                });
+            });
+            const vp = document.getElementById('viewport');
+            if (vp) ro.observe(vp);
+        }
 
         function applyTierVisibility() {
             const advBlocks = document.querySelectorAll('.tier-accordion.adv');
