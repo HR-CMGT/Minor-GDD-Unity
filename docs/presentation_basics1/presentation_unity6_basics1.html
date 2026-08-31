@@ -1467,6 +1467,136 @@
             display: none !important;
         }
 
+        /* ==========================================================================
+           LAB MODE SPECIFIC STYLING (Clean Vertical Reading & Smooth Natural Scrolling)
+           ========================================================================== */
+        body.lab-mode .slide-viewport {
+            overflow: hidden;
+        }
+
+        body.lab-mode .view-interactive {
+            overflow-y: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            gap: 16px !important;
+            padding: 24px 32px !important;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            box-sizing: border-box;
+        }
+
+        /* Clean Scrollbar in Lab Mode */
+        body.lab-mode .view-interactive::-webkit-scrollbar {
+            width: 6px;
+        }
+        body.lab-mode .view-interactive::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        body.lab-mode .view-interactive::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        body.lab-mode .view-interactive::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        body.lab-mode .slide-content-area {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 16px !important;
+            height: auto !important;
+            min-height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+            flex: 0 0 auto !important;
+        }
+
+        body.lab-mode .content-stack {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 14px !important;
+            height: auto !important;
+            overflow: visible !important;
+            flex: 0 0 auto !important;
+            justify-content: flex-start !important;
+        }
+
+        body.lab-mode .split-media-layout {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 20px !important;
+            height: auto !important;
+            min-height: auto !important;
+            overflow: visible !important;
+            align-items: start !important;
+            flex: 0 0 auto !important;
+        }
+
+        body.lab-mode .split-media-layout .left-column,
+        body.lab-mode .split-media-layout .right-column {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 14px !important;
+            height: auto !important;
+            overflow: visible !important;
+            width: 100% !important;
+        }
+
+        body.lab-mode .content-card {
+            padding: 16px 20px !important;
+            border-radius: 8px !important;
+            height: auto !important;
+            min-height: auto !important;
+            flex: 0 0 auto !important;
+            overflow: visible !important;
+        }
+
+        body.lab-mode .card-title {
+            font-size: 1.05rem !important;
+            margin-bottom: 6px !important;
+            font-weight: 800 !important;
+        }
+
+        body.lab-mode .card-body {
+            font-size: 0.94rem !important;
+            line-height: 1.55 !important;
+        }
+
+        body.lab-mode pre {
+            font-size: 0.88rem !important;
+            padding: 10px 14px !important;
+            line-height: 1.42 !important;
+            overflow-x: auto;
+        }
+
+        body.lab-mode table.dense-table th {
+            font-size: 0.86rem !important;
+            padding: 6px 10px !important;
+        }
+
+        body.lab-mode table.dense-table td {
+            font-size: 0.84rem !important;
+            padding: 6px 10px !important;
+        }
+
+        body.lab-mode details.tier-accordion {
+            margin-top: 10px !important;
+            border-radius: 8px !important;
+            flex-shrink: 0 !important;
+        }
+
+        body.lab-mode summary.accordion-header {
+            font-size: 0.95rem !important;
+            padding: 8px 14px !important;
+        }
+
+        body.lab-mode .accordion-body {
+            font-size: 0.88rem !important;
+            padding: 12px 16px !important;
+            line-height: 1.5 !important;
+        }
+
         /* Slide Footer */
         .slide-footer {
             margin-top: auto;
@@ -3120,7 +3250,7 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
             if (!area) return;
 
             // Reset dynamic scaling
-            area.querySelectorAll('.content-card, pre, table.dense-table, .hierarchy-box-tree, .card-body, .split-media-layout, .content-stack, .left-column').forEach(el => {
+            area.querySelectorAll('.content-card, pre, table.dense-table, .hierarchy-box-tree, .card-body, .split-media-layout, .content-stack, .left-column, details.tier-accordion').forEach(el => {
                 el.style.transform = '';
                 el.style.transformOrigin = '';
                 el.style.width = '';
@@ -3128,7 +3258,10 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
                 el.style.maxHeight = '';
             });
 
-            // 1. Fit each card's internal content
+            // In Lab Mode, allow natural height and clean layout with scrolling (no artificial shrinking)
+            if (currentViewMode !== 'projector') return;
+
+            // 1. Fit each card's internal content (Projector Lecture Mode only)
             const cards = area.querySelectorAll('.content-card');
             cards.forEach(card => {
                 const title = card.querySelector('.card-title');
