@@ -1972,20 +1972,20 @@ git checkout -b feature/platformer-controller</pre>
                     </div>
                     <details class="tier-accordion adv">
                         <summary class="accordion-header">
-                            <span>[Advanced] Quick Testing with [ContextMenu]</span>
+                            <span>[Advanced] Offline Unity Documentation Access</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Add <code>[ContextMenu("Test Jump")]</code> above any void method in your C# script. In Play Mode, right-click the component header in the Inspector to execute that method instantly without pressing keyboard buttons! See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/ContextMenu.html" target="_blank" rel="noopener noreferrer">Unity ContextMenu API [link]</a>.
+                            Install offline documentation via Unity Hub (under Editor Install &rarr; Add Modules &rarr; Documentation) to access complete manual and API references in your browser even without internet: <code>Help > Unity Manual</code>. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/OfflineDocumentation.html" target="_blank" rel="noopener noreferrer">Unity Offline Docs Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Locking Prefab Selection with [SelectionBase]</span>
+                            <span>[Expert] In-IDE API Tooltips & Decompiled Headers</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Add <code>[SelectionBase]</code> above your player's root class definition. Now clicking the character anywhere in Scene View always selects the main parent container instead of accidental child sprite objects. See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/SelectionBaseAttribute.html" target="_blank" rel="noopener noreferrer">SelectionBase Documentation [link]</a>.
+                            In Rider or Visual Studio, press <kbd>F12</kbd> (or <kbd>Ctrl+Click</kbd>) on any Unity class (like <code>MonoBehaviour</code> or <code>Rigidbody2D</code>) to jump straight into Unity's decompiled C# API headers and read parameter documentation without leaving your code editor!
                         </div>
                     </details>
                 `
@@ -2098,26 +2098,20 @@ git checkout -b feature/platformer-controller</pre>
                     </div>
                     <details class="tier-accordion adv">
                         <summary class="accordion-header">
-                            <span>[Advanced] Custom Input Action Assets</span>
+                            <span>[Advanced] Installing Packages via Git URLs</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Right-click in Project &rarr; <code>Create > Input Actions</code>. Double-click the asset to open the visual action editor, where you can map Gamepad sticks, WASD, and Arrow keys to a single "Move" action. Read the <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/manual/ActionAssets.html" target="_blank" rel="noopener noreferrer">Unity Input Actions Manual [link]</a>.
+                            In Package Manager, click the <code>+</code> button at the top left &rarr; select <strong>Add package from git URL...</strong> to install community tools or open-source packages directly from GitHub (e.g. <code>https://github.com/.../package.git</code>). Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/upm-ui-giturl.html" target="_blank" rel="noopener noreferrer">Unity Git URL Package Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] C# Direct Action Subscriptions</span>
+                            <span>[Expert] Project Dependencies & manifest.json</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Generate a C# class from your Input Actions asset, then subscribe directly with C# callbacks for maximum responsiveness:
-                            <div class="code-box">
-                                <pre>controls.Player.Jump.performed += ctx => OnJump();
-controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt;();</pre>
-                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                            </div>
-                            See <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/manual/Events.html" target="_blank" rel="noopener noreferrer">Input System C# Event Workflow [link]</a>.
+                            Unity stores all project package dependencies in <code>Packages/manifest.json</code>. Team members commit this file to Git so everyone automatically gets identical package versions on project open without manual setup. Read <a class="slide-url" href="https://docs.unity3d.com/Manual/upm-manifestPrj.html" target="_blank" rel="noopener noreferrer">Unity Project Manifest Reference [link]</a>.
                         </div>
                     </details>
                 `
@@ -2157,27 +2151,26 @@ controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt
                     </div>
                     <details class="tier-accordion adv">
                         <summary class="accordion-header">
-                            <span>[Advanced] Feedback & Feel Polish</span>
+                            <span>[Advanced] Rapid 2D Grayboxing Checklist</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Spawn a particle burst when picking up coins and trigger camera impulse shake on hard landings. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/class-ParticleSystem.html" target="_blank" rel="noopener noreferrer">Unity Particle System Manual [link]</a> and <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.cinemachine@3.0/manual/CinemachineImpulse.html" target="_blank" rel="noopener noreferrer">Cinemachine Impulse Guide [link]</a>.
+                            Before placing detailed art, build your level with flat color 2D sprites. Test that the maximum jump height easily clears 2-unit platforms and that gap distances feel fair across all 4 milestones before polishing visual graphics!
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Decoupled Score Event Channel</span>
+                            <span>[Expert] Iterative Milestone Commits with Git Tags</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Create a static C# event in your Coin script so UI score managers listen without direct object links:
+                            Tag clean Git savepoints after completing each workshop goal:
                             <div class="code-box">
-                                <pre>public static event System.Action OnCoinCollected;
-// In OnTriggerEnter2D:
-OnCoinCollected?.Invoke();</pre>
+                                <pre>git commit -m "Milestone 1 complete: Player moves and jumps"
+git tag milestone-1-movement</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
-                            Learn more in the <a class="slide-url" href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/events/" target="_blank" rel="noopener noreferrer">Microsoft C# Events Guide [link]</a>.
+                            This lets you instantly roll back if you break code while experimenting on later milestones.
                         </div>
                     </details>
                 `
@@ -2425,11 +2418,11 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Zero-Allocation YieldInstruction Caching</span>
+                            <span>[Expert] Update vs FixedUpdate Timing & Fixed Delta Time</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            In Coroutines, avoid Garbage Collector allocations from <code>yield return new WaitForSeconds(1f);</code> by caching instructions in fields: <code>private readonly WaitForSeconds waitOneSec = new(1f);</code>. See <a class="slide-url" href="https://docs.unity3d.com/Manual/Coroutines.html" target="_blank" rel="noopener noreferrer">Unity Coroutines Best Practice [link]</a>.
+                            <code>Update()</code> runs once per visual frame (variable timestep <code>Time.deltaTime</code>), while <code>FixedUpdate()</code> runs on a deterministic 50Hz physics clock (<code>Time.fixedDeltaTime = 0.02s</code>). Never apply Rigidbody velocities in <code>Update()</code>, or physics calculations will stutter when frame rates fluctuate! Read <a class="slide-url" href="https://docs.unity3d.com/Manual/TimeFrameManagement.html" target="_blank" rel="noopener noreferrer">Unity Time and Frame Rate Management [link]</a>.
                         </div>
                     </details>
                 `
@@ -2495,11 +2488,18 @@ public class PlayerController2D : MonoBehaviour {
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Custom Inspector Play Mode Buttons</span>
+                            <span>[Expert] Guarding Scripts with [DisallowMultipleComponent]</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Add <code>[ContextMenu("Reset Player")]</code> or build custom Editor GUI with <code>GUILayout.Button</code> to trigger quick reset actions directly in Inspector while testing. See <a class="slide-url" href="https://docs.unity3d.com/Manual/editor-CustomEditors.html" target="_blank" rel="noopener noreferrer">Unity Custom Inspector Manual [link]</a>.
+                            Add <code>[DisallowMultipleComponent]</code> above your class to prevent accidentally attaching two copies of <code>PlayerController2D</code> to the same GameObject:
+                            <div class="code-box">
+                                <pre>[RequireComponent(typeof(Rigidbody2D))]
+[DisallowMultipleComponent]
+public class PlayerController2D : MonoBehaviour { }</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Read the <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/DisallowMultipleComponent.html" target="_blank" rel="noopener noreferrer">Unity DisallowMultipleComponent API [link]</a>.
                         </div>
                     </details>
                 `
@@ -2863,11 +2863,11 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Clean Architecture & Service Locator</span>
+                            <span>[Expert] Game Architecture & Design Patterns Resource</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            For decoupling systems in large games, explore lightweight dependency injection like <a class="slide-url" href="https://github.com/hadashiA/VContainer" target="_blank" rel="noopener noreferrer">VContainer [link]</a> or the simple <a class="slide-url" href="https://gameprogrammingpatterns.com/service-locator.html" target="_blank" rel="noopener noreferrer">Service Locator Pattern [link]</a>.
+                            Read Robert Nystrom's free book <a class="slide-url" href="https://gameprogrammingpatterns.com/" target="_blank" rel="noopener noreferrer">Game Programming Patterns [free book link]</a> (specifically State Pattern and Component Pattern) to design scalable gameplay code without messy spaghetti architecture.
                         </div>
                     </details>
                 `
