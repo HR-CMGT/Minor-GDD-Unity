@@ -2292,22 +2292,33 @@ rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Code to Paste Inside Player Movement Methods</div>
+                                <div class="card-title core">1. Inside Move() &rarr; if (directionX != 0)</div>
                                 <div class="code-box">
-                                    <pre>// 1. Inside Move() -> if (directionX != 0)
-rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
-
-// 2. Inside Move() -> else (smooth brake)
-rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
-
-// 3. Inside Jump() -> if (CheckGrounded())
-rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                                    <pre>rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">2. Inside Move() &rarr; else (Smooth Brake)</div>
+                                <div class="code-box">
+                                    <pre>rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">3. Inside Jump() &rarr; if (CheckGrounded())</div>
+                                <div class="code-box">
+                                    <pre>rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 if (currentSoundSource != null && jumpSound != null) {
     currentSoundSource.PlayOneShot(jumpSound);
-}
-
-// 4. Inside ResetPlayer() (fall reset)
-rb.MovePosition(startPosition);
+}</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">4. Inside ResetPlayer() (Fall Reset)</div>
+                                <div class="code-box">
+                                    <pre>rb.MovePosition(startPosition);
 rb.linearVelocity = Vector2.zero;</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
@@ -2690,23 +2701,30 @@ public class PlayerController2D : MonoBehaviour {
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Code to Paste Inside Collisions & Pickups</div>
+                                <div class="card-title core">1. Inside OnCollisionEnter2D() (Hit Enemy)</div>
                                 <div class="code-box">
-                                    <pre>// Paste inside: OnCollisionEnter2D(Collision2D other) { ... }
-if (other.gameObject.CompareTag("Enemy")) {
+                                    <pre>if (other.gameObject.CompareTag("Enemy")) {
     Destroy(other.gameObject);
     if (currentSoundSource != null && enemySound != null) {
         currentSoundSource.PlayOneShot(enemySound);
     }
-}
-
-// Paste inside: OnTriggerEnter2D(Collider2D collision) { ... }
-if (collision.CompareTag("Coin")) {
+}</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">2. Inside OnTriggerEnter2D() (Detect Coin)</div>
+                                <div class="code-box">
+                                    <pre>if (collision.CompareTag("Coin")) {
     CollectCoin(collision.gameObject);
-}
-
-// Paste inside: CollectCoin(GameObject coinGameObject) { ... }
-Destroy(coinGameObject);
+}</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">3. Inside CollectCoin() (Pickup & Sound)</div>
+                                <div class="code-box">
+                                    <pre>Destroy(coinGameObject);
 if (currentSoundSource != null && coinSound != null) {
     currentSoundSource.PlayOneShot(coinSound);
 }</pre>
