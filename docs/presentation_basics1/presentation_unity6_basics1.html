@@ -2140,15 +2140,6 @@ controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt
                                     </ol>
                                 </div>
                             </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">Code to Paste Inside ResetPlayer()</div>
-                                <div class="code-box">
-                                    <pre>// Paste inside: ResetPlayer() { ... }
-rb.MovePosition(startPosition);
-rb.linearVelocity = Vector2.zero; // Stop falling momentum</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
                         </div>
                         <div class="right-column">
                             <div class="media-canvas ratio-16-9">
@@ -2301,19 +2292,23 @@ rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Code to Paste Inside Move() and Jump()</div>
+                                <div class="card-title core">Code to Paste Inside Player Movement Methods</div>
                                 <div class="code-box">
-                                    <pre>// Paste inside: Move(float directionX) -> if (directionX != 0) { ... }
+                                    <pre>// 1. Inside Move() -> if (directionX != 0)
 rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
 
-// Paste inside: Move(float directionX) -> else { ... }
+// 2. Inside Move() -> else (smooth brake)
 rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
 
-// Paste inside: Jump() -> if (CheckGrounded()) { ... }
+// 3. Inside Jump() -> if (CheckGrounded())
 rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 if (currentSoundSource != null && jumpSound != null) {
     currentSoundSource.PlayOneShot(jumpSound);
-}</pre>
+}
+
+// 4. Inside ResetPlayer() (fall reset)
+rb.MovePosition(startPosition);
+rb.linearVelocity = Vector2.zero;</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                             </div>
