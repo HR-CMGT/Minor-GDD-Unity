@@ -20,10 +20,7 @@ public class UpdateTimer : MonoBehaviour
     private float timeRemaining;
     private bool isRunning;
 
-    private void Start()
-    {
-        StartTimer();
-    }
+    private void Start() => StartTimer();
 
     public void StartTimer()
     {
@@ -39,14 +36,8 @@ public class UpdateTimer : MonoBehaviour
         if (timeRemaining <= 0f)
         {
             onTimerElapsed?.Invoke();
-            if (repeat)
-            {
-                timeRemaining = duration;
-            }
-            else
-            {
-                isRunning = false;
-            }
+            if (repeat) timeRemaining = duration;
+            else isRunning = false;
         }
     }
 }
@@ -66,7 +57,6 @@ public class CoroutineTimer : MonoBehaviour
 
     private IEnumerator ExecuteAfterDelay(float delay)
     {
-        // WaitForSeconds suspends the coroutine without CPU waste
         yield return new WaitForSeconds(delay);
         Debug.Log("Action executed after delay!");
     }
@@ -75,20 +65,22 @@ public class CoroutineTimer : MonoBehaviour
 
 ---
 
-## 2. Input & Movement Systems
+## 2. 2D Platformer Character Controller (Unity 6 Standard)
 
-### 2D Rigidbody Controller (New Input System)
 ```csharp
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
 public class Movement2D : MonoBehaviour
 {
+    [Header("Movement Config")]
     [SerializeField] private float speed = 7f;
-    [SerializeField] private float jumpForce = 12f;
+    [SerializeField] private float jumpForce = 13f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform visualTransform; // Child Graphics object for juice!
 
     private Rigidbody2D rb;
     private Vector2 inputDirection;
@@ -102,76 +94,32 @@ public class Movement2D : MonoBehaviour
     {
         if (value.isPressed && isGrounded)
         {
-            // Unity 6 linearVelocity standard (replaces legacy rb.velocity)
+            // Unity 6 linearVelocity standard
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            // Juice: Squash & stretch child visual transform without breaking physics collider!
+            if (visualTransform != null)
+            {
+                visualTransform.localScale = new Vector3(0.8f, 1.25f, 1.0f);
+            }
         }
     }
 
     private void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+
+        // Smoothly restore visual squash back to normal scale
+        if (visualTransform != null && visualTransform.localScale != Vector3.one)
+        {
+            visualTransform.localScale = Vector3.MoveTowards(visualTransform.localScale, Vector3.one, Time.deltaTime * 3f);
+        }
     }
 
     private void FixedUpdate()
     {
-        // Unity 6 linearVelocity applied in FixedUpdate
+        // Unity 6 linearVelocity in FixedUpdate
         rb.linearVelocity = new Vector2(inputDirection.x * speed, rb.linearVelocity.y);
-    }
-}
-```
-
-### 3D CharacterController (Camera-Relative)
-```csharp
-using UnityEngine;
-using UnityEngine.InputSystem;
-
-[RequireComponent(typeof(CharacterController))]
-public class Movement3D : MonoBehaviour
-{
-    [SerializeField] private float walkSpeed = 6f;
-    [SerializeField] private float gravity = -18f;
-    [SerializeField] private Transform cameraTransform;
-
-    private CharacterController controller;
-    private Vector2 moveInput;
-    private float verticalVelocity;
-
-    private void Awake() => controller = GetComponent<CharacterController>();
-
-    public void OnMove(InputValue value) => moveInput = value.Get<Vector2>();
-
-    private void Update()
-    {
-        // 1. Calculate direction relative to camera facing angle
-        Vector3 forward = cameraTransform.forward;
-        Vector3 right = cameraTransform.right;
-        forward.y = 0f;
-        right.y = 0f;
-        forward.Normalize();
-        right.Normalize();
-
-        Vector3 desiredMove = (forward * moveInput.y + right * moveInput.x) * walkSpeed;
-
-        // 2. Gravity handling
-        if (controller.isGrounded && verticalVelocity < 0f)
-        {
-            verticalVelocity = -2f; // Slight downward force to keep grounded
-        }
-        else
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
-        desiredMove.y = verticalVelocity;
-
-        // 3. Apply movement
-        controller.Move(desiredMove * Time.deltaTime);
-
-        // 4. Rotate character towards movement direction
-        Vector3 horizontalVelocity = new Vector3(desiredMove.x, 0, desiredMove.z);
-        if (horizontalVelocity.sqrMagnitude > 0.05f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(horizontalVelocity), Time.deltaTime * 12f);
-        }
     }
 }
 ```
@@ -180,7 +128,7 @@ public class Movement3D : MonoBehaviour
 
 ## 3. Raycasting (2D & 3D)
 
-### 2D Raycast with LayerMask
+### 2D Raycast with LayerMask & Debug Visualizer
 ```csharp
 using UnityEngine;
 
@@ -193,114 +141,79 @@ public class RaycastExample2D : MonoBehaviour
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, rayDistance, hitLayers);
         
-        // Visualize the ray in editor
+        // Draw debug line in Scene View (Green if hit, Red if clear)
         Debug.DrawRay(transform.position, transform.right * rayDistance, hit.collider != null ? Color.green : Color.red);
 
         if (hit.collider != null)
         {
-            Debug.Log($"Hit 2D object: {hit.collider.name} at distance: {hit.distance}");
+            Debug.Log($"Hit object: {hit.collider.name} at distance: {hit.distance}");
         }
     }
-}
-```
-
-### 3D Screen Center Raycast (Interaction)
-```csharp
-using UnityEngine;
-
-public class RaycastExample3D : MonoBehaviour
-{
-    [SerializeField] private float interactRange = 3f;
-    [SerializeField] private LayerMask interactableMask;
-
-    public void CheckInteraction()
-    {
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, interactRange, interactableMask))
-        {
-            Debug.Log($"Interactable: {hit.collider.name}");
-            if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
-            {
-                interactable.Interact();
-            }
-        }
-    }
-}
-
-public interface IInteractable
-{
-    void Interact();
 }
 ```
 
 ---
 
-## 4. Object Pooling Pattern (Eliminate GC Lag)
+## 4. Object Pooling (Modern Built-in Pool)
 
+### Unity 6 `UnityEngine.Pool.ObjectPool<T>` Standard
 ```csharp
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
-public class ObjectPool : MonoBehaviour
+public class ParticlePoolManager : MonoBehaviour
 {
-    [SerializeField] private GameObject prefab;
-    [SerializeField] private int initialSize = 20;
-
-    private readonly Queue<GameObject> pool = new();
+    [SerializeField] private ParticleSystem vfxPrefab;
+    private IObjectPool<ParticleSystem> pool;
 
     private void Awake()
     {
-        for (int i = 0; i < initialSize; i++)
-        {
-            CreateNewInstance();
-        }
+        pool = new ObjectPool<ParticleSystem>(
+            createFunc: () => Instantiate(vfxPrefab, transform),
+            actionOnGet: (vfx) => vfx.gameObject.SetActive(true),
+            actionOnRelease: (vfx) => vfx.gameObject.SetActive(false),
+            actionOnDestroy: (vfx) => Destroy(vfx.gameObject),
+            collectionCheck: false,
+            defaultCapacity: 20,
+            maxSize: 100
+        );
     }
 
-    private GameObject CreateNewInstance()
+    public ParticleSystem SpawnEffect(Vector3 position)
     {
-        GameObject obj = Instantiate(prefab, transform);
-        obj.SetActive(false);
-        pool.Enqueue(obj);
-        return obj;
+        ParticleSystem effect = pool.Get();
+        effect.transform.position = position;
+        return effect;
     }
 
-    public GameObject Get(Vector3 position, Quaternion rotation)
+    public void ReturnEffect(ParticleSystem effect)
     {
-        GameObject obj = pool.Count > 0 ? pool.Dequeue() : CreateNewInstance();
-        obj.transform.SetPositionAndRotation(position, rotation);
-        obj.SetActive(true);
-        return obj;
-    }
-
-    public void ReturnToPool(GameObject obj)
-    {
-        obj.SetActive(false);
-        pool.Enqueue(obj);
+        pool.Release(effect);
     }
 }
 ```
 
 ---
 
-## 5. Scene Management & Fast Reload Helpers
+## 5. Editor Automation: Pixel Art Sprite Importer
+
+Place this script in an `Editor/` folder to automatically apply crisp settings to all imported pixel art textures:
 
 ```csharp
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public static class SceneUtilityHelper
+public class PixelArtPostprocessor : AssetPostprocessor
 {
-    // Reload the active scene immediately
-    public static void ReloadActiveScene()
+    private void OnPreprocessTexture()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.buildIndex);
-    }
-
-    // Load scene by name
-    public static void LoadSceneByName(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
+        TextureImporter ti = (TextureImporter)assetImporter;
+        
+        // Auto-configure crisp 2D sprite settings
+        ti.textureType = TextureImporterType.Sprite;
+        ti.spritePixelsPerUnit = 16;
+        ti.filterMode = FilterMode.Point;
+        ti.textureCompression = TextureImporterCompression.Uncompressed;
     }
 }
 ```
@@ -316,14 +229,14 @@ public class DebugHelpers : MonoBehaviour
 {
     [SerializeField] private float detectionRadius = 4f;
 
-    // Right-click this component in the Inspector to execute live!
-    [ContextMenu("Test Spawn Explosion")]
-    public void TestExplosion()
+    // Right-click this component in Inspector to test immediately during Play Mode!
+    [ContextMenu("Trigger Test Impact")]
+    public void TestImpact()
     {
-        Debug.Log($"Simulating explosion at: {transform.position}");
+        Debug.Log($"Test impact triggered at: {transform.position}");
     }
 
-    // Draw visual gizmos in Scene View
+    // Visual boundary indicator in Scene View
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

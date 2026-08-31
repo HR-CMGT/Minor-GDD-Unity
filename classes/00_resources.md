@@ -4,7 +4,7 @@ A curated collection of free, high-quality assets, tools, open-source repositori
 
 ---
 
-## 🎮 2D Graphics & Sprites
+## 2D Graphics & Sprites
 
 - [Kenney.nl](https://kenney.nl/assets) - Thousands of free CC0 2D sprites, UI packs, audio, and tiles.
 - [OpenGameArt.org](https://opengameart.org/) - Large community database of free 2D game assets.
@@ -15,17 +15,16 @@ A curated collection of free, high-quality assets, tools, open-source repositori
 
 ---
 
-## 🧊 3D Models & PBR Textures
+## 3D Models & PBR Textures
 
 - [Poly Haven](https://polyhaven.com/) - 100% free CC0 3D models, HDRIs, and PBR materials (up to 8K).
 - [Sketchfab (CC0 / Downloadable)](https://sketchfab.com/3d-models?features=downloadable&licenses=7c23a1ba438d4306920229c12afcb5f9) - Professional-grade downloadable 3D assets.
 - [Mixamo (Adobe)](https://www.mixamo.com/) - Free rigged 3D humanoids and hundreds of mocap animation clips.
-- [Quixel Megascans](https://quixel.com/megascans) - High-resolution 3D scans and photoreal textures.
 - [AmbientCG](https://ambientcg.com/) - Extensive collection of CC0 PBR textures (Albedo, Normal, Roughness, AO).
 
 ---
 
-## 🔊 Audio & Sound FX
+## Audio & Sound FX
 
 - [Freesound.org](https://freesound.org/) - Extensive database of sound effects under Creative Commons licenses.
 - [sfxr.me (jsfxr)](https://sfxr.me/) - 8-bit retro sound generator in your browser.
@@ -35,16 +34,16 @@ A curated collection of free, high-quality assets, tools, open-source repositori
 
 ---
 
-## 🛠️ Unity Tools & Open Source Packages
+## Unity Tools & Open Source Packages
 
 - [OpenUPM](https://openupm.com/) - Open-source package registry for Unity (UniTask, UniRx, NaughtyAttributes).
 - [DOTween (Demigiant)](http://dotween.demigiant.com/) - The industry standard for tweening transforms, UI, and variables.
+- [VContainer (GitHub)](https://github.com/hadashiA/VContainer) - Lightweight, high-performance Dependency Injection framework for Unity.
 - [Awesome Unity (GitHub)](https://github.com/RyanNielson/awesome-unity) - Curated list of top Unity libraries and tools.
-- [Unity Particle Pack](https://assetstore.unity.com/packages/vfx/particles/particle-pack-127325) - Free official particle library from Unity.
 
 ---
 
-## 📖 Game Architecture & Game Design Theory
+## Game Architecture & Game Design Theory
 
 - [Game Programming Patterns (Robert Nystrom)](https://gameprogrammingpatterns.com/) - Free online book on software architecture in game development.
 - [Game Developer](https://www.gamedeveloper.com/) - In-depth post-mortems and game design essays.

@@ -4,15 +4,15 @@ In this guide, you learn how to collaborate on a Unity project using Git and **G
 
 ---
 
-## 🎯 3 Golden Rules for Unity Teams
+## 3 Golden Rules for Unity Teams
 
-1. **Always use Git LFS for binary files:** Large 3D models, audio files, and textures belong in LFS, not in the raw Git commit history.
+1. **Always use Git LFS for binary files:** Large 3D models, audio files, and textures belong in LFS, not in raw Git commit history.
 2. **NEVER work simultaneously in the same `.unity` scene:** Each team member develops features inside **dedicated Prefabs** or isolated test scenes.
-3. **Enable 'Force Text' serialization:** This enables clean text diffs for Unity meta files.
+3. **Commit both Asset and `.meta` files together:** Never delete or ignore `.meta` files. Unity tracks object GUIDs inside meta files; missing meta files cause `Missing Script` errors.
 
 ---
 
-## ⚙️ 1. Unity Editor Project Settings
+## 1. Unity Editor Project Settings
 
 Verify these settings before making your first commit:
 1. Navigate to: `Edit > Project Settings > Editor`.
@@ -21,7 +21,7 @@ Verify these settings before making your first commit:
 
 ---
 
-## 📄 2. The Official Unity `.gitignore`
+## 2. The Official Unity `.gitignore`
 
 Place this `.gitignore` file in the root of your repository:
 
@@ -36,7 +36,7 @@ Place this `.gitignore` file in the root of your repository:
 /[Uu]ser[Ss]ettings/
 /[Mm]emoryCaptures/
 
-# Visual Studio / Rider project files (rebuilt automatically)
+# Visual Studio / Rider project files
 *.csproj
 *.unityproj
 *.sln
@@ -59,7 +59,7 @@ Thumbs.db
 
 ---
 
-## 📦 3. Git LFS Configuration (`.gitattributes`)
+## 3. Git LFS Configuration (`.gitattributes`)
 
 Install Git LFS once globally on your workstation:
 ```bash
@@ -98,7 +98,7 @@ Place this `.gitattributes` file in the root of your repository:
 
 ---
 
-## 🌿 4. Team Workflow & Preventing Merge Conflicts
+## 4. Team Workflow & Preventing Merge Conflicts
 
 ```
 [MAIN Branch] (Always stable, playable & reviewed)
@@ -114,3 +114,19 @@ Place this `.gitattributes` file in the root of your repository:
 - The master scene `Main_Level.unity` contains only static geometry and empty spawn points.
 - Players, enemies, UI, and managers are **Prefabs**.
 - When Developer A updates player logic, she edits `Player.prefab`. Developer B can simultaneously edit `Enemy.prefab` **without ever triggering a scene merge conflict!**
+
+---
+
+## 5. Unity SmartMerge (UnityYAMLMerge)
+
+Unity includes a built-in tool (`UnityYAMLMerge`) designed to merge scene and prefab YAML files semantically without conflicts:
+
+Add to your workstation `~/.gitconfig`:
+```ini
+[merge]
+tool = unityyamlmerge
+
+[mergetool "unityyamlmerge"]
+trustExitCode = false
+cmd = '<Unity-Install-Path>/Editor/Data/Tools/UnityYAMLMerge.exe' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
+```
