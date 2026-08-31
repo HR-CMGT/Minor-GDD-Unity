@@ -2610,13 +2610,13 @@ if (animator != null) {
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Easy 4-Step Setup</div>
+                                <div class="card-title core">Easy 4-Step Cinemachine 3.0 Setup</div>
                                 <div class="card-body">
                                     <ol>
-                                        <li>Top menu: <code>GameObject > Cinemachine > Cinemachine Camera</code>.</li>
-                                        <li>Drag your <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
-                                        <li>Set <strong>Body</strong> to <span class="term-tip" data-title="Framing Transposer" data-desc="Cinemachine algorithm keeping player in defined screen zone." data-diff="vs Hard Lock: Guides camera smoothly without rigid lock-on jitter."><code><strong>Framing Transposer</strong></code></span>.</li>
-                                        <li>Adjust <span class="term-tip" data-title="Dead Zone" data-desc="Center box where player moves without moving camera." data-diff="Why needed: Prevents camera moving on tiny fidgeting steps."><code><strong>Dead Zone</strong></code></span> so the camera moves when walking.</li>
+                                        <li>In Hierarchy: Click <strong>Cinemachine Camera</strong>.</li>
+                                        <li>Drag <code>Player_Start</code> into the <strong>Tracking Target</strong> slot.</li>
+                                        <li>Under <strong>Procedural Components</strong>, click <strong>Position Control</strong> (currently <code>None</code>) &rarr; select <span class="term-tip" data-title="Position Control: Position Follow" data-desc="Cinemachine 3 follower keeping player centered smoothly." data-diff="Replaces legacy Body > Framing Transposer."><code><strong>Position Follow</strong></code></span> (or <code>Framing Transposer</code>).</li>
+                                        <li>Expand <strong>Position Control</strong> &rarr; adjust <span class="term-tip" data-title="Dead Zone" data-desc="Center box where player moves without moving camera." data-diff="Prevents micro-camera jitter on tiny steps."><code><strong>Dead Zone Width / Height</strong></code></span> and <strong>Damping</strong>!</li>
                                     </ol>
                                 </div>
                             </div>
@@ -2624,23 +2624,20 @@ if (animator != null) {
                                 <div class="card-title core">What Makes It Look Great?</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><span class="term-tip" data-title="Damping" data-desc="Camera motion delay factor." data-diff="vs 0 Damping: Creates smooth cinematic glide; 0 damping jerks harshly."><strong>Damping:</strong></span> Adds a smooth motion delay so the camera glides instead of jerking rigidly.</li>
-                                        <li><span class="term-tip" data-title="Dead Zone" data-desc="Screen zone where player moves without camera moving." data-diff="Prevents nauseating micro-camera jitter."><strong>Dead Zone:</strong></span> Prevents dizzying camera micro-movements on small player adjustments.</li>
+                                        <li><span class="term-tip" data-title="Damping" data-desc="Camera motion delay factor." data-diff="vs 0 Damping: Creates smooth cinematic glide; 0 damping jerks harshly."><strong>Damping:</strong></span> Adds smooth motion delay so camera glides instead of snapping rigidly.</li>
+                                        <li><span class="term-tip" data-title="Dead Zone" data-desc="Screen zone where player moves without camera moving." data-diff="Prevents nauseating micro-camera jitter."><strong>Dead Zone:</strong></span> Prevents dizzying camera micro-movements on small fidgeting steps.</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="right-column">
-                            <div class="media-canvas ratio-16-9">
-                                <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Cinemachine Follow GIF</span>
-                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                            <div class="media-canvas" style="display:flex; flex-direction:column; max-height:520px; background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; overflow:hidden;">
+                                <div class="media-canvas-header" style="background:#0f172a; color:#f8fafc; padding:8px 12px; display:flex; justify-content:space-between; align-items:center;">
+                                    <span class="media-canvas-badge" style="background:#e20049; color:#fff; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;">Cinemachine 3 Inspector</span>
+                                    <span style="color:#94a3b8; font-size:0.75rem;">Procedural Components</span>
                                 </div>
-                                <div class="media-canvas-viewport">
-                                    <div class="media-placeholder-graphic">
-                                        <div class="media-placeholder-title">Framing Transposer Follow</div>
-                                        <div class="media-placeholder-sub">Smooth camera lag, dead-zone box preview, and lookahead leading</div>
-                                    </div>
+                                <div style="overflow-y:auto; padding:12px; display:flex; justify-content:center; background:#1e293b; flex:1;">
+                                    <img src="cinemachine3_inspector.png" alt="Cinemachine 3.0 Position Control Inspector" style="width:100%; max-width:400px; height:auto; display:block; border-radius:4px; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
                                 </div>
                             </div>
                         </div>
