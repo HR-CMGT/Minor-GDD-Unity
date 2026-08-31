@@ -2552,23 +2552,33 @@ public class PlayerController2D : MonoBehaviour {
                                 <div class="card-title core">Why Split Them?</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><strong>Rigid Collision Box:</strong> The root <code>Rigidbody2D</code> and <code>BoxCollider2D</code> always stay upright and unwarped.</li>
-                                        <li><strong>Juicy Art Animations:</strong> The child <code>Graphics</code> object can squash, stretch, and flip horizontally on jump/land without breaking wall collisions!</li>
+                                        <li><strong>Physics Stays Rigid:</strong> The root <code>Rigidbody2D</code> and <code>BoxCollider2D</code> always stay upright and unwarped.</li>
+                                        <li><strong>Animation Freedom:</strong> The child <code>Graphics</code> can flip or play jump/walk clips freely without breaking wall collisions!</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="right-column">
-                            <div class="media-canvas ratio-16-9">
-                                <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Squash & Stretch GIF</span>
-                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
+                            <div class="content-card primary">
+                                <div class="card-title core">How Animation is Handled (PlayerStart.cs)</div>
+                                <div class="code-box">
+                                    <pre>// Inside Update() in PlayerStart.cs:
+
+// 1. Flip child sprite without rotating physics box:
+spriteRenderer.flipX = rb.linearVelocity.x < 0;
+
+// 2. Feed physics speed & jump state to Animator:
+if (animator != null) {
+    animator.SetFloat("walkspeed", rb.linearVelocity.magnitude);
+    animator.SetBool("jumpBoolean", !CheckGrounded());
+}</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
-                                <div class="media-canvas-viewport">
-                                    <div class="media-placeholder-graphic">
-                                        <div class="media-placeholder-title">Child Transform Animation</div>
-                                        <div class="media-placeholder-sub">Squashing child visual sprite on jump takeoff while BoxCollider2D stays rigid</div>
-                                    </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Key Visual Takeaway</div>
+                                <div class="card-body">
+                                    Because <code>SpriteRenderer</code> is on the child <strong>Graphics</strong> object, changing <code>flipX</code> or playing walk animations flips the visual art instantly while the parent physics collider stays firmly upright!
                                 </div>
                             </div>
                         </div>
