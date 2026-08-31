@@ -1853,11 +1853,11 @@
                     </div>
                     <details class="tier-accordion adv">
                         <summary class="accordion-header">
-                            <span>[Advanced] IDE Performance Profiling</span>
+                            <span>[Advanced] IDE Code Inspections & Warnings</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Rider highlights Unity performance warnings directly in code: GC allocations in <code>Update()</code>, inefficient <code>GetComponent()</code> calls, and string comparisons.
+                            Rider and Visual Studio highlight Unity performance warnings directly in code: GC allocations in <code>Update()</code>, inefficient <code>GetComponent()</code> calls, and string comparisons. Learn more in the <a class="slide-url" href="https://www.jetbrains.com/help/rider/Unity.html" target="_blank" rel="noopener noreferrer">JetBrains Rider Unity Guide [link]</a> and <a class="slide-url" href="https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity.html" target="_blank" rel="noopener noreferrer">Unity Performance Best Practices [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -1866,7 +1866,7 @@
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Split core gameplay systems into separate <code>.asmdef</code> modules to prevent Unity from recompiling entire projects on every script edit.
+                            Right-click in Project &rarr; <code>Create > Assembly Definition</code> to split your gameplay code into separate modules. This avoids recompiling the entire project on every script save. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/ScriptCompilationAssemblyDefinitionFiles.html" target="_blank" rel="noopener noreferrer">Unity Manual on Assembly Definitions [link]</a>.
                         </div>
                     </details>
                 `
@@ -1936,20 +1936,22 @@
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
+                            Clone the course repo and keep your work isolated on feature branches:
                             <div class="code-box">
                                 <pre>git clone https://github.com/HR-CMGT/Minor-GDD-Unity.git
 git checkout -b feature/platformer-controller</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
+                            See the <a class="slide-url" href="https://docs.unity3d.com/Manual/VersionControl.html" target="_blank" rel="noopener noreferrer">Unity Version Control Guide [link]</a> for recommended <code>.gitignore</code> rules.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Git LFS & Binary Scene Merge Conflicts</span>
+                            <span>[Expert] Git LFS & UnityYAMLMerge</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Track assets with Git LFS (<code>git lfs track "*.psd" "*.png" "*.wav"</code>) and configure <code>UnityYAMLMerge</code> to prevent merge conflicts in team projects.
+                            Track heavy binary assets like audio and sprites with Git LFS (<code>git lfs track "*.png" "*.wav"</code>), and use Unity's smart merge tool for scenes. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/SmartMerge.html" target="_blank" rel="noopener noreferrer">Unity SmartMerge Manual [link]</a> and <a class="slide-url" href="https://git-lfs.com/" target="_blank" rel="noopener noreferrer">Git LFS Guide [link]</a>.
                         </div>
                     </details>
                 `
@@ -1980,25 +1982,25 @@ git checkout -b feature/platformer-controller</pre>
                     </div>
                     <details class="tier-accordion adv">
                         <summary class="accordion-header">
-                            <span>[Advanced] ContextMenu Editor Testing</span>
+                            <span>[Advanced] Quick Testing with [ContextMenu]</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Add <code>[ContextMenu("Trigger Test")]</code> above C# functions to trigger test behaviors via the Inspector context menu during runtime.
+                            Add <code>[ContextMenu("Test Jump")]</code> above any void method in your C# script. In Play Mode, right-click the component header in the Inspector to execute that method instantly without pressing keyboard buttons! See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/ContextMenu.html" target="_blank" rel="noopener noreferrer">Unity ContextMenu API [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] SelectionBase & Custom Property Drawers</span>
+                            <span>[Expert] Locking Prefab Selection with [SelectionBase]</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Add <code>[SelectionBase]</code> to the root GameObject script so clicking in Scene View always selects the root prefab container.
+                            Add <code>[SelectionBase]</code> above your player's root class definition. Now clicking the character anywhere in Scene View always selects the main parent container instead of accidental child sprite objects. See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/SelectionBaseAttribute.html" target="_blank" rel="noopener noreferrer">SelectionBase Documentation [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 7: Startproject (Split Media Layout)
+            // Slide 6: Startproject (Split Media Layout)
             {
                 title: "Importing Your Starter Package",
                 content: `
@@ -2040,25 +2042,36 @@ git checkout -b feature/platformer-controller</pre>
                     </div>
                     <details class="tier-accordion adv">
                         <summary class="accordion-header">
-                            <span>[Advanced] Pixel Art Sprite Settings</span>
+                            <span>[Advanced] Pixel Art Sprite Import Settings</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            For crisp pixel art: Select sprites in Project View &rarr; Set <strong>Pixels Per Unit</strong> to 16 &rarr; <strong>Filter Mode: Point (no filter)</strong> &rarr; <strong>Compression: None</strong>.
+                            For crisp, unblurred 2D pixel art: Select sprite assets in Project View &rarr; in Inspector set <strong>Pixels Per Unit</strong> to <code>16</code> &rarr; set <strong>Filter Mode: Point (no filter)</strong> &rarr; set <strong>Compression: None</strong>. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/class-TextureImporter.html" target="_blank" rel="noopener noreferrer">Unity Sprite Import Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Automated Asset Postprocessors</span>
+                            <span>[Expert] Automating Sprite Settings (AssetPostprocessor)</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Write an <code>AssetPostprocessor</code> script to automatically set Point filter mode and 16 PPU whenever any sprite is imported into <code>Textures/</code>.
+                            Place a script in an <code>Editor/</code> folder inheriting from <code>AssetPostprocessor</code> to auto-configure all imported sprites:
+                            <div class="code-box">
+                                <pre>public class PixelArtImporter : AssetPostprocessor {
+    void OnPreprocessTexture() {
+        var ti = (TextureImporter)assetImporter;
+        ti.filterMode = FilterMode.Point;
+        ti.textureCompression = TextureImporterCompression.Uncompressed;
+    }
+}</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/AssetPostprocessor.OnPreprocessTexture.html" target="_blank" rel="noopener noreferrer">AssetPostprocessor.OnPreprocessTexture [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 8: Package Manager (Split Media Layout - 4:3 Proportion)
+            // Slide 7: Package Manager (Split Media Layout - 4:3 Proportion)
             {
                 title: "Installing Cinemachine Camera Tool",
                 content: `
@@ -2105,7 +2118,7 @@ git checkout -b feature/platformer-controller</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Right-click in Project &rarr; <code>Create > Input Actions</code> to define custom Action Maps with bindings for keyboard, gamepad, and touch controls.
+                            Right-click in Project &rarr; <code>Create > Input Actions</code>. Double-click the asset to open the visual action editor, where you can map Gamepad sticks, WASD, and Arrow keys to a single "Move" action. Read the <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/manual/ActionAssets.html" target="_blank" rel="noopener noreferrer">Unity Input Actions Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -2114,12 +2127,18 @@ git checkout -b feature/platformer-controller</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Subscribe directly to C# actions: <code>controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt;();</code> for zero-reflection performance.
+                            Generate a C# class from your Input Actions asset, then subscribe directly with C# callbacks for maximum responsiveness:
+                            <div class="code-box">
+                                <pre>controls.Player.Jump.performed += ctx => OnJump();
+controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt;();</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            See <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/manual/Events.html" target="_blank" rel="noopener noreferrer">Input System C# Event Workflow [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 9: Assignment StartProject (Split Media Layout - 4 Steps)
+            // Slide 8: Assignment StartProject (Split Media Layout - 4 Steps)
             {
                 title: "Workshop Goals: 4 Clear Steps",
                 content: `
@@ -2158,21 +2177,28 @@ git checkout -b feature/platformer-controller</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Add a camera shake impulse when landing from high jumps, and instantiate a particle burst effect when collecting coins.
+                            Spawn a particle burst when picking up coins and trigger camera impulse shake on hard landings. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/class-ParticleSystem.html" target="_blank" rel="noopener noreferrer">Unity Particle System Manual [link]</a> and <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.cinemachine@3.0/manual/CinemachineImpulse.html" target="_blank" rel="noopener noreferrer">Cinemachine Impulse Guide [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Score Event Channel (Decoupled)</span>
+                            <span>[Expert] Decoupled Score Event Channel</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Create a <code>ScoreManager</code> that listens to a <code>Coin.OnCollected</code> C# static event without holding direct object references.
+                            Create a static C# event in your Coin script so UI score managers listen without direct object links:
+                            <div class="code-box">
+                                <pre>public static event System.Action OnCoinCollected;
+// In OnTriggerEnter2D:
+OnCoinCollected?.Invoke();</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Learn more in the <a class="slide-url" href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/events/" target="_blank" rel="noopener noreferrer">Microsoft C# Events Guide [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 10: Rigidbody2D Component (Split Media Layout - Portrait Inspector)
+            // Slide 9: Rigidbody2D Component (Split Media Layout - Portrait Inspector)
             {
                 title: "Rigidbody2D: Giving Objects Gravity",
                 content: `
@@ -2254,7 +2280,7 @@ git checkout -b feature/platformer-controller</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Create a <code>PhysicsMaterial2D</code> with <strong>Friction: 0</strong> and attach to player collider so jumping against walls doesn't stick.
+                            Create a frictionless material: In Project window right-click &rarr; <code>Create > 2D > Physics Material 2D</code> &rarr; set <strong>Friction: 0</strong> &rarr; drag it onto your Player's <code>Collider2D</code> material slot. This stops the character from sticking to walls while jumping! Read <a class="slide-url" href="https://docs.unity3d.com/Manual/class-PhysicsMaterial2D.html" target="_blank" rel="noopener noreferrer">Unity PhysicsMaterial2D Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -2263,12 +2289,18 @@ git checkout -b feature/platformer-controller</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Clamp vertical falling velocity in <code>FixedUpdate</code>: <code>float y = Mathf.Max(rb.linearVelocity.y, -maxFallSpeed);</code> to prevent tunnel glitching.
+                            Clamp falling speed in <code>FixedUpdate</code> to prevent tunneling through thin floors on high drops:
+                            <div class="code-box">
+                                <pre>float clampedY = Mathf.Max(rb.linearVelocity.y, -maxFallSpeed);
+rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Mathf.Max.html" target="_blank" rel="noopener noreferrer">Mathf.Max [link]</a> and <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Rigidbody2D-linearVelocity.html" target="_blank" rel="noopener noreferrer">Rigidbody2D.linearVelocity [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 11: Rigidbody2D Scripting (Split Media Layout - 16:9 Physics GIF)
+            // Slide 10: Rigidbody2D Scripting (Split Media Layout - 16:9 Physics GIF)
             {
                 title: "How to Move Your Character in Code",
                 content: `
@@ -2319,12 +2351,14 @@ if (jumpRequested) {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
+                            If the player releases the jump button early while moving upward, cut vertical velocity in half for responsive jump height control:
                             <div class="code-box">
                                 <pre>if (!isJumpHeld && rb.linearVelocity.y > 0) {
     rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
 }</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
+                            Watch <a class="slide-url" href="https://www.youtube.com/watch?v=K1xZ-rycYY8" target="_blank" rel="noopener noreferrer">Tarodev Platformer Jump Feel Video [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -2333,6 +2367,7 @@ if (jumpRequested) {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
+                            Smooth horizontal speed using <code>Mathf.MoveTowards</code> instead of instantaneous velocity snapping:
                             <div class="code-box">
                                 <pre>float targetSpeed = moveInput.x * moveSpeed;
 float accel = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
@@ -2340,11 +2375,12 @@ float newSpeedX = Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed, accel * Ti
 rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
+                            See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Mathf.MoveTowards.html" target="_blank" rel="noopener noreferrer">Mathf.MoveTowards API Reference [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 12: Script Lifecycle (Moved for technical continuity)
+            // Slide 11: Script Lifecycle (Moved for technical continuity)
             {
                 title: "How Unity Runs Your Code Step-by-Step",
                 content: `
@@ -2394,7 +2430,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            In <code>Project Settings > Script Execution Order</code>, configure Manager scripts to run at <code>-100</code> before character controllers execute.
+                            Go to <code>Edit > Project Settings > Script Execution Order</code> and click <code>+</code> to set Manager scripts to run at <code>-100</code> before character controllers execute. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/class-MonoManager.html" target="_blank" rel="noopener noreferrer">Unity Script Execution Order Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -2403,12 +2439,12 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Avoid calling <code>yield return new WaitForSeconds(1f);</code> repeatedly in Coroutines. Cache <code>private readonly WaitForSeconds wait = new(1f);</code> in field definitions.
+                            In Coroutines, avoid Garbage Collector allocations from <code>yield return new WaitForSeconds(1f);</code> by caching instructions in fields: <code>private readonly WaitForSeconds waitOneSec = new(1f);</code>. See <a class="slide-url" href="https://docs.unity3d.com/Manual/Coroutines.html" target="_blank" rel="noopener noreferrer">Unity Coroutines Best Practice [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 14: Component-Based Workflow
+            // Slide 12: Component-Based Workflow
             {
                 title: "Automatic Component Safety",
                 content: `
@@ -2440,26 +2476,28 @@ public class PlayerController2D : MonoBehaviour {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
+                            Use <code>TryGetComponent</code> to avoid null reference exceptions and prevent double component lookups in C#:
                             <div class="code-box">
                                 <pre>if (other.TryGetComponent&lt;ICollectible&gt;(out var item)) {
     item.Collect();
 }</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
+                            Read the <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Component.TryGetComponent.html" target="_blank" rel="noopener noreferrer">Unity Component.TryGetComponent API [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Custom Inspector GUI with Play Mode Buttons</span>
+                            <span>[Expert] Custom Inspector Play Mode Buttons</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Use <code>[CustomEditor(typeof(PlayerController2D))]</code> with <code>GUILayout.Button("Reset Player")</code> for rapid level designer debugging.
+                            Add <code>[ContextMenu("Reset Player")]</code> or build custom Editor GUI with <code>GUILayout.Button</code> to trigger quick reset actions directly in Inspector while testing. See <a class="slide-url" href="https://docs.unity3d.com/Manual/editor-CustomEditors.html" target="_blank" rel="noopener noreferrer">Unity Custom Inspector Manual [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 15: Separation of Concerns (Split Media Layout - 16:9 GIF)
+            // Slide 13: Separation of Concerns (Split Media Layout - 16:9 GIF)
             {
                 title: "Keeping Art and Physics Separate",
                 content: `
@@ -2524,21 +2562,21 @@ public class PlayerController2D : MonoBehaviour {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Scale the child <code>Graphics</code> Transform (e.g. <code>Vector3(0.8f, 1.2f, 1f)</code>) on takeoff without deforming the physics box collider on Root.
+                            Scale the child <code>Graphics</code> Transform (e.g. <code>transform.localScale = new Vector3(0.8f, 1.2f, 1f);</code>) on jump takeoff. Because the collider is on the parent Root, the physics boundary stays intact! Read the <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Transform-localScale.html" target="_blank" rel="noopener noreferrer">Transform.localScale API [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Attachment Sockets Pattern</span>
+                            <span>[Expert] Sockets Pattern for VFX & Audio</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Create dedicated child Transforms (<code>FootstepSocket</code>, <code>MuzzleSocket</code>) for precise procedural VFX and audio spatial placement.
+                            Create dedicated child GameObjects (like <code>DustSocket</code> at feet) as spawn anchors: <code>Instantiate(dustPrefab, dustSocket.position, Quaternion.identity);</code>. Read the <a class="slide-url" href="https://docs.unity3d.com/Manual/Hierarchy.html" target="_blank" rel="noopener noreferrer">Unity Hierarchy & Parenting Guide [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 16: Cinemachine 3 (Split Media Layout - 16:9 GIF)
+            // Slide 14: Cinemachine 3 (Split Media Layout - 16:9 GIF)
             {
                 title: "Setting Up Smooth Camera Follow",
                 content: `
@@ -2586,21 +2624,21 @@ public class PlayerController2D : MonoBehaviour {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Set <strong>Lookahead Time</strong> to <code>0.2s</code> and <strong>Lookahead Smoothing</strong> to <code>5</code> so the camera pans ahead in movement direction.
+                            In the Cinemachine Inspector, set <strong>Lookahead Time</strong> to <code>0.2s</code> and <strong>Lookahead Smoothing</strong> to <code>5</code> so the camera pans ahead in movement direction. See <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.cinemachine@3.0/manual/CinemachineFollow.html" target="_blank" rel="noopener noreferrer">Cinemachine Follow Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Cinemachine Impulse Shake on Landings</span>
+                            <span>[Expert] Screen Shake with Cinemachine Impulse</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Attach a <code>CinemachineImpulseSource</code> to Player and trigger screen shake on hard impacts: <code>impulseSource.GenerateImpulse();</code>.
+                            Attach a <code>CinemachineImpulseSource</code> to Player and trigger screen shake on hard landing impacts: <code>GetComponent&lt;CinemachineImpulseSource&gt;().GenerateImpulse();</code>. Read the <a class="slide-url" href="https://docs.unity3d.com/Packages/com.unity.cinemachine@3.0/manual/CinemachineImpulse.html" target="_blank" rel="noopener noreferrer">Cinemachine Impulse Manual [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 17: Using Prefabs
+            // Slide 15: Using Prefabs
             {
                 title: "Prefabs: Master Reusable Templates",
                 content: `
@@ -2639,7 +2677,7 @@ public class PlayerController2D : MonoBehaviour {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Right-click base <code>Coin_Base</code> &rarr; <code>Create > Prefab Variant</code> to create <code>GoldCoin</code> (10 pts) and <code>GemCoin</code> (50 pts) inheriting all base behaviors.
+                            Right-click base <code>Coin_Base</code> &rarr; <code>Create > Prefab Variant</code> to create <code>GoldCoin</code> (10 pts) and <code>GemCoin</code> (50 pts) inheriting all base behaviors. Read <a class="slide-url" href="https://docs.unity3d.com/Manual/PrefabVariants.html" target="_blank" rel="noopener noreferrer">Unity Prefab Variants Manual [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -2648,7 +2686,7 @@ public class PlayerController2D : MonoBehaviour {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Nest independently authored prefabs (HealthBar HUD, Weapon Socket) inside the character prefab to allow multiple developers to work concurrently.
+                            Nest independently authored prefabs (HealthBar HUD, Weapon Socket) inside the character prefab to allow multiple developers to work concurrently. Read <a class="slide-url" href="https://docs.unity3d.com/Manual/NestedPrefabs.html" target="_blank" rel="noopener noreferrer">Unity Nested Prefabs Manual [link]</a>.
                         </div>
                     </details>
                 `
@@ -2705,23 +2743,25 @@ public class PlayerController2D : MonoBehaviour {
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            <code>Destroy(gameObject)</code> instantly terminates AudioSources! Use <code>AudioSource.PlayClipAtPoint(clip, transform.position);</code> or disable <code>SpriteRenderer</code> first.
+                            Calling <code>Destroy(gameObject)</code> immediately cuts off any attached AudioSource! Instead, use <code>AudioSource.PlayClipAtPoint(coinSound, transform.position);</code> to play audio at the world position even after the coin is destroyed. Read <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/AudioSource.PlayClipAtPoint.html" target="_blank" rel="noopener noreferrer">AudioSource.PlayClipAtPoint API [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Unity Object Pool Pattern (Zero Garbage Collection)</span>
+                            <span>[Expert] Unity 6 Built-in Object Pool (Zero Garbage Collection)</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
+                            Use Unity 6's built-in <code>UnityEngine.Pool</code> to recycle collected items without memory spikes:
                             <div class="code-box">
                                 <pre>using UnityEngine.Pool;
 
 private ObjectPool&lt;GameObject&gt; coinPool;
-// Deactivate back to pool instead of Destroy():
-coinPool.Release(gameObject);</pre>
+// When player touches coin:
+coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
                                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                             </div>
+                            Read the <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Pool.ObjectPool_1.html" target="_blank" rel="noopener noreferrer">Unity ObjectPool API Reference [link]</a>.
                         </div>
                     </details>
                 `
@@ -2750,7 +2790,7 @@ coinPool.Release(gameObject);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Methods like <code>Physics2D.Raycast</code> return a <code>RaycastHit2D</code> struct containing <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code>.
+                            Methods like <code>Physics2D.Raycast</code> return a <code>RaycastHit2D</code> struct containing <code>hit.point</code>, <code>hit.normal</code>, and <code>hit.collider</code>. Learn how to inspect return types in the <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Physics2D.Raycast.html" target="_blank" rel="noopener noreferrer">Physics2D.Raycast API [link]</a> and <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/RaycastHit2D.html" target="_blank" rel="noopener noreferrer">RaycastHit2D Reference [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -2759,7 +2799,7 @@ coinPool.Release(gameObject);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Inspect <a class="slide-url" href="https://github.com/Unity-Technologies/UnityCsReference" target="_blank" rel="noopener noreferrer">Unity's open-source C# repo on GitHub</a> to see the internal implementation of <code>MonoBehaviour</code>, <code>Transform</code>, and <code>Physics2D</code>.
+                            Browse <a class="slide-url" href="https://github.com/Unity-Technologies/UnityCsReference" target="_blank" rel="noopener noreferrer">Unity's official open-source C# repo on GitHub [link]</a> to see exactly how components like <code>Transform</code>, <code>MonoBehaviour</code>, and <code>Collider2D</code> are built internally.
                         </div>
                     </details>
                 `
@@ -2794,21 +2834,21 @@ coinPool.Release(gameObject);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Watch <a class="slide-url" href="https://www.youtube.com/watch?v=Fy0aCDmgnxg" target="_blank" rel="noopener noreferrer">"Juice It or Lose It"</a> (Martin Jonasson & Petri Purho) and <a class="slide-url" href="https://www.youtube.com/watch?v=AJdEqss3-DU" target="_blank" rel="noopener noreferrer">"The Art of Screenshake"</a> (Jan Willem Nijman / Vlambeer).
+                            Watch <a class="slide-url" href="https://www.youtube.com/watch?v=Fy0aCDmgnxg" target="_blank" rel="noopener noreferrer">"Juice It or Lose It" [video]</a> (Martin Jonasson & Petri Purho) and <a class="slide-url" href="https://www.youtube.com/watch?v=AJdEqss3-DU" target="_blank" rel="noopener noreferrer">"The Art of Screenshake" [video]</a> (Jan Willem Nijman / Vlambeer) to master game feel.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
                         <summary class="accordion-header">
-                            <span>[Expert] Clean Architecture & Dependency Injection</span>
+                            <span>[Expert] Clean Architecture & Service Locator</span>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Explore <a class="slide-url" href="https://github.com/hadashiA/VContainer" target="_blank" rel="noopener noreferrer">VContainer</a> and <a class="slide-url" href="https://github.com/modesttree/Zenject" target="_blank" rel="noopener noreferrer">Zenject</a> for inversion of control and decoupled testable service injection in Unity.
+                            For decoupling systems in large games, explore lightweight dependency injection like <a class="slide-url" href="https://github.com/hadashiA/VContainer" target="_blank" rel="noopener noreferrer">VContainer [link]</a> or the simple <a class="slide-url" href="https://gameprogrammingpatterns.com/service-locator.html" target="_blank" rel="noopener noreferrer">Service Locator Pattern [link]</a>.
                         </div>
                     </details>
                 `
             },
-            // Slide 21: Help / Discord (Split Media Layout - Portrait Discord UI)
+            // Slide 19: Help / Discord (Split Media Layout - Portrait Discord UI)
             {
                 title: "Quick Fix Guide & Getting Help",
                 content: `
@@ -2882,7 +2922,12 @@ coinPool.Release(gameObject);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Draw live gizmo rays in Scene View: <code>Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.green);</code>.
+                            Draw visible debug rays in your Scene View to verify ground detection distance:
+                            <div class="code-box">
+                                <pre>Debug.DrawRay(transform.position, Vector2.down * groundDistance, Color.green);</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            Read <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Debug.DrawRay.html" target="_blank" rel="noopener noreferrer">Debug.DrawRay API Reference [link]</a>.
                         </div>
                     </details>
                     <details class="tier-accordion exp">
@@ -2891,7 +2936,7 @@ coinPool.Release(gameObject);</pre>
                             <span style="font-size:0.75rem;">Expand ▼</span>
                         </summary>
                         <div class="accordion-body">
-                            Execute <code>Debug.Break();</code> in C# to pause the Unity Editor on the exact physics tick an unexpected collision or state bug triggers.
+                            Call <code>Debug.Break();</code> in your C# code to pause the Unity Editor on the exact physics tick an unexpected collision or state glitch occurs. See <a class="slide-url" href="https://docs.unity3d.com/ScriptReference/Debug.Break.html" target="_blank" rel="noopener noreferrer">Debug.Break API Reference [link]</a>.
                         </div>
                     </details>
                 `
