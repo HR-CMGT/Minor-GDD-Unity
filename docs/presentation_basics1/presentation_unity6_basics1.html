@@ -732,23 +732,23 @@
         }
 
         .media-canvas-header {
-            background: #111726;
-            border-bottom: 1px solid #242c3d;
-            padding: 3px 8px;
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+            padding: 4px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            height: 26px;
+            height: 28px;
         }
 
         .media-canvas-badge {
             background: var(--hr-red);
             color: #ffffff;
-            font-size: 0.62rem;
-            font-weight: 900;
+            font-size: 0.65rem;
+            font-weight: 800;
             text-transform: uppercase;
-            padding: 1px 5px;
+            padding: 1px 6px;
             border-radius: 3px;
             letter-spacing: 0.5px;
         }
@@ -758,19 +758,17 @@
             font-weight: 700;
             color: #94a3b8;
             font-family: monospace;
-            background: #1e293b;
             padding: 1px 5px;
-            border-radius: 3px;
         }
 
         .media-canvas-viewport {
             flex: 1 1 auto;
-            padding: 6px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at center, #111827 0%, #080c14 100%);
+            background: #ffffff;
             position: relative;
             overflow: hidden;
             min-height: 0;
@@ -782,6 +780,7 @@
             max-height: 100%;
             object-fit: contain;
             border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .media-placeholder-graphic {
@@ -2142,16 +2141,16 @@ controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt
                             </div>
                         </div>
                         <div class="right-column">
-                            <div class="media-canvas ratio-16-9">
-                                <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Target Gameplay GIF</span>
-                                    <span class="media-canvas-dim">16:9 &bull; 1920 &times; 1080</span>
-                                </div>
-                                <div class="media-canvas-viewport">
-                                    <div class="media-placeholder-graphic">
-                                        <div class="media-placeholder-title">Finished Milestone Gameplay</div>
-                                        <div class="media-placeholder-sub">Player runs, jumps on platforms, triggers coins, and smooth camera pans</div>
-                                    </div>
+                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
+                                <div class="card-title core" style="color: #059669;">Success Checklist</div>
+                                <div class="card-body">
+                                    <ul style="padding-left: 18px;">
+                                        <li><strong>Player moves</strong> left/right smoothly with arrow keys / A & D.</li>
+                                        <li><strong>Player jumps</strong> only when grounded on platforms.</li>
+                                        <li><strong>Camera follows</strong> player automatically with gentle damping glide.</li>
+                                        <li><strong>Coins disappear</strong> on touch with sound feedback.</li>
+                                        <li><strong>Pit fall reset:</strong> Falling off bottom resets player back to start!</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -2233,28 +2232,22 @@ OnCoinCollected?.Invoke();</pre>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="content-card primary" style="border-left-color: #f59e0b; background: #fffbeb;">
-                                <div class="card-title core" style="color: #d97706;">Play Mode Safety Tip</div>
+                        </div>
+                        <div class="right-column">
+                            <div class="content-card primary">
+                                <div class="card-title core">Essential Rigidbody2D Checklist</div>
                                 <div class="card-body">
-                                    <ul>
-                                        <li><strong>Play Mode Reset:</strong> Changes made while the game runs are discarded upon exit!</li>
-                                        <li><strong>Safe Workflow:</strong> Copy component values during play mode &rarr; Stop &rarr; Paste Component Values.</li>
-                                        <li><strong>Visual Tint:</strong> Enable in <code>Edit > Preferences > Colors > Playmode tint</code>.</li>
+                                    <ul style="padding-left: 18px;">
+                                        <li><strong>Body Type: Dynamic</strong> &mdash; Object falls with gravity and reacts to solid forces.</li>
+                                        <li><strong>Constraints: Freeze Rotation Z</strong> &mdash; <em>Crucial!</em> Keeps your character standing upright so they don't tip over and roll on the ground.</li>
+                                        <li><strong>Interpolate: Interpolate</strong> &mdash; Prevents physics jitter on 120Hz/144Hz high-refresh displays.</li>
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                        <div class="right-column">
-                            <div class="media-canvas ratio-portrait">
-                                <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Inspector Screenshot</span>
-                                    <span class="media-canvas-dim">380 &times; 580 px</span>
-                                </div>
-                                <div class="media-canvas-viewport">
-                                    <div class="media-placeholder-graphic">
-                                        <div class="media-placeholder-title">Rigidbody2D Inspector</div>
-                                        <div class="media-placeholder-sub">Body Type: Dynamic &bull; Constraints: Freeze Rotation Z &bull; Interpolate: Interpolate</div>
-                                    </div>
+                            <div class="content-card primary" style="border-left-color: #f59e0b; background: #fffbeb;">
+                                <div class="card-title core" style="color: #d97706;">Play Mode Safety Tip</div>
+                                <div class="card-body">
+                                    Changes made while the game runs in Play Mode reset when stopped! Copy values during play &rarr; Stop &rarr; Paste Component Values.
                                 </div>
                             </div>
                         </div>
@@ -2306,6 +2299,17 @@ rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);</pre>
                                 </div>
                             </div>
                             <div class="content-card primary">
+                                <div class="card-title core">Physics Breakdown</div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li><span class="term-tip" data-title="Vector2" data-desc="A pair of 2D numbers (X, Y)." data-diff="X = horizontal speed, Y = vertical jump speed."><strong>Vector2(X, Y):</strong></span> <code>X</code> sets left/right speed; <code>Y</code> preserves falling gravity.</li>
+                                        <li><span class="term-tip" data-title="linearVelocity" data-desc="Unity 6 physics velocity property." data-diff="Replaces legacy .velocity."><strong>linearVelocity:</strong></span> Modern Unity 6 property for glitch-free character movement.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-column">
+                            <div class="content-card primary">
                                 <div class="card-title core">3. Inside Jump() &rarr; if (CheckGrounded())</div>
                                 <div class="code-box">
                                     <pre>rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
@@ -2323,27 +2327,13 @@ rb.linearVelocity = Vector2.zero;</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                             </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">Physics Breakdown</div>
+                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
+                                <div class="card-title core" style="color: #059669;">Movement & Jump Tips</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><span class="term-tip" data-title="Vector2" data-desc="A pair of 2D numbers (X, Y)." data-diff="X = horizontal speed, Y = vertical jump speed."><strong>Vector2(X, Y):</strong></span> <code>X</code> sets left/right speed; <code>Y</code> preserves falling gravity or applies upward jump impulse.</li>
-                                        <li><span class="term-tip" data-title="linearVelocity" data-desc="Unity 6 physics velocity property in units per second." data-diff="vs .velocity: Unity 6 replaced legacy .velocity with linearVelocity."><strong>linearVelocity:</strong></span> Modern Unity 6 property for stable, glitch-free character movement.</li>
+                                        <li><strong>Impulse Force:</strong> <code>ForceMode2D.Impulse</code> gives instant jump snap.</li>
+                                        <li><strong>Zero Velocity on Reset:</strong> Prevents falling momentum continuing after respawn!</li>
                                     </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="right-column">
-                            <div class="media-canvas ratio-16-9">
-                                <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Physics Demo GIF</span>
-                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
-                                </div>
-                                <div class="media-canvas-viewport">
-                                    <div class="media-placeholder-graphic">
-                                        <div class="media-placeholder-title">linearVelocity Physics Motion</div>
-                                        <div class="media-placeholder-sub">Smooth acceleration & jump arc vs stuttering transform teleportation</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2636,8 +2626,8 @@ if (animator != null) {
                                     <span class="media-canvas-badge" style="background:#e20049; color:#fff; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;">Cinemachine 3 Inspector</span>
                                     <span style="color:#94a3b8; font-size:0.75rem;">Procedural Components</span>
                                 </div>
-                                <div style="overflow-y:auto; padding:12px; display:flex; justify-content:center; background:#1e293b; flex:1;">
-                                    <img src="cinemachine3_inspector.png" alt="Cinemachine 3.0 Position Control Inspector" style="width:100%; max-width:400px; height:auto; display:block; border-radius:4px; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+                                <div style="overflow-y:auto; padding:12px; display:flex; justify-content:center; background:#f8fafc; flex:1;">
+                                    <img src="cinemachine3_inspector.png" alt="Cinemachine 3.0 Position Control Inspector" style="width:100%; max-width:400px; height:auto; display:block; border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
                                 </div>
                             </div>
                         </div>
@@ -2752,28 +2742,21 @@ if (currentSoundSource != null && coinSound != null) {
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="right-column">
                             <div class="content-card primary">
                                 <div class="card-title core">Collision vs Trigger Rules</div>
                                 <div class="card-body">
-                                    <ul>
-                                        <li><strong><span class="term-tip" data-title="OnCollisionEnter2D" data-desc="Fires when two solid colliders impact." data-diff="Solid walls & enemies that bump or block player movement.">OnCollisionEnter2D</span>:</strong> For solid enemies (<span class="term-tip" data-title="CompareTag" data-desc="Checks GameObject tag string efficiently without memory allocation." data-diff="Faster and safer than other.tag == 'Enemy'."><code>CompareTag("Enemy")</code></span>).</li>
-                                        <li><strong><span class="term-tip" data-title="OnTriggerEnter2D" data-desc="Fires when player passes through a trigger collider." data-diff="Collectibles, coins, zones without physical bouncing.">OnTriggerEnter2D</span>:</strong> For collectibles with <span class="term-tip" data-title="Is Trigger" data-desc="Turns off solid walls so player passes through." data-diff="Allows player to pick up coin without hitting a brick wall."><code>Is Trigger</code></span> checked.</li>
-                                        <li><strong>Audio Feedback:</strong> Uses <code>PlayOneShot(clip)</code> on <code>currentSoundSource</code>.</li>
+                                    <ul style="padding-left: 18px;">
+                                        <li><strong><span class="term-tip" data-title="OnCollisionEnter2D" data-desc="Fires when two solid colliders impact." data-diff="Solid walls & enemies that bump or block player movement.">OnCollisionEnter2D</span>:</strong> For solid enemies (<span class="term-tip" data-title="CompareTag" data-desc="Checks GameObject tag string efficiently without memory allocation." data-diff="Faster and safer than other.tag == 'Enemy'."><code>CompareTag("Enemy")</code></span>). Physical impact occurs.</li>
+                                        <li><strong><span class="term-tip" data-title="OnTriggerEnter2D" data-desc="Fires when player passes through a trigger collider." data-diff="Collectibles, coins, zones without physical bouncing.">OnTriggerEnter2D</span>:</strong> For collectibles with <span class="term-tip" data-title="Is Trigger" data-desc="Turns off solid walls so player passes through." data-diff="Allows player to pick up coin without hitting a brick wall."><code>Is Trigger</code></span> checked. Pass-through overlap.</li>
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                        <div class="right-column">
-                            <div class="media-canvas ratio-16-9">
-                                <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Trigger Pickup GIF</span>
-                                    <span class="media-canvas-dim">16:9 &bull; 1280 &times; 720</span>
-                                </div>
-                                <div class="media-canvas-viewport">
-                                    <div class="media-placeholder-graphic">
-                                        <div class="media-placeholder-title">Coin Trigger Interaction</div>
-                                        <div class="media-placeholder-sub">Player box collides with trigger &bull; Instant pickup particle & object destruction</div>
-                                    </div>
+                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
+                                <div class="card-title core" style="color: #059669;">Audio Feedback Tip</div>
+                                <div class="card-body">
+                                    Always use <code>currentSoundSource.PlayOneShot(clip)</code> so sound plays cleanly without cutting off background music.
                                 </div>
                             </div>
                         </div>
@@ -2932,27 +2915,22 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="content-card primary" style="border-left-color: #0284c7; background: #f0f9ff;">
-                                <div class="card-title core" style="color: #0284c7;">Need Live Support?</div>
-                                <div class="card-body">
-                                    <ul>
-                                        <li><strong>Official Discord:</strong> Post in <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a> for live teacher & peer support!</li>
-                                        <li><strong>Fast Fixes:</strong> Include a screenshot of your Inspector and Console error message.</li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                         <div class="right-column">
-                            <div class="media-canvas ratio-portrait">
-                                <div class="media-canvas-header">
-                                    <span class="media-canvas-badge">Discord Community UI</span>
-                                    <span class="media-canvas-dim">340 &times; 560 px</span>
+                            <div class="content-card primary" style="border-left-color: #0284c7; background: #f0f9ff;">
+                                <div class="card-title core" style="color: #0284c7;">Need Live Support?</div>
+                                <div class="card-body">
+                                    <ul style="padding-left: 18px;">
+                                        <li><strong>Official Discord:</strong> Post in <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a> for live teacher & peer support!</li>
+                                        <li><strong>Fast Fixes:</strong> When asking for help, include a screenshot of your <strong>Inspector</strong> and the <strong>Console error message</strong>.</li>
+                                    </ul>
                                 </div>
-                                <div class="media-canvas-viewport">
-                                    <div class="media-placeholder-graphic">
-                                        <div class="media-placeholder-title">HR CMGT Discord Server</div>
-                                        <div class="media-placeholder-sub"><a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">#dev-help [Discord link]</a> &bull; Live Teacher & Student Support</div>
-                                    </div>
+                            </div>
+                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
+                                <div class="card-title core" style="color: #059669;">Pro Tip: Debugging in Console</div>
+                                <div class="card-body">
+                                    Use <code>Debug.Log("Jumped!");</code> inside your functions to verify in the Console that key presses are triggering!
                                 </div>
                             </div>
                         </div>
