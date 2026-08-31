@@ -1755,7 +1755,7 @@
         </div>
 
         <div style="display: flex; align-items: center; gap: 14px;">
-            <span class="slide-counter" id="slideCounter">Slide 1 / 21</span>
+            <span class="slide-counter" id="slideCounter">Slide 1 / 19</span>
             <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
         </div>
     </div>
@@ -1842,7 +1842,7 @@
                 content: `
                     <div class="content-stack">
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Part 1: Starting Your First Project</div>
+                            <div class="card-title" style="color:#ffffff;">1. Fundamentals & 2D Movement</div>
                             <div class="card-body">
                                 <ul>
                                     <li>Downloading course files and packages from GitHub</li>
@@ -1854,7 +1854,7 @@
                             </div>
                         </div>
                         <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Part 2: Gameplay Features & Documentation</div>
+                            <div class="card-title" style="color:#ffffff;">2. Architecture & Gameplay Mechanics</div>
                             <div class="card-body">
                                 <ul>
                                     <li>Keeping character art separate from physics hitboxes</li>
@@ -1868,38 +1868,7 @@
                     </div>
                 `
             },
-            // Slide 4: Part 1 Agenda (Inverted HR Red Slide)
-            {
-                isInverted: true,
-                title: "Part 1 Agenda",
-                content: `
-                    <div class="content-stack">
-                        <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Step 1: Setting Up Your Workspace</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><strong>GitHub Portal:</strong> Where to download weekly starter files</li>
-                                    <li><strong>Documentation:</strong> Easy guides and ready-made code examples</li>
-                                    <li><strong>Importing Packages:</strong> Loading the 2D starter scene into Unity</li>
-                                    <li><strong>Camera Tool:</strong> Installing <span class="term-tip" data-title="Cinemachine" data-desc="Unity smart camera suite that automatically follows player." data-diff="Smooth lag and framing with 0 code."><strong>Cinemachine</strong></span> from <span class="term-tip" data-title="Package Manager" data-desc="Unity's built-in tool to install official packages." data-diff="Downloads engine modules and official tools."><strong>Package Manager</strong></span></li>
-                                    <li><strong>Workshop Goals:</strong> 4 clear milestone steps</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Step 2: Physics & Code Basics</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><span class="term-tip" data-title="Rigidbody2D" data-desc="Physics engine component adding gravity and realistic collisions." data-diff="vs Transform: Moves with physics simulation rather than teleporting."><strong>Rigidbody2D:</strong></span> Making objects fall and collide</li>
-                                    <li><strong>Movement Script:</strong> Moving left/right and jumping with <span class="term-tip" data-title="Vector2(X, Y)" data-desc="Pair of X and Y numbers for 2D position or speed." data-diff="vs Vector3: Vector2 is 2D (X, Y); Vector3 adds Z depth (3D)."><strong>Vector2</strong></span></li>
-                                    <li><strong>Script Lifecycle:</strong> When Unity runs <span class="term-tip" data-title="Start()" data-desc="Runs once right before first frame." data-diff="Used for starting values like health."><strong>Start</strong></span>, <span class="term-tip" data-title="Update()" data-desc="Runs every frame for player input." data-diff="vs FixedUpdate: Frame rate varies with PC speed."><strong>Update</strong></span>, and <span class="term-tip" data-title="FixedUpdate()" data-desc="Runs on strict 50Hz physics clock (0.02s)." data-diff="vs Update: Always apply physics forces here."><strong>FixedUpdate</strong></span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            // Slide 5: GitHub MGDD
+            // Slide 4: GitHub MGDD
             {
                 title: "Course Files & Starter Downloads",
                 content: `
@@ -2403,37 +2372,7 @@ rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);</pre>
                     </details>
                 `
             },
-            // Slide 13: Part 2 Agenda (Inverted HR Red Slide)
-            {
-                isInverted: true,
-                title: "Part 2 Agenda",
-                content: `
-                    <div class="content-stack">
-                        <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Smart Object Structure</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><span class="term-tip" data-title="RequireComponent" data-desc="Script attribute forcing Unity to auto-attach needed components." data-diff="Guarantees physics tools exist so script never crashes."><strong>RequireComponent:</strong></span> Automatically adding required physics tools</li>
-                                    <li><span class="term-tip" data-title="Root vs Child" data-desc="Hierarchy parenting separating physics from visuals." data-diff="Root moves & collides; Child animates & rotates."><strong>Root vs Child:</strong></span> Keeping invisible hitboxes separate from character pictures</li>
-                                    <li><strong>Finding Objects:</strong> How scripts safely communicate</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content-card">
-                            <div class="card-title" style="color:#ffffff;">Gameplay Elements & Reference</div>
-                            <div class="card-body">
-                                <ul>
-                                    <li><strong>Smooth Camera:</strong> Setting up <span class="term-tip" data-title="Cinemachine" data-desc="Smart camera suite tracking player automatically." data-diff="Smooth follow with zero math code."><strong>Cinemachine</strong></span> to follow the player</li>
-                                    <li><strong>Prefabs:</strong> Making master templates (<span class="term-tip" data-title="Prefabs" data-desc="Reusable master template assets." data-diff="Editing template updates all scene copies."><strong>Prefabs</strong></span>) for reusable coins and enemies</li>
-                                    <li><strong>Collectibles:</strong> Making coins disappear and score points on touch</li>
-                                    <li><strong>Appendix:</strong> Unity manual, video tutorials & Discord help</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            // Slide 14: Component-Based Workflow
+            // Slide 12: Component-Based Workflow
             {
                 title: "Automatic Component Safety",
                 content: `
