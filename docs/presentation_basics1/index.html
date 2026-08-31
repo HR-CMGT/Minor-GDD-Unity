@@ -2127,11 +2127,21 @@ controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt
                                 <div class="card-title core">Workshop Goals (4 Milestones)</div>
                                 <div class="card-body">
                                     <ol style="padding-left: 18px;">
-                                        <li><strong>Make Player Move:</strong> Attach script for arrow keys & jump.</li>
+                                        <li><strong>Make Player Move:</strong> Code <code>Move()</code>, <code>Jump()</code>, and <code>ResetPlayer()</code>.</li>
                                         <li><strong>Add Camera Follow:</strong> Create <span class="term-tip" data-title="Cinemachine" data-desc="Smart camera suite tracking player automatically." data-diff="Smooth follow with zero math code."><strong>Cinemachine camera</strong></span>.</li>
                                         <li><strong>Place Collectibles:</strong> Place coin <span class="term-tip" data-title="Prefabs" data-desc="Reusable master template assets." data-diff="Edit once to update all copies in level."><strong>prefabs</strong></span> with <span class="term-tip" data-title="Is Trigger" data-desc="Collider mode that turns off solid walls so player passes through." data-diff="vs Solid Collider: Triggers fire pickup events without blocking."><code><strong>Is Trigger</strong></code></span> checked.</li>
                                         <li><strong>Playtest & Tune:</strong> Jump, run, and collect all coins!</li>
                                     </ol>
+                                </div>
+                            </div>
+                            <div class="content-card primary">
+                                <div class="card-title core">Fall Reset Code (PlayerStart.cs)</div>
+                                <div class="code-box">
+                                    <pre>private void ResetPlayer() {
+    rb.MovePosition(startPosition);
+    rb.linearVelocity = Vector2.zero; // Stop momentum
+}</pre>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                             </div>
                         </div>
@@ -2286,15 +2296,25 @@ rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Movement Code with <span class="term-tip" data-title="Vector2(X, Y)" data-desc="Pair of numbers representing 2D direction/speed." data-diff="X = Left/Right speed, Y = Up/Down jump force.">Vector2</span> (<span class="term-tip" data-title="linearVelocity" data-desc="Unity 6 physics velocity property in units per second." data-diff="vs .velocity: Unity 6 replaced legacy .velocity with linearVelocity.">linearVelocity</span>)</div>
+                                <div class="card-title core">Player Movement & Jump Code (PlayerStart.cs)</div>
                                 <div class="code-box">
-                                    <pre>// FixedUpdate: moveInput & jumpRequested from PlayerInput
-// Unity 6 linearVelocity (formerly .velocity)
-rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+                                    <pre>// 1. Move method (called from FixedUpdate)
+private void Move(float directionX) {
+    if (directionX != 0) {
+        rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
+    } else {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
+    }
+}
 
-if (jumpRequested) {
-    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-    jumpRequested = false;
+// 2. Jump method with AddForce & Audio
+private void Jump() {
+    if (CheckGrounded()) {
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        if (currentSoundSource != null && jumpSound != null) {
+            currentSoundSource.PlayOneShot(jumpSound);
+        }
+    }
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
@@ -2672,31 +2692,46 @@ public class PlayerController2D : MonoBehaviour {
             },
             // Slide 18: Coins & Destruction (Split Media Layout - 16:9 GIF)
             {
-                title: "Collecting Coins on Touch",
+                title: "Collisions & Triggers: Enemies & Coins",
                 content: `
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">The Coin Script (Coin.cs)</div>
+                                <div class="card-title core">Collisions & Pickups (PlayerStart.cs)</div>
                                 <div class="code-box">
-                                    <pre>public class Coin : MonoBehaviour {
-    private void <span class="term-tip" data-title="OnTriggerEnter2D" data-desc="Event function running when collider enters trigger." data-diff="vs OnCollisionEnter2D: Overlap event for pickups rather than solid physical bounce.">OnTriggerEnter2D</span>(Collider2D other) {
-        if (other.CompareTag("Player")) {
-            // Trigger fires because Player has Rigidbody2D!
-            <span class="term-tip" data-title="Destroy()" data-desc="Removes GameObject or component from memory." data-diff="vs SetActive(false): Completely deletes object rather than hiding it.">Destroy</span>(gameObject); // Coin disappears!
+                                    <pre>// 1. Hit Enemy (Solid Collision)
+private void OnCollisionEnter2D(Collision2D other) {
+    if (other.gameObject.CompareTag("Enemy")) {
+        Destroy(other.gameObject);
+        if (currentSoundSource != null && enemySound != null) {
+            currentSoundSource.PlayOneShot(enemySound);
         }
+    }
+}
+
+// 2. Collect Coin (Trigger Overlap)
+private void OnTriggerEnter2D(Collider2D collision) {
+    if (collision.CompareTag("Coin")) {
+        CollectCoin(collision.gameObject);
+    }
+}
+
+private void CollectCoin(GameObject coinGameObject) {
+    Destroy(coinGameObject);
+    if (currentSoundSource != null && coinSound != null) {
+        currentSoundSource.PlayOneShot(coinSound);
     }
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Trigger Checklist</div>
+                                <div class="card-title core">Collision vs Trigger Rules</div>
                                 <div class="card-body">
                                     <ul>
-                                        <li><strong>Check <span class="term-tip" data-title="Is Trigger" data-desc="Turns off solid walls so player passes through." data-diff="vs Solid Collider: Solid colliders bounce; Triggers fire pickup events."><code>Is Trigger</code></span> on Coin:</strong> Allows player to walk through the coin without bumping into a solid wall.</li>
-                                        <li><strong>Player has <span class="term-tip" data-title="Rigidbody2D Requirement" data-desc="At least one object must hold Rigidbody2D for OnTriggerEnter2D to fire." data-diff="Without Rigidbody2D, triggers will not detect overlap."><code>Rigidbody2D</code></span> + "Player" Tag:</strong> At least one object must have a <code>Rigidbody2D</code> for <code>OnTriggerEnter2D</code> to run!</li>
-                                        <li><em>Next lesson: We'll connect this to an on-screen score counter!</em></li>
+                                        <li><strong><span class="term-tip" data-title="OnCollisionEnter2D" data-desc="Fires when two solid colliders impact." data-diff="Solid walls & enemies that bump or block player movement.">OnCollisionEnter2D</span>:</strong> For solid enemies (<span class="term-tip" data-title="CompareTag" data-desc="Checks GameObject tag string efficiently without memory allocation." data-diff="Faster and safer than other.tag == 'Enemy'."><code>CompareTag("Enemy")</code></span>).</li>
+                                        <li><strong><span class="term-tip" data-title="OnTriggerEnter2D" data-desc="Fires when player passes through a trigger collider." data-diff="Collectibles, coins, zones without physical bouncing.">OnTriggerEnter2D</span>:</strong> For collectibles with <span class="term-tip" data-title="Is Trigger" data-desc="Turns off solid walls so player passes through." data-diff="Allows player to pick up coin without hitting a brick wall."><code>Is Trigger</code></span> checked.</li>
+                                        <li><strong>Audio Feedback:</strong> Uses <code>PlayOneShot(clip)</code> on <code>currentSoundSource</code>.</li>
                                     </ul>
                                 </div>
                             </div>
