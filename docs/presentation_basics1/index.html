@@ -2235,32 +2235,27 @@ git checkout -b feature/platformer-controller</pre>
             {
                 title: "Workshop Goals: 4 Clear Steps",
                 content: `
-                    <div class="split-media-layout">
-                        <div class="left-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">Workshop Goals (4 Milestones)</div>
-                                <div class="card-body">
-                                    <ol style="padding-left: 18px;">
-                                        <li><strong>Make Player Move:</strong> Code <code>Move()</code>, <code>Jump()</code>, and <code>ResetPlayer()</code>.</li>
-                                        <li><strong>Add Camera Follow:</strong> Create <span class="term-tip" data-title="Cinemachine" data-desc="Smart camera suite tracking player automatically." data-diff="Smooth follow with zero math code."><strong>Cinemachine camera</strong></span>.</li>
-                                        <li><strong>Place Collectibles:</strong> Place coin <span class="term-tip" data-title="Prefabs" data-desc="Reusable master template assets." data-diff="Edit once to update all copies in level."><strong>prefabs</strong></span> with <span class="term-tip" data-title="Is Trigger" data-desc="Collider mode that turns off solid walls so player passes through." data-diff="vs Solid Collider: Triggers fire pickup events without blocking."><code><strong>Is Trigger</strong></code></span> checked.</li>
-                                        <li><strong>Playtest & Tune:</strong> Jump, run, and collect all coins!</li>
-                                    </ol>
-                                </div>
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Workshop Goals (4 Milestones)</div>
+                            <div class="card-body">
+                                <ol style="padding-left: 22px;">
+                                    <li><strong>Make Player Move:</strong> Code <code>Move()</code>, <code>Jump()</code>, and <code>ResetPlayer()</code>.</li>
+                                    <li><strong>Add Camera Follow:</strong> Create <span class="term-tip" data-title="Cinemachine" data-desc="Smart camera suite tracking player automatically." data-diff="Smooth follow with zero math code."><strong>Cinemachine camera</strong></span>.</li>
+                                    <li><strong>Place Collectibles:</strong> Place coin <span class="term-tip" data-title="Prefabs" data-desc="Reusable master template assets." data-diff="Edit once to update all copies in level."><strong>prefabs</strong></span> with <span class="term-tip" data-title="Is Trigger" data-desc="Collider mode that turns off solid walls so player passes through." data-diff="vs Solid Collider: Triggers fire pickup events without blocking."><code><strong>Is Trigger</strong></code></span> checked.</li>
+                                    <li><strong>Playtest & Tune:</strong> Jump, run, and collect all coins!</li>
+                                </ol>
                             </div>
                         </div>
-                        <div class="right-column">
-                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
-                                <div class="card-title core" style="color: #059669;">Success Checklist</div>
-                                <div class="card-body">
-                                    <ul style="padding-left: 18px;">
-                                        <li><strong>Player moves</strong> left/right smoothly with arrow keys / A & D.</li>
-                                        <li><strong>Player jumps</strong> only when grounded on platforms.</li>
-                                        <li><strong>Camera follows</strong> player automatically with gentle damping glide.</li>
-                                        <li><strong>Coins disappear</strong> on touch with sound feedback.</li>
-                                        <li><strong>Pit fall reset:</strong> Falling off bottom resets player back to start!</li>
-                                    </ul>
-                                </div>
+                        <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
+                            <div class="card-title core" style="color: #059669;">Success Checklist</div>
+                            <div class="card-body">
+                                <ul style="padding-left: 22px;">
+                                    <li><strong>Player moves</strong> left/right smoothly with arrow keys / A & D.</li>
+                                    <li><strong>Player jumps</strong> only when grounded on platforms.</li>
+                                    <li><strong>Camera follows</strong> player automatically with gentle damping glide.</li>
+                                    <li><strong>Coins disappear</strong> on touch with sound feedback & pit fall resets to spawn!</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -2294,69 +2289,58 @@ git tag milestone-1-movement</pre>
             {
                 title: "Rigidbody2D: Giving Objects Gravity",
                 content: `
-                    <div class="split-media-layout">
-                        <div class="left-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">Essential Rigidbody2D Settings</div>
-                                <table class="dense-table">
-                                    <colgroup>
-                                        <col style="width: 34%;">
-                                        <col style="width: 24%;">
-                                        <col style="width: 42%;">
-                                    </colgroup>
-                                    <thead>
-                                        <tr>
-                                            <th>Setting</th>
-                                            <th>Value</th>
-                                            <th>What It Does</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><span class="term-tip" data-title="Body Type" data-desc="Defines how physics handles this object." data-diff="Dynamic = moves with gravity; Static = unmovable; Kinematic = script only."><strong>Body Type</strong></span></td>
-                                            <td><code>Dynamic</code></td>
-                                            <td>Enables gravity and physics collisions.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="term-tip" data-title="Collision Detection" data-desc="How physics checks for overlapping colliders." data-diff="Continuous checks full motion path; Discrete checks once per tick."><strong>Collision</strong></span></td>
-                                            <td><code>Continuous</code></td>
-                                            <td>Prevents high-speed tunneling through thin floors.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks rotation on the 2D plane." data-diff="Why needed: Keeps character upright so capsule collider never falls over."><strong>Freeze Rotation Z</strong></span></td>
-                                            <td><code>Checked</code></td>
-                                            <td>Locks 2D tilt so character never tips over.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="term-tip" data-title="Interpolate" data-desc="Smooths movement rendering between physics ticks." data-diff="Why needed: Eliminates visual micro-stutter on high refresh monitors."><strong>Interpolation</strong></span></td>
-                                            <td><code>Interpolate</code></td>
-                                            <td>Smooths movement on high-refresh 144Hz+ displays.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="term-tip" data-title="Gravity Scale" data-desc="Multiplier for gravity acceleration." data-diff="Default is 1; 3 creates snappy responsive platformer jump feel."><strong>Gravity Scale</strong></span></td>
-                                            <td><code>2.5 - 3.5</code></td>
-                                            <td>Gives snappy, responsive platformer jumps (no floatiness).</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Essential Rigidbody2D Settings</div>
+                            <table class="dense-table">
+                                <colgroup>
+                                    <col style="width: 25%;">
+                                    <col style="width: 22%;">
+                                    <col style="width: 53%;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Setting</th>
+                                        <th>Value</th>
+                                        <th>What It Does</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="term-tip" data-title="Body Type" data-desc="Defines how physics handles this object." data-diff="Dynamic = moves with gravity; Static = unmovable; Kinematic = script only."><strong>Body Type</strong></span></td>
+                                        <td><code>Dynamic</code></td>
+                                        <td>Enables gravity and physics collisions.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="term-tip" data-title="Collision Detection" data-desc="How physics checks for overlapping colliders." data-diff="Continuous checks full motion path; Discrete checks once per tick."><strong>Collision</strong></span></td>
+                                        <td><code>Continuous</code></td>
+                                        <td>Prevents high-speed tunneling through thin floors.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks rotation on the 2D plane." data-diff="Why needed: Keeps character upright so capsule collider never falls over."><strong>Freeze Rotation Z</strong></span></td>
+                                        <td><code>Checked</code></td>
+                                        <td>Locks 2D tilt so character never tips over.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="term-tip" data-title="Interpolate" data-desc="Smooths movement rendering between physics ticks." data-diff="Why needed: Eliminates visual micro-stutter on high refresh monitors."><strong>Interpolation</strong></span></td>
+                                        <td><code>Interpolate</code></td>
+                                        <td>Smooths movement on high-refresh 144Hz+ displays.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="term-tip" data-title="Gravity Scale" data-desc="Multiplier for gravity acceleration." data-diff="Default is 1; 3 creates snappy responsive platformer jump feel."><strong>Gravity Scale</strong></span></td>
+                                        <td><code>2.5 - 3.5</code></td>
+                                        <td>Gives snappy, responsive platformer jumps (no floatiness).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="right-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">Essential Rigidbody2D Checklist</div>
-                                <div class="card-body">
-                                    <ul style="padding-left: 18px;">
-                                        <li><strong>Body Type: Dynamic</strong> &mdash; Object falls with gravity and reacts to solid forces.</li>
-                                        <li><strong>Constraints: Freeze Rotation Z</strong> &mdash; <em>Crucial!</em> Keeps your character standing upright so they don't tip over and roll on the ground.</li>
-                                        <li><strong>Interpolate: Interpolate</strong> &mdash; Prevents physics jitter on 120Hz/144Hz high-refresh displays.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content-card primary" style="border-left-color: #f59e0b; background: #fffbeb;">
-                                <div class="card-title core" style="color: #d97706;">Play Mode Safety Tip</div>
-                                <div class="card-body">
-                                    Changes made while the game runs in Play Mode reset when stopped! Copy values during play &rarr; Stop &rarr; Paste Component Values.
-                                </div>
+                        <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
+                            <div class="card-title core" style="color: #059669;">Essential Setup Tips</div>
+                            <div class="card-body">
+                                <ul style="padding-left: 22px;">
+                                    <li><strong>Freeze Rotation Z:</strong> Crucial! Keeps your character standing upright so they don't tip over and roll on the ground.</li>
+                                    <li><strong>Play Mode Warning:</strong> Changes made while the game is running reset when stopped! Copy values &rarr; Stop &rarr; Paste Component Values.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -2390,59 +2374,31 @@ rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);</pre>
             {
                 title: "How to Move Your Character in Code",
                 content: `
-                    <div class="split-media-layout">
-                        <div class="left-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">1. Inside Move() &rarr; if (directionX != 0)</div>
-                                <div class="code-box">
-                                    <pre>rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">2. Inside Move() &rarr; else (Smooth Brake)</div>
-                                <div class="code-box">
-                                    <pre>rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">Physics Breakdown</div>
-                                <div class="card-body">
-                                    <ul>
-                                        <li><span class="term-tip" data-title="Vector2" data-desc="A pair of 2D numbers (X, Y)." data-diff="X = horizontal speed, Y = vertical jump speed."><strong>Vector2(X, Y):</strong></span> <code>X</code> sets left/right speed; <code>Y</code> preserves falling gravity.</li>
-                                        <li><span class="term-tip" data-title="linearVelocity" data-desc="Unity 6 physics velocity property." data-diff="Replaces legacy .velocity."><strong>linearVelocity:</strong></span> Modern Unity 6 property for glitch-free character movement.</li>
-                                    </ul>
-                                </div>
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">1. Horizontal Walking & Smooth Braking (Inside Move)</div>
+                            <div class="code-box">
+                                <pre>// Walk left/right (preserving gravity on Y)
+if (directionX != 0) {
+    rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
+} else {
+    // Smooth deceleration when keys released
+    rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
+}</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                             </div>
                         </div>
-                        <div class="right-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">3. Inside Jump() &rarr; if (CheckGrounded())</div>
-                                <div class="code-box">
-                                    <pre>rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-if (currentSoundSource != null && jumpSound != null) {
-    currentSoundSource.PlayOneShot(jumpSound);
-}</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">4. Inside ResetPlayer() (Fall Reset)</div>
-                                <div class="code-box">
-                                    <pre>rb.MovePosition(startPosition);
+                        <div class="content-card primary">
+                            <div class="card-title core">2. Jumping & Fall Reset (Inside Jump & ResetPlayer)</div>
+                            <div class="code-box">
+                                <pre>// Jump upward with instant impulse force
+rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+if (currentSoundSource != null && jumpSound != null) currentSoundSource.PlayOneShot(jumpSound);
+
+// Respawn: move position and cancel falling momentum
+rb.MovePosition(startPosition);
 rb.linearVelocity = Vector2.zero;</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
-                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
-                                <div class="card-title core" style="color: #059669;">Movement & Jump Tips</div>
-                                <div class="card-body">
-                                    <ul>
-                                        <li><strong>Impulse Force:</strong> <code>ForceMode2D.Impulse</code> gives instant jump snap.</li>
-                                        <li><strong>Zero Velocity on Reset:</strong> Prevents falling momentum continuing after respawn!</li>
-                                    </ul>
-                                </div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                             </div>
                         </div>
                     </div>
@@ -2824,55 +2780,27 @@ if (animator != null) {
             {
                 title: "Collisions & Triggers: Enemies & Coins",
                 content: `
-                    <div class="split-media-layout">
-                        <div class="left-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">1. Inside OnCollisionEnter2D() (Hit Enemy)</div>
-                                <div class="code-box">
-                                    <pre>if (other.gameObject.CompareTag("Enemy")) {
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">1. Enemy Collisions & Destruction (OnCollisionEnter2D)</div>
+                            <div class="code-box">
+                                <pre>// Solid collisions: bump enemies or destroy them on impact
+if (other.gameObject.CompareTag("Enemy")) {
     Destroy(other.gameObject);
-    if (currentSoundSource != null && enemySound != null) {
-        currentSoundSource.PlayOneShot(enemySound);
-    }
+    if (currentSoundSource != null && enemySound != null) currentSoundSource.PlayOneShot(enemySound);
 }</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">2. Inside OnTriggerEnter2D() (Detect Coin)</div>
-                                <div class="code-box">
-                                    <pre>if (collision.CompareTag("Coin")) {
-    CollectCoin(collision.gameObject);
-}</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
-                            </div>
-                            <div class="content-card primary">
-                                <div class="card-title core">3. Inside CollectCoin() (Pickup & Sound)</div>
-                                <div class="code-box">
-                                    <pre>Destroy(coinGameObject);
-if (currentSoundSource != null && coinSound != null) {
-    currentSoundSource.PlayOneShot(coinSound);
-}</pre>
-                                    <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
-                                </div>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                             </div>
                         </div>
-                        <div class="right-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">Collision vs Trigger Rules</div>
-                                <div class="card-body">
-                                    <ul style="padding-left: 18px;">
-                                        <li><strong><span class="term-tip" data-title="OnCollisionEnter2D" data-desc="Fires when two solid colliders impact." data-diff="Solid walls & enemies that bump or block player movement.">OnCollisionEnter2D</span>:</strong> For solid enemies (<span class="term-tip" data-title="CompareTag" data-desc="Checks GameObject tag string efficiently without memory allocation." data-diff="Faster and safer than other.tag == 'Enemy'."><code>CompareTag("Enemy")</code></span>). Physical impact occurs.</li>
-                                        <li><strong><span class="term-tip" data-title="OnTriggerEnter2D" data-desc="Fires when player passes through a trigger collider." data-diff="Collectibles, coins, zones without physical bouncing.">OnTriggerEnter2D</span>:</strong> For collectibles with <span class="term-tip" data-title="Is Trigger" data-desc="Turns off solid walls so player passes through." data-diff="Allows player to pick up coin without hitting a brick wall."><code>Is Trigger</code></span> checked. Pass-through overlap.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
-                                <div class="card-title core" style="color: #059669;">Audio Feedback Tip</div>
-                                <div class="card-body">
-                                    Always use <code>currentSoundSource.PlayOneShot(clip)</code> so sound plays cleanly without cutting off background music.
-                                </div>
+                        <div class="content-card primary">
+                            <div class="card-title core">2. Coin Pickups & Sound Feedback (OnTriggerEnter2D)</div>
+                            <div class="code-box">
+                                <pre>// Trigger overlap: pass-through coin pickup with audio
+if (collision.CompareTag("Coin")) {
+    Destroy(collision.gameObject);
+    if (currentSoundSource != null && coinSound != null) currentSoundSource.PlayOneShot(coinSound);
+}</pre>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                             </div>
                         </div>
                     </div>
@@ -2991,62 +2919,51 @@ coinPool.Release(gameObject); // Recycles instead of Destroy()</pre>
             {
                 title: "Quick Fix Guide & Getting Help",
                 content: `
-                    <div class="split-media-layout">
-                        <div class="left-column">
-                            <div class="content-card primary">
-                                <div class="card-title core">Common Troubleshooting Guide</div>
-                                <table class="dense-table">
-                                    <colgroup>
-                                        <col style="width: 38%;">
-                                        <col style="width: 62%;">
-                                    </colgroup>
-                                    <thead>
-                                        <tr>
-                                            <th>Common Problem</th>
-                                            <th>How to Fix It</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Player falls through floor</strong></td>
-                                            <td>Add a <span class="term-tip" data-title="BoxCollider2D" data-desc="Rectangular 2D collision boundary." data-diff="vs CircleCollider2D: Fits flat platforms; Circle fits round balls."><code>BoxCollider2D</code></span> to the floor.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Character tips over on slopes</strong></td>
-                                            <td>Check <span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks tilt on the 2D plane." data-diff="Keeps capsule upright on slopes."><code>Freeze Rotation Z</code></span> in Rigidbody2D.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Keys do not move character</strong></td>
-                                            <td>Attach the <span class="term-tip" data-title="PlayerInput" data-desc="Unity New Input System component mapping keys to actions." data-diff="vs Input.GetKey: Maps keys, gamepads, and touch through one clean system."><code>PlayerInput</code></span> component.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Coins do not collect</strong></td>
-                                            <td>Check <span class="term-tip" data-title="Is Trigger" data-desc="Pass-through collider mode." data-diff="Fires pickup event."><code>Is Trigger</code></span> on coin collider.</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Camera does not follow</strong></td>
-                                            <td>Drag <code>Player_Start</code> to <strong>Tracking Target</strong>.</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div>
+                    <div class="content-stack">
+                        <div class="content-card primary">
+                            <div class="card-title core">Common Troubleshooting Guide</div>
+                            <table class="dense-table">
+                                <colgroup>
+                                    <col style="width: 38%;">
+                                    <col style="width: 62%;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Common Problem</th>
+                                        <th>How to Fix It</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Player falls through floor</strong></td>
+                                        <td>Add a <span class="term-tip" data-title="BoxCollider2D" data-desc="Rectangular 2D collision boundary." data-diff="vs CircleCollider2D: Fits flat platforms; Circle fits round balls."><code>BoxCollider2D</code></span> to the floor.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Character tips over on slopes</strong></td>
+                                        <td>Check <span class="term-tip" data-title="Freeze Rotation Z" data-desc="Locks tilt on the 2D plane." data-diff="Keeps capsule upright on slopes."><code>Freeze Rotation Z</code></span> in Rigidbody2D.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Keys do not move character</strong></td>
+                                        <td>Attach the <span class="term-tip" data-title="PlayerInput" data-desc="Unity New Input System component mapping keys to actions." data-diff="vs Input.GetKey: Maps keys, gamepads, and touch through one clean system."><code>PlayerInput</code></span> component.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Coins do not collect</strong></td>
+                                        <td>Check <span class="term-tip" data-title="Is Trigger" data-desc="Pass-through collider mode." data-diff="Fires pickup event."><code>Is Trigger</code></span> on coin collider.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Camera does not follow</strong></td>
+                                        <td>Drag <code>Player_Start</code> to <strong>Tracking Target</strong>.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="right-column">
-                            <div class="content-card primary" style="border-left-color: #0284c7; background: #f0f9ff;">
-                                <div class="card-title core" style="color: #0284c7;">Need Live Support?</div>
-                                <div class="card-body">
-                                    <ul style="padding-left: 18px;">
-                                        <li><strong>Official Discord:</strong> Post in <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a> for live teacher & peer support!</li>
-                                        <li><strong>Fast Fixes:</strong> When asking for help, include a screenshot of your <strong>Inspector</strong> and the <strong>Console error message</strong>.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="content-card primary" style="border-left-color: #059669; background: #ecfdf5;">
-                                <div class="card-title core" style="color: #059669;">Pro Tip: Debugging in Console</div>
-                                <div class="card-body">
-                                    Use <code>Debug.Log("Jumped!");</code> inside your functions to verify in the Console that key presses are triggering!
-                                </div>
+                        <div class="content-card primary" style="border-left-color: #0284c7; background: #f0f9ff;">
+                            <div class="card-title core" style="color: #0284c7;">Need Live Support?</div>
+                            <div class="card-body">
+                                <ul style="padding-left: 22px;">
+                                    <li><strong>Official Discord:</strong> Post in <a class="slide-url" href="https://discord.gg" target="_blank" rel="noopener noreferrer"><strong>#dev-help</strong></a> for live teacher & peer support!</li>
+                                    <li><strong>Fast Fixes:</strong> When asking for help, include a screenshot of your <strong>Inspector</strong> and the <strong>Console error message</strong>.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
