@@ -4,7 +4,17 @@ Tested, modern, and high-performance C# code snippets for common game engineerin
 
 ## 1. Class 1: PlayerStart.cs Workshop Methods
 
-Complete, copy-ready implementations for the 5 methods in `PlayerStart.cs` (`basics1.unitypackage`):
+Official Unity 6 API documentation reference links for `PlayerStart.cs`:
+- Jump: [Rigidbody2D.AddForce](https://docs.unity3d.com/ScriptReference/Rigidbody2D.AddForce.html)
+- Move: [Rigidbody2D.linearVelocity](https://docs.unity3d.com/ScriptReference/Rigidbody2D-linearVelocity.html)
+- ResetPlayer: [Rigidbody2D.MovePosition](https://docs.unity3d.com/ScriptReference/Rigidbody2D.MovePosition.html)
+- OnCollisionEnter2D: [MonoBehaviour.OnCollisionEnter2D](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnCollisionEnter2D.html)
+- OnTriggerEnter2D: [MonoBehaviour.OnTriggerEnter2D](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnTriggerEnter2D.html)
+- CollectCoin: [Object.Destroy](https://docs.unity3d.com/ScriptReference/Object.Destroy.html)
+- Audio: [AudioSource.PlayOneShot](https://docs.unity3d.com/ScriptReference/AudioSource.PlayOneShot.html)
+- Triggers: [CircleCollider2D Is Trigger](https://docs.unity3d.com/Manual/class-CircleCollider2D.html)
+
+Complete, copy-ready implementations for the 5 methods in `PlayerStart.cs`:
 
 ```csharp
 // 1. Move (called from FixedUpdate)
