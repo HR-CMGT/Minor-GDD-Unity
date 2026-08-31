@@ -1468,7 +1468,7 @@
         }
 
         /* ==========================================================================
-           LAB MODE SPECIFIC STYLING (Clean Vertical Reading & Smooth Natural Scrolling)
+           LAB MODE (Self-Paced Learning Mode: Balanced Proportions & Filled Canvas)
            ========================================================================== */
         body.lab-mode .slide-viewport {
             overflow: hidden;
@@ -1478,9 +1478,9 @@
             overflow-y: auto !important;
             display: flex !important;
             flex-direction: column !important;
-            justify-content: flex-start !important;
-            gap: 16px !important;
-            padding: 24px 32px !important;
+            justify-content: space-between !important;
+            gap: 1.4cqh !important;
+            padding: 2.2cqh 2.8cqw !important;
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             box-sizing: border-box;
@@ -1504,96 +1504,102 @@
         body.lab-mode .slide-content-area {
             display: flex !important;
             flex-direction: column !important;
-            gap: 16px !important;
-            height: auto !important;
-            min-height: auto !important;
-            max-height: none !important;
+            gap: 1.4cqh !important;
+            height: 100% !important;
+            min-height: 0 !important;
+            max-height: 100% !important;
+            flex: 1 1 auto !important;
+            justify-content: space-between !important;
             overflow: visible !important;
-            flex: 0 0 auto !important;
         }
 
         body.lab-mode .content-stack {
             display: flex !important;
             flex-direction: column !important;
-            gap: 14px !important;
-            height: auto !important;
+            gap: 1.4cqh !important;
+            height: 100% !important;
+            flex: 1 1 auto !important;
+            justify-content: space-between !important;
             overflow: visible !important;
-            flex: 0 0 auto !important;
-            justify-content: flex-start !important;
         }
 
         body.lab-mode .split-media-layout {
             display: grid !important;
             grid-template-columns: 1fr 1fr !important;
-            gap: 20px !important;
-            height: auto !important;
-            min-height: auto !important;
+            gap: 1.8cqw !important;
+            height: 100% !important;
+            min-height: 0 !important;
+            flex: 1 1 auto !important;
+            align-items: stretch !important;
             overflow: visible !important;
-            align-items: start !important;
-            flex: 0 0 auto !important;
         }
 
         body.lab-mode .split-media-layout .left-column,
         body.lab-mode .split-media-layout .right-column {
             display: flex !important;
             flex-direction: column !important;
-            gap: 14px !important;
-            height: auto !important;
+            gap: 1.2cqh !important;
+            height: 100% !important;
+            min-height: 0 !important;
+            justify-content: space-between !important;
             overflow: visible !important;
             width: 100% !important;
         }
 
         body.lab-mode .content-card {
-            padding: 16px 20px !important;
-            border-radius: 8px !important;
+            padding: 1.8cqh 2.2cqw !important;
+            border-radius: 10px !important;
+            flex: 1 1 auto !important;
             height: auto !important;
-            min-height: auto !important;
-            flex: 0 0 auto !important;
+            min-height: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
             overflow: visible !important;
         }
 
         body.lab-mode .card-title {
-            font-size: 1.05rem !important;
-            margin-bottom: 6px !important;
-            font-weight: 800 !important;
+            font-size: clamp(1.10rem, 2.6cqh, 1.60rem) !important;
+            margin-bottom: 0.5cqh !important;
+            font-weight: 900 !important;
         }
 
         body.lab-mode .card-body {
-            font-size: 0.94rem !important;
+            font-size: clamp(0.95rem, 2.2cqh, 1.35rem) !important;
             line-height: 1.55 !important;
         }
 
         body.lab-mode pre {
-            font-size: 0.88rem !important;
-            padding: 10px 14px !important;
-            line-height: 1.42 !important;
+            font-size: clamp(0.85rem, 2.0cqh, 1.20rem) !important;
+            padding: 0.8cqh 1.2cqw !important;
+            line-height: 1.40 !important;
             overflow-x: auto;
         }
 
         body.lab-mode table.dense-table th {
-            font-size: 0.86rem !important;
-            padding: 6px 10px !important;
+            font-size: clamp(0.85rem, 1.95cqh, 1.15rem) !important;
+            padding: 0.6cqh 0.9cqw !important;
         }
 
         body.lab-mode table.dense-table td {
-            font-size: 0.84rem !important;
-            padding: 6px 10px !important;
+            font-size: clamp(0.82rem, 1.85cqh, 1.10rem) !important;
+            padding: 0.6cqh 0.9cqw !important;
         }
 
         body.lab-mode details.tier-accordion {
-            margin-top: 10px !important;
+            margin-top: 0.6cqh !important;
             border-radius: 8px !important;
             flex-shrink: 0 !important;
         }
 
         body.lab-mode summary.accordion-header {
-            font-size: 0.95rem !important;
-            padding: 8px 14px !important;
+            font-size: clamp(0.92rem, 2.1cqh, 1.25rem) !important;
+            padding: 0.7cqh 1.4cqw !important;
         }
 
         body.lab-mode .accordion-body {
-            font-size: 0.88rem !important;
-            padding: 12px 16px !important;
+            font-size: clamp(0.86rem, 1.95cqh, 1.18rem) !important;
+            padding: 1.0cqh 1.6cqw !important;
             line-height: 1.5 !important;
         }
 
