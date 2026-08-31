@@ -14,75 +14,47 @@ Official Unity 6 API documentation reference links for `PlayerStart.cs`:
 - Audio: [AudioSource.PlayOneShot](https://docs.unity3d.com/ScriptReference/AudioSource.PlayOneShot.html)
 - Triggers: [CircleCollider2D Is Trigger](https://docs.unity3d.com/Manual/class-CircleCollider2D.html)
 
-Complete, copy-ready implementations for the 5 methods in `PlayerStart.cs`:
+### Option A: Lines to Paste Directly Inside Existing Methods
 
 ```csharp
-// 1. Move (called from FixedUpdate)
-private void Move(float directionX)
+// 1. Paste inside: Move(float directionX) -> if (directionX != 0) { ... }
+rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
+
+// 2. Paste inside: Move(float directionX) -> else { ... }
+rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
+
+// 3. Paste inside: Jump() -> if (CheckGrounded()) { ... }
+rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+if (currentSoundSource != null && jumpSound != null)
 {
-    if (directionX != 0)
+    currentSoundSource.PlayOneShot(jumpSound);
+}
+
+// 4. Paste inside: ResetPlayer() { ... }
+rb.MovePosition(startPosition);
+rb.linearVelocity = Vector2.zero; // Stop momentum
+
+// 5. Paste inside: OnCollisionEnter2D(Collision2D other) { ... }
+if (other.gameObject.CompareTag("Enemy"))
+{
+    Destroy(other.gameObject);
+    if (currentSoundSource != null && enemySound != null)
     {
-        // Move horizontally using walkSpeed; maintain current vertical velocity for gravity
-        rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
-    }
-    else
-    {
-        // Smooth braking deceleration when no input is pressed
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
+        currentSoundSource.PlayOneShot(enemySound);
     }
 }
 
-// 2. Jump (triggered via InputHandler event)
-private void Jump()
+// 6. Paste inside: OnTriggerEnter2D(Collider2D collision) { ... }
+if (collision.CompareTag("Coin"))
 {
-    if (CheckGrounded())
-    {
-        // Apply vertical impulse force
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-
-        if (currentSoundSource != null && jumpSound != null)
-        {
-            currentSoundSource.PlayOneShot(jumpSound);
-        }
-    }
+    CollectCoin(collision.gameObject);
 }
 
-// 3. ResetPlayer (called when falling off bottom of level)
-private void ResetPlayer()
+// 7. Paste inside: CollectCoin(GameObject coinGameObject) { ... }
+Destroy(coinGameObject);
+if (currentSoundSource != null && coinSound != null)
 {
-    rb.MovePosition(startPosition);
-    rb.linearVelocity = Vector2.zero; // Stop all falling momentum
-}
-
-// 4. OnCollisionEnter2D (Solid Enemy Impact)
-private void OnCollisionEnter2D(Collision2D other)
-{
-    if (other.gameObject.CompareTag("Enemy"))
-    {
-        Destroy(other.gameObject);
-        if (currentSoundSource != null && enemySound != null)
-        {
-            currentSoundSource.PlayOneShot(enemySound);
-        }
-    }
-}
-
-// 5. OnTriggerEnter2D & CollectCoin (Coin Pickups)
-private void OnTriggerEnter2D(Collider2D collision)
-{
-    if (collision.CompareTag("Coin"))
-    {
-        CollectCoin(collision.gameObject);
-    }
-}
-
-private void CollectCoin(GameObject coinGameObject)
-{
-    Destroy(coinGameObject);
-    if (currentSoundSource != null && coinSound != null)
-    {
-        currentSoundSource.PlayOneShot(coinSound);
-    }
+    currentSoundSource.PlayOneShot(coinSound);
 }
 ```
 

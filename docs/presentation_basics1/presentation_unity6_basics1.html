@@ -2135,12 +2135,11 @@ controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue&lt;Vector2&gt
                                 </div>
                             </div>
                             <div class="content-card primary">
-                                <div class="card-title core">Fall Reset Code (PlayerStart.cs)</div>
+                                <div class="card-title core">Code to Paste Inside ResetPlayer()</div>
                                 <div class="code-box">
-                                    <pre>private void ResetPlayer() {
-    rb.MovePosition(startPosition);
-    rb.linearVelocity = Vector2.zero; // Stop momentum
-}</pre>
+                                    <pre>// Paste inside: ResetPlayer() { ... }
+rb.MovePosition(startPosition);
+rb.linearVelocity = Vector2.zero; // Stop falling momentum</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
                             </div>
@@ -2296,25 +2295,18 @@ rb.linearVelocity = new Vector2(rb.linearVelocity.x, clampedY);</pre>
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Player Movement & Jump Code (PlayerStart.cs)</div>
+                                <div class="card-title core">Code to Paste Inside Move() and Jump()</div>
                                 <div class="code-box">
-                                    <pre>// 1. Move method (called from FixedUpdate)
-private void Move(float directionX) {
-    if (directionX != 0) {
-        rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
-    } else {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
-    }
-}
+                                    <pre>// Paste inside: Move(float directionX) -> if (directionX != 0) { ... }
+rb.linearVelocity = new Vector2(directionX * walkSpeed, rb.linearVelocity.y);
 
-// 2. Jump method with AddForce & Audio
-private void Jump() {
-    if (CheckGrounded()) {
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        if (currentSoundSource != null && jumpSound != null) {
-            currentSoundSource.PlayOneShot(jumpSound);
-        }
-    }
+// Paste inside: Move(float directionX) -> else { ... }
+rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y);
+
+// Paste inside: Jump() -> if (CheckGrounded()) { ... }
+rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+if (currentSoundSource != null && jumpSound != null) {
+    currentSoundSource.PlayOneShot(jumpSound);
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
@@ -2697,30 +2689,25 @@ public class PlayerController2D : MonoBehaviour {
                     <div class="split-media-layout">
                         <div class="left-column">
                             <div class="content-card primary">
-                                <div class="card-title core">Collisions & Pickups (PlayerStart.cs)</div>
+                                <div class="card-title core">Code to Paste Inside Collisions & Pickups</div>
                                 <div class="code-box">
-                                    <pre>// 1. Hit Enemy (Solid Collision)
-private void OnCollisionEnter2D(Collision2D other) {
-    if (other.gameObject.CompareTag("Enemy")) {
-        Destroy(other.gameObject);
-        if (currentSoundSource != null && enemySound != null) {
-            currentSoundSource.PlayOneShot(enemySound);
-        }
+                                    <pre>// Paste inside: OnCollisionEnter2D(Collision2D other) { ... }
+if (other.gameObject.CompareTag("Enemy")) {
+    Destroy(other.gameObject);
+    if (currentSoundSource != null && enemySound != null) {
+        currentSoundSource.PlayOneShot(enemySound);
     }
 }
 
-// 2. Collect Coin (Trigger Overlap)
-private void OnTriggerEnter2D(Collider2D collision) {
-    if (collision.CompareTag("Coin")) {
-        CollectCoin(collision.gameObject);
-    }
+// Paste inside: OnTriggerEnter2D(Collider2D collision) { ... }
+if (collision.CompareTag("Coin")) {
+    CollectCoin(collision.gameObject);
 }
 
-private void CollectCoin(GameObject coinGameObject) {
-    Destroy(coinGameObject);
-    if (currentSoundSource != null && coinSound != null) {
-        currentSoundSource.PlayOneShot(coinSound);
-    }
+// Paste inside: CollectCoin(GameObject coinGameObject) { ... }
+Destroy(coinGameObject);
+if (currentSoundSource != null && coinSound != null) {
+    currentSoundSource.PlayOneShot(coinSound);
 }</pre>
                                     <button class="copy-btn" onclick="copyCode(this)">Copy C#</button>
                                 </div>
