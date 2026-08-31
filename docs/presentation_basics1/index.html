@@ -1563,64 +1563,93 @@
             flex-shrink: 0;
         }
 
-        /* Bottom Navigation Bar */
+        /* ==========================================================================
+           BOTTOM NAVIGATION BAR
+           ========================================================================== */
         .bottom-bar {
-            height: 46px;
-            background: #141418;
-            border-top: 1px solid #24242e;
+            height: 48px;
+            background: #0f1117;
+            border-top: 1px solid #1f2430;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 16px;
             z-index: 100;
             flex-shrink: 0;
+            white-space: nowrap;
+            gap: 12px;
+        }
+
+        .bottom-bar button {
+            font-family: inherit;
         }
 
         .nav-btn {
-            background: #1e293b;
-            color: #f1f5f9;
-            border: 1px solid #334155;
-            padding: 5px 14px;
-            border-radius: 6px;
+            background: #1e2536 !important;
+            color: #e2e8f0 !important;
+            border: 1px solid #334155 !important;
+            padding: 6px 14px !important;
+            border-radius: 6px !important;
             cursor: pointer;
             font-weight: 700;
             font-size: 0.8rem;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .nav-btn:hover:not(:disabled) { background: #334155; border-color: #475569; }
-        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .nav-btn:hover:not(:disabled) { 
+            background: #2e3b55 !important; 
+            border-color: #475569 !important; 
+            color: #ffffff !important;
+        }
+        .nav-btn:disabled { 
+            opacity: 0.35 !important; 
+            cursor: not-allowed; 
+        }
 
         /* View Mode Toggle Pill in Bottom Bar */
         .viewmode-toggle {
-            display: flex;
+            display: inline-flex !important;
             align-items: center;
-            background: #1a1a22;
-            border: 1px solid #2e2e3e;
+            background: #141824;
+            border: 1px solid #28334a;
             border-radius: 6px;
             overflow: hidden;
+            white-space: nowrap;
         }
 
         .viewmode-btn {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            padding: 5px 14px;
+            background: transparent !important;
+            border: none !important;
+            color: #94a3b8 !important;
+            padding: 6px 14px !important;
             font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
         }
 
         .viewmode-btn.active {
-            background: #334155;
-            color: #ffffff;
+            background: #334155 !important;
+            color: #ffffff !important;
+        }
+
+        .viewmode-btn:hover:not(.active) {
+            color: #f1f5f9 !important;
+            background: rgba(255, 255, 255, 0.05) !important;
         }
 
         .slide-counter {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: #94a3b8;
+            white-space: nowrap;
         }
 
         /* Floating Little Orange Dot Counter (Locked to Slide Canvas Bottom-Middle) */
@@ -1672,54 +1701,55 @@
 
         /* Teacher Clear Flags Button (Shown in Lecture Mode when flags present) */
         .btn-clear-flags {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid #f59e0b;
-            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.15) !important;
+            border: 1px solid #f59e0b !important;
+            color: #f59e0b !important;
             font-size: 0.72rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.4px;
-            padding: 5px 12px;
-            border-radius: 6px;
+            padding: 6px 12px !important;
+            border-radius: 6px !important;
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
             display: none;
+            white-space: nowrap;
         }
 
         .btn-clear-flags:hover {
-            background: #f59e0b;
-            color: #000000;
+            background: #f59e0b !important;
+            color: #000000 !important;
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
         }
 
-        body.projector-mode .btn-clear-flags.visible { display: inline-block !important; }
+        body.projector-mode .btn-clear-flags.visible { display: inline-flex !important; }
         body:not(.projector-mode) .btn-clear-flags { display: none !important; }
 
         /* Clean Student Flag Button with Light Dot (Shown in Lab Mode) */
         .btn-flag-pace {
-            display: inline-flex;
+            display: inline-flex !important;
             align-items: center;
             gap: 7px;
-            background: #141a29;
-            border: 1px solid #243049;
-            color: #cbd5e1;
+            background: #141a29 !important;
+            border: 1px solid #243049 !important;
+            color: #cbd5e1 !important;
             font-size: 0.74rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.4px;
-            padding: 5px 12px;
-            border-radius: 6px;
+            padding: 6px 12px !important;
+            border-radius: 6px !important;
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
-            display: none;
+            white-space: nowrap;
         }
 
         .btn-flag-pace:hover {
-            border-color: #f59e0b;
-            color: #ffffff;
-            background: #1a233a;
+            border-color: #f59e0b !important;
+            color: #ffffff !important;
+            background: #1a233a !important;
         }
 
         .flag-dot {
@@ -1731,9 +1761,9 @@
         }
 
         .btn-flag-pace.active {
-            border-color: #f59e0b;
-            color: #ffffff;
-            background: #1e2638;
+            border-color: #f59e0b !important;
+            color: #ffffff !important;
+            background: #1e2638 !important;
         }
 
         .btn-flag-pace.active .flag-dot {
