@@ -1,0 +1,233 @@
+[
+  {
+    "slide": 1,
+    "filename": "slide_01_img_01.jpeg",
+    "width": 967,
+    "height": 544,
+    "ext": "jpeg"
+  },
+  {
+    "slide": 1,
+    "filename": "slide_01_img_02.png",
+    "width": 256,
+    "height": 27,
+    "ext": "png"
+  },
+  {
+    "slide": 4,
+    "filename": "slide_04_img_01.png",
+    "width": 124,
+    "height": 149,
+    "ext": "png"
+  },
+  {
+    "slide": 4,
+    "filename": "slide_04_img_02.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 5,
+    "filename": "slide_05_img_01.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 5,
+    "filename": "slide_05_img_02.png",
+    "width": 124,
+    "height": 149,
+    "ext": "png"
+  },
+  {
+    "slide": 6,
+    "filename": "slide_06_img_01.png",
+    "width": 602,
+    "height": 171,
+    "ext": "png"
+  },
+  {
+    "slide": 6,
+    "filename": "slide_06_img_02.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 6,
+    "filename": "slide_06_img_03.png",
+    "width": 232,
+    "height": 34,
+    "ext": "png"
+  },
+  {
+    "slide": 6,
+    "filename": "slide_06_img_04.png",
+    "width": 124,
+    "height": 149,
+    "ext": "png"
+  },
+  {
+    "slide": 7,
+    "filename": "slide_07_img_01.png",
+    "width": 308,
+    "height": 164,
+    "ext": "png"
+  },
+  {
+    "slide": 7,
+    "filename": "slide_07_img_02.png",
+    "width": 265,
+    "height": 164,
+    "ext": "png"
+  },
+  {
+    "slide": 8,
+    "filename": "slide_08_img_01.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 10,
+    "filename": "slide_10_img_01.png",
+    "width": 502,
+    "height": 151,
+    "ext": "png"
+  },
+  {
+    "slide": 11,
+    "filename": "slide_11_img_01.png",
+    "width": 502,
+    "height": 151,
+    "ext": "png"
+  },
+  {
+    "slide": 12,
+    "filename": "slide_12_img_01.png",
+    "width": 505,
+    "height": 237,
+    "ext": "png"
+  },
+  {
+    "slide": 13,
+    "filename": "slide_13_img_01.png",
+    "width": 346,
+    "height": 178,
+    "ext": "png"
+  },
+  {
+    "slide": 13,
+    "filename": "slide_13_img_02.png",
+    "width": 303,
+    "height": 106,
+    "ext": "png"
+  },
+  {
+    "slide": 13,
+    "filename": "slide_13_img_03.png",
+    "width": 439,
+    "height": 175,
+    "ext": "png"
+  },
+  {
+    "slide": 16,
+    "filename": "slide_16_img_01.png",
+    "width": 549,
+    "height": 99,
+    "ext": "png"
+  },
+  {
+    "slide": 16,
+    "filename": "slide_16_img_02.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 16,
+    "filename": "slide_16_img_03.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 17,
+    "filename": "slide_17_img_01.png",
+    "width": 521,
+    "height": 323,
+    "ext": "png"
+  },
+  {
+    "slide": 18,
+    "filename": "slide_18_img_01.png",
+    "width": 546,
+    "height": 198,
+    "ext": "png"
+  },
+  {
+    "slide": 18,
+    "filename": "slide_18_img_02.png",
+    "width": 306,
+    "height": 105,
+    "ext": "png"
+  },
+  {
+    "slide": 18,
+    "filename": "slide_18_img_03.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 19,
+    "filename": "slide_19_img_01.png",
+    "width": 124,
+    "height": 149,
+    "ext": "png"
+  },
+  {
+    "slide": 19,
+    "filename": "slide_19_img_02.png",
+    "width": 120,
+    "height": 116,
+    "ext": "png"
+  },
+  {
+    "slide": 19,
+    "filename": "slide_19_img_03.png",
+    "width": 416,
+    "height": 120,
+    "ext": "png"
+  },
+  {
+    "slide": 19,
+    "filename": "slide_19_img_04.png",
+    "width": 327,
+    "height": 106,
+    "ext": "png"
+  },
+  {
+    "slide": 19,
+    "filename": "slide_19_img_05.png",
+    "width": 411,
+    "height": 158,
+    "ext": "png"
+  },
+  {
+    "slide": 22,
+    "filename": "slide_22_img_01.png",
+    "width": 467,
+    "height": 373,
+    "ext": "png"
+  },
+  {
+    "slide": 23,
+    "filename": "slide_23_img_01.png",
+    "width": 531,
+    "height": 325,
+    "ext": "png"
+  }
+]
