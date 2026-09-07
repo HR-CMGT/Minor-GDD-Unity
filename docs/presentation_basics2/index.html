@@ -7,6 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Lesson 02: Basics 2 (Unity 6) • HR Minor GDD</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
 
         :root {
@@ -2117,7 +2118,7 @@
     "title": "Practice Challenge 1: The Stomp & Tag Test",
     "origImg": "original_slides/slide_08.png",
     "notes": "Give students 5 minutes to test this in Unity. Emphasize realizing WHAT to use: CompareTag or TryGetComponent to identify the object, and normal.y > 0.5f to detect the stomp from above. Walk around and answer questions.",
-    "content": "\n    <div class=\"split-media-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">[5-MIN CHALLENGE] Put Part 1 Into Practice</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0 0 8px 0; font-weight: 700; color: #0284c7;\">\n                        Goal: When Player bumps into an object, detect if it is an Enemy and check if it was a stomp!\n                    </p>\n                    <ul style=\"padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;\">\n                        <li><strong>Step 1:</strong> In <code>OnCollisionEnter2D(Collision2D other)</code>, check if the touched object is tagged <code>\"Enemy\"</code> OR has an <code>Enemy</code> component.</li>\n                        <li><strong>Step 2:</strong> Check impact direction: if <code>other.GetContact(0).normal.y > 0.5f</code>, print <code>\"Squashed Enemy!\"</code>. Otherwise, print <code>\"Player Damaged!\"</code>.</li>\n                    </ul>\n                    <div class=\"code-box\">\n                        <pre>// Your Scaffold in Player.cs:\nvoid OnCollisionEnter2D(Collision2D other) {\n    // 1. Check if hit object is an enemy:\n    \n    // 2. Check if stomp from above:\n    \n}</pre>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"content-card primary\" style=\"border-left-color: #10b981;\">\n                <div class=\"card-title core\" style=\"color: #059669;\">Quick Decision Rule: What to Use When</div>\n                <div class=\"card-body\">\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">TAG</span> Just want to know what it is? &rarr; <code>CompareTag(\"Enemy\")</code> (fast, 0 bytes).</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">SCRIPT</span> Need to call enemy health or squash? &rarr; <code>TryGetComponent&lt;Enemy&gt;(out enemy)</code>.</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">STOMP</span> Landed on head? &rarr; <code>other.GetContact(0).normal.y > 0.5f</code>.</div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"right-column\">\n            <div class=\"media-panel-card\" style=\"padding: 14px; gap: 10px;\">\n                <div style=\"font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;\">\n                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]\n                </div>\n                <div style=\"width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;\">\n                    <div id=\"cTimer1\" style=\"font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;\">\n                        05:00\n                    </div>\n                    <div style=\"display: flex; gap: 8px; justify-content: center; margin-top: 10px;\">\n                        <button class=\"interactive-action-btn\" onclick=\"startChallengeTimer('cTimer1', 300)\">Start 5:00</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"resetChallengeTimer('cTimer1', 300)\">Reset</button>\n                    </div>\n                </div>\n\n                <div style=\"width: 100%; margin-top: 8px;\">\n                    <button class=\"interactive-action-btn secondary\" style=\"width: 100%; font-size: 0.78rem;\" onclick=\"toggleSolutionBox('solBox1')\">\n                        Stuck? Click to Toggle C# Solution\n                    </button>\n                    <div id=\"solBox1\" style=\"display: none; margin-top: 8px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; padding: 10px;\">\n                        <div class=\"code-box\">\n                            <pre>void OnCollisionEnter2D(Collision2D other) {\n    if (other.gameObject.TryGetComponent(out Enemy enemy)) {\n        if (other.GetContact(0).normal.y > 0.5f) {\n            Debug.Log(\"Squashed Enemy!\");\n            enemy.Squash();\n        } else {\n            Debug.Log(\"Player Damaged!\");\n        }\n    }\n}</pre>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n"
+    "content": "\n    <div class=\"split-media-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">[5-MIN CHALLENGE] Put Part 1 Into Practice</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0 0 8px 0; font-weight: 700; color: #0284c7;\">\n                        Goal: When Player bumps into an object, detect if it is an Enemy and check if it was a stomp!\n                    </p>\n                    <ul style=\"padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;\">\n                        <li><strong>Step 1:</strong> In <code>OnCollisionEnter2D(Collision2D other)</code>, check if the touched object is tagged <code>\"Enemy\"</code> OR has an <code>Enemy</code> component.</li>\n                        <li><strong>Step 2:</strong> Check impact direction: if <code>other.GetContact(0).normal.y > 0.5f</code>, print <code>\"Squashed Enemy!\"</code>. Otherwise, print <code>\"Player Damaged!\"</code>.</li>\n                    </ul>\n                    <div class=\"code-box\">\n                        <pre>// Your Scaffold in Player.cs:\nvoid OnCollisionEnter2D(Collision2D other) {\n    // 1. Check if hit object is an enemy:\n    \n    // 2. Check if stomp from above:\n    \n}</pre>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"content-card primary\" style=\"border-left-color: #10b981;\">\n                <div class=\"card-title core\" style=\"color: #059669;\">Quick Decision Rule: What to Use When</div>\n                <div class=\"card-body\">\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">TAG</span> Just want to know what it is? &rarr; <code>CompareTag(\"Enemy\")</code> (fast, 0 bytes).</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">SCRIPT</span> Need to call enemy health or squash? &rarr; <code>TryGetComponent&lt;Enemy&gt;(out enemy)</code>.</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">STOMP</span> Landed on head? &rarr; <code>other.GetContact(0).normal.y > 0.5f</code>.</div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"right-column\">\n            <div class=\"media-panel-card\" style=\"padding: 14px; gap: 10px;\">\n                <div style=\"font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;\">\n                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]\n                </div>\n                <div style=\"width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;\">\n                    <div id=\"cTimer1\" style=\"font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;\">\n                        05:00\n                    </div>\n                    <div class=\"lecturer-timer-controls\" id=\"controls_cTimer1\" style=\"display: flex; gap: 8px; justify-content: center; margin-top: 10px;\">\n                        <button class=\"interactive-action-btn\" onclick=\"lecturerStartTimer('cTimer1', 300)\">Start 5:00</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"lecturerPauseTimer('cTimer1')\">Pause</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"lecturerResetTimer('cTimer1', 300)\">Reset</button>\n                    </div>\n                    <div class=\"student-timer-status\" id=\"status_cTimer1\" style=\"display: none; margin-top: 10px; font-size: 0.76rem; font-weight: 700; color: #94a3b8;\">\n                        Synced with Lecturer \u2022 Waiting for start...\n                    </div>\n                </div>\n\n                <div style=\"width: 100%; margin-top: 8px;\">\n                    <button id=\"btnSol_solBox1\" class=\"interactive-action-btn secondary solution-btn\" style=\"width: 100%; font-size: 0.78rem; opacity: 0.6; cursor: not-allowed;\" onclick=\"toggleSolutionBox('solBox1', 'cTimer1')\" disabled>\n                        Solution Locked (Unlocks at 1:00 remaining)\n                    </button>\n                    <div id=\"solBox1\" style=\"display: none; margin-top: 8px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; padding: 10px;\">\n                        <div class=\"code-box\">\n                            <pre>void OnCollisionEnter2D(Collision2D other) {\n    if (other.gameObject.TryGetComponent(out Enemy enemy)) {\n        if (other.GetContact(0).normal.y > 0.5f) {\n            Debug.Log(\"Squashed Enemy!\");\n            enemy.Squash();\n        } else {\n            Debug.Log(\"Player Damaged!\");\n        }\n    }\n}</pre>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n"
   },
   {
     "isInverted": true,
@@ -2167,7 +2168,7 @@
     "title": "Practice Challenge 2: Pick the Right Container & Brain",
     "origImg": "original_slides/slide_14.png",
     "notes": "Give students 5 minutes. First part is picking the right container for 3 real game scenarios so they build intuition. Second part is creating a simple ScriptableObject and asset file in Unity to see shared memory in action.",
-    "content": "\n    <div class=\"split-media-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">[5-MIN CHALLENGE] What to Use When: Containers</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0 0 10px 0; font-weight: 700; color: #0284c7;\">\n                        Pick the right container for each game feature:\n                    </p>\n                    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;\">\n                        <div style=\"font-size: 0.82rem; font-weight: 700;\">1. Exactly 4 fixed player spawn points:</div>\n                        <div style=\"display: flex; gap: 6px; margin-top: 4px;\">\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, true, 'Array is fixed-size, zero memory waste.')\">Array Transform[]</button>\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, false, 'List has resizing overhead; spawn points never change.')\">List&lt;Transform&gt;</button>\n                        </div>\n                    </div>\n\n                    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;\">\n                        <div style=\"font-size: 0.82rem; font-weight: 700;\">2. Inventory of items collected during play:</div>\n                        <div style=\"display: flex; gap: 6px; margin-top: 4px;\">\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, false, 'Arrays cannot expand dynamically as player loots.')\">Array Item[]</button>\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, true, 'Lists expand with .Add() as items are picked up.')\">List&lt;Item&gt;</button>\n                        </div>\n                    </div>\n\n                    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px;\">\n                        <div style=\"font-size: 0.82rem; font-weight: 700;\">3. Instant item stats lookup by item ID name string:</div>\n                        <div style=\"display: flex; gap: 6px; margin-top: 4px;\">\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, false, 'Lists require slow looping through all items.')\">List&lt;Item&gt;</button>\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, true, 'Dictionary finds key instantly in 1 step O(1).')\">Dictionary&lt;string, Item&gt;</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"content-card primary\" style=\"border-left-color: #10b981;\">\n                <div class=\"card-title core\" style=\"color: #059669;\">Unity Action Step: Shared Brain</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0; font-weight: 600;\">\n                        Create <code>EnemyStatsSO.cs</code> with <code>[CreateAssetMenu]</code>. In Project view, right-click &rarr; <em>Create &rarr; Stats &rarr; Enemy</em>. Set speed = <code>3.5</code> and drag into Goomba Inspector!\n                    </p>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"right-column\">\n            <div class=\"media-panel-card\" style=\"padding: 14px; gap: 10px;\">\n                <div style=\"font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;\">\n                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]\n                </div>\n                <div style=\"width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;\">\n                    <div id=\"cTimer2\" style=\"font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;\">\n                        05:00\n                    </div>\n                    <div style=\"display: flex; gap: 8px; justify-content: center; margin-top: 10px;\">\n                        <button class=\"interactive-action-btn\" onclick=\"startChallengeTimer('cTimer2', 300)\">Start 5:00</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"resetChallengeTimer('cTimer2', 300)\">Reset</button>\n                    </div>\n                </div>\n\n                <div style=\"width: 100%; margin-top: 8px;\">\n                    <button class=\"interactive-action-btn secondary\" style=\"width: 100%; font-size: 0.78rem;\" onclick=\"toggleSolutionBox('solBox2')\">\n                        Stuck? Click to Toggle ScriptableObject Code\n                    </button>\n                    <div id=\"solBox2\" style=\"display: none; margin-top: 8px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; padding: 10px;\">\n                        <div class=\"code-box\">\n                            <pre>[CreateAssetMenu(fileName = \"EnemyData\", menuName = \"Stats/Enemy\")]\npublic class EnemyStatsSO : ScriptableObject {\n    public float moveSpeed = 3.5f;\n    public int maxHealth = 20;\n}</pre>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n"
+    "content": "\n    <div class=\"split-media-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">[5-MIN CHALLENGE] What to Use When: Containers</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0 0 10px 0; font-weight: 700; color: #0284c7;\">\n                        Pick the right container for each game feature:\n                    </p>\n                    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;\">\n                        <div style=\"font-size: 0.82rem; font-weight: 700;\">1. Exactly 4 fixed player spawn points:</div>\n                        <div style=\"display: flex; gap: 6px; margin-top: 4px;\">\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, true, 'Array is fixed-size, zero memory waste.')\">Array Transform[]</button>\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, false, 'List has resizing overhead; spawn points never change.')\">List&lt;Transform&gt;</button>\n                        </div>\n                    </div>\n\n                    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;\">\n                        <div style=\"font-size: 0.82rem; font-weight: 700;\">2. Inventory of items collected during play:</div>\n                        <div style=\"display: flex; gap: 6px; margin-top: 4px;\">\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, false, 'Arrays cannot expand dynamically as player loots.')\">Array Item[]</button>\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, true, 'Lists expand with .Add() as items are picked up.')\">List&lt;Item&gt;</button>\n                        </div>\n                    </div>\n\n                    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px;\">\n                        <div style=\"font-size: 0.82rem; font-weight: 700;\">3. Instant item stats lookup by item ID name string:</div>\n                        <div style=\"display: flex; gap: 6px; margin-top: 4px;\">\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, false, 'Lists require slow looping through all items.')\">List&lt;Item&gt;</button>\n                            <button class=\"interactive-action-btn secondary\" style=\"padding: 3px 8px; font-size: 0.72rem;\" onclick=\"checkScenarioPick(this, true, 'Dictionary finds key instantly in 1 step O(1).')\">Dictionary&lt;string, Item&gt;</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"content-card primary\" style=\"border-left-color: #10b981;\">\n                <div class=\"card-title core\" style=\"color: #059669;\">Unity Action Step: Shared Brain</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0; font-weight: 600;\">\n                        Create <code>EnemyStatsSO.cs</code> with <code>[CreateAssetMenu]</code>. In Project view, right-click &rarr; <em>Create &rarr; Stats &rarr; Enemy</em>. Set speed = <code>3.5</code> and drag into Goomba Inspector!\n                    </p>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"right-column\">\n            <div class=\"media-panel-card\" style=\"padding: 14px; gap: 10px;\">\n                <div style=\"font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;\">\n                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]\n                </div>\n                <div style=\"width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;\">\n                    <div id=\"cTimer2\" style=\"font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;\">\n                        05:00\n                    </div>\n                    <div class=\"lecturer-timer-controls\" id=\"controls_cTimer2\" style=\"display: flex; gap: 8px; justify-content: center; margin-top: 10px;\">\n                        <button class=\"interactive-action-btn\" onclick=\"lecturerStartTimer('cTimer2', 300)\">Start 5:00</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"lecturerPauseTimer('cTimer2')\">Pause</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"lecturerResetTimer('cTimer2', 300)\">Reset</button>\n                    </div>\n                    <div class=\"student-timer-status\" id=\"status_cTimer2\" style=\"display: none; margin-top: 10px; font-size: 0.76rem; font-weight: 700; color: #94a3b8;\">\n                        Synced with Lecturer \u2022 Waiting for start...\n                    </div>\n                </div>\n\n                <div style=\"width: 100%; margin-top: 8px;\">\n                    <button id=\"btnSol_solBox2\" class=\"interactive-action-btn secondary solution-btn\" style=\"width: 100%; font-size: 0.78rem; opacity: 0.6; cursor: not-allowed;\" onclick=\"toggleSolutionBox('solBox2', 'cTimer2')\" disabled>\n                        Solution Locked (Unlocks at 1:00 remaining)\n                    </button>\n                    <div id=\"solBox2\" style=\"display: none; margin-top: 8px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; padding: 10px;\">\n                        <div class=\"code-box\">\n                            <pre>[CreateAssetMenu(fileName = \"EnemyData\", menuName = \"Stats/Enemy\")]\npublic class EnemyStatsSO : ScriptableObject {\n    public float moveSpeed = 3.5f;\n    public int maxHealth = 20;\n}</pre>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n"
   },
   {
     "isInverted": true,
@@ -2224,7 +2225,7 @@
     "title": "Practice Challenge 3: Spawner Loop & Death Event",
     "origImg": "original_slides/slide_21.png",
     "notes": "Give students 5 minutes. Goal is connecting the pieces: write a simple 2-second spawner coroutine, and fire a UnityEvent when an enemy dies so ScoreManager adds points without spaghetti coupling.",
-    "content": "\n    <div class=\"split-media-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">[5-MIN CHALLENGE] Timers &amp; Clean Events</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0 0 8px 0; font-weight: 700; color: #0284c7;\">\n                        Goal: Spawn enemies on a 2-second interval, and shout an event when an enemy dies!\n                    </p>\n                    <ul style=\"padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;\">\n                        <li><strong>Step 1 (Spawner):</strong> Write a Coroutine <code>SpawnRoutine()</code> that repeats: wait 2 seconds &rarr; spawn Goomba.</li>\n                        <li><strong>Step 2 (Event):</strong> Add <code>[SerializeField] private UnityEvent onDied;</code> on Goomba. When stomped, call <code>onDied?.Invoke();</code>.</li>\n                        <li><strong>Step 3 (Wiring):</strong> In the Inspector, click <code>+</code> on Goomba's event and wire it to <code>ScoreManager.AddScore()</code>!</li>\n                    </ul>\n                    <div class=\"code-box\">\n                        <pre>// Scaffold:\nprivate IEnumerator SpawnRoutine() {\n    while (true) {\n        yield return new WaitForSeconds(2.0f);\n        Instantiate(goombaPrefab, transform.position, Quaternion.identity);\n    }\n}</pre>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"content-card primary\" style=\"border-left-color: #10b981;\">\n                <div class=\"card-title core\" style=\"color: #059669;\">Quick Decision Rule: What to Use When</div>\n                <div class=\"card-body\">\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">TIMER</span> Custom delays without Update mess? &rarr; <strong>Coroutine</strong>.</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">EVENT</span> Hook up sound/UI in Inspector with 0 code? &rarr; <strong>UnityEvent</strong>.</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">FAST</span> 100 bullets hitting per second? &rarr; <strong>System.Action</strong>.</div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"right-column\">\n            <div class=\"media-panel-card\" style=\"padding: 14px; gap: 10px;\">\n                <div style=\"font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;\">\n                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]\n                </div>\n                <div style=\"width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;\">\n                    <div id=\"cTimer3\" style=\"font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;\">\n                        05:00\n                    </div>\n                    <div style=\"display: flex; gap: 8px; justify-content: center; margin-top: 10px;\">\n                        <button class=\"interactive-action-btn\" onclick=\"startChallengeTimer('cTimer3', 300)\">Start 5:00</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"resetChallengeTimer('cTimer3', 300)\">Reset</button>\n                    </div>\n                </div>\n\n                <div style=\"width: 100%; margin-top: 8px;\">\n                    <button class=\"interactive-action-btn secondary\" style=\"width: 100%; font-size: 0.78rem;\" onclick=\"toggleSolutionBox('solBox3')\">\n                        Stuck? Click to Toggle Event Solution\n                    </button>\n                    <div id=\"solBox3\" style=\"display: none; margin-top: 8px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; padding: 10px;\">\n                        <div class=\"code-box\">\n                            <pre>using UnityEngine.Events;\n\npublic class Goomba : MonoBehaviour {\n    [SerializeField] private UnityEvent onDied;\n\n    public void Squash() {\n        onDied?.Invoke(); // Fires ScoreManager!\n        Destroy(gameObject);\n    }\n}</pre>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n"
+    "content": "\n    <div class=\"split-media-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">[5-MIN CHALLENGE] Timers &amp; Clean Events</div>\n                <div class=\"card-body\">\n                    <p style=\"margin: 0 0 8px 0; font-weight: 700; color: #0284c7;\">\n                        Goal: Spawn enemies on a 2-second interval, and shout an event when an enemy dies!\n                    </p>\n                    <ul style=\"padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;\">\n                        <li><strong>Step 1 (Spawner):</strong> Write a Coroutine <code>SpawnRoutine()</code> that repeats: wait 2 seconds &rarr; spawn Goomba.</li>\n                        <li><strong>Step 2 (Event):</strong> Add <code>[SerializeField] private UnityEvent onDied;</code> on Goomba. When stomped, call <code>onDied?.Invoke();</code>.</li>\n                        <li><strong>Step 3 (Wiring):</strong> In the Inspector, click <code>+</code> on Goomba's event and wire it to <code>ScoreManager.AddScore()</code>!</li>\n                    </ul>\n                    <div class=\"code-box\">\n                        <pre>// Scaffold:\nprivate IEnumerator SpawnRoutine() {\n    while (true) {\n        yield return new WaitForSeconds(2.0f);\n        Instantiate(goombaPrefab, transform.position, Quaternion.identity);\n    }\n}</pre>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"content-card primary\" style=\"border-left-color: #10b981;\">\n                <div class=\"card-title core\" style=\"color: #059669;\">Quick Decision Rule: What to Use When</div>\n                <div class=\"card-body\">\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">TIMER</span> Custom delays without Update mess? &rarr; <strong>Coroutine</strong>.</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">EVENT</span> Hook up sound/UI in Inspector with 0 code? &rarr; <strong>UnityEvent</strong>.</div>\n                    <div class=\"punchy-point\"><span class=\"punchy-tag\">FAST</span> 100 bullets hitting per second? &rarr; <strong>System.Action</strong>.</div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"right-column\">\n            <div class=\"media-panel-card\" style=\"padding: 14px; gap: 10px;\">\n                <div style=\"font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;\">\n                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]\n                </div>\n                <div style=\"width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;\">\n                    <div id=\"cTimer3\" style=\"font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;\">\n                        05:00\n                    </div>\n                    <div class=\"lecturer-timer-controls\" id=\"controls_cTimer3\" style=\"display: flex; gap: 8px; justify-content: center; margin-top: 10px;\">\n                        <button class=\"interactive-action-btn\" onclick=\"lecturerStartTimer('cTimer3', 300)\">Start 5:00</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"lecturerPauseTimer('cTimer3')\">Pause</button>\n                        <button class=\"interactive-action-btn secondary\" onclick=\"lecturerResetTimer('cTimer3', 300)\">Reset</button>\n                    </div>\n                    <div class=\"student-timer-status\" id=\"status_cTimer3\" style=\"display: none; margin-top: 10px; font-size: 0.76rem; font-weight: 700; color: #94a3b8;\">\n                        Synced with Lecturer \u2022 Waiting for start...\n                    </div>\n                </div>\n\n                <div style=\"width: 100%; margin-top: 8px;\">\n                    <button id=\"btnSol_solBox3\" class=\"interactive-action-btn secondary solution-btn\" style=\"width: 100%; font-size: 0.78rem; opacity: 0.6; cursor: not-allowed;\" onclick=\"toggleSolutionBox('solBox3', 'cTimer3')\" disabled>\n                        Solution Locked (Unlocks at 1:00 remaining)\n                    </button>\n                    <div id=\"solBox3\" style=\"display: none; margin-top: 8px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; padding: 10px;\">\n                        <div class=\"code-box\">\n                            <pre>using UnityEngine.Events;\n\npublic class Goomba : MonoBehaviour {\n    [SerializeField] private UnityEvent onDied;\n\n    public void Squash() {\n        onDied?.Invoke(); // Fires ScoreManager!\n        Destroy(gameObject);\n    }\n}</pre>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n"
   },
   {
     "isInverted": true,
@@ -2288,6 +2289,9 @@
                 } else if (e.key === 'l' || e.key === 'L') {
                     e.preventDefault();
                     toggleLectureLabMode();
+                } else if (e.key === 't' || e.key === 'T') {
+                    e.preventDefault();
+                    toggleLecturerRole();
                 } else if (e.key === 'f' || e.key === 'F') {
                     e.preventDefault();
                     toggleFullscreen();
@@ -2309,6 +2313,7 @@
             window.addEventListener('resize', autoFitSlideElements);
 
             renderSlide();
+            initTimerSync();
             updateModeDisplay();
         }
 
@@ -2420,6 +2425,7 @@
             if (next >= 0 && next < slidesData.length) {
                 currentSlide = next;
                 renderSlide();
+            initTimerSync();
             }
         }
 
@@ -2427,6 +2433,7 @@
             if (idx >= 0 && idx < slidesData.length) {
                 currentSlide = idx;
                 renderSlide();
+            initTimerSync();
             }
         }
 
@@ -2854,46 +2861,254 @@
         // CLASS CHALLENGE HELPERS (5-MIN TIMEBOX TIMERS & QUIZ)
         // =========================================================================
         let challengeTimers = {};
+        let challengeRemaining = { 'cTimer1': 300, 'cTimer2': 300, 'cTimer3': 300 };
+        let timerToSolutionMap = {
+            'cTimer1': 'solBox1',
+            'cTimer2': 'solBox2',
+            'cTimer3': 'solBox3'
+        };
 
-        function startChallengeTimer(timerId, totalSeconds) {
-            if (challengeTimers[timerId]) clearInterval(challengeTimers[timerId]);
-            let remaining = totalSeconds;
-            const disp = document.getElementById(timerId);
+        // Lecturer detection: URL param ?teacher=true / ?lecturer=true OR localStorage
+        let isLecturer = false;
+        try {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('teacher') || params.has('lecturer') || localStorage.getItem('hr_gdd_role') === 'lecturer') {
+                isLecturer = true;
+            }
+        } catch (e) {}
 
-            function tick() {
-                const m = Math.floor(remaining / 60);
-                const s = remaining % 60;
-                if (disp) disp.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                if (remaining <= 0) {
-                    clearInterval(challengeTimers[timerId]);
-                    if (disp) {
-                        disp.textContent = "TIME UP!";
-                        disp.style.color = "#ef4444";
+        // MQTT Real-time sync engine
+        let timerMqtt = null;
+        const MQTT_TIMER_TOPIC = 'hr-cmgt/minor-gdd/basics2/timers';
+
+        function initTimerSync() {
+            updateRoleUI();
+
+            if (typeof mqtt === 'undefined') {
+                console.warn('MQTT library not loaded; timers running in local mode.');
+                return;
+            }
+
+            try {
+                const clientId = (isLecturer ? 'teacher_' : 'std_') + Math.random().toString(16).substring(2, 8);
+                timerMqtt = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+                    clientId: clientId,
+                    clean: true,
+                    connectTimeout: 4000,
+                    reconnectPeriod: 3000
+                });
+
+                timerMqtt.on('connect', () => {
+                    timerMqtt.subscribe(MQTT_TIMER_TOPIC, (err) => {
+                        if (!err) console.log('MQTT Timer Sync connected on:', MQTT_TIMER_TOPIC);
+                    });
+                });
+
+                timerMqtt.on('message', (topic, message) => {
+                    try {
+                        const payload = JSON.parse(message.toString());
+                        handleRemoteTimerEvent(payload);
+                    } catch (e) {
+                        console.error('Failed to parse timer MQTT payload:', e);
                     }
+                });
+            } catch (e) {
+                console.warn('MQTT init error:', e);
+            }
+        }
+
+        function updateRoleUI() {
+            // Update all challenge slides based on role
+            ['cTimer1', 'cTimer2', 'cTimer3'].forEach(id => {
+                const ctrl = document.getElementById('controls_' + id);
+                const stat = document.getElementById('status_' + id);
+                if (ctrl) ctrl.style.display = isLecturer ? 'flex' : 'none';
+                if (stat) stat.style.display = isLecturer ? 'none' : 'block';
+            });
+        }
+
+        function toggleLecturerRole() {
+            if (!isLecturer) {
+                const pin = prompt('Enter Lecturer PIN:');
+                if (pin === '7412' || pin === 'teacher') {
+                    isLecturer = true;
+                    try { localStorage.setItem('hr_gdd_role', 'lecturer'); } catch (e) {}
+                    alert('Lecturer mode enabled! You now control classroom timers.');
+                } else {
+                    alert('Incorrect PIN.');
+                    return;
                 }
-                remaining--;
+            } else {
+                isLecturer = false;
+                try { localStorage.removeItem('hr_gdd_role'); } catch (e) {}
+                alert('Switched to Student mode.');
             }
-            tick();
-            challengeTimers[timerId] = setInterval(tick, 1000);
+            updateRoleUI();
         }
 
-        function resetChallengeTimer(timerId, totalSeconds) {
+        // =====================================================================
+        // TIMER EXECUTION & 1-MINUTE SOLUTION UNLOCK RULE
+        // =====================================================================
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateSolutionLockState(timerId, remaining) {
+            const solBoxId = timerToSolutionMap[timerId];
+            if (!solBoxId) return;
+            const btn = document.getElementById('btnSol_' + solBoxId);
+            if (!btn) return;
+
+            // Unlock if remaining <= 60 seconds (1 minute remaining) or if teacher
+            if (remaining <= 60 || isLecturer) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.background = '#059669';
+                btn.style.cursor = 'pointer';
+                btn.style.borderColor = '#10b981';
+                btn.textContent = 'View C# Solution (Unlocked!)';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.style.background = '#334155';
+                btn.style.cursor = 'not-allowed';
+                btn.style.borderColor = '#1e293b';
+                btn.textContent = `Solution Locked (Unlocks at 01:00 • ${formatTime(remaining)} remaining)`;
+                
+                // Hide solution if it was open
+                const box = document.getElementById(solBoxId);
+                if (box && !isLecturer) box.style.display = 'none';
+            }
+        }
+
+        function runLocalTimer(timerId, startSeconds) {
             if (challengeTimers[timerId]) clearInterval(challengeTimers[timerId]);
+            challengeRemaining[timerId] = startSeconds;
+
             const disp = document.getElementById(timerId);
-            const m = Math.floor(totalSeconds / 60);
-            const s = totalSeconds % 60;
             if (disp) {
-                disp.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                disp.style.color = "#38bdf8";
+                disp.textContent = formatTime(challengeRemaining[timerId]);
+                disp.style.color = '#38bdf8';
+            }
+            updateSolutionLockState(timerId, challengeRemaining[timerId]);
+
+            challengeTimers[timerId] = setInterval(() => {
+                challengeRemaining[timerId]--;
+                if (disp) disp.textContent = formatTime(challengeRemaining[timerId]);
+
+                updateSolutionLockState(timerId, challengeRemaining[timerId]);
+
+                if (challengeRemaining[timerId] <= 60 && disp) {
+                    disp.style.color = '#f59e0b'; // Amber warning when under 1 min
+                }
+
+                if (challengeRemaining[timerId] <= 0) {
+                    clearInterval(challengeTimers[timerId]);
+                    challengeTimers[timerId] = null;
+                    if (disp) {
+                        disp.textContent = 'TIME UP!';
+                        disp.style.color = '#ef4444';
+                    }
+                    updateSolutionLockState(timerId, 0);
+                }
+            }, 1000);
+        }
+
+        function pauseLocalTimer(timerId) {
+            if (challengeTimers[timerId]) {
+                clearInterval(challengeTimers[timerId]);
+                challengeTimers[timerId] = null;
             }
         }
 
-        function toggleSolutionBox(id) {
-            const el = document.getElementById(id);
+        function resetLocalTimer(timerId, totalSeconds) {
+            pauseLocalTimer(timerId);
+            challengeRemaining[timerId] = totalSeconds;
+            const disp = document.getElementById(timerId);
+            if (disp) {
+                disp.textContent = formatTime(totalSeconds);
+                disp.style.color = '#38bdf8';
+            }
+            updateSolutionLockState(timerId, totalSeconds);
+        }
+
+        // =====================================================================
+        // LECTURER CONTROLS (BROADCASTS OVER MQTT)
+        // =====================================================================
+        function lecturerStartTimer(timerId, totalSeconds) {
+            if (!isLecturer) return;
+            const rem = challengeRemaining[timerId] || totalSeconds;
+            runLocalTimer(timerId, rem);
+            broadcastTimerAction('start', timerId, rem);
+        }
+
+        function lecturerPauseTimer(timerId) {
+            if (!isLecturer) return;
+            pauseLocalTimer(timerId);
+            broadcastTimerAction('pause', timerId, challengeRemaining[timerId]);
+        }
+
+        function lecturerResetTimer(timerId, totalSeconds) {
+            if (!isLecturer) return;
+            resetLocalTimer(timerId, totalSeconds);
+            broadcastTimerAction('reset', timerId, totalSeconds);
+        }
+
+        function broadcastTimerAction(action, timerId, remaining) {
+            if (!timerMqtt || !timerMqtt.connected) return;
+            try {
+                const payload = JSON.stringify({
+                    sender: 'lecturer',
+                    action: action,
+                    timerId: timerId,
+                    remaining: remaining,
+                    timestamp: Date.now()
+                });
+                timerMqtt.publish(MQTT_TIMER_TOPIC, payload, { qos: 1 });
+            } catch (e) {
+                console.error('MQTT publish error:', e);
+            }
+        }
+
+        function handleRemoteTimerEvent(data) {
+            if (!data || data.sender !== 'lecturer') return;
+            const timerId = data.timerId;
+            const stat = document.getElementById('status_' + timerId);
+
+            if (data.action === 'start') {
+                runLocalTimer(timerId, data.remaining);
+                if (stat) stat.textContent = 'Challenge running in sync with Lecturer!';
+            } else if (data.action === 'pause') {
+                pauseLocalTimer(timerId);
+                if (stat) stat.textContent = 'Lecturer paused the timer.';
+            } else if (data.action === 'reset') {
+                resetLocalTimer(timerId, data.remaining);
+                if (stat) stat.textContent = 'Lecturer reset timer to ' + formatTime(data.remaining);
+            }
+        }
+
+        // =====================================================================
+        // SOLUTION BOX TOGGLE
+        // =====================================================================
+        function toggleSolutionBox(solBoxId, timerId) {
+            const rem = challengeRemaining[timerId] !== undefined ? challengeRemaining[timerId] : 300;
+            // Strict 1-minute lock unless lecturer
+            if (rem > 60 && !isLecturer) {
+                alert(`Challenge is in progress! Solution unlocks automatically when the timer reaches 1:00 (${formatTime(rem)} remaining).`);
+                return;
+            }
+
+            const el = document.getElementById(solBoxId);
             if (!el) return;
             const isHidden = (el.style.display === 'none' || el.style.display === '');
             el.style.display = isHidden ? 'block' : 'none';
         }
+
+        // Backward compatibility wrappers
+        function startChallengeTimer(id, sec) { lecturerStartTimer(id, sec); }
+        function resetChallengeTimer(id, sec) { lecturerResetTimer(id, sec); }
 
         function checkScenarioPick(btn, isCorrect, explanation) {
             const parent = btn.parentElement;
