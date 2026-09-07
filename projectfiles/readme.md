@@ -1,6 +1,10 @@
-Download the .unitypackage file: open the file on Github, click the "..." in the top-right, and select "Download Raw File Content".
+Download the `.unitypackage` files directly:
+- [Download basics1.unitypackage](https://github.com/HR-CMGT/Minor-GDD-Unity/raw/master/projectfiles/basics1.unitypackage) (Class 1)
+- [Download basics2.unitypackage](https://github.com/HR-CMGT/Minor-GDD-Unity/raw/master/projectfiles/basics2.unitypackage) (Class 2 - Unity 6.3)
 
-First method:
+---
+
+### How to Import:
 1. With the Unity editor open, open (double-click) the .unitypackage file in Windows/Mac/Linux
 2. In the "Import Unity Package" dialog window, click "Import"
 
