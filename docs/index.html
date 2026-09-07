@@ -467,8 +467,6 @@
         function onLesson2CardClick() {
             if (isTeacherAuthenticated()) {
                 window.location.href = 'presentation_basics2/presentation_unity6_basics2.html?teacher=true';
-            } else {
-                toggleTeacherPinModal(true);
             }
         }
 
@@ -489,8 +487,6 @@
         // Initialize on load
         if (isTeacherAuthenticated()) {
             unlockLesson2();
-        } else if (checkTeacherParam()) {
-            toggleTeacherPinModal(true);
         }
     </script>
 </body>
