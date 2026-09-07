@@ -1767,6 +1767,191 @@
         body.projector-mode .btn-flag-pace { display: none !important; }
         body:not(.projector-mode) .btn-flag-pace { display: inline-flex !important; }
     
+
+        /* Interactive Action Widgets & Live Sandboxes */
+        .interactive-action-btn {
+            background: #0284c7;
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+            flex: 1;
+            user-select: none;
+        }
+
+        .interactive-action-btn:hover {
+            background: #0369a1;
+            transform: translateY(-1px);
+        }
+
+        .interactive-action-btn.secondary {
+            background: #334155;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .interactive-action-btn.secondary:hover {
+            background: #475569;
+        }
+
+        .mini-tag {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #38bdf8;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        .split-media-layout {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 1.8cqw;
+            align-items: stretch;
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            flex: 0 0 auto;
+        }
+
+        .media-panel-card {
+            background: #090d16;
+            border: 2px solid #202b3c;
+            border-radius: 10px;
+            padding: 1.6cqh 1.8cqw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .punchy-point {
+            font-size: clamp(0.95rem, 2.3cqh, 1.45rem);
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.6cqh;
+            line-height: 1.45;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .punchy-tag {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* JetBrains Rider Dark Unity Theme for Code Blocks */
+        pre {
+            background: #1e1f22 !important;
+            border: 1px solid #2e3138 !important;
+            color: #bcbec4 !important;
+            font-family: 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace !important;
+            font-size: clamp(0.86rem, 2.1cqh, 1.20rem) !important;
+            line-height: 1.45 !important;
+            border-radius: 8px !important;
+            padding: 1.2cqh 1.4cqw !important;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+        }
+
+        .copy-btn {
+            background: #2b2d30 !important;
+            border: 1px solid #3e4249 !important;
+            color: #bcbec4 !important;
+        }
+
+        .copy-btn:hover {
+            background: #393b40 !important;
+            color: #ffffff !important;
+        }
+
+        /* Challenge & Timer Box */
+        .challenge-card {
+            background: #090d16;
+            border: 2px solid #0284c7;
+            border-radius: 10px;
+            padding: 16px;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .timer-display {
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #38bdf8;
+            background: #020617;
+            padding: 6px 16px;
+            border-radius: 6px;
+            border: 1px solid #1e293b;
+            letter-spacing: 1px;
+        }
+
+        .solution-box {
+            background: #070b14;
+            border: 1px dashed #10b981;
+            border-radius: 8px;
+            padding: 12px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Progressive Disclosure: Lab Mode vs Lecture Mode */
+        body.lecture-mode .lab-deep-dive,
+        body.lecture-mode .lab-only,
+        body.lecture-mode details.tier-accordion {
+            display: none !important;
+        }
+
+        body.lecture-mode .lecture-only {
+            display: block !important;
+        }
+
+        body.lab-mode .lab-deep-dive,
+        body.lab-mode .lab-only {
+            display: block !important;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: clamp(0.82rem, 1.8cqh, 0.98rem);
+            color: #334155;
+            line-height: 1.45;
+        }
+
+        body.lab-mode .lecture-only {
+            display: none !important;
+        }
+
+        body.lab-mode details.tier-accordion {
+            display: block !important;
+        }
+
     </style>
 </head>
 <body class="lecture-mode">
@@ -1809,28 +1994,26 @@
         </main>
     </div>
 
-    <!-- Bottom Controls -->
+    <!-- Bottom Navigation Bar -->
     <footer class="bottom-bar">
-        <div class="control-left">
-            <button class="btn btn-secondary" id="prevBtn" onclick="changeSlide(-1)">
-                &larr; Previous
-            </button>
-            <button class="btn btn-primary" id="nextBtn" onclick="changeSlide(1)">
-                Next &rarr;
-            </button>
-            <span class="slide-counter" id="slideCounter">Slide 1 / 28</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+            <button class="nav-btn" id="btnFullscreen" onclick="toggleFullscreen()" title="Toggle Fullscreen [F]">Fullscreen [F]</button>
+            <button class="nav-btn" id="btnHelp" onclick="toggleHelpModal(true)" title="View Keyboard Shortcuts [?]">[?] Shortcuts</button>
+            <button class="nav-btn" id="btnNotes" onclick="toggleSpeakerNotes()" title="Toggle Speaker Notes [N]">Notes [N]</button>
         </div>
 
-        <div class="control-right">
-            <button class="btn btn-secondary" onclick="toggleLectureLabMode()" id="modeToggleBtn" title="Toggle Lecture / Lab Mode [L]">
-                Switch to Lab Mode
-            </button>
-            <button class="btn btn-secondary" onclick="toggleFullscreen()" title="Fullscreen [F]">
-                Fullscreen
-            </button>
-            <button class="btn btn-secondary" onclick="toggleHelpModal()" title="Keyboard Shortcuts [?]">
-                Help
-            </button>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="viewmode-toggle" title="Switch View Mode">
+                <button class="viewmode-btn active" id="btnViewLecture" onclick="setViewMode('lecture')">Lecture Mode</button>
+                <button class="viewmode-btn" id="btnViewLab" onclick="setViewMode('lab')">Lab Mode</button>
+            </div>
+            <span class="mode-indicator new" id="modeBadge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">Modern Unity 6</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <span class="slide-counter" id="slideCounter">Slide 1 / 28</span>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
         </div>
     </footer>
 
@@ -3097,6 +3280,71 @@
                 hideTip();
             });
         })();
+
+        function simulateTagTest(mode) {
+            const res = document.getElementById('tagTestResult');
+            const meter = document.getElementById('tagGcMeter');
+            if (!res) return;
+
+            if (mode === 'correct') {
+                if (meter) {
+                    meter.style.width = '0%';
+                    meter.style.background = '#10b981';
+                }
+                res.style.color = '#10b981';
+                res.innerHTML = '<strong>other.gameObject.CompareTag("Enemy"):</strong> 0 GC Bytes! Native internal hash check. Zero lag.';
+            } else {
+                if (meter) {
+                    meter.style.width = '100%';
+                    meter.style.background = '#ef4444';
+                }
+                res.style.color = '#ef4444';
+                res.innerHTML = '<strong>other.tag == "Enemy":</strong> Allocates new string on heap EVERY frame! Triggers GC stutter.';
+            }
+        }
+
+        function updateGoombaSOStats(speedVal) {
+            const disp = document.getElementById('soSpeedDisp');
+            const g1 = document.getElementById('gSpeed1');
+            const g2 = document.getElementById('gSpeed2');
+            const g3 = document.getElementById('gSpeed3');
+            if (disp) disp.textContent = speedVal + ' m/s';
+            if (g1) g1.textContent = speedVal + ' m/s';
+            if (g2) g2.textContent = speedVal + ' m/s';
+            if (g3) g3.textContent = speedVal + ' m/s';
+        }
+
+        function fireRadioBroadcast() {
+            const wave = document.getElementById('radioWaveCircle');
+            const sub1 = document.getElementById('subSound');
+            const sub2 = document.getElementById('subScore');
+            const sub3 = document.getElementById('subVFX');
+            const res = document.getElementById('actionBroadcastResult');
+
+            if (wave) {
+                wave.style.transform = 'scale(2.5)';
+                wave.style.opacity = '0';
+                setTimeout(() => {
+                    wave.style.transform = 'scale(0.8)';
+                    wave.style.opacity = '1';
+                }, 500);
+            }
+
+            if (sub1) sub1.style.borderColor = '#10b981';
+            if (sub2) sub2.style.borderColor = '#10b981';
+            if (sub3) sub3.style.borderColor = '#10b981';
+
+            if (res) {
+                res.style.color = '#10b981';
+                res.innerHTML = 'onGoombaDied?.Invoke() FIRED! SoundManager played squish, ScoreUI added 100, VFX spawned stars!';
+            }
+
+            setTimeout(() => {
+                if (sub1) sub1.style.borderColor = '#334155';
+                if (sub2) sub2.style.borderColor = '#334155';
+                if (sub3) sub3.style.borderColor = '#334155';
+            }, 1200);
+        }
 
         window.onload = init;
 
