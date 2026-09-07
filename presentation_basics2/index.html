@@ -2919,7 +2919,128 @@
             }
         }
 
+        // ==========================================
+        // TEACHER AUTHENTICATION (PIN: 7331)
+        // ==========================================
+        const TEACHER_PIN = "7331";
+
+        function isTeacherAuthenticated() {
+            return sessionStorage.getItem('gdd_teacher_auth') === TEACHER_PIN;
+        }
+
+        function checkTeacherParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('teacher') === 'true';
+        }
+
+        function toggleTeacherPinModal(show) {
+            const modal = document.getElementById('teacherPinModal');
+            if (!modal) return;
+            const open = (typeof show === 'boolean') ? show : (modal.style.display === 'none');
+            modal.style.display = open ? 'flex' : 'none';
+            const err = document.getElementById('teacherPinError');
+            if (err) err.style.display = 'none';
+            const input = document.getElementById('teacherPinInput');
+            if (input) {
+                input.value = '';
+                if (open) setTimeout(() => input.focus(), 80);
+            }
+        }
+
+        function handleTeacherPinSubmit(e) {
+            if (e) e.preventDefault();
+            const input = document.getElementById('teacherPinInput');
+            const err = document.getElementById('teacherPinError');
+            const pin = input ? input.value.trim() : '';
+
+            if (pin === TEACHER_PIN) {
+                sessionStorage.setItem('gdd_teacher_auth', TEACHER_PIN);
+                toggleTeacherPinModal(false);
+                applyTeacherModeUI(true);
+                showTeacherToast('Teacher Mode unlocked! Speaker Notes [N] enabled.');
+            } else {
+                if (err) {
+                    err.style.display = 'block';
+                    err.textContent = 'Incorrect PIN. Please try again.';
+                }
+                if (input) {
+                    input.select();
+                    input.style.borderColor = '#f43f5e';
+                }
+            }
+        }
+
+        function applyTeacherModeUI(authenticated) {
+            let btnNotes = document.getElementById('btnNotes');
+            const navGroup = document.querySelector('.bottom-bar > div:first-child');
+            
+            if (authenticated) {
+                if (!btnNotes && navGroup) {
+                    btnNotes = document.createElement('button');
+                    btnNotes.className = 'nav-btn';
+                    btnNotes.id = 'btnNotes';
+                    btnNotes.onclick = () => toggleSpeakerNotes();
+                    btnNotes.title = 'Toggle Speaker Notes [N]';
+                    btnNotes.textContent = 'Notes [N]';
+                    btnNotes.style.borderColor = '#38bdf8';
+                    btnNotes.style.color = '#38bdf8';
+                    navGroup.appendChild(btnNotes);
+                } else if (btnNotes) {
+                    btnNotes.style.display = 'inline-flex';
+                }
+
+                let tBadge = document.getElementById('teacherModeBadge');
+                if (!tBadge) {
+                    tBadge = document.createElement('span');
+                    tBadge.id = 'teacherModeBadge';
+                    tBadge.className = 'mode-indicator';
+                    tBadge.style.cssText = 'background: rgba(226, 0, 73, 0.15); color: #ff4d79; border: 1px solid var(--hr-red); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;';
+                    tBadge.title = 'Teacher Mode Active [T]';
+                    tBadge.innerHTML = '&#x2714; Teacher Active';
+                    tBadge.onclick = () => toggleSpeakerNotes();
+                    const topBar = document.querySelector('.top-bar');
+                    if (topBar) topBar.appendChild(tBadge);
+                } else {
+                    tBadge.style.display = 'inline-flex';
+                }
+            } else {
+                if (btnNotes) btnNotes.style.display = 'none';
+                const tBadge = document.getElementById('teacherModeBadge');
+                if (tBadge) tBadge.style.display = 'none';
+            }
+        }
+
+        function showTeacherToast(msg) {
+            let toast = document.getElementById('teacherToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'teacherToast';
+                toast.style.cssText = 'position: fixed; top: 62px; right: 20px; background: #111726; border: 1.5px solid #38bdf8; color: #f8fafc; padding: 10px 18px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; z-index: 99999; box-shadow: 0 8px 24px rgba(0,0,0,0.6); transition: all 0.25s ease; opacity: 0; transform: translateY(-10px); pointer-events: none;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+            }, 3200);
+        }
+
+        function initTeacherMode() {
+            if (isTeacherAuthenticated()) {
+                applyTeacherModeUI(true);
+            } else if (checkTeacherParam()) {
+                // When accessed with ?teacher=true, prompt for PIN if not authenticated
+                toggleTeacherPinModal(true);
+            }
+        }
+
         function toggleSpeakerNotes(force) {
+            if (!isTeacherAuthenticated()) {
+                toggleTeacherPinModal(true);
+                return;
+            }
             const m = document.getElementById('notesModal');
             if (!m) return;
             const show = typeof force === 'boolean' ? force : (m.style.display === 'none');
