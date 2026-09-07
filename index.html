@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -224,6 +224,29 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        /* Teacher PIN Modal */
+        .portal-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .portal-modal-content {
+            background: #111726;
+            border: 1.5px solid #2e384d;
+            border-left: 5px solid var(--hr-red);
+            border-radius: 12px;
+            padding: 24px 28px;
+            max-width: 440px;
+            width: 90%;
+            color: #f8fafc;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+        }
     </style>
 </head>
 <body>
@@ -258,17 +281,17 @@
                 <div class="deck-link-text">Open Presentation &rarr;</div>
             </a>
 
-            <!-- Lesson 2 Disabled -->
-            <div class="deck-card disabled-card">
+            <!-- Lesson 2 (Locked / Unlocks with PIN 7331) -->
+            <div class="deck-card disabled-card" id="cardLesson2" style="cursor: pointer;" onclick="onLesson2CardClick()">
                 <div>
                     <div class="deck-header">
                         <span class="deck-num">Lesson 02</span>
-                        <span class="deck-badge">In Development</span>
+                        <span class="deck-badge" id="badgeLesson2">In Development</span>
                     </div>
                     <div class="deck-title">Basics 2: Core Architecture</div>
                     <p class="deck-desc">Events, game loops, game managers, and script architecture.</p>
                 </div>
-                <div class="deck-link-text">Locked</div>
+                <div class="deck-link-text" id="linkLesson2">Locked (Press T for PIN)</div>
             </div>
 
             <!-- Lesson 3 Disabled -->
@@ -332,5 +355,138 @@
             </div>
         </footer>
     </div>
+
+    <!-- Teacher PIN Modal -->
+    <div id="teacherPinModal" class="portal-modal" style="display: none;" onclick="if(event.target===this) toggleTeacherPinModal(false)">
+        <div class="portal-modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
+                <h3 style="color: #ffffff; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 8px; margin: 0;">
+                    <span style="background: var(--hr-red); color: white; padding: 2px 7px; border-radius: 4px; font-size: 0.8rem; font-weight: 900;">HR</span>
+                    Teacher Mode Access
+                </h3>
+                <button onclick="toggleTeacherPinModal(false)" style="background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; line-height: 1;">&times;</button>
+            </div>
+            <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px; line-height: 1.5;">
+                Enter the 4-digit teacher PIN to unlock Lesson 2 and teacher presentation decks:
+            </p>
+            <form id="teacherPinForm" onsubmit="handleTeacherPinSubmit(event)" style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="password" id="teacherPinInput" maxlength="4" placeholder="••••" autocomplete="off"
+                    style="width: 100%; padding: 12px 16px; background: #080b12; border: 2px solid #202b3c; border-radius: 8px; color: #f8fafc; font-size: 1.5rem; font-weight: 900; letter-spacing: 8px; text-align: center; outline: none; transition: border-color 0.2s;"
+                    onfocus="this.style.borderColor='#38bdf8'" onblur="this.style.borderColor='#202b3c'">
+                <div id="teacherPinError" style="display: none; color: #f43f5e; font-size: 0.82rem; font-weight: 700; text-align: center; background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); padding: 6px; border-radius: 6px;">
+                    Incorrect PIN. Please try again.
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 4px;">
+                    <button type="submit" style="flex: 1; background: var(--hr-red); color: #fff; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 800; font-size: 0.88rem; cursor: pointer;">
+                        Unlock Lesson 2
+                    </button>
+                    <button type="button" onclick="toggleTeacherPinModal(false)" style="background: #334155; color: #cbd5e1; border: none; padding: 10px 14px; border-radius: 6px; font-size: 0.88rem; cursor: pointer;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const TEACHER_PIN = "7331";
+
+        function isTeacherAuthenticated() {
+            return sessionStorage.getItem('gdd_teacher_auth') === TEACHER_PIN;
+        }
+
+        function checkTeacherParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('teacher') === 'true';
+        }
+
+        function toggleTeacherPinModal(show) {
+            const modal = document.getElementById('teacherPinModal');
+            if (!modal) return;
+            const open = (typeof show === 'boolean') ? show : (modal.style.display === 'none');
+            modal.style.display = open ? 'flex' : 'none';
+            const err = document.getElementById('teacherPinError');
+            if (err) err.style.display = 'none';
+            const input = document.getElementById('teacherPinInput');
+            if (input) {
+                input.value = '';
+                if (open) setTimeout(() => input.focus(), 80);
+            }
+        }
+
+        function handleTeacherPinSubmit(e) {
+            if (e) e.preventDefault();
+            const input = document.getElementById('teacherPinInput');
+            const err = document.getElementById('teacherPinError');
+            const pin = input ? input.value.trim() : '';
+
+            if (pin === TEACHER_PIN) {
+                sessionStorage.setItem('gdd_teacher_auth', TEACHER_PIN);
+                toggleTeacherPinModal(false);
+                unlockLesson2();
+            } else {
+                if (err) {
+                    err.style.display = 'block';
+                    err.textContent = 'Incorrect PIN. Please try again.';
+                }
+                if (input) {
+                    input.select();
+                    input.style.borderColor = '#f43f5e';
+                }
+            }
+        }
+
+        function unlockLesson2() {
+            const card = document.getElementById('cardLesson2');
+            const badge = document.getElementById('badgeLesson2');
+            const link = document.getElementById('linkLesson2');
+            if (card) {
+                card.classList.remove('disabled-card');
+                card.classList.add('active-card');
+                card.onclick = () => {
+                    window.location.href = 'presentation_basics2/presentation_unity6_basics2.html?teacher=true';
+                };
+            }
+            if (badge) {
+                badge.textContent = 'Teacher Access';
+                badge.style.background = 'rgba(16, 185, 129, 0.2)';
+                badge.style.color = '#10b981';
+                badge.style.borderColor = '#10b981';
+            }
+            if (link) {
+                link.innerHTML = 'Open Presentation &rarr;';
+                link.style.color = '#ff4d79';
+            }
+        }
+
+        function onLesson2CardClick() {
+            if (isTeacherAuthenticated()) {
+                window.location.href = 'presentation_basics2/presentation_unity6_basics2.html?teacher=true';
+            } else {
+                toggleTeacherPinModal(true);
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 't' || e.key === 'T') {
+                e.preventDefault();
+                if (isTeacherAuthenticated()) {
+                    window.location.href = 'presentation_basics2/presentation_unity6_basics2.html?teacher=true';
+                } else {
+                    toggleTeacherPinModal(true);
+                }
+            } else if (e.key === 'Escape' || e.key === 'Esc') {
+                toggleTeacherPinModal(false);
+            }
+        });
+
+        // Initialize on load
+        if (isTeacherAuthenticated()) {
+            unlockLesson2();
+        } else if (checkTeacherParam()) {
+            toggleTeacherPinModal(true);
+        }
+    </script>
 </body>
 </html>
