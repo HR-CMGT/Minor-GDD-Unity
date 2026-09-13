@@ -51,7 +51,7 @@ Students are building a **Mobile Game** (iOS & Android) in Unity 6 (6000.x). The
 
 1. **Dual-View Comparison Mode (`[C]` Key)**:
    - Extracted all 15 original Apple Keynote slides from git commit `4f74a2e` (`docs/presentation_uisaving/assets/`) and converted them to 2000x1125 HD PNGs in `presentation_basics3/original_slides/`.
-   - Built a header toggle switch and keyboard shortcut (`[C]`) to seamlessly toggle between the original Apple Keynote HD slides and the modern interactive Unity 6 deck on every slide.
+   - Built a header toggle switch and keyboard shortcut (`[C]`) to toggle between the original Apple Keynote HD slides and the modern interactive Unity 6 deck on every slide.
 2. **Mobile Screen Scalability & Canvas Scaler (Slide 7)**:
    - **Landscape Mobile Rule**: Set `UI Scale Mode = Scale With Screen Size`, Reference `1920 x 1080`, **`Match Height = 1.0`** (or `0.5`). Prevents vertical HUD shrinkage across 19.5:9 phones and 4:3 tablets.
    - **Portrait Mobile Rule**: Reference `1080 x 1920`, **`Match Width = 0.0`**. Keeps navigation bars glued edge-to-edge.
@@ -63,49 +63,65 @@ Students are building a **Mobile Game** (iOS & Android) in Unity 6 (6000.x). The
      [RequireComponent(typeof(RectTransform))]
      public class SafeAreaFitter : MonoBehaviour {
          private RectTransform _rectTransform;
+         private Rect _lastSafeArea = Rect.zero;
+         private Vector2Int _lastScreenSize = Vector2Int.zero;
+         private ScreenOrientation _lastOrientation = ScreenOrientation.AutoRotation;
+
          void Awake() {
              _rectTransform = GetComponent<RectTransform>();
              ApplySafeArea();
          }
+         void Update() {
+             if (Screen.safeArea != _lastSafeArea || Screen.width != _lastScreenSize.x || Screen.height != _lastScreenSize.y || Screen.orientation != _lastOrientation) {
+                 ApplySafeArea();
+             }
+         }
          void ApplySafeArea() {
-             Rect safeArea = Screen.safeArea;
-             Vector2 anchorMin = safeArea.position;
-             Vector2 anchorMax = anchorMin + safeArea.size;
-             anchorMin.x /= Screen.width;
-             anchorMin.y /= Screen.height;
-             anchorMax.x /= Screen.width;
-             anchorMax.y /= Screen.height;
+             _lastSafeArea = Screen.safeArea;
+             _lastScreenSize = new Vector2Int(Screen.width, Screen.height);
+             _lastOrientation = Screen.orientation;
+             Vector2 anchorMin = _lastSafeArea.position;
+             Vector2 anchorMax = anchorMin + _lastSafeArea.size;
+             anchorMin.x /= Screen.width;  anchorMin.y /= Screen.height;
+             anchorMax.x /= Screen.width;  anchorMax.y /= Screen.height;
              _rectTransform.anchorMin = anchorMin;
              _rectTransform.anchorMax = anchorMax;
          }
      }
      ```
    - **Interactive Notch & Safe Area Simulator**: Live on Slide 8. Lets users select device aspect (iPhone 15, Galaxy S24, iPad, Classic 16:9), toggle `[x] Enable SafeAreaFitter`, and see real-time visual collision vs safe insetting past the camera notch!
-4. **Touch Ergonomics & Performance (Slide 9)**:
-   - **Minimum Touch Target**: 44x44pt (Apple HIG) / 48x48dp (Google Material) $\ge 88\times 88\text{ px}$ at 1080p. 12px finger padding between buttons.
-   - **Thumb Arc Layout**: Primary controls in bottom corners; secondary controls in top corners inside Safe Area.
-   - **Raycast Target Optimization**: Uncheck `Raycast Target` on background panels, decorative icons, and static labels to eliminate mobile touch raycasting frame drops.
-   - **TextMeshPro SDF & Zero-GC**: Always use `TextMeshProUGUI`. Use `scoreText.SetText("Score: {0}", val)` instead of string concatenation `+` to eliminate mobile garbage collection stutter.
-5. **Decoupled UI Architecture (Slide 10)**:
-   - Event-driven UI: Gameplay scripts expose C# `Action<int, int>` events. UI components subscribe via `+=` in `OnEnable()` and unsubscribe via `-=` in `OnDisable()`.
-6. **Cross-Platform JSON Persistence (Slides 13-18)**:
-   - Why `PlayerPrefs` is dangerous for savegames (unencrypted registry storage, primitive types only, easy corruption).
-   - Robust JSON serialization using `[System.Serializable]` classes + `JsonUtility` + `Application.persistentDataPath`.
-   - **Mobile Lifecycle Auto-Save**: Mobile players don't click "Quit Game" &mdash; they switch apps or receive phone calls. Implement `void OnApplicationPause(bool pause) { if (pause) SaveSystem.Save(data); }`.
-   - **Interactive Simulators**:
-     - *Live JSON Persistence Sandbox (Slide 17)*: Editable character sheet with Save, Restart Session, and Load from simulated disk.
-     - *Storage Benchmark (Slide 15)*: Real-time simulation of `PlayerPrefs` vs `System.IO` JSON write performance.
-7. **5-Minute Challenges with Strict 1-Minute Solution Locks (Slides 11 & 18)**:
-   - 300-second classroom countdown timers with MQTT broadcast sync.
-   - Solutions remain strictly locked until $\le 60$ seconds remain (or unlocked via Teacher Mode).
-   - Challenge 1: Mobile HUD with `SafeAreaFitter` and 4 responsive corners.
-   - Challenge 2: Complete `SaveSystem.cs` static service.
-8. **In-Engine Project Setup (No Package Required)**:
-   - Removed all references to `basics3.unitypackage`. Students work directly inside their ongoing mobile game project (or in `Assets/Class3/Class3_MobileUI.unity`).
-9. **Teacher Mode & Speaker Notes**:
-   - Press **`[T]`** to open the Teacher Access modal. PIN is `7331`.
-   - Press **`[N]`** to view per-slide lecturer speaker notes, pedagogical timing, and talking points.
-   - Press **`[L]`** to toggle Lecture Mode (presentation view) vs Lab Mode (deep-dive study notes).
+   - **No Black Bars / No Letterboxing Rule**: The 2D mobile UI must fluidly adapt across all aspect ratios (16:9, 19.5:9, 20:9, 4:3). Never hardcode aspect ratios or force black bars.
+4. **Universal Anchor Playbook & Live Distortion Simulator (Slide 9)**:
+   - 4 UI Anchor Recipes: Corner Pinned (`Min == Max`), Banners (`Horizontal Stretch`), Center Popups (`Middle-Center`), and 1:1 Squares (`AspectRatioFitter`).
+   - 9-Sliced 2D Sprites: Sprite Editor 4-way borders + `Image Type = Sliced` prevents distorted borders.
+   - TextMeshPro Auto-Size: Min 16, Max 32 avoids clipping.
+   - Interactive Live Simulator toggling good vs bad anchors across 20:9, 19.5:9, 16:9, and 4:3 screens.
+5. **Mobile Touch Ergonomics & Optimization (Slide 10)**:
+   - New Input System `OnScreenStick` and `OnScreenButton` for 2D mobile touch.
+   - Minimum Touch Target: $\ge 88\times 88\text{ px}$ (44pt) with 12px finger padding.
+   - Raycast Target Optimization: Uncheck on decorative backgrounds to eliminate mobile touch CPU lag.
+   - High-DPI Drag Threshold: `EventSystem.current.pixelDragThreshold = Mathf.RoundToInt(Screen.dpi / 160f * 6);`.
+   - 2D Sprite Atlas: Pack HUD sprites to reduce draw calls from 40+ to 1-2 on mobile GPUs.
+6. **Sub-Canvas Architecture & Rebatching Isolation (Slide 5)**:
+   - Separate into `Static_HUD` and `Dynamic_HUD` sub-canvases so moving healthbars never rebatch static backgrounds.
+7. **2D World Space UI Sorting & Flip Fix (Slide 6 & Milestone 2)**:
+   - `canvas.overrideSorting = true`, `sortingLayerName = "UI"`, `sortingOrder = 100` so bars render above 2D sprites/tilemaps.
+   - Upright scale fix prevents health bars mirroring backwards when 2D characters flip horizontal (`transform.localScale.x = -1`).
+8. **Mobile 60 FPS Lock**:
+   - `Application.targetFrameRate = 60;` in `Awake()` prevents Unity mobile defaulting to 30 FPS.
+9. **Decoupled UI Architecture (Slide 11)**:
+   - Event-driven UI: Gameplay scripts expose C# `Action<int, int>` events. UI components subscribe in `OnEnable()` and unsubscribe in `OnDisable()`.
+10. **Cross-Platform JSON Persistence (Slides 14-19)**:
+    - Replace PlayerPrefs with `JsonUtility` + `Application.persistentDataPath`.
+    - Mobile Lifecycle Auto-Save: `void OnApplicationPause(bool pause) { if (pause) SaveSystem.Save(data); }`.
+    - Live JSON Persistence Sandbox & Storage Benchmark simulator.
+11. **5-Minute Challenges with Strict 1-Minute Solution Locks (Slides 12 & 19)**:
+    - 300-second classroom countdown timers with MQTT broadcast sync.
+    - Strict unlock at $\le 60$ seconds.
+12. **In-Engine Project Setup (No Package Required)**:
+    - Students work directly inside ongoing mobile game project.
+13. **Teacher Mode & Speaker Notes**:
+    - Press `[T]` for PIN (`7331`). Press `[N]` for speaker notes. Press `[L]` for Lecture/Lab mode.
 
 ---
 
@@ -114,10 +130,10 @@ Students are building a **Mobile Game** (iOS & Android) in Unity 6 (6000.x). The
 ```
 HR/
 ├── presentation_basics3/
-│   ├── presentation_unity6_basics3.html   # Main 19-slide presentation deck (222 KB)
+│   ├── presentation_unity6_basics3.html   # Main 20-slide presentation deck (241 KB)
 │   ├── index.html                         # Presentation entrypoint mirror
 │   ├── generate.js                        # Generator script
-│   ├── test_deck.js                       # 56-test automated validation suite
+│   ├── test_deck.js                       # 57-test automated validation suite
 │   ├── assets/
 │   │   ├── mario.png
 │   │   └── goomba.png

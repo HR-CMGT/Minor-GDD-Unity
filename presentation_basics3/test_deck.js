@@ -41,7 +41,7 @@ assert(match !== null, 'slidesData array extracted successfully');
 
 if (match) {
     const slides = JSON.parse(match[1]);
-    assert(slides.length === 19, 'slidesData has 19 comprehensive slides (found ' + slides.length + ')');
+    assert(slides.length === 20, 'slidesData has 20 comprehensive slides (found ' + slides.length + ')');
     
     let allImgsExist = true;
     slides.forEach((s, i) => {
@@ -56,7 +56,7 @@ if (match) {
             }
         }
     });
-    assert(allImgsExist, 'All 19 slides have valid existing original slide PNG images');
+    assert(allImgsExist, 'All 20 slides have valid existing original slide PNG images');
 }
 
 // 4. Check Lecture vs Lab mode
@@ -91,6 +91,7 @@ assert(html.includes('function setCanvasMode('), 'setCanvasMode() visualizer pre
 assert(html.includes('function simulateJsonSave()'), 'simulateJsonSave() simulator present');
 assert(html.includes('function simulateJsonLoad()'), 'simulateJsonLoad() simulator present');
 assert(html.includes('function simulateStorageBenchmark('), 'simulateStorageBenchmark() present');
+assert(html.includes('function runScaleSimulator()'), 'runScaleSimulator() simulator present');
 
 // 9. Check Syntax Highlighter & Glossary
 assert(html.includes('function highlightCSharp('), 'JetBrains Rider C# syntax highlighter present');
