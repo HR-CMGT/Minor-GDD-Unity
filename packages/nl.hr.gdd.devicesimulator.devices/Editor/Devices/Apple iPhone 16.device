@@ -67,11 +67,11 @@
         }
       ],
       "presentation": {
-        "overlayPath": "DeviceOverlays/iPhone 15.png",
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/Apple iPhone 16_Overlay.png",
         "borderSize": {
-          "x": 80.0,
+          "x": 70.0,
           "y": 70.0,
-          "z": 80.0,
+          "z": 70.0,
           "w": 70.0
         },
         "cornerRadius": 175.0

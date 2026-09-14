@@ -67,7 +67,7 @@
         }
       ],
       "presentation": {
-        "overlayPath": "DeviceOverlays/OnePlus 12_Overlay.png",
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/OnePlus 12_Overlay.png",
         "borderSize": {
           "x": 50.0,
           "y": 50.0,

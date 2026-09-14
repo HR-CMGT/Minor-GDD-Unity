@@ -67,7 +67,7 @@
         }
       ],
       "presentation": {
-        "overlayPath": "DeviceOverlays/Google Pixel 9 Pro XL_Overlay.png",
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/Google Pixel 9 Pro XL_Overlay.png",
         "borderSize": {
           "x": 55.0,
           "y": 55.0,

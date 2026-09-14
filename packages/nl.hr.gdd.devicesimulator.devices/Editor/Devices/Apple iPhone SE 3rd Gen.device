@@ -43,7 +43,7 @@
         }
       ],
       "presentation": {
-        "overlayPath": "DeviceOverlays/Apple iPhone 8_Overlay.png",
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/Apple iPhone 8_Overlay.png",
         "borderSize": {
           "x": 40.0,
           "y": 205.0,

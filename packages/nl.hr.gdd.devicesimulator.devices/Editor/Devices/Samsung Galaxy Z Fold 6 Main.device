@@ -67,7 +67,7 @@
         }
       ],
       "presentation": {
-        "overlayPath": "DeviceOverlays/Samsung Galaxy Z Fold2 5G_2_Overlay.png",
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/Samsung Galaxy Z Fold2 5G_2_Overlay.png",
         "borderSize": {
           "x": 60.0,
           "y": 60.0,

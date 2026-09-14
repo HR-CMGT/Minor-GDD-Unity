@@ -67,7 +67,7 @@
         }
       ],
       "presentation": {
-        "overlayPath": "DeviceOverlays/Samsung Galaxy Z Flip3 5G_Overlay.png",
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/Samsung Galaxy Z Flip3 5G_Overlay.png",
         "borderSize": {
           "x": 60.0,
           "y": 60.0,
