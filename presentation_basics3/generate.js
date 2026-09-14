@@ -2040,21 +2040,64 @@ ${cssStyles}
             --font-scale: 1;
         }
 
-        /* Class 3 Compact Overrides to Prevent Slide Overflow */
-        .code-box pre {
+        /* Scalable Slide Content - Affects all elements inside slides */
+        .slide-content-area,
+        .slide-content-area p,
+        .slide-content-area span,
+        .slide-content-area div,
+        .slide-content-area li,
+        .slide-content-area td,
+        .slide-content-area th,
+        .slide-content-area strong,
+        .slide-content-area em,
+        .slide-content-area code,
+        .slide-content-area pre,
+        .slide-content-area select,
+        .slide-content-area button,
+        .slide-content-area .card-title,
+        .slide-content-area .card-body,
+        .slide-content-area .punchy-point,
+        .slide-content-area .interactive-action-btn,
+        .slide-content-area details summary,
+        .slide-content-area .accordion-body {
+            font-size-adjust: none;
+        }
+
+        /* Apply font scaling multiplier to all text within slide-content-area */
+        .slide-content-area .card-title {
+            font-size: calc(clamp(1.05rem, 2.5cqh, 1.55rem) * var(--font-scale)) !important;
+        }
+        .slide-content-area .card-body {
+            font-size: calc(clamp(0.78rem, 1.70cqh, 1.05rem) * var(--font-scale)) !important;
+            line-height: 1.45 !important;
+        }
+        .slide-content-area .code-box pre {
             font-size: calc(clamp(0.68rem, 1.45cqh, 0.86rem) * var(--font-scale)) !important;
             line-height: 1.35 !important;
             padding: 0.6cqh 1.0cqw !important;
         }
+        .slide-content-area table.dense-table th {
+            font-size: calc(clamp(0.70rem, 1.5cqh, 0.95rem) * var(--font-scale)) !important;
+        }
+        .slide-content-area table.dense-table td {
+            font-size: calc(clamp(0.68rem, 1.4cqh, 0.90rem) * var(--font-scale)) !important;
+        }
+        .slide-content-area .accordion-header {
+            font-size: calc(clamp(0.72rem, 1.6cqh, 0.95rem) * var(--font-scale)) !important;
+        }
+        .slide-content-area .accordion-body {
+            font-size: calc(clamp(0.72rem, 1.55cqh, 0.92rem) * var(--font-scale)) !important;
+        }
+        .slide-content-area .punchy-point {
+            font-size: calc(clamp(0.74rem, 1.6cqh, 0.95rem) * var(--font-scale)) !important;
+        }
+        .slide-content-area .interactive-action-btn {
+            font-size: calc(clamp(0.70rem, 1.5cqh, 0.88rem) * var(--font-scale)) !important;
+        }
+
+        /* Class 3 Compact Overrides to Prevent Slide Overflow */
         .content-card.primary {
             padding: 0.9cqh 1.3cqw !important;
-        }
-        .card-body {
-            font-size: calc(clamp(0.78rem, 1.70cqh, 1.05rem) * var(--font-scale)) !important;
-            line-height: 1.45 !important;
-        }
-        .card-title {
-            font-size: calc(clamp(1.05rem, 2.5cqh, 1.55rem) * var(--font-scale)) !important;
         }
         .split-media-layout .left-column,
         .split-media-layout .right-column {
@@ -2426,6 +2469,9 @@ ${cssStyles}
                 enhanceGlossaryElements();
             }
 
+            // Apply active font scale setting to newly rendered slide elements
+            applyFontScaleToCurrentSlide();
+
             document.getElementById('slideCounter').textContent = \`Slide \${currentSlide + 1} / \${slidesData.length}\`;
             document.getElementById('prevBtn').disabled = (currentSlide === 0);
             document.getElementById('nextBtn').disabled = (currentSlide === slidesData.length - 1);
@@ -2529,6 +2575,28 @@ ${cssStyles}
             setTimeout(autoFitSlideElements, 20);
         }
 
+        function applyFontScaleToCurrentSlide() {
+            let saved = '100';
+            try { saved = localStorage.getItem('gdd_font_scale') || '100'; } catch (e) {}
+            const scale = parseFloat(saved) / 100;
+            const area = document.getElementById('slideContentArea');
+            if (area) {
+                const els = area.querySelectorAll('[style*="font-size"]');
+                els.forEach(el => {
+                    if (!el.dataset.origFontSize) {
+                        el.dataset.origFontSize = el.style.fontSize;
+                    }
+                    const orig = el.dataset.origFontSize;
+                    const match = orig.match(/^([0-9.]+)(rem|px|em|cqh|cqw|vw|vh)$/);
+                    if (match) {
+                        const num = parseFloat(match[1]);
+                        const unit = match[2];
+                        el.style.fontSize = (num * scale).toFixed(3) + unit;
+                    }
+                });
+            }
+        }
+
         function setFontScale(val) {
             const scale = parseFloat(val) / 100;
             document.documentElement.style.setProperty('--font-scale', scale);
@@ -2537,6 +2605,8 @@ ${cssStyles}
             const slider = document.getElementById('fontScaleSlider');
             if (slider && slider.value !== String(val)) slider.value = val;
             try { localStorage.setItem('gdd_font_scale', val); } catch (e) {}
+
+            applyFontScaleToCurrentSlide();
             setTimeout(autoFitSlideElements, 20);
         }
 
