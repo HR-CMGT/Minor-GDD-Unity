@@ -727,7 +727,7 @@ DefaultImporter:
     else:
         return f"""fileFormatVersion: 2
 guid: {guid}
-DefaultImporter:
+TextScriptImporter:
   externalObjects: {{}}
   userData: 
   assetBundleName: 
@@ -995,14 +995,7 @@ def build_unitypackage():
 
     items = []
 
-    # Directories
-    items.append({
-        "pathname": "Assets/Editor",
-        "guid": generate_guid("Assets/Editor"),
-        "is_dir": True,
-        "meta": generate_meta_file(generate_guid("Assets/Editor"), is_folder=True),
-        "content": None
-    })
+    # Subfolders inside Assets/Editor (do not include Assets/Editor itself to avoid GUID conflicts with existing projects)
     items.append({
         "pathname": "Assets/Editor/Devices",
         "guid": generate_guid("Assets/Editor/Devices"),
@@ -1039,39 +1032,66 @@ def build_unitypackage():
             "pathname": rel_path,
             "guid": generate_guid(rel_path),
             "is_dir": False,
-            "meta": generate_meta_file(generate_guid(rel_path)),
+            "meta": generate_meta_file(generate_guid(rel_path), is_folder=False),
             "content": content_bytes
         })
 
-    # Create tar.gz archive
+    # Create tar.gz archive conforming exactly to Unity's native package format
     current_time = int(time.time())
     with tarfile.open(UNITYPACKAGE_OUTPUT, "w:gz", format=tarfile.PAX_FORMAT) as tar:
         for item in items:
             guid = item["guid"]
-            pathname_bytes = (item["pathname"] + "\n").encode('utf-8')
+            pathname_bytes = item["pathname"].encode('utf-8')  # NO TRAILING NEWLINE!
             meta_bytes = item["meta"].encode('utf-8')
 
-            # 1. pathname entry
-            p_info = tarfile.TarInfo(name=f"{guid}/pathname")
-            p_info.size = len(pathname_bytes)
-            p_info.mtime = current_time
-            p_info.mode = 0o644
-            tar.addfile(p_info, io.BytesIO(pathname_bytes))
+            # 1. Directory entry for the GUID (required by Unity unarchiver)
+            dir_info = tarfile.TarInfo(name=guid)
+            dir_info.type = tarfile.DIRTYPE
+            dir_info.size = 0
+            dir_info.mode = 0o777
+            dir_info.mtime = current_time
+            dir_info.uname = ""
+            dir_info.gname = ""
+            dir_info.uid = 0
+            dir_info.gid = 0
+            tar.addfile(dir_info)
 
-            # 2. asset.meta entry
-            m_info = tarfile.TarInfo(name=f"{guid}/asset.meta")
-            m_info.size = len(meta_bytes)
-            m_info.mtime = current_time
-            m_info.mode = 0o644
-            tar.addfile(m_info, io.BytesIO(meta_bytes))
-
-            # 3. asset entry (if not dir)
+            # 2. Asset file (only for files, not folders)
             if not item["is_dir"] and item["content"] is not None:
                 a_info = tarfile.TarInfo(name=f"{guid}/asset")
+                a_info.type = tarfile.REGTYPE
                 a_info.size = len(item["content"])
+                a_info.mode = 0o777
                 a_info.mtime = current_time
-                a_info.mode = 0o644
+                a_info.uname = ""
+                a_info.gname = ""
+                a_info.uid = 0
+                a_info.gid = 0
                 tar.addfile(a_info, io.BytesIO(item["content"]))
+
+            # 3. asset.meta entry
+            m_info = tarfile.TarInfo(name=f"{guid}/asset.meta")
+            m_info.type = tarfile.REGTYPE
+            m_info.size = len(meta_bytes)
+            m_info.mode = 0o777
+            m_info.mtime = current_time
+            m_info.uname = ""
+            m_info.gname = ""
+            m_info.uid = 0
+            m_info.gid = 0
+            tar.addfile(m_info, io.BytesIO(meta_bytes))
+
+            # 4. pathname entry
+            p_info = tarfile.TarInfo(name=f"{guid}/pathname")
+            p_info.type = tarfile.REGTYPE
+            p_info.size = len(pathname_bytes)
+            p_info.mode = 0o777
+            p_info.mtime = current_time
+            p_info.uname = ""
+            p_info.gname = ""
+            p_info.uid = 0
+            p_info.gid = 0
+            tar.addfile(p_info, io.BytesIO(pathname_bytes))
 
     pkg_size = os.path.getsize(UNITYPACKAGE_OUTPUT)
     print(f"Created {UNITYPACKAGE_OUTPUT} ({pkg_size} bytes, {len(items)} items)")
