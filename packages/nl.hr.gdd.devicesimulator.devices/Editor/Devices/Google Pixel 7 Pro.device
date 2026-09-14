@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Google Pixel 7 Pro / 6 Pro",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1440,
+      "height": 3120,
+      "navigationBarHeight": 0,
+      "dpi": 512.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 1440.0,
+            "height": 2976.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 675.0,
+              "y": 3002.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 96.0,
+            "y": 0.0,
+            "width": 2928.0,
+            "height": 1440.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 28.0,
+              "y": 675.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 96.0,
+            "y": 0.0,
+            "width": 2928.0,
+            "height": 1440.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 3002.0,
+              "y": 675.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "Pixel 7 Pro",
+    "deviceType": 1,
+    "operatingSystem": "Android 13.0",
+    "processorCount": 8,
+    "processorType": "Google Tensor G2",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 12288
+  }
+}

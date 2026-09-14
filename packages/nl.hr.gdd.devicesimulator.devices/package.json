@@ -1,0 +1,24 @@
+{
+  "name": "nl.hr.gdd.devicesimulator.devices",
+  "displayName": "HR-CMGT Mobile Device Simulator Profiles (2020-2025)",
+  "version": "1.0.0",
+  "unity": "6000.0",
+  "unityRelease": "0b1",
+  "description": "Comprehensive mobile device profiles for Unity 6 Device Simulator featuring recent flagships (Apple iPhone 12-16, iPads, Samsung Galaxy S20-S24, Z-Fold/Flip, Google Pixel 6-9, OnePlus, Xiaomi) with exact resolutions, DPIs, safe areas, Dynamic Islands, notches, and punch-hole cutouts.",
+  "keywords": [
+    "device simulator",
+    "mobile",
+    "ios",
+    "android",
+    "safe area",
+    "notch",
+    "dynamic island",
+    "hr-cmgt",
+    "gdd"
+  ],
+  "category": "Mobile Simulation",
+  "author": {
+    "name": "HR-CMGT Game Development",
+    "url": "https://github.com/HR-CMGT/Minor-GDD-Unity"
+  }
+}

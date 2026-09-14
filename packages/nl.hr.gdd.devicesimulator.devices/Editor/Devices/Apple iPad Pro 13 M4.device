@@ -1,0 +1,60 @@
+{
+  "friendlyName": "Apple iPad Pro 13-inch (M4)",
+  "version": 1,
+  "screens": [
+    {
+      "width": 2064,
+      "height": 2752,
+      "navigationBarHeight": 0,
+      "dpi": 264.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 2064.0,
+            "height": 2656.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 2752.0,
+            "height": 1968.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 2752.0,
+            "height": 1968.0
+          },
+          "cutouts": []
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPad16,5",
+    "deviceType": 1,
+    "operatingSystem": "iPadOS 17.5",
+    "processorCount": 9,
+    "processorType": "Apple M4",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 8192
+  }
+}

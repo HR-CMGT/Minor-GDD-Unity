@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Apple iPhone 16 Pro Max",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1320,
+      "height": 2868,
+      "navigationBarHeight": 0,
+      "dpi": 460.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 102.0,
+            "width": 1320.0,
+            "height": 2630.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 535.0,
+              "y": 2750.0,
+              "width": 250.0,
+              "height": 75.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 136.0,
+            "y": 63.0,
+            "width": 2596.0,
+            "height": 1257.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 43.0,
+              "y": 535.0,
+              "width": 75.0,
+              "height": 250.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 136.0,
+            "y": 63.0,
+            "width": 2596.0,
+            "height": 1257.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2750.0,
+              "y": 535.0,
+              "width": 75.0,
+              "height": 250.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPhone17,2",
+    "deviceType": 1,
+    "operatingSystem": "iOS 18.0",
+    "processorCount": 6,
+    "processorType": "Apple A18 Pro",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 8192
+  }
+}

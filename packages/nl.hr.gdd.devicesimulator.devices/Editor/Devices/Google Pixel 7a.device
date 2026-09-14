@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Google Pixel 7a / 6a",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1080,
+      "height": 2400,
+      "navigationBarHeight": 0,
+      "dpi": 429.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 1080.0,
+            "height": 2264.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 498.0,
+              "y": 2290.0,
+              "width": 84.0,
+              "height": 84.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 88.0,
+            "y": 0.0,
+            "width": 2224.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 26.0,
+              "y": 498.0,
+              "width": 84.0,
+              "height": 84.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 88.0,
+            "y": 0.0,
+            "width": 2224.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2290.0,
+              "y": 498.0,
+              "width": 84.0,
+              "height": 84.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "Pixel 7a",
+    "deviceType": 1,
+    "operatingSystem": "Android 13.0",
+    "processorCount": 8,
+    "processorType": "Google Tensor G2",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 8192
+  }
+}

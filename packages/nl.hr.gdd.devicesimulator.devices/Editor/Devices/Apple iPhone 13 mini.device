@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Apple iPhone 13 mini / 12 mini",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1080,
+      "height": 2340,
+      "navigationBarHeight": 0,
+      "dpi": 476.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 102.0,
+            "width": 1080.0,
+            "height": 2108.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 355.0,
+              "y": 2244.0,
+              "width": 370.0,
+              "height": 96.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 130.0,
+            "y": 63.0,
+            "width": 2080.0,
+            "height": 1017.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 0.0,
+              "y": 355.0,
+              "width": 96.0,
+              "height": 370.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 130.0,
+            "y": 63.0,
+            "width": 2080.0,
+            "height": 1017.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2244.0,
+              "y": 355.0,
+              "width": 96.0,
+              "height": 370.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPhone14,4",
+    "deviceType": 1,
+    "operatingSystem": "iOS 15.0",
+    "processorCount": 6,
+    "processorType": "Apple A15 Bionic",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 4096
+  }
+}

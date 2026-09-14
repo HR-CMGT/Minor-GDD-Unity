@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Samsung Galaxy Z Fold 6 / 5 (Unfolded Main)",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1812,
+      "height": 2176,
+      "navigationBarHeight": 0,
+      "dpi": 374.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 44.0,
+            "width": 1812.0,
+            "height": 2062.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 1176.0,
+              "y": 2092.0,
+              "width": 60.0,
+              "height": 60.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 70.0,
+            "y": 0.0,
+            "width": 2036.0,
+            "height": 1812.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 24.0,
+              "y": 1176.0,
+              "width": 60.0,
+              "height": 60.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 70.0,
+            "y": 0.0,
+            "width": 2036.0,
+            "height": 1812.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2092.0,
+              "y": 1176.0,
+              "width": 60.0,
+              "height": 60.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "SM-F956B",
+    "deviceType": 1,
+    "operatingSystem": "Android 14.0",
+    "processorCount": 8,
+    "processorType": "Snapdragon 8 Gen 3",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 12288
+  }
+}

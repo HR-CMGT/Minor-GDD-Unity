@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Apple iPhone 16 / 15 / 15 Pro",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1179,
+      "height": 2556,
+      "navigationBarHeight": 0,
+      "dpi": 460.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 102.0,
+            "width": 1179.0,
+            "height": 2318.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 464.5,
+              "y": 2438.0,
+              "width": 250.0,
+              "height": 75.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 136.0,
+            "y": 63.0,
+            "width": 2284.0,
+            "height": 1116.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 43.0,
+              "y": 464.5,
+              "width": 75.0,
+              "height": 250.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 136.0,
+            "y": 63.0,
+            "width": 2284.0,
+            "height": 1116.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2438.0,
+              "y": 464.5,
+              "width": 75.0,
+              "height": 250.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPhone17,3",
+    "deviceType": 1,
+    "operatingSystem": "iOS 18.0",
+    "processorCount": 6,
+    "processorType": "Apple A18",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 8192
+  }
+}
