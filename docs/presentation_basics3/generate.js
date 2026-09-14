@@ -858,35 +858,31 @@ public class HealthBarUI : MonoBehaviour {
   {
     title: "Challenge 1: Mobile HUD with Safe Area",
     origImg: "original_slides/slide_09.png",
-    notes: "Give students 5 minutes to construct their mobile HUD with SafeAreaFitter. Have them test in Unity Device Simulator across iPhone 15 Pro and iPad Air.",
+    notes: "Give students 10 minutes to construct their mobile HUD with SafeAreaFitter. Have them test in Unity Device Simulator across iPhone 15 Pro and iPad Air.",
     content: `
     <div class="split-media-layout">
         <div class="left-column">
             <div class="content-card primary">
-                <div class="card-title core">[5-MIN CHALLENGE] Mobile-First HUD Layout</div>
+                <div class="card-title core">[10-MIN CHALLENGE] Mobile-First HUD Layout</div>
                 <div class="card-body">
                     <p style="margin: 0 0 8px 0; font-weight: 700; color: #0284c7;">
                         Goal: Construct a fluid mobile HUD on Canvas Scaler (1920x1080 Match Height 1.0) with SafeAreaFitter that dynamically adapts across iPhone, Galaxy, and iPad without black borders!
                     </p>
                     <ul style="padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;">
                         <li><strong>SafeAreaPanel:</strong> Child of Canvas, Full Stretch (0,0 to 1,1) with <code>SafeAreaFitter.cs</code> attached.</li>
-                        <li><strong>Element 1 (Pause Button):</strong> Top-Left inside Safe Area &bull; Min size <strong>88 &times; 88 px</strong>.</li>
-                        <li><strong>Element 2 (Currency / Score):</strong> Top-Right inside Safe Area &bull; TMP (Raycast Target OFF).</li>
-                        <li><strong>Element 3 (Joystick Touch Zone):</strong> Bottom-Left &bull; Min <strong>140 &times; 140 px</strong> &bull; <code>OnScreenStick</code> attached.</li>
-                        <li><strong>Element 4 (Attack / Jump):</strong> Bottom-Right &bull; Min <strong>96 &times; 96 px</strong> &bull; <code>OnScreenButton</code> attached.</li>
+                        <li><strong>Pause Button:</strong> Anchored Top-Left inside SafeAreaPanel (Min: 0,1 | Max: 0,1 | Pivot: 0,1).</li>
+                        <li><strong>Attack Button:</strong> Anchored Bottom-Right inside SafeAreaPanel (Min: 1,0 | Max: 1,0 | Pivot: 1,0).</li>
+                        <li><strong>Health Bar:</strong> Anchored Top-Center inside SafeAreaPanel (Min: 0.5,1 | Max: 0.5,1 | Pivot: 0.5,1).</li>
                     </ul>
-                    <div class="lab-deep-dive">
-                        <strong>Test in Device Simulator:</strong> Open <code>Window &gt; General &gt; Device Simulator</code>. Switch between <strong>Apple iPhone 15 Pro</strong>, <strong>Galaxy S24</strong>, and <strong>Apple iPad Air (4:3)</strong>. Ensure UI dynamically spreads across widescreen and insets past notches without letterboxing!
-                    </div>
                 </div>
             </div>
 
             <div class="content-card primary" style="border-left-color: #10b981;">
-                <div class="card-title core" style="color: #059669;">Quick Mobile Rules Checklist</div>
+                <div class="card-title core" style="color: #059669;">Device Simulator Test Targets</div>
                 <div class="card-body">
-                    <div class="punchy-point"><span class="punchy-tag">NOTCH</span> Never anchor HUD directly to Canvas &mdash; anchor to <code>SafeAreaPanel</code>!</div>
-                    <div class="punchy-point"><span class="punchy-tag">TOUCH</span> Keep buttons &ge; 88px (44pt) with 12px padding between buttons.</div>
-                    <div class="punchy-point"><span class="punchy-tag">RAYCAST</span> Uncheck 'Raycast Target' on all decorative images and static text!</div>
+                    <div class="punchy-point"><span class="punchy-tag">iPhone 15</span> Notch / Island: Pause button insets safely without notch clipping.</div>
+                    <div class="punchy-point"><span class="punchy-tag">Galaxy S24</span> 20:9 Ultrawide: Buttons remain corner-pinned, zero letterbox bars.</div>
+                    <div class="punchy-point"><span class="punchy-tag">iPad Air</span> 4:3 Aspect: Horizontal elements contract cleanly without overlapping.</div>
                 </div>
             </div>
         </div>
@@ -894,16 +890,16 @@ public class HealthBarUI : MonoBehaviour {
         <div class="right-column">
             <div class="media-panel-card" style="padding: 14px; gap: 10px;">
                 <div style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;">
-                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]
+                    [CLASS CHALLENGE TIMEBOX: 10 MINUTES]
                 </div>
                 <div style="width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;">
                     <div id="cTimer1" style="font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;">
-                        05:00
+                        10:00
                     </div>
                     <div class="lecturer-timer-controls" id="controls_cTimer1" style="display: flex; gap: 8px; justify-content: center; margin-top: 10px;">
-                        <button class="interactive-action-btn" onclick="lecturerStartTimer('cTimer1', 300)">Start 5:00</button>
+                        <button class="interactive-action-btn" onclick="lecturerStartTimer('cTimer1', 600)">Start 10:00</button>
                         <button class="interactive-action-btn secondary" onclick="lecturerPauseTimer('cTimer1')">Pause</button>
-                        <button class="interactive-action-btn secondary" onclick="lecturerResetTimer('cTimer1', 300)">Reset</button>
+                        <button class="interactive-action-btn secondary" onclick="lecturerResetTimer('cTimer1', 600)">Reset</button>
                     </div>
                     <div class="student-timer-status" id="status_cTimer1" style="display: none; margin-top: 10px; font-size: 0.76rem; font-weight: 700; color: #94a3b8;">
                         Synced with Classroom Timer
@@ -913,7 +909,7 @@ public class HealthBarUI : MonoBehaviour {
                 <!-- 1-Minute Solution Lock Box -->
                 <div style="width: 100%;">
                     <button id="btnSol_solBox1" class="interactive-action-btn secondary" disabled style="width: 100%; padding: 8px 12px; font-size: 0.78rem; font-weight: 800; opacity: 0.6; cursor: not-allowed; border: 1px solid #1e293b;">
-                        Solution Locked (Unlocks at 01:00 &bull; 05:00 remaining)
+                        Solution Locked (Unlocks at 01:00 &bull; 10:00 remaining)
                     </button>
                     <div id="solBox1" class="solution-box" style="display: none; margin-top: 8px;">
                         <div style="font-size: 0.75rem; font-weight: 800; color: #10b981; margin-bottom: 4px;">
@@ -1490,12 +1486,12 @@ IEnumerator FetchOnlineLeaderboard(string url) {
   {
     title: "Challenge 2: The JSON Save & Fetch Service",
     origImg: "original_slides/slide_15.png",
-    notes: "Give students 5 minutes to test saving, loading, and fetching. Emphasize realizing WHAT to serialize: a clean [Serializable] class, and how to consume it in a MonoBehaviour.",
+    notes: "Give students 10 minutes to test saving, loading, and fetching. Emphasize realizing WHAT to serialize: a clean [Serializable] class, and how to consume it in a MonoBehaviour.",
     content: `
     <div class="split-media-layout">
         <div class="left-column">
             <div class="content-card primary">
-                <div class="card-title core">[5-MIN CHALLENGE] Production JSON Persistence</div>
+                <div class="card-title core">[10-MIN CHALLENGE] Production JSON Persistence</div>
                 <div class="card-body">
                     <p style="margin: 0 0 8px 0; font-weight: 700; color: #0284c7;">
                         Goal: Create a complete Save/Load system for player highscore and unlocked levels, then fetch and bind it to the HUD!
@@ -1521,16 +1517,16 @@ IEnumerator FetchOnlineLeaderboard(string url) {
         <div class="right-column">
             <div class="media-panel-card" style="padding: 14px; gap: 10px;">
                 <div style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;">
-                    [CLASS CHALLENGE TIMEBOX: 5 MINUTES]
+                    [CLASS CHALLENGE TIMEBOX: 10 MINUTES]
                 </div>
                 <div style="width: 100%; padding: 14px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; text-align: center;">
                     <div id="cTimer2" style="font-size: 2.6rem; font-weight: 900; font-family: monospace; color: #38bdf8; letter-spacing: 2px;">
-                        05:00
+                        10:00
                     </div>
                     <div class="lecturer-timer-controls" id="controls_cTimer2" style="display: flex; gap: 8px; justify-content: center; margin-top: 10px;">
-                        <button class="interactive-action-btn" onclick="lecturerStartTimer('cTimer2', 300)">Start 5:00</button>
+                        <button class="interactive-action-btn" onclick="lecturerStartTimer('cTimer2', 600)">Start 10:00</button>
                         <button class="interactive-action-btn secondary" onclick="lecturerPauseTimer('cTimer2')">Pause</button>
-                        <button class="interactive-action-btn secondary" onclick="lecturerResetTimer('cTimer2', 300)">Reset</button>
+                        <button class="interactive-action-btn secondary" onclick="lecturerResetTimer('cTimer2', 600)">Reset</button>
                     </div>
                     <div class="student-timer-status" id="status_cTimer2" style="display: none; margin-top: 10px; font-size: 0.76rem; font-weight: 700; color: #94a3b8;">
                         Synced with Classroom Timer
@@ -1540,7 +1536,7 @@ IEnumerator FetchOnlineLeaderboard(string url) {
                 <!-- 1-Minute Solution Lock Box -->
                 <div style="width: 100%;">
                     <button id="btnSol_solBox2" class="interactive-action-btn secondary" disabled style="width: 100%; padding: 8px 12px; font-size: 0.78rem; font-weight: 800; opacity: 0.6; cursor: not-allowed; border: 1px solid #1e293b;">
-                        Solution Locked (Unlocks at 01:00 &bull; 05:00 remaining)
+                        Solution Locked (Unlocks at 01:00 &bull; 10:00 remaining)
                     </button>
                     <div id="solBox2" class="solution-box" style="display: none; margin-top: 8px;">
                         <div style="font-size: 0.75rem; font-weight: 800; color: #10b981; margin-bottom: 4px;">
@@ -1577,9 +1573,9 @@ void Start() {
     `
   },
 
-  // Slide 21: Course Summary & Milestones Checklist
+  // Slide 21: Course Summary & Key Takeaways
   {
-    title: "Summary & Milestone Checklist",
+    title: "Course Summary & Key Takeaways",
     origImg: "original_slides/slide_15.png",
     content: `
     <div class="split-media-layout">
@@ -2931,10 +2927,10 @@ ${cssStyles}
         }
 
         // ==========================================
-        // CLASS CHALLENGE TIMERS (5-MIN TIMEBOX)
+        // CLASS CHALLENGE TIMERS (10-MIN TIMEBOX)
         // ==========================================
         let challengeTimers = {};
-        let challengeRemaining = { 'cTimer1': 300, 'cTimer2': 300 };
+        let challengeRemaining = { 'cTimer1': 600, 'cTimer2': 600 };
         let timerToSolutionMap = {
             'cTimer1': 'solBox1',
             'cTimer2': 'solBox2'
@@ -2985,7 +2981,7 @@ ${cssStyles}
                 const stat = document.getElementById('status_' + id);
                 if (ctrl) ctrl.style.display = isLecturer ? 'flex' : 'none';
                 if (stat) stat.style.display = isLecturer ? 'none' : 'block';
-                updateSolutionLockState(id, challengeRemaining[id] !== undefined ? challengeRemaining[id] : 300);
+                updateSolutionLockState(id, challengeRemaining[id] !== undefined ? challengeRemaining[id] : 600);
             });
         }
 
