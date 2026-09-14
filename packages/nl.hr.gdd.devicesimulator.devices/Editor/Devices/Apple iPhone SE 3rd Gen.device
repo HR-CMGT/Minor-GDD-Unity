@@ -1,0 +1,60 @@
+{
+  "friendlyName": "Apple iPhone SE (3rd Gen)",
+  "version": 1,
+  "screens": [
+    {
+      "width": 750,
+      "height": 1334,
+      "navigationBarHeight": 0,
+      "dpi": 326.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 750.0,
+            "height": 1294.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 1334.0,
+            "height": 750.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 1334.0,
+            "height": 750.0
+          },
+          "cutouts": []
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPhone14,6",
+    "deviceType": 1,
+    "operatingSystem": "iOS 15.4",
+    "processorCount": 6,
+    "processorType": "Apple A15 Bionic",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 4096
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Samsung Galaxy S24 / S23 / S22",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1080,
+      "height": 2340,
+      "navigationBarHeight": 0,
+      "dpi": 416.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 44.0,
+            "width": 1080.0,
+            "height": 2212.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 500.0,
+              "y": 2236.0,
+              "width": 80.0,
+              "height": 80.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 84.0,
+            "y": 0.0,
+            "width": 2172.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 24.0,
+              "y": 500.0,
+              "width": 80.0,
+              "height": 80.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 84.0,
+            "y": 0.0,
+            "width": 2172.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2236.0,
+              "y": 500.0,
+              "width": 80.0,
+              "height": 80.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "SM-S921B",
+    "deviceType": 1,
+    "operatingSystem": "Android 14.0",
+    "processorCount": 8,
+    "processorType": "Snapdragon 8 Gen 3",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 8192
+  }
+}

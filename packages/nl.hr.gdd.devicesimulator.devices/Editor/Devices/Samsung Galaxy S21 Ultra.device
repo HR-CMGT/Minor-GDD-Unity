@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Samsung Galaxy S21 Ultra / S20 Ultra",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1440,
+      "height": 3200,
+      "navigationBarHeight": 0,
+      "dpi": 515.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 1440.0,
+            "height": 3054.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 675.0,
+              "y": 3084.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 98.0,
+            "y": 0.0,
+            "width": 3004.0,
+            "height": 1440.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 26.0,
+              "y": 675.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 98.0,
+            "y": 0.0,
+            "width": 3004.0,
+            "height": 1440.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 3084.0,
+              "y": 675.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "SM-G998B",
+    "deviceType": 1,
+    "operatingSystem": "Android 11.0",
+    "processorCount": 8,
+    "processorType": "Exynos 2100",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 12288
+  }
+}

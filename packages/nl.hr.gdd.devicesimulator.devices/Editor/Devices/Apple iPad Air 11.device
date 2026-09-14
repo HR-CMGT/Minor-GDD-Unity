@@ -1,0 +1,60 @@
+{
+  "friendlyName": "Apple iPad Air 11-inch (M2) / 10th Gen",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1640,
+      "height": 2360,
+      "navigationBarHeight": 0,
+      "dpi": 264.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 44.0,
+            "width": 1640.0,
+            "height": 2272.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 44.0,
+            "width": 2360.0,
+            "height": 1552.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 44.0,
+            "width": 2360.0,
+            "height": 1552.0
+          },
+          "cutouts": []
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPad14,8",
+    "deviceType": 1,
+    "operatingSystem": "iPadOS 17.4",
+    "processorCount": 8,
+    "processorType": "Apple M2",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 8192
+  }
+}

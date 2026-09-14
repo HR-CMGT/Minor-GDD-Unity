@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Google Pixel 9 / 8",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1080,
+      "height": 2424,
+      "navigationBarHeight": 0,
+      "dpi": 428.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 1080.0,
+            "height": 2286.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 498.0,
+              "y": 2314.0,
+              "width": 84.0,
+              "height": 84.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 90.0,
+            "y": 0.0,
+            "width": 2244.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 26.0,
+              "y": 498.0,
+              "width": 84.0,
+              "height": 84.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 90.0,
+            "y": 0.0,
+            "width": 2244.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2314.0,
+              "y": 498.0,
+              "width": 84.0,
+              "height": 84.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "Pixel 9",
+    "deviceType": 1,
+    "operatingSystem": "Android 14.0",
+    "processorCount": 8,
+    "processorType": "Google Tensor G4",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 12288
+  }
+}

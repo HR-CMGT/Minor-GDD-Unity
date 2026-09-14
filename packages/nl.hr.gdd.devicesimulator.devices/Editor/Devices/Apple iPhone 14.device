@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Apple iPhone 14 / 13 / 13 Pro",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1170,
+      "height": 2532,
+      "navigationBarHeight": 0,
+      "dpi": 460.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 102.0,
+            "width": 1170.0,
+            "height": 2298.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 410.0,
+              "y": 2430.0,
+              "width": 350.0,
+              "height": 102.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 132.0,
+            "y": 63.0,
+            "width": 2268.0,
+            "height": 1107.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 0.0,
+              "y": 410.0,
+              "width": 102.0,
+              "height": 350.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 132.0,
+            "y": 63.0,
+            "width": 2268.0,
+            "height": 1107.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2430.0,
+              "y": 410.0,
+              "width": 102.0,
+              "height": 350.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPhone14,7",
+    "deviceType": 1,
+    "operatingSystem": "iOS 16.0",
+    "processorCount": 6,
+    "processorType": "Apple A15 Bionic",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 6144
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Google Pixel 9 Pro XL / 8 Pro",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1344,
+      "height": 2992,
+      "navigationBarHeight": 0,
+      "dpi": 486.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 50.0,
+            "width": 1344.0,
+            "height": 2846.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 627.0,
+              "y": 2874.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 96.0,
+            "y": 0.0,
+            "width": 2800.0,
+            "height": 1344.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 28.0,
+              "y": 627.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 96.0,
+            "y": 0.0,
+            "width": 2800.0,
+            "height": 1344.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2874.0,
+              "y": 627.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "Pixel 9 Pro XL",
+    "deviceType": 1,
+    "operatingSystem": "Android 14.0",
+    "processorCount": 8,
+    "processorType": "Google Tensor G4",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 16384
+  }
+}

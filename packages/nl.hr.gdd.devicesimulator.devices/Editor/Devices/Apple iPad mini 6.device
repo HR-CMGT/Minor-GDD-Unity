@@ -1,0 +1,60 @@
+{
+  "friendlyName": "Apple iPad mini (6th Gen)",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1488,
+      "height": 2266,
+      "navigationBarHeight": 0,
+      "dpi": 326.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 40.0,
+            "width": 1488.0,
+            "height": 2186.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 40.0,
+            "width": 2266.0,
+            "height": 1408.0
+          },
+          "cutouts": []
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 40.0,
+            "width": 2266.0,
+            "height": 1408.0
+          },
+          "cutouts": []
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "iPad14,1",
+    "deviceType": 1,
+    "operatingSystem": "iPadOS 15.0",
+    "processorCount": 6,
+    "processorType": "Apple A15 Bionic",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 4096
+  }
+}

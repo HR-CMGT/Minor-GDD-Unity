@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Samsung Galaxy S24 Ultra",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1440,
+      "height": 3120,
+      "navigationBarHeight": 0,
+      "dpi": 505.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 50.0,
+            "width": 1440.0,
+            "height": 2970.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 672.0,
+              "y": 2996.0,
+              "width": 96.0,
+              "height": 96.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 100.0,
+            "y": 0.0,
+            "width": 2920.0,
+            "height": 1440.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 28.0,
+              "y": 672.0,
+              "width": 96.0,
+              "height": 96.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 100.0,
+            "y": 0.0,
+            "width": 2920.0,
+            "height": 1440.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2996.0,
+              "y": 672.0,
+              "width": 96.0,
+              "height": 96.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "SM-S928B",
+    "deviceType": 1,
+    "operatingSystem": "Android 14.0",
+    "processorCount": 8,
+    "processorType": "Snapdragon 8 Gen 3",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 12288
+  }
+}

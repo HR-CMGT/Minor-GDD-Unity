@@ -1,0 +1,84 @@
+{
+  "friendlyName": "Samsung Galaxy A55 / A54 5G",
+  "version": 1,
+  "screens": [
+    {
+      "width": 1080,
+      "height": 2340,
+      "navigationBarHeight": 0,
+      "dpi": 390.0,
+      "orientations": [
+        {
+          "orientation": 1,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 48.0,
+            "width": 1080.0,
+            "height": 2204.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 495.0,
+              "y": 2224.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 3,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 88.0,
+            "y": 0.0,
+            "width": 2164.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 26.0,
+              "y": 495.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        },
+        {
+          "orientation": 4,
+          "safeArea": {
+            "serializedVersion": "2",
+            "x": 88.0,
+            "y": 0.0,
+            "width": 2164.0,
+            "height": 1080.0
+          },
+          "cutouts": [
+            {
+              "serializedVersion": "2",
+              "x": 2224.0,
+              "y": 495.0,
+              "width": 90.0,
+              "height": 90.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systemInfo": {
+    "deviceModel": "SM-A556B",
+    "deviceType": 1,
+    "operatingSystem": "Android 14.0",
+    "processorCount": 8,
+    "processorType": "Exynos 1480",
+    "supportsAccelerometer": true,
+    "supportsAudio": true,
+    "supportsGyroscope": true,
+    "supportsLocationService": true,
+    "supportsVibration": true,
+    "systemMemorySize": 8192
+  }
+}
