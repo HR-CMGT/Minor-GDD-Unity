@@ -1956,9 +1956,14 @@
         }
 
     
+        /* Font Scaling Root Variables */
+        :root {
+            --font-scale: 1;
+        }
+
         /* Class 3 Compact Overrides to Prevent Slide Overflow */
         .code-box pre {
-            font-size: clamp(0.68rem, 1.45cqh, 0.86rem) !important;
+            font-size: calc(clamp(0.68rem, 1.45cqh, 0.86rem) * var(--font-scale)) !important;
             line-height: 1.35 !important;
             padding: 0.6cqh 1.0cqw !important;
         }
@@ -1966,8 +1971,11 @@
             padding: 0.9cqh 1.3cqw !important;
         }
         .card-body {
-            font-size: clamp(0.78rem, 1.70cqh, 1.05rem) !important;
+            font-size: calc(clamp(0.78rem, 1.70cqh, 1.05rem) * var(--font-scale)) !important;
             line-height: 1.45 !important;
+        }
+        .card-title {
+            font-size: calc(clamp(1.05rem, 2.5cqh, 1.55rem) * var(--font-scale)) !important;
         }
         .split-media-layout .left-column,
         .split-media-layout .right-column {
@@ -1975,6 +1983,40 @@
         }
         .slide-content-area {
             transform-origin: top left;
+        }
+
+        /* Bottom Bar Font Slider Widget */
+        .font-slider-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #182030;
+            border: 1px solid #334155;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .font-slider-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            user-select: none;
+        }
+        .font-slider-ctrl {
+            width: 80px;
+            height: 4px;
+            accent-color: var(--hr-red);
+            cursor: pointer;
+            outline: none;
+        }
+        .font-slider-val {
+            font-size: 0.70rem;
+            font-weight: 800;
+            color: #38bdf8;
+            font-family: monospace;
+            min-width: 32px;
+            text-align: right;
+            user-select: none;
         }
     </style>
 </head>
@@ -2049,11 +2091,11 @@
                 <button class="viewmode-btn active" id="btnViewLecture" onclick="setViewMode('lecture')">Lecture Mode</button>
                 <button class="viewmode-btn" id="btnViewLab" onclick="setViewMode('lab')">Lab Mode</button>
             </div>
-            <button class="btn-flag-pace" id="btnStudentTooFast" onclick="toggleStudentTooFast()">
-                <span class="flag-dot"></span>
-                <span>Too Fast</span>
-            </button>
-            <button class="btn-clear-flags" id="btnClearFlags" onclick="clearAllPaceFlags()">Clear Pace (0)</button>
+            <div class="font-slider-wrap" title="Adjust text font size">
+                <span class="font-slider-label">Font:</span>
+                <input type="range" id="fontScaleSlider" class="font-slider-ctrl" min="70" max="140" value="100" step="5" oninput="setFontScale(this.value)">
+                <span id="fontScaleValue" class="font-slider-val">100%</span>
+            </div>
             <span class="mode-indicator new" id="modeBadge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">Modern Unity 6</span>
         </div>
 
@@ -2353,6 +2395,7 @@
             updateModeDisplay();
             initTeacherMode();
             initPaceFeedback();
+            initFontScale();
         }
 
         function buildDrawer() {
@@ -2551,6 +2594,23 @@
             highlightAllCodeBlocks();
             enhanceGlossaryElements();
             setTimeout(autoFitSlideElements, 20);
+        }
+
+        function setFontScale(val) {
+            const scale = parseFloat(val) / 100;
+            document.documentElement.style.setProperty('--font-scale', scale);
+            const disp = document.getElementById('fontScaleValue');
+            if (disp) disp.textContent = val + '%';
+            const slider = document.getElementById('fontScaleSlider');
+            if (slider && slider.value !== String(val)) slider.value = val;
+            try { localStorage.setItem('gdd_font_scale', val); } catch (e) {}
+            setTimeout(autoFitSlideElements, 20);
+        }
+
+        function initFontScale() {
+            let saved = '100';
+            try { saved = localStorage.getItem('gdd_font_scale') || '100'; } catch (e) {}
+            setFontScale(saved);
         }
 
         function setTier(tier) {

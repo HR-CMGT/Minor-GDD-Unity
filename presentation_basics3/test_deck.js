@@ -99,10 +99,12 @@ assert(html.includes('function copyCode('), 'copyCode() clipboard function prese
 assert(html.includes('const GLOSSARY_TERMS ='), 'Glossary dictionary defined');
 assert(html.includes('function initGlossaryTooltips()'), 'Glossary tooltip manager initialized');
 
-// 10. Check Student Pace & MQTT
-assert(html.includes('id="btnStudentTooFast"'), 'Student Too Fast button present');
+// 10. Check Font Slider & Pace Controls
+assert(html.includes('id="fontScaleSlider"'), 'Font size slider present');
+assert(html.includes('id="fontScaleValue"'), 'Font size value display present');
+assert(html.includes('function setFontScale('), 'setFontScale() function defined');
+assert(!html.includes('id="btnStudentTooFast"'), 'Too Fast button removed from bottom bar');
 assert(html.includes('id="paceSpeedBubble"'), 'Teacher pace speed bubble present');
-assert(html.includes('id="btnClearFlags"'), 'Teacher clear flags button present');
 
 // 11. Check Portal links
 const rootIndexHtml = fs.readFileSync(rootIndexPath, 'utf8');
