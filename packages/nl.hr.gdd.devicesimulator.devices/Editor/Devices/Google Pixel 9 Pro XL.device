@@ -65,7 +65,17 @@
             }
           ]
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "DeviceOverlays/Google Pixel 9 Pro XL_Overlay.png",
+        "borderSize": {
+          "x": 55.0,
+          "y": 55.0,
+          "z": 55.0,
+          "w": 55.0
+        },
+        "cornerRadius": 145.0
+      }
     }
   ],
   "systemInfo": {

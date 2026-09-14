@@ -65,7 +65,17 @@
             }
           ]
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "DeviceOverlays/iPhone 14.png",
+        "borderSize": {
+          "x": 80.0,
+          "y": 70.0,
+          "z": 80.0,
+          "w": 70.0
+        },
+        "cornerRadius": 185.0
+      }
     }
   ],
   "systemInfo": {

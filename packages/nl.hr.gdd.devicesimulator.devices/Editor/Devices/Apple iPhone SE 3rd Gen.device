@@ -41,7 +41,17 @@
           },
           "cutouts": []
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "DeviceOverlays/Apple iPhone 8_Overlay.png",
+        "borderSize": {
+          "x": 40.0,
+          "y": 205.0,
+          "z": 40.0,
+          "w": 205.0
+        },
+        "cornerRadius": 140.0
+      }
     }
   ],
   "systemInfo": {

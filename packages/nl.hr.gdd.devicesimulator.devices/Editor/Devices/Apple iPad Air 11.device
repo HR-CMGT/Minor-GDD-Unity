@@ -41,7 +41,17 @@
           },
           "cutouts": []
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "DeviceOverlays/Apple iPad Air (4th generation)_Overlay.png",
+        "borderSize": {
+          "x": 115.0,
+          "y": 115.0,
+          "z": 115.0,
+          "w": 115.0
+        },
+        "cornerRadius": 125.0
+      }
     }
   ],
   "systemInfo": {

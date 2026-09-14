@@ -65,7 +65,17 @@
             }
           ]
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "DeviceOverlays/Apple iPhone 12 mini_Overlay.png",
+        "borderSize": {
+          "x": 65.0,
+          "y": 65.0,
+          "z": 65.0,
+          "w": 65.0
+        },
+        "cornerRadius": 190.0
+      }
     }
   ],
   "systemInfo": {

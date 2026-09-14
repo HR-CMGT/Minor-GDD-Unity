@@ -65,7 +65,17 @@
             }
           ]
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "DeviceOverlays/Samsung Galaxy Z Flip3 5G_Overlay.png",
+        "borderSize": {
+          "x": 60.0,
+          "y": 60.0,
+          "z": 60.0,
+          "w": 60.0
+        },
+        "cornerRadius": 150.0
+      }
     }
   ],
   "systemInfo": {

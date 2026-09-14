@@ -65,7 +65,17 @@
             }
           ]
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "DeviceOverlays/Samsung Galaxy S24_Overlay.png",
+        "borderSize": {
+          "x": 50.0,
+          "y": 50.0,
+          "z": 50.0,
+          "w": 50.0
+        },
+        "cornerRadius": 100.0
+      }
     }
   ],
   "systemInfo": {
