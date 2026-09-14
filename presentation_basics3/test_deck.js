@@ -41,7 +41,7 @@ assert(match !== null, 'slidesData array extracted successfully');
 
 if (match) {
     const slides = JSON.parse(match[1]);
-    assert(slides.length === 19, 'slidesData has 19 comprehensive slides (found ' + slides.length + ')');
+    assert(slides.length === 20, 'slidesData has 20 comprehensive slides (found ' + slides.length + ')');
     
     let allImgsExist = true;
     slides.forEach((s, i) => {
@@ -56,7 +56,7 @@ if (match) {
             }
         }
     });
-    assert(allImgsExist, 'All 19 slides have valid existing original slide PNG images');
+    assert(allImgsExist, 'All 20 slides have valid existing original slide PNG images');
 }
 
 // 4. Check Lecture vs Lab mode
@@ -91,6 +91,7 @@ assert(html.includes('function setCanvasMode('), 'setCanvasMode() visualizer pre
 assert(html.includes('function simulateJsonSave()'), 'simulateJsonSave() simulator present');
 assert(html.includes('function simulateJsonLoad()'), 'simulateJsonLoad() simulator present');
 assert(html.includes('function simulateStorageBenchmark('), 'simulateStorageBenchmark() present');
+assert(html.includes('function runScaleSimulator()'), 'runScaleSimulator() simulator present');
 
 // 9. Check Syntax Highlighter & Glossary
 assert(html.includes('function highlightCSharp('), 'JetBrains Rider C# syntax highlighter present');
@@ -98,10 +99,12 @@ assert(html.includes('function copyCode('), 'copyCode() clipboard function prese
 assert(html.includes('const GLOSSARY_TERMS ='), 'Glossary dictionary defined');
 assert(html.includes('function initGlossaryTooltips()'), 'Glossary tooltip manager initialized');
 
-// 10. Check Student Pace & MQTT
-assert(html.includes('id="btnStudentTooFast"'), 'Student Too Fast button present');
+// 10. Check Font Slider & Pace Controls
+assert(html.includes('id="fontScaleSlider"'), 'Font size slider present');
+assert(html.includes('id="fontScaleValue"'), 'Font size value display present');
+assert(html.includes('function setFontScale('), 'setFontScale() function defined');
+assert(!html.includes('id="btnStudentTooFast"'), 'Too Fast button removed from bottom bar');
 assert(html.includes('id="paceSpeedBubble"'), 'Teacher pace speed bubble present');
-assert(html.includes('id="btnClearFlags"'), 'Teacher clear flags button present');
 
 // 11. Check Portal links
 const rootIndexHtml = fs.readFileSync(rootIndexPath, 'utf8');
