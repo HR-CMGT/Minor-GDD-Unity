@@ -303,18 +303,16 @@ const slidesData = [
 [RequireComponent(typeof(Canvas))]
 public class WorldSpaceHealthBar2D : MonoBehaviour {
     void Awake() {
-        var canvas = GetComponent&lt;Canvas&gt;();
-        canvas.overrideSorting = true;
-        canvas.sortingLayerName = "UI";
-        canvas.sortingOrder = 100;
+        var c = GetComponent&lt;Canvas&gt;();
+        c.overrideSorting = true;
+        c.sortingLayerName = "UI";
+        c.sortingOrder = 100;
     }
     void LateUpdate() {
-        // Keep UI upright when parent 2D character turns left/right
-        if (transform.parent != null) {
-            Vector3 s = transform.localScale;
-            s.x = Mathf.Abs(s.x) * Mathf.Sign(transform.parent.lossyScale.x);
-            transform.localScale = s;
-        }
+        if (transform.parent == null) return;
+        Vector3 s = transform.localScale;
+        s.x = Mathf.Abs(s.x) * Mathf.Sign(transform.parent.lossyScale.x);
+        transform.localScale = s;
     }
 }</pre>
                     </div>
@@ -494,24 +492,15 @@ public class WorldSpaceHealthBar2D : MonoBehaviour {
 public class SafeAreaFitter : MonoBehaviour {
     private RectTransform _rt;
     private Rect _lastSafe;
-    private Vector2Int _lastScreen;
-
-    void Awake() {
-        _rt = GetComponent&lt;RectTransform&gt;();
-        ApplySafeArea();
-    }
+    void Awake() { _rt = GetComponent&lt;RectTransform&gt;(); ApplySafeArea(); }
     void Update() {
-        // Re-apply if player rotates phone 180deg or screen resizes
-        if (Screen.safeArea != _lastSafe || Screen.width != _lastScreen.x || Screen.height != _lastScreen.y) {
-            ApplySafeArea();
-        }
+        if (Screen.safeArea != _lastSafe) ApplySafeArea();
     }
     void ApplySafeArea() {
         _lastSafe = Screen.safeArea;
-        _lastScreen = new Vector2Int(Screen.width, Screen.height);
         Vector2 min = _lastSafe.position, max = min + _lastSafe.size;
-        min.x /= Screen.width;  min.y /= Screen.height;
-        max.x /= Screen.width;  max.y /= Screen.height;
+        min.x /= Screen.width; min.y /= Screen.height;
+        max.x /= Screen.width; max.y /= Screen.height;
         _rt.anchorMin = min; _rt.anchorMax = max;
     }
 }</pre>
@@ -736,24 +725,14 @@ public class SafeAreaFitter : MonoBehaviour {
                     </div>
                 </div>
                 <div class="code-box" style="width: 100%;">
-                    <pre>using UnityEngine;
-using UnityEngine.UI;
-using TMPro; // TextMeshPro
-
+                    <pre>using UnityEngine; using UnityEngine.UI; using TMPro;
 public class MobileHUDController : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private Button pauseButton;
-
-    void Start() {
-        // Wire touch listener
-        pauseButton.onClick.AddListener(OnPauseTapped);
-    }
-
+    void Start() { pauseButton.onClick.AddListener(OnPauseTapped); }
     public void UpdateScore(int newScore) {
-        // Zero Garbage Collection (GC) formatting for mobile
-        scoreText.SetText("Score: {0:N0}", newScore);
+        scoreText.SetText("Score: {0:N0}", newScore); // 0 GC alloc
     }
-
     private void OnPauseTapped() {
         Time.timeScale = (Time.timeScale == 0) ? 1 : 0;
     }
@@ -815,22 +794,20 @@ public class MobileHUDController : MonoBehaviour {
             <div class="content-card primary">
                 <div class="card-title core">The Radio Station Pattern for UI</div>
                 <div class="card-body">
-                    <p style="margin: 0 0 6px 0; font-weight: 600;">UI should be an observer, not a controller. Never do this:</p>
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">UI should observe, not poll. Never search in <code>Update()</code>:</p>
                     <div class="code-box">
-                        <pre>// BAD ANTI-PATTERN (Tight coupling + 60Hz polling):
+                        <pre>// BAD ANTI-PATTERN (60Hz polling):
 void Update() {
-    // Searches scene every frame!
-    int hp = GameObject.Find("Player").GetComponent<Player>().Health;
+    int hp = GameObject.Find("Player").GetComponent&lt;Player&gt;().Health;
     healthText.text = "HP: " + hp;
 }</pre>
                     </div>
-                    <p style="margin: 6px 0 6px 0; font-weight: 600;">DO THIS: Event-driven notification:</p>
+                    <p style="margin: 4px 0 4px 0; font-weight: 600;">DO THIS: Event-driven notification:</p>
                     <div class="code-box">
-                        <pre>// GOOD: Player fires event when damage occurs:
-public event Action<int, int> OnHealthChanged; // (current, max)
-
-public void TakeDamage(int damage) {
-    currentHealth = Mathf.Max(0, currentHealth - damage);
+                        <pre>// GOOD: Player fires C# Action when HP changes:
+public event Action&lt;int, int&gt; OnHealthChanged; // current, max
+public void TakeDamage(int dmg) {
+    currentHealth = Mathf.Max(0, currentHealth - dmg);
     OnHealthChanged?.Invoke(currentHealth, maxHealth);
 }</pre>
                     </div>
@@ -852,9 +829,7 @@ public void TakeDamage(int damage) {
                     [SUBSCRIBER: CLEAN HEALTH BAR UI]
                 </div>
                 <div class="code-box" style="width: 100%;">
-                    <pre>using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+                    <pre>using UnityEngine; using UnityEngine.UI; using TMPro;
 
 public class HealthBarUI : MonoBehaviour {
     [SerializeField] private Slider healthSlider;
@@ -862,17 +837,11 @@ public class HealthBarUI : MonoBehaviour {
     [SerializeField] private PlayerHealth player;
 
     void OnEnable() {
-        if (player != null) {
-            player.OnHealthChanged += UpdateHealthBar;
-        }
+        if (player != null) player.OnHealthChanged += UpdateHealthBar;
     }
-
     void OnDisable() {
-        if (player != null) {
-            player.OnHealthChanged -= UpdateHealthBar;
-        }
+        if (player != null) player.OnHealthChanged -= UpdateHealthBar;
     }
-
     private void UpdateHealthBar(int current, int max) {
         healthSlider.maxValue = max;
         healthSlider.value = current;
@@ -2066,6 +2035,26 @@ const fullHtml = `<!DOCTYPE html>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
 ${cssStyles}
+        /* Class 3 Compact Overrides to Prevent Slide Overflow */
+        .code-box pre {
+            font-size: clamp(0.68rem, 1.45cqh, 0.86rem) !important;
+            line-height: 1.35 !important;
+            padding: 0.6cqh 1.0cqw !important;
+        }
+        .content-card.primary {
+            padding: 0.9cqh 1.3cqw !important;
+        }
+        .card-body {
+            font-size: clamp(0.78rem, 1.70cqh, 1.05rem) !important;
+            line-height: 1.45 !important;
+        }
+        .split-media-layout .left-column,
+        .split-media-layout .right-column {
+            gap: 0.8cqh !important;
+        }
+        .slide-content-area {
+            transform-origin: top left;
+        }
     </style>
 </head>
 <body class="lecture-mode">
@@ -2522,14 +2511,28 @@ ${cssStyles}
 
         function autoFitSlideElements() {
             const area = document.getElementById('slideContentArea');
-            if (!area) return;
+            const view = document.getElementById('interactiveSlide');
+            if (!area || !view) return;
             area.style.transform = 'none';
             area.style.transformOrigin = 'top left';
+            area.style.width = '100%';
 
-            if (area.scrollHeight > area.clientHeight + 2) {
-                const ratio = (area.clientHeight - 4) / area.scrollHeight;
-                if (ratio < 0.98) {
-                    area.style.transform = \`scale(\${Math.max(ratio, 0.72)})\`;
+            if (document.body.classList.contains('lab-mode')) return;
+
+            const header = document.getElementById('slideHeader');
+            const footer = view.querySelector('.slide-footer');
+            const headerH = (header && header.style.display !== 'none') ? header.getBoundingClientRect().height : 0;
+            const footerH = footer ? footer.getBoundingClientRect().height : 0;
+            const viewH = view.clientHeight;
+            const availableH = viewH - headerH - footerH - 32;
+
+            const contentH = area.scrollHeight;
+            if (contentH > availableH && availableH > 100) {
+                const ratio = availableH / contentH;
+                if (ratio < 0.99) {
+                    const scale = Math.max(ratio, 0.65);
+                    area.style.transform = \`scale(\${scale})\`;
+                    area.style.width = \`\${(100 / scale)}%\`;
                 }
             }
         }
