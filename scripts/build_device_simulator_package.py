@@ -995,7 +995,14 @@ def build_unitypackage():
 
     items = []
 
-    # Subfolders inside Assets/Editor (do not include Assets/Editor itself to avoid GUID conflicts with existing projects)
+    # Parent folder Assets/Editor (MUST be present so PackageImportTreeView can compute enabled state without NRE)
+    items.append({
+        "pathname": "Assets/Editor",
+        "guid": generate_guid("Assets/Editor"),
+        "is_dir": True,
+        "meta": generate_meta_file(generate_guid("Assets/Editor"), is_folder=True),
+        "content": None
+    })
     items.append({
         "pathname": "Assets/Editor/Devices",
         "guid": generate_guid("Assets/Editor/Devices"),
@@ -1035,6 +1042,9 @@ def build_unitypackage():
             "meta": generate_meta_file(generate_guid(rel_path), is_folder=False),
             "content": content_bytes
         })
+
+    # Sort items by pathname so parents are always encountered before children in the tree
+    items.sort(key=lambda x: x["pathname"])
 
     # Create tar.gz archive conforming exactly to Unity's native package format
     current_time = int(time.time())
