@@ -2151,15 +2151,6 @@ ${cssStyles}
             <span>Lesson 03: UI &amp; Saving Systems &bull; <strong>Modern Unity 6</strong></span>
         </div>
 
-        <!-- Mode Toggle (Comparison Mode) -->
-        <div class="toggle-wrap">
-            <span class="toggle-text" id="labelOld" onclick="setMode(false); event.stopPropagation();">ORIGINAL KEYNOTE (HD)</span>
-            <div class="switch" onclick="toggleMode(); event.stopPropagation();" title="Toggle view [C]">
-                <input type="checkbox" id="modeSwitch" checked>
-                <span class="slider"></span>
-            </div>
-            <span class="toggle-text active-new" id="labelNew" onclick="setMode(true); event.stopPropagation();">MODERN UNITY 6</span>
-        </div>
 
         <!-- Tier Selector Pills -->
         <div class="tier-selector">
@@ -2178,10 +2169,7 @@ ${cssStyles}
         <!-- Stage Area -->
         <main class="stage-area" id="stageArea">
             <div class="slide-viewport" id="viewport" style="position: relative;">
-                <!-- Original Keynote Image View (Comparison Mode) -->
-                <div id="viewOriginal" class="view-original" style="display: none; width: 100%; height: 100%; background: #000; position: absolute; top:0; left:0; right:0; bottom:0; z-index: 10;">
-                    <img id="originalSlideImg" src="original_slides/slide_01.png" alt="Original Keynote Slide" style="width: 100%; height: 100%; object-fit: contain; display: block; background: #000;">
-                </div>
+
 
                 <!-- Modern Slide View -->
                 <div id="interactiveSlide" class="view-interactive" style="display: flex; width: 100%; height: 100%;">
@@ -2273,7 +2261,6 @@ ${cssStyles}
                 <div class="shortcut-row"><span class="shortcut-key">&rarr; / Space</span><span>Next Slide</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">&larr;</span><span>Previous Slide</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">F</span><span>Toggle Fullscreen</span></div>
-                <div class="shortcut-row"><span class="shortcut-key">C</span><span>Switch Original / Modern View (Comparison)</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">L</span><span>Toggle Lecture / Lab Mode</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">0 - 3</span><span>Filter Tracks (All, Core, Adv, Exp)</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">T</span><span>Teacher Mode Access</span></div>
@@ -2321,9 +2308,7 @@ ${cssStyles}
                 } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
                     e.preventDefault();
                     changeSlide(-1);
-                } else if (e.key === 'c' || e.key === 'C') {
-                    e.preventDefault();
-                    toggleMode();
+
                 } else if (e.key === 'l' || e.key === 'L') {
                     e.preventDefault();
                     toggleLectureLabMode();
@@ -2502,49 +2487,12 @@ ${cssStyles}
         // ==========================================
         // COMPARISON MODE (ORIGINAL HD VS MODERN)
         // ==========================================
-        function toggleMode() {
-            setMode(!isModernView);
-        }
-
-        function setMode(modern) {
-            isModernView = modern;
-            const chk = document.getElementById('modeSwitch');
-            if (chk) chk.checked = modern;
-            updateModeDisplay();
-        }
-
+        // Compatibility stubs (Comparison mode permanently removed)
+        function toggleMode() {}
+        function setMode(modern) {}
         function updateModeDisplay() {
-            const oldView = document.getElementById('viewOriginal');
             const newView = document.getElementById('interactiveSlide');
-            const labelOld = document.getElementById('labelOld');
-            const labelNew = document.getElementById('labelNew');
-            const badge = document.getElementById('modeBadge');
-
-            if (isModernView) {
-                if (oldView) oldView.style.display = 'none';
-                if (newView) newView.style.display = 'flex';
-                if (labelNew) labelNew.classList.add('active-new');
-                if (labelOld) labelOld.classList.remove('active-old');
-                if (badge) {
-                    badge.className = 'mode-indicator new';
-                    badge.textContent = 'Modern Unity 6';
-                    badge.style.background = 'rgba(16, 185, 129, 0.15)';
-                    badge.style.color = '#10b981';
-                    badge.style.borderColor = '#10b981';
-                }
-            } else {
-                if (oldView) oldView.style.display = 'block';
-                if (newView) newView.style.display = 'none';
-                if (labelOld) labelOld.classList.add('active-old');
-                if (labelNew) labelNew.classList.remove('active-new');
-                if (badge) {
-                    badge.className = 'mode-indicator old';
-                    badge.textContent = 'Original Keynote (HD)';
-                    badge.style.background = 'rgba(244, 63, 94, 0.15)';
-                    badge.style.color = '#f43f5e';
-                    badge.style.borderColor = '#f43f5e';
-                }
-            }
+            if (newView) newView.style.display = 'flex';
         }
 
         // ==========================================
