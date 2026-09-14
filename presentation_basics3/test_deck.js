@@ -27,13 +27,13 @@ assert(fs.existsSync(lessonDocPath), 'classes/03_UI.md exists');
 
 const html = fs.readFileSync(htmlPath, 'utf8');
 
-// 2. Check Comparison Mode elements
-assert(html.includes('id="viewOriginal"'), 'Comparison Mode #viewOriginal container present');
-assert(html.includes('id="originalSlideImg"'), 'Comparison Mode #originalSlideImg element present');
-assert(html.includes('id="modeSwitch"'), 'Comparison Mode #modeSwitch toggle present');
-assert(html.includes('function toggleMode()'), 'toggleMode() function defined');
-assert(html.includes('function updateModeDisplay()'), 'updateModeDisplay() function defined');
-assert(html.includes("e.key === 'c' || e.key === 'C'"), 'Comparison shortcut [C] registered in keydown');
+// 2. Check Comparison Mode elements are permanently removed
+assert(!html.includes('id="viewOriginal"'), 'Comparison Mode #viewOriginal container removed');
+assert(!html.includes('id="originalSlideImg"'), 'Comparison Mode #originalSlideImg element removed');
+assert(!html.includes('id="modeSwitch"'), 'Comparison Mode #modeSwitch toggle removed');
+assert(!html.includes("e.key === 'c' || e.key === 'C'"), 'Comparison shortcut [C] removed from keydown');
+assert(html.includes('function toggleMode()'), 'toggleMode() stub defined');
+assert(html.includes('function updateModeDisplay()'), 'updateModeDisplay() stub defined');
 
 // 3. Extract slidesData and check original slide images
 const match = html.match(/let slidesData = (\[[\s\S]*?\]);\s*let currentSlide/);
@@ -41,7 +41,7 @@ assert(match !== null, 'slidesData array extracted successfully');
 
 if (match) {
     const slides = JSON.parse(match[1]);
-    assert(slides.length === 20, 'slidesData has 20 comprehensive slides (found ' + slides.length + ')');
+    assert(slides.length === 21, 'slidesData has 21 comprehensive slides (found ' + slides.length + ')');
     
     let allImgsExist = true;
     slides.forEach((s, i) => {
@@ -56,7 +56,7 @@ if (match) {
             }
         }
     });
-    assert(allImgsExist, 'All 20 slides have valid existing original slide PNG images');
+    assert(allImgsExist, 'All 21 slides have valid existing original slide PNG images');
 }
 
 // 4. Check Lecture vs Lab mode
@@ -131,6 +131,20 @@ assert(lessonDoc.includes('SafeAreaFitter'), 'SafeAreaFitter component in classe
 assert(lessonDoc.includes('Device Simulator'), 'Device Simulator in classes/03_UI.md');
 assert(lessonDoc.includes('Match Height'), 'Landscape Match Height 1.0 rule in classes/03_UI.md');
 
+// 13. Check Slide 21 Checklist Addition
+assert(html.includes('Mobile Game Production Checklist'), 'Mobile Game Production Checklist present');
+
+// 14. Check JSON Fetching and TextAsset
+assert(html.includes('GameDataManager'), 'GameDataManager JSON consumer present in presentation');
+assert(html.includes('TextAsset'), 'TextAsset JSON config fetching present in presentation');
+assert(html.includes('Fetching & Consuming JSON'), 'Fetching & Consuming JSON slide title present');
+
+// 15. Check Smart Relative Font Scaling Script & Title Exclusion
+assert(html.includes('function isTitleElement('), 'Smart title detector function isTitleElement() defined');
+assert(html.includes('BASE_BOOST = 1.22'), 'Base boost multiplier 1.22 applied for readable 100% baseline');
+assert(html.includes("el.matches('.card-title"), 'Card titles excluded from relative font scaling');
+
 console.log('--- TEST SUMMARY: ' + (failures === 0 ? 'ALL PASSED!' : failures + ' FAILED') + ' ---');
 process.exit(failures === 0 ? 0 : 1);
+
 

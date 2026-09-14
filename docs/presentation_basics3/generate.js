@@ -11,13 +11,14 @@ const slidesData = [
     subtitle: "Minor Game Design & Development - Hogeschool Rotterdam",
     topics: [
       "1. Coordinate Systems & RectTransform (anchoredPosition, pivots, rect tool)",
-      "2. Canvas Architecture (Screen Space - Overlay, Camera, and World Space)",
-      "3. Responsive Multi-Resolution UI (Canvas Scaler, Reference 1920x1080, Match 0.5)",
-      "4. TextMeshPro & Decoupled UI Scripting (C# Actions & UnityEvents)",
-      "5. Data Persistence Engine (PlayerPrefs trap vs Production JSON Serialization)"
+      "2. Canvas Architecture (Screen Space - Overlay, Camera, and World Space in 2D)",
+      "3. Responsive Multi-Resolution UI & Safe Area (Fluid Adaptation, No Black Bars)",
+      "4. Universal Anchor Playbook (Corners, Stretches, Center Modals, 9-Slicing, AspectRatioFitter)",
+      "5. TextMeshPro, Touch Controls & Decoupled Scripting (OnScreenStick, C# Actions)",
+      "6. Data Persistence Engine (PlayerPrefs trap vs Saving & Fetching JSON)"
     ],
     origImg: "original_slides/slide_01.png",
-    notes: "Lesson Overview (10 min): Welcome students to Class 3. Frame today around two core pillars: Responsive UI (making sure your game looks identical on 16:9, Ultrawide, and mobile screens) and Data Persistence (saving and loading game state cleanly with JSON)."
+    notes: "Lesson Overview (10 min): Welcome students to Class 3. Frame today around two core pillars: Responsive UI (making sure your game looks identical on 16:9, Ultrawide, and mobile screens) and Data Persistence (saving, fetching, and binding game state cleanly with JSON)."
   },
 
   // Slide 2: Roadmap & 5 Milestones
@@ -57,8 +58,8 @@ const slidesData = [
                         <p style="font-size: 0.88rem; color: #475569; margin-top: 4px;">Listen to gameplay C# Actions (health, score, inventory) instead of calling GameObject.Find.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; grid-column: span 2;">
-                        <span style="font-weight: 800; color: #e11d48; font-size: 0.95rem;">5. Cross-Platform JSON Persistence</span>
-                        <p style="font-size: 0.88rem; color: #475569; margin-top: 4px;">Replace the PlayerPrefs trap with robust, serialized C# JSON save files in persistentDataPath.</p>
+                        <span style="font-weight: 800; color: #10b981; font-size: 0.95rem;">5. Data Persistence &amp; JSON Fetching</span>
+                        <p style="font-size: 0.88rem; color: #475569; margin-top: 4px;">Save game state to persistentDataPath, and fetch saved player data &amp; static config files into your HUD.</p>
                     </div>
                 </div>
             </div>
@@ -268,31 +269,50 @@ const slidesData = [
             Use the <strong>Sort Order</strong> property on Canvas components to control layer priority. Set HUD Canvas to <code>Sort Order = 0</code> and Pause Menu Canvas to <code>Sort Order = 100</code> so menus always render on top of the gameplay HUD.
         </div>
     </details>
+    <details class="tier-accordion exp">
+        <summary class="accordion-header">
+            <span>[Expert] Sub-Canvases &amp; Mobile Canvas Rebatching</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            When <em>any</em> UI element moves or updates text on a Canvas, Unity regenerates the mesh for the <strong>entire</strong> Canvas! On mobile GPUs, this burns battery and drops frames. <strong>Production Standard:</strong> Nest child Canvases. Keep static frames on a <code>Static_HUD</code> sub-canvas, and dynamic health bars/timers on a <code>Dynamic_HUD</code> sub-canvas so mesh rebuilds are strictly isolated.
+        </div>
+    </details>
     `,
     notes: "Canvas Render Modes (6 min): Walk through Screen Space - Overlay vs Camera. Explain that Overlay is the default choice for 2D games, while Camera allows 3D UI VFX."
   },
 
-  // Slide 6: World Space Canvas & In-Game UI
+  // Slide 6: World Space Canvas in 2D Games
   {
-    title: "World Space Canvas & Overhead UI",
+    title: "World Space Canvas in 2D Games",
     origImg: "original_slides/slide_05.png",
     content: `
     <div class="split-media-layout">
         <div class="left-column">
             <div class="content-card primary">
-                <div class="card-title core">World Space: UI Living in the Scene</div>
+                <div class="card-title core">World Space: In-Game 2D UI &amp; Health Bars</div>
                 <div class="card-body">
-                    <p style="margin: 0 0 6px 0; font-weight: 600;">The Canvas behaves like any physical 3D GameObject inside the scene:</p>
+                    <p style="margin: 0 0 6px 0; font-weight: 600;">The Canvas lives directly inside the 2D scene at game coordinates:</p>
                     <ul style="padding-left: 18px; margin: 0 0 8px 0; line-height: 1.45; font-weight: 600;">
-                        <li>Has true world position, rotation, and distance falloff.</li>
-                        <li>Used for <strong>overhead enemy health bars</strong>, ground interaction circles, floating damage numbers (<code>+50 XP</code>), and in-game computer terminals.</li>
+                        <li>Used for <strong>overhead enemy health bars</strong>, floating damage text (<code>+50 XP</code>), and interact prompts.</li>
+                        <li><strong>The 2D Sorting Trap:</strong> Without sorting layers, World Space UI renders behind 2D sprites and tilemaps! Set <code>overrideSorting = true</code> and assign to <code>UI</code> sorting layer.</li>
+                        <li><strong>The 2D Flip Bug:</strong> When a 2D sprite turns left (<code>localScale.x = -1</code>), child health bars mirror backwards! Prevent this in code:</li>
                     </ul>
                     <div class="code-box">
-                        <pre>// Essential Billboarding Script (Face Main Camera):
-public class BillboardUI : MonoBehaviour {
+                        <pre>// 2D World Space Health Bar (Sorting & Flip Protection):
+[RequireComponent(typeof(Canvas))]
+public class WorldSpaceHealthBar2D : MonoBehaviour {
+    void Awake() {
+        var c = GetComponent&lt;Canvas&gt;();
+        c.overrideSorting = true;
+        c.sortingLayerName = "UI";
+        c.sortingOrder = 100;
+    }
     void LateUpdate() {
-        // Keeps health bar facing the camera regardless of player flip
-        transform.forward = Camera.main.transform.forward;
+        if (transform.parent == null) return;
+        Vector3 s = transform.localScale;
+        s.x = Mathf.Abs(s.x) * Mathf.Sign(transform.parent.lossyScale.x);
+        transform.localScale = s;
     }
 }</pre>
                     </div>
@@ -300,9 +320,9 @@ public class BillboardUI : MonoBehaviour {
             </div>
 
             <div class="content-card primary" style="border-left-color: #ef4444;">
-                <div class="card-title core" style="color: #dc2626;">The Giant Canvas Trap</div>
+                <div class="card-title core" style="color: #dc2626;">The Giant Canvas Trap in 2D</div>
                 <div class="card-body">
-                    When switching Canvas to World Space, 1 reference pixel becomes 1 meter! A 1920x1080 canvas will be <strong>1.9 kilometers wide</strong>! Scale the World Space Canvas transform down to <code>(0.01, 0.01, 0.01)</code> or <code>(0.005, 0.005, 0.005)</code>.
+                    In World Space, 1 reference pixel becomes 1 Unity world meter! A 1920x1080 canvas will be <strong>1,920 meters wide</strong>! Scale the World Space Canvas transform down to <code>(0.01, 0.01, 0.01)</code> or <code>(0.005, 0.005, 0.005)</code> so it fits above a 2D sprite.
                 </div>
             </div>
         </div>
@@ -316,7 +336,7 @@ public class BillboardUI : MonoBehaviour {
                 <div style="position: relative; width: 100%; height: 140px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
                     <!-- Visual Scene Arena -->
                     <div id="simModeDisplay" style="text-align: center; padding: 10px;">
-                        <div id="simModeIcon" style="font-size: 1.8rem; margin-bottom: 4px;">🖥️</div>
+                        <div id="simModeIcon" style="font-size: 0.78rem; font-weight: 900; letter-spacing: 1px; color: #38bdf8; margin-bottom: 4px;">[OVERLAY MODE]</div>
                         <div id="simModeTitle" style="font-size: 0.88rem; font-weight: 800; color: #10b981;">Screen Space - Overlay</div>
                         <div id="simModeDesc" style="font-size: 0.74rem; color: #cbd5e1; max-width: 260px; margin-top: 4px;">Pinned to glass. Ignores scene camera. 1:1 pixel crispness.</div>
                     </div>
@@ -334,15 +354,15 @@ public class BillboardUI : MonoBehaviour {
     </div>
     <details class="tier-accordion adv">
         <summary class="accordion-header">
-            <span>[Advanced] Billboarding Without Camera.main Overhead</span>
+            <span>[Advanced] 2D Sorting Layer Hierarchy</span>
             <span style="font-size:0.75rem;">Expand</span>
         </summary>
         <div class="accordion-body">
-            In Unity 6, <code>Camera.main</code> is internally cached, but for hundreds of floating health bars, cache <code>private Transform _camTransform;</code> in <code>Awake()</code> to eliminate component lookups during high-frequency combat!
+            In 2D projects, create explicit Sorting Layers: <code>Background</code> &lt; <code>Default</code> &lt; <code>Characters</code> &lt; <code>Foreground</code> &lt; <code>UI</code>. By placing World Space Canvases on the <code>UI</code> sorting layer with positive order, overhead bars always stay clearly visible in front of platforms and enemies.
         </div>
     </details>
     `,
-    notes: "World Space UI (7 min): Explain overhead healthbars. Warn students about the giant canvas trap (1920x1080 canvas = 1.9km in 3D world). Demonstrate the billboarding code."
+    notes: "World Space UI (7 min): Explain overhead healthbars in 2D. Warn students about 2D sorting layers (hiding behind tilemaps) and the sprite flip bug (scale.x -1 mirrors child UI).",
   },
 
   // Slide 7: Mobile Screen Resolutions & Canvas Scaler
@@ -353,18 +373,18 @@ public class BillboardUI : MonoBehaviour {
     <div class="split-media-layout">
         <div class="left-column">
             <div class="content-card primary">
-                <div class="card-title core">The Mobile Canvas Scaler Formula</div>
+                <div class="card-title core">Fluid Adaptation (No Black Bars / Letterboxing!)</div>
                 <div class="card-body">
-                    <p style="margin: 0 0 6px 0; font-weight: 600;">Mobile screens range from ultra-tall phones (20:9) to square tablets (4:3). Configure your Canvas Scaler:</p>
+                    <p style="margin: 0 0 6px 0; font-weight: 600;">Mobile screens vary from 20:9 phones to 4:3 tablets. <strong>Never hardcode aspect ratios or force black bars!</strong> The UI must fluidly adapt:</p>
                     <ul style="padding-left: 18px; margin: 0 0 8px 0; line-height: 1.5; font-weight: 600;">
                         <li><strong>UI Scale Mode:</strong> <code>Scale With Screen Size</code></li>
                         <li><strong>Reference Resolution:</strong> <code>1920 x 1080</code> (Landscape) or <code>1080 x 1920</code> (Portrait)</li>
                         <li><strong>Screen Match Mode:</strong> <code>Match Width Or Height</code></li>
-                        <li><strong>Landscape Games:</strong> Match Height = <code>1.0</code> (or <code>0.5</code>) &mdash; prevents vertical HUD clipping on wide phones!</li>
-                        <li><strong>Portrait Games:</strong> Match Width = <code>0.0</code> &mdash; glues navigation bars edge-to-edge!</li>
+                        <li><strong>Landscape Games:</strong> Match Height = <code>1.0</code> (or <code>0.5</code>) &mdash; keeps vertical playfield constant while HUD pins dynamically to wide edges!</li>
+                        <li><strong>Portrait Games:</strong> Match Width = <code>0.0</code> &mdash; glues bars edge-to-edge!</li>
                     </ul>
                     <div class="lab-deep-dive">
-                        <strong>Why Match Height 1.0 Wins on Landscape Mobile:</strong> In landscape games, the player holds the phone horizontally. Screen height is fixed in their hands, while width stretches wildly between an iPad (4:3) and an iPhone 15 (19.5:9). Matching Height guarantees your vertical playfield and HUD never shrink vertically!
+                        <strong>Why Fluid UI Wins Over Black Borders:</strong> Forcing letterboxing (black bars) looks amateur and violates Apple/Google store guidelines. By combining Canvas Scaler Match Height with Corner Anchors, your 2D game fills the entire physical glass while HUD buttons adapt cleanly.
                     </div>
                 </div>
             </div>
@@ -425,7 +445,7 @@ public class BillboardUI : MonoBehaviour {
                     </tbody>
                 </table>
                 <div style="background: #070b14; border: 1px solid #1e293b; border-radius: 6px; padding: 8px 10px; width: 100%; font-size: 0.74rem; color: #94a3b8; line-height: 1.4; margin-top: 4px;">
-                    <strong style="color: #38bdf8;">Mobile Rule:</strong> If your HUD looks great on both an <strong>iPhone 15 (19.5:9)</strong> and an <strong>iPad (4:3)</strong>, it will look stunning on 100% of consumer devices worldwide!
+                    <strong style="color: #38bdf8;">Production Rule:</strong> If your HUD scales cleanly on both an <strong>iPhone 15 (19.5:9)</strong> and an <strong>iPad (4:3)</strong>, it adapts reliably across target consumer mobile devices.
                 </div>
             </div>
         </div>
@@ -463,22 +483,14 @@ public class BillboardUI : MonoBehaviour {
             </div>
 
             <div class="content-card primary" style="border-left-color: #10b981;">
-                <div class="card-title core" style="color: #059669;">The Fix: Screen.safeArea &amp; SafeAreaFitter</div>
+                <div class="card-title core" style="color: #059669;">Pivots: Center of Rotation &amp; Scale</div>
                 <div class="card-body">
-                    <p style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 600;">Wrap all HUD elements in a full-stretch <code>SafeAreaPanel</code> with this script:</p>
-                    <div class="code-box">
-                        <pre>// Attach to SafeAreaPanel (Full Stretch child of Canvas):
-public class SafeAreaFitter : MonoBehaviour {
-    void Awake() {
-        Rect safe = Screen.safeArea;
-        Vector2 min = safe.position, max = min + safe.size;
-        min.x /= Screen.width;  min.y /= Screen.height;
-        max.x /= Screen.width;  max.y /= Screen.height;
-        var rt = GetComponent&lt;RectTransform&gt;();
-        rt.anchorMin = min; rt.anchorMax = max;
-    }
-}</pre>
-                    </div>
+                    <p style="margin: 0 0 6px 0; font-weight: 600;">The <strong>Pivot</strong> (<code>0.0</code> to <code>1.0</code>) is the local origin point inside the UI element itself:</p>
+                    <ul style="padding-left: 18px; margin: 0; line-height: 1.45; font-weight: 600;">
+                        <li><strong>(0.5, 0.5) Center:</strong> Default origin. The element rotates, scales, and positions around its middle.</li>
+                        <li><strong>(0, 1) Top-Left:</strong> Aligns top-left corner directly to anchor (ideal for HUD &amp; Pause buttons).</li>
+                        <li><strong>Anchors vs Pivot:</strong> Anchors specify <em>where on parent</em> to pin; Pivot specifies <em>which point on the child</em> aligns with that pin!</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -500,7 +512,7 @@ public class SafeAreaFitter : MonoBehaviour {
                         <div id="simSafeAreaBox" style="position: absolute; inset: 0; border: 1.5px dashed #10b981; pointer-events: none; transition: all 0.3s ease;"></div>
                         <!-- Simulated UI Element -->
                         <div id="simUiElement" style="position: absolute; top: 6px; left: 6px; background: #e11d48; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 900; transition: all 0.3s ease; display: flex; align-items: center; gap: 4px; z-index: 5;">
-                            <span>⏸️ Pause</span>
+                            <span>PAUSE</span>
                         </div>
                         <!-- Aspect label -->
                         <div id="simAspectLabel" style="position: absolute; bottom: 3px; right: 6px; font-size: 0.60rem; color: #64748b; font-family: monospace;">19.5:9 iPhone (Notch)</div>
@@ -552,7 +564,110 @@ public class SafeAreaFitter : MonoBehaviour {
     notes: "Anchors & Mobile Safe Area (7 min): Demonstrate the simulator! Show students what happens when SafeAreaFitter is unchecked: on modern notched phones, the button gets hidden under the camera cutout!"
   },
 
-  // Slide 9: Mobile Touch Ergonomics & TextMeshPro
+  // Slide 9: Anchor Playbook: Clean Scaling Without Distortion
+  {
+    title: "Anchor Playbook: Scaling Without Distortion",
+    origImg: "original_slides/slide_07.png",
+    content: `
+    <div class="split-media-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">How to Anchor Every UI Element</div>
+                <div class="card-body">
+                    <p style="margin: 0 0 6px 0; font-weight: 600;">Follow these 4 anchor rules so elements never stretch weirdly across screens:</p>
+                    <ul style="padding-left: 18px; margin: 0 0 6px 0; line-height: 1.45; font-weight: 600; font-size: 0.82rem;">
+                        <li><strong>1. Corner Controls (Buttons, Joysticks, Coins):</strong> Point Anchor to corner (<code>Min == Max</code>). Keep fixed pixel size (e.g. 96x96). They pin to corners and <em>never stretch</em>.</li>
+                        <li><strong>2. Banners &amp; Bars (Top HUD, Bottom Dock):</strong> Horizontal Stretch (<code>Min(0,1) Max(1,1)</code>). Height stays fixed (e.g. 80px); width fluidly spans screen edges.</li>
+                        <li><strong>3. Center Windows (Dialogues, Menus, Popups):</strong> Middle-Center Anchor (<code>Min == Max = 0.5, 0.5</code>). Preserves designed box size dead-center without warping.</li>
+                        <li><strong>4. 1:1 Squares/Circles (Minimaps, Avatars):</strong> Attach <code>AspectRatioFitter</code> (<code>Fit In Parent</code>, Ratio <code>1.0</code>). Prevents circles turning into squashed ovals!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card primary" style="border-left-color: #10b981;">
+                <div class="card-title core" style="color: #059669;">9-Slice Sprites &amp; TMP Auto-Size</div>
+                <div class="card-body" style="font-size: 0.82rem;">
+                    <div class="punchy-point"><span class="punchy-tag">9-SLICE</span> In Sprite Editor, set 4-way borders and set Image Type to <strong>Sliced</strong>. Corners stay crisp while edges expand!</div>
+                    <div class="punchy-point"><span class="punchy-tag">TMP AUTO</span> Check <strong>Auto Size</strong> (Min 16, Max 32) on TextMeshPro to prevent labels clipping on narrow screens.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="media-panel-card" style="padding: 12px; gap: 8px;">
+                <div style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;">
+                    [LIVE UI SCALING &amp; DISTORTION SIMULATOR]
+                </div>
+                <!-- Interactive Phone Screen Arena -->
+                <div style="width: 100%; height: 140px; background: #070b14; border: 1px solid #1e293b; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <div id="scaleSimFrame" style="width: 290px; height: 100px; background: #0c1222; border: 2px solid #38bdf8; border-radius: 10px; position: relative; transition: all 0.3s ease; overflow: hidden;">
+                        <!-- Top HUD Bar -->
+                        <div id="scaleSimHudBar" style="position: absolute; top: 3px; left: 4px; right: 4px; height: 14px; background: #1e293b; border: 1px solid #334155; border-radius: 3px; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; transition: all 0.3s ease;">
+                            <span style="font-size: 0.55rem; color: #94a3b8; font-weight: 700;">HUD BAR (Stretch X)</span>
+                            <span style="font-size: 0.55rem; color: #10b981; font-weight: 800;">HP: 100%</span>
+                        </div>
+                        <!-- Pause Button (Top-Left) -->
+                        <div id="scaleSimPauseBtn" style="position: absolute; top: 2px; left: 6px; width: 20px; height: 20px; background: #ef4444; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.50rem; color: white; font-weight: 900; z-index: 5; transition: all 0.3s ease;">II</div>
+                        <!-- Coin Counter (Top-Right) -->
+                        <div id="scaleSimCoinCounter" style="position: absolute; top: 2px; right: 6px; background: #d97706; padding: 1px 4px; border-radius: 3px; font-size: 0.55rem; color: white; font-weight: 800; z-index: 5; transition: all 0.3s ease;">Coins: 250</div>
+                        <!-- Minimap (Aspect Ratio Fitter 1:1) -->
+                        <div id="scaleSimMinimap" style="position: absolute; bottom: 8px; left: 8px; width: 30px; height: 30px; background: #0284c7; border: 1.5px solid #38bdf8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.50rem; color: white; font-weight: 800; transition: all 0.3s ease;">MAP</div>
+                        <!-- Centered Dialogue Modal -->
+                        <div id="scaleSimDialogBox" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 110px; height: 42px; background: #0f172a; border: 2px solid #38bdf8; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; z-index: 4; transition: all 0.3s ease;">
+                            <span style="font-size: 0.52rem; font-weight: 800; color: #f8fafc;">Quest Dialog</span>
+                            <span style="font-size: 0.44rem; color: #94a3b8;">9-Slice Clean Borders</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%;">
+                    <div>
+                        <span style="font-size: 0.70rem; color: #94a3b8; font-weight: 700;">Screen Resolution:</span>
+                        <select id="simScaleAspectSelect" onchange="runScaleSimulator()" style="width: 100%; background: #1e293b; border: 1px solid #334155; color: #f8fafc; padding: 4px; border-radius: 4px; font-size: 0.74rem;">
+                            <option value="20:9">20:9 (Galaxy S24 / Wide Phone)</option>
+                            <option value="19.5:9">19.5:9 (iPhone 15 Pro)</option>
+                            <option value="16:9">16:9 (Standard Screen)</option>
+                            <option value="4:3">4:3 (iPad / Tablet)</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #38bdf8; cursor: pointer; background: #070b14; padding: 6px 8px; border-radius: 4px; border: 1px solid #1e293b; width: 100%;">
+                            <input type="checkbox" id="simScaleCorrectCheck" onchange="runScaleSimulator()" checked>
+                            <span><strong>[x] Correct Anchors &amp; 9-Slice</strong></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="scaleSimResult" style="min-height: 28px; font-size: 0.74rem; font-family: monospace; font-weight: 700; color: #10b981; background: #070b14; border: 1px solid #1e293b; padding: 6px 8px; border-radius: 4px; width: 100%;">
+                    [CLEAN &amp; CRISP] Correct anchors: buttons stay corner-pinned, minimap stays 1:1 round, dialog stays centered &amp; undistorted!
+                </div>
+            </div>
+        </div>
+    </div>
+    <details class="tier-accordion adv">
+        <summary class="accordion-header">
+            <span>[Advanced] Layout Groups + Content Size Fitter</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            For dynamic rows of buttons, inventory slots, or ability icons: add <code>HorizontalLayoutGroup</code> and <code>ContentSizeFitter</code>. It automatically calculates item spacing and container width on any screen resolution without manual script offsets.
+        </div>
+    </details>
+    <details class="tier-accordion exp">
+        <summary class="accordion-header">
+            <span>[Expert] AspectRatioFitter Modes in Production</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            <code>AspectRatioFitter</code> provides 4 modes: <em>Width Controls Height</em>, <em>Height Controls Width</em>, <em>Fit In Parent</em> (never overflows), and <em>Envelope Parent</em> (fills screen completely, ideal for full-screen background video or splash screens).
+        </div>
+    </details>
+    `,
+    notes: "Anchor Playbook (7 min): Walk through the 4 element types (corners, banners, center modals, square icons). Toggle the simulator checkbox to show students the horrible distortion when anchors are stretched blindly without 9-slice!"
+  },
+
+  // Slide 10: Mobile Touch Ergonomics & TextMeshPro
   {
     title: "Mobile Touch Ergonomics & TextMeshPro",
     origImg: "original_slides/slide_08.png",
@@ -596,28 +711,21 @@ public class SafeAreaFitter : MonoBehaviour {
                     </div>
                 </div>
                 <div class="code-box" style="width: 100%;">
-                    <pre>using UnityEngine;
-using UnityEngine.UI;
-using TMPro; // TextMeshPro
-
+                    <pre>using UnityEngine; using UnityEngine.UI; using TMPro;
 public class MobileHUDController : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private Button pauseButton;
-
-    void Start() {
-        // Wire touch listener
-        pauseButton.onClick.AddListener(OnPauseTapped);
-    }
-
+    void Start() { pauseButton.onClick.AddListener(OnPauseTapped); }
     public void UpdateScore(int newScore) {
-        // Zero Garbage Collection (GC) formatting for mobile
-        scoreText.SetText("Score: {0:N0}", newScore);
+        scoreText.SetText("Score: {0:N0}", newScore); // 0 GC alloc
     }
-
     private void OnPauseTapped() {
         Time.timeScale = (Time.timeScale == 0) ? 1 : 0;
     }
 }</pre>
+                </div>
+                <div style="background: #070b14; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; width: 100%; font-size: 0.72rem; color: #cbd5e1; line-height: 1.4;">
+                    <strong style="color: #38bdf8;">2D Sprite Atlas (Draw Call Reduction):</strong> Pack all HUD buttons and icons into a <code>SpriteAtlas</code> (Window &gt; 2D &gt; Sprite Atlas). Reduces 40+ mobile draw calls to <strong>1 single draw call</strong>!
                 </div>
             </div>
         </div>
@@ -631,11 +739,38 @@ public class MobileHUDController : MonoBehaviour {
             Using string concatenation like <code>text.text = "Score: " + score;</code> allocates heap garbage on every frame, triggering mobile GC stutter. TextMeshPro's <code>SetText()</code> method reuses internal character buffers with <strong>zero GC allocations</strong>!
         </div>
     </details>
+    <details class="tier-accordion adv">
+        <summary class="accordion-header">
+            <span>[2D Mobile] Virtual Touch Controls (OnScreenStick &amp; OnScreenButton)</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            In Unity's New Input System, attach <code>OnScreenStick</code> to your UI joystick image and set Control Path to <code>&lt;Gamepad&gt;/leftStick</code>. Attach <code>OnScreenButton</code> to your jump button. They automatically feed standard Input Actions without custom touch scripting!
+        </div>
+    </details>
+    <details class="tier-accordion exp">
+        <summary class="accordion-header">
+            <span>[2D Art] 9-Sliced UI Sprites for Responsive Panels</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            In Sprite Editor, set 4-way green borders on UI sprites. On UI Image, change <em>Image Type</em> to <strong>Sliced</strong>. Now dialogue boxes and buttons can stretch across any aspect ratio (from 4:3 iPad to 20:9 Galaxy) without blurry or distorted corners!
+        </div>
+    </details>
+    <details class="tier-accordion exp">
+        <summary class="accordion-header">
+            <span>[Expert] High-DPI Retina Touch Drag Threshold</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            Modern mobile screens have 300-450 DPI. Unity's default <code>pixelDragThreshold</code> (5-10px) is microscopic on 4K phones, causing finger taps to falsely register as scroll drags. In your game boot script, scale it by DPI: <code>EventSystem.current.pixelDragThreshold = Mathf.RoundToInt(Screen.dpi / 160f * 6);</code>.
+        </div>
+    </details>
     `,
-    notes: "Mobile Touch Ergonomics & TMP (6 min): Crucial for mobile games! Explain minimum 44pt touch targets, thumb arc zones, and unchecking Raycast Target on decorative elements to save mobile battery and CPU."
+    notes: "Mobile Touch Ergonomics & TextMeshPro (6 min): Cover minimum 44pt touch targets, thumb arc zones, unchecking Raycast Target, and Sprite Atlas draw call batching."
   },
 
-  // Slide 10: Decoupled UI Scripting Architecture
+  // Slide 11: Decoupled UI Scripting Architecture
   {
     title: "Decoupled UI Architecture",
     origImg: "original_slides/slide_09.png",
@@ -645,22 +780,20 @@ public class MobileHUDController : MonoBehaviour {
             <div class="content-card primary">
                 <div class="card-title core">The Radio Station Pattern for UI</div>
                 <div class="card-body">
-                    <p style="margin: 0 0 6px 0; font-weight: 600;">UI should be an observer, not a controller. Never do this:</p>
+                    <p style="margin: 0 0 4px 0; font-weight: 600;">UI should observe, not poll. Never search in <code>Update()</code>:</p>
                     <div class="code-box">
-                        <pre>// BAD ANTI-PATTERN (Tight coupling + 60Hz polling):
+                        <pre>// BAD ANTI-PATTERN (60Hz polling):
 void Update() {
-    // Searches scene every frame!
-    int hp = GameObject.Find("Player").GetComponent<Player>().Health;
+    int hp = GameObject.Find("Player").GetComponent&lt;Player&gt;().Health;
     healthText.text = "HP: " + hp;
 }</pre>
                     </div>
-                    <p style="margin: 6px 0 6px 0; font-weight: 600;">DO THIS: Event-driven notification:</p>
+                    <p style="margin: 4px 0 4px 0; font-weight: 600;">DO THIS: Event-driven notification:</p>
                     <div class="code-box">
-                        <pre>// GOOD: Player fires event when damage occurs:
-public event Action<int, int> OnHealthChanged; // (current, max)
-
-public void TakeDamage(int damage) {
-    currentHealth = Mathf.Max(0, currentHealth - damage);
+                        <pre>// GOOD: Player fires C# Action when HP changes:
+public event Action&lt;int, int&gt; OnHealthChanged; // current, max
+public void TakeDamage(int dmg) {
+    currentHealth = Mathf.Max(0, currentHealth - dmg);
     OnHealthChanged?.Invoke(currentHealth, maxHealth);
 }</pre>
                     </div>
@@ -682,9 +815,7 @@ public void TakeDamage(int damage) {
                     [SUBSCRIBER: CLEAN HEALTH BAR UI]
                 </div>
                 <div class="code-box" style="width: 100%;">
-                    <pre>using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+                    <pre>using UnityEngine; using UnityEngine.UI; using TMPro;
 
 public class HealthBarUI : MonoBehaviour {
     [SerializeField] private Slider healthSlider;
@@ -692,17 +823,11 @@ public class HealthBarUI : MonoBehaviour {
     [SerializeField] private PlayerHealth player;
 
     void OnEnable() {
-        if (player != null) {
-            player.OnHealthChanged += UpdateHealthBar;
-        }
+        if (player != null) player.OnHealthChanged += UpdateHealthBar;
     }
-
     void OnDisable() {
-        if (player != null) {
-            player.OnHealthChanged -= UpdateHealthBar;
-        }
+        if (player != null) player.OnHealthChanged -= UpdateHealthBar;
     }
-
     private void UpdateHealthBar(int current, int max) {
         healthSlider.maxValue = max;
         healthSlider.value = current;
@@ -741,17 +866,17 @@ public class HealthBarUI : MonoBehaviour {
                 <div class="card-title core">[5-MIN CHALLENGE] Mobile-First HUD Layout</div>
                 <div class="card-body">
                     <p style="margin: 0 0 8px 0; font-weight: 700; color: #0284c7;">
-                        Goal: Construct a mobile HUD on a Canvas Scaler (1920x1080 Match Height 1.0) with SafeAreaFitter that never clips across iPhone, Galaxy, and iPad!
+                        Goal: Construct a fluid mobile HUD on Canvas Scaler (1920x1080 Match Height 1.0) with SafeAreaFitter that dynamically adapts across iPhone, Galaxy, and iPad without black borders!
                     </p>
                     <ul style="padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;">
                         <li><strong>SafeAreaPanel:</strong> Child of Canvas, Full Stretch (0,0 to 1,1) with <code>SafeAreaFitter.cs</code> attached.</li>
                         <li><strong>Element 1 (Pause Button):</strong> Top-Left inside Safe Area &bull; Min size <strong>88 &times; 88 px</strong>.</li>
-                        <li><strong>Element 2 (Currency / Score):</strong> Top-Right inside Safe Area.</li>
-                        <li><strong>Element 3 (Joystick Touch Area):</strong> Bottom-Left &bull; Min <strong>140 &times; 140 px</strong>.</li>
-                        <li><strong>Element 4 (Attack / Jump):</strong> Bottom-Right &bull; Min <strong>96 &times; 96 px</strong> touch target.</li>
+                        <li><strong>Element 2 (Currency / Score):</strong> Top-Right inside Safe Area &bull; TMP (Raycast Target OFF).</li>
+                        <li><strong>Element 3 (Joystick Touch Zone):</strong> Bottom-Left &bull; Min <strong>140 &times; 140 px</strong> &bull; <code>OnScreenStick</code> attached.</li>
+                        <li><strong>Element 4 (Attack / Jump):</strong> Bottom-Right &bull; Min <strong>96 &times; 96 px</strong> &bull; <code>OnScreenButton</code> attached.</li>
                     </ul>
                     <div class="lab-deep-dive">
-                        <strong>Test in Device Simulator:</strong> Open <code>Window &gt; General &gt; Device Simulator</code>. Switch between <strong>Apple iPhone 15 Pro</strong> and <strong>Apple iPad Air (4:3)</strong>. Ensure no buttons are occluded by the Dynamic Island or clipped by screen edges!
+                        <strong>Test in Device Simulator:</strong> Open <code>Window &gt; General &gt; Device Simulator</code>. Switch between <strong>Apple iPhone 15 Pro</strong>, <strong>Galaxy S24</strong>, and <strong>Apple iPad Air (4:3)</strong>. Ensure UI dynamically spreads across widescreen and insets past notches without letterboxing!
                     </div>
                 </div>
             </div>
@@ -803,8 +928,8 @@ Canvas
  └─ SafeAreaPanel [SafeAreaFitter.cs] (Min: 0,0 | Max: 1,1)
      ├─ PauseBtn: Top-Left (0, 1) | Size: 96x96
      ├─ ScoreText: Top-Right (1, 1) | TMP (Raycast OFF)
-     ├─ JoystickZone: Bottom-Left (0, 0) | Size: 160x160
-     └─ AttackBtn: Bottom-Right (1, 0) | Size: 100x100</pre>
+     ├─ JoystickZone [OnScreenStick]: Bottom-Left (0, 0) | Size: 160x160
+     └─ AttackBtn [OnScreenButton]: Bottom-Right (1, 0) | Size: 100x100</pre>
                     </div>
                 </div>
             </div>
@@ -1166,7 +1291,117 @@ public static class SaveSystem {
     notes: "JSON Persistence (7 min): Walk through SaveData class and SaveSystem service. Point out the static methods and File.Exists check to avoid FileNotFound exceptions."
   },
 
-  // Slide 17: Live JSON Persistence Simulator
+  // Slide 18: Fetching & Consuming JSON Data
+  {
+    title: "Fetching & Consuming JSON in Gameplay & HUD",
+    origImg: "original_slides/slide_15.png",
+    notes: "Fetching JSON Data (6 min): Crucial step! Students often write SaveSystem.Load() but don't know where to call it or how to bind it. Walk through GameDataManager fetching saved progress on Start(), updating TextMeshPro, and also show how to fetch static JSON files (level/item configs) using TextAsset.",
+    content: `
+    <div class="split-media-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">1. Consuming Saved State in MonoBehaviour</div>
+                <div class="card-body">
+                    <p style="margin: 0 0 6px 0; font-weight: 600;">Fetch the JSON save on boot &amp; bind directly to UI:</p>
+                    <div class="code-box">
+                        <pre>using UnityEngine;
+using TMPro;
+
+public class GameDataManager : MonoBehaviour {
+    [SerializeField] private TextMeshProUGUI highScoreText;
+    public SaveData CurrentData { get; private set; }
+
+    private void Start() {
+        // 1. FETCH saved state from disk JSON
+        CurrentData = SaveSystem.Load();
+
+        // 2. Unpack &amp; bind data to HUD
+        highScoreText.SetText("Highscore: {0}", CurrentData.highscore);
+    }
+
+    public void AddScore(int points) {
+        // 3. Mutate in-memory data
+        CurrentData.highscore += points;
+        highScoreText.SetText("Highscore: {0}", CurrentData.highscore);
+    }
+
+    // 4. Auto-save when mobile app pauses
+    private void OnApplicationPause(bool pause) {
+        if (pause) SaveSystem.Save(CurrentData);
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card primary" style="border-left-color: #0284c7;">
+                <div class="card-title core" style="color: #0284c7;">The 3-Step Fetch Lifecycle</div>
+                <div class="card-body">
+                    <div class="punchy-point"><span class="punchy-tag">1. READ</span> <code>File.ReadAllText(path)</code> reads raw JSON text from disk.</div>
+                    <div class="punchy-point"><span class="punchy-tag">2. PARSE</span> <code>JsonUtility.FromJson&lt;T&gt;(json)</code> deserializes into typed C# object.</div>
+                    <div class="punchy-point"><span class="punchy-tag">3. BIND</span> Assign fields (<code>data.highscore</code>) to gameplay logic &amp; HUD text.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="media-panel-card" style="padding: 12px; gap: 8px;">
+                <div style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;">
+                    [FETCHING STATIC CONFIG DATA (TEXTASSET)]
+                </div>
+                <div style="font-size: 0.74rem; font-weight: 700; color: #cbd5e1; width: 100%;">
+                    Fetch level configs, weapon stats, or dialogues from <code>Assets/Data/*.json</code>:
+                </div>
+                <div class="code-box" style="width: 100%;">
+                    <pre>// 1. Define matching data structure
+[System.Serializable]
+public class LevelConfig {
+    public int levelNumber;
+    public float timeLimit;
+    public int targetCoins;
+}
+
+public class LevelLoader : MonoBehaviour {
+    // 2. Drag &amp; drop .json file in Inspector
+    [SerializeField] private TextAsset levelJson;
+
+    private void Awake() {
+        // 3. Fetch text &amp; parse immediately
+        LevelConfig config =
+            JsonUtility.FromJson&lt;LevelConfig&gt;(levelJson.text);
+
+        Debug.Log($"Loaded Level {config.levelNumber}, Limit: {config.timeLimit}s");
+    }
+}</pre>
+                </div>
+                <div style="background: #070b14; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; width: 100%; font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+                    <strong style="color: #38bdf8;">Tip:</strong> Use <code>TextAsset</code> for read-only designer data; use <code>Application.persistentDataPath</code> for player saves!
+                </div>
+            </div>
+        </div>
+    </div>
+    <details class="tier-accordion adv">
+        <summary class="accordion-header">
+            <span>[Advanced] Fetching JSON from Web APIs (UnityWebRequest)</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            To fetch online leaderboards or cloud save data from an HTTP REST API:
+            <pre style="font-size:0.72rem; margin-top:6px; background:#070b14; padding:8px; border-radius:4px; color:#38bdf8;">using UnityEngine.Networking;
+IEnumerator FetchOnlineLeaderboard(string url) {
+    using UnityWebRequest req = UnityWebRequest.Get(url);
+    yield return req.SendWebRequest();
+    if (req.result == UnityWebRequest.Result.Success) {
+        SaveData cloudData = JsonUtility.FromJson&lt;SaveData&gt;(req.downloadHandler.text);
+        Debug.Log($"Fetched online highscore: {cloudData.highscore}");
+    }
+}</pre>
+        </div>
+    </details>
+    `
+  },
+
+  // Slide 19: Live JSON Persistence Simulator
   {
     title: "Live JSON Persistence Sandbox",
     origImg: "original_slides/slide_15.png",
@@ -1201,7 +1436,7 @@ public static class SaveSystem {
                     <div style="display: flex; gap: 6px; margin-top: 10px;">
                         <button class="interactive-action-btn" style="flex: 1;" onclick="simulateJsonSave()">Save to JSON</button>
                         <button class="interactive-action-btn secondary" style="flex: 1;" onclick="simulateGameRestart()">Restart App</button>
-                        <button class="interactive-action-btn secondary" style="flex: 1;" onclick="simulateJsonLoad()">Load Save</button>
+                        <button class="interactive-action-btn secondary" style="flex: 1;" onclick="simulateJsonLoad()">Fetch / Load Save</button>
                     </div>
                 </div>
             </div>
@@ -1251,11 +1486,11 @@ public static class SaveSystem {
     notes: "Save Simulator (6 min): Demonstrate the simulator. Change the player name and score, click Save, click Restart (fields reset to defaults), and click Load to prove data persists."
   },
 
-  // Slide 18: Practice Challenge 2: Complete SaveSystem Service
+  // Slide 20: Practice Challenge 2: Complete SaveSystem Service
   {
-    title: "Challenge 2: The JSON SaveSystem Service",
+    title: "Challenge 2: The JSON Save & Fetch Service",
     origImg: "original_slides/slide_15.png",
-    notes: "Give students 5 minutes to test saving and loading. Emphasize realizing WHAT to serialize: a clean [Serializable] class. Walk around and answer questions.",
+    notes: "Give students 5 minutes to test saving, loading, and fetching. Emphasize realizing WHAT to serialize: a clean [Serializable] class, and how to consume it in a MonoBehaviour.",
     content: `
     <div class="split-media-layout">
         <div class="left-column">
@@ -1263,12 +1498,12 @@ public static class SaveSystem {
                 <div class="card-title core">[5-MIN CHALLENGE] Production JSON Persistence</div>
                 <div class="card-body">
                     <p style="margin: 0 0 8px 0; font-weight: 700; color: #0284c7;">
-                        Goal: Create a complete Save/Load system for player highscore and unlocked levels that survives game restart!
+                        Goal: Create a complete Save/Load system for player highscore and unlocked levels, then fetch and bind it to the HUD!
                     </p>
                     <ul style="padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;">
                         <li><strong>Step 1:</strong> Create <code>SaveData.cs</code> with <code>[System.Serializable]</code>, <code>public int highscore</code>, and <code>public int unlockedLevel</code>.</li>
-                        <li><strong>Step 2:</strong> In <code>SaveSystem.cs</code>, implement <code>Save(SaveData data)</code> with <code>JsonUtility.ToJson(data, true)</code> and <code>File.WriteAllText</code>.</li>
-                        <li><strong>Step 3:</strong> Implement <code>Load()</code> with <code>File.Exists</code> guard check.</li>
+                        <li><strong>Step 2:</strong> In <code>SaveSystem.cs</code>, implement <code>Save(SaveData data)</code> and <code>Load()</code> using <code>JsonUtility</code>.</li>
+                        <li><strong>Step 3:</strong> In a <code>GameDataManager</code>, call <code>SaveSystem.Load()</code> on <code>Start()</code> and fetch/display the score in the HUD!</li>
                     </ul>
                 </div>
             </div>
@@ -1277,8 +1512,8 @@ public static class SaveSystem {
                 <div class="card-title core" style="color: #059669;">Verification Steps</div>
                 <div class="card-body">
                     <div class="punchy-point"><span class="punchy-tag">1. SAVE</span> Trigger save in game &rarr; Check Console log for persistentDataPath.</div>
-                    <div class="punchy-point"><span class="punchy-tag">2. STOP</span> Stop Unity Play Mode.</div>
-                    <div class="punchy-point"><span class="punchy-tag">3. PLAY</span> Start Play Mode &rarr; Verify high score is loaded from JSON!</div>
+                    <div class="punchy-point"><span class="punchy-tag">2. STOP</span> Stop Unity Play Mode &rarr; Wipes in-memory variables.</div>
+                    <div class="punchy-point"><span class="punchy-tag">3. FETCH</span> Start Play Mode &rarr; Verify high score is fetched from JSON and shown on HUD!</div>
                 </div>
             </div>
         </div>
@@ -1309,11 +1544,12 @@ public static class SaveSystem {
                     </button>
                     <div id="solBox2" class="solution-box" style="display: none; margin-top: 8px;">
                         <div style="font-size: 0.75rem; font-weight: 800; color: #10b981; margin-bottom: 4px;">
-                            C# Solution:
+                            C# Solution (Service + Consumer):
                         </div>
                         <pre style="font-size: 0.72rem; padding: 6px 8px;">using System.IO;
 using UnityEngine;
 
+// 1. Persistence Service
 public static class SaveSystem {
     private static string Path =>
         System.IO.Path.Combine(Application.persistentDataPath, "savedata.json");
@@ -1324,8 +1560,14 @@ public static class SaveSystem {
 
     public static SaveData Load() {
         if (!File.Exists(Path)) return new SaveData();
-        return JsonUtility.FromJson<SaveData>(File.ReadAllText(Path));
+        return JsonUtility.FromJson&lt;SaveData&gt;(File.ReadAllText(Path));
     }
+}
+
+// 2. Fetching in MonoBehaviour
+void Start() {
+    SaveData loaded = SaveSystem.Load();
+    highScoreText.SetText("Highscore: {0}", loaded.highscore);
 }</pre>
                     </div>
                 </div>
@@ -1335,7 +1577,7 @@ public static class SaveSystem {
     `
   },
 
-  // Slide 19: Course Summary & Milestones Checklist
+  // Slide 21: Course Summary & Milestones Checklist
   {
     title: "Summary & Milestone Checklist",
     origImg: "original_slides/slide_15.png",
@@ -1351,21 +1593,23 @@ public static class SaveSystem {
                         <li><strong>Touch Ergonomics:</strong> Keep buttons &ge; 44pt (88px at 1080p) &bull; Leave 12px finger padding.</li>
                         <li><strong>Raycast Optimization:</strong> Turn off 'Raycast Target' on all decorative images and static text.</li>
                         <li><strong>TextMeshPro:</strong> Use <code>scoreText.SetText()</code> to prevent mobile garbage collection stutter.</li>
+                        <li><strong>JSON Fetch &amp; Persist:</strong> Save via <code>JsonUtility.ToJson()</code> &bull; Fetch and unpack with <code>SaveSystem.Load()</code> on startup.</li>
+                        <li><strong>Static Config JSON:</strong> Fetch level/dialogue files via <code>TextAsset.text</code> &bull; Parse with <code>JsonUtility.FromJson&lt;T&gt;()</code>.</li>
                         <li><strong>Mobile Auto-Save:</strong> Save in <code>OnApplicationPause(true)</code> when mobile OS suspends the app.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="content-card primary" style="border-left-color: #10b981;">
-                <div class="card-title core" style="color: #059669;">Homework Assignment (classes/03_UI.md)</div>
+                <div class="card-title core" style="color: #059669;">Mobile Game Production Checklist</div>
                 <div class="card-body">
-                    Complete the 4 Milestones in <code>classes/03_UI.md</code>:
-                    <ol style="padding-left: 20px; margin-top: 4px; line-height: 1.45; font-weight: 600;">
-                        <li>Build a scalable mobile HUD with <code>SafeAreaFitter</code> and test in Device Simulator.</li>
-                        <li>Create an overhead world-space health bar with camera billboarding.</li>
-                        <li>Implement a decoupled <code>HealthBarUI</code> listening to player events.</li>
-                        <li>Write the <code>SaveSystem.cs</code> JSON service and persist high scores!</li>
-                    </ol>
+                    Essential verification steps before building your mobile APK / iOS build:
+                    <ul style="padding-left: 20px; margin-top: 4px; line-height: 1.5; font-weight: 600;">
+                        <li><strong>Safe Area &amp; Notches:</strong> Verified HUD bounds across notch, dynamic island, and punch-hole cutouts in Device Simulator.</li>
+                        <li><strong>Aspect Ratio Stability:</strong> Tested layout consistency across 16:9, 19.5:9, 20:9, and 4:3 tablet screens.</li>
+                        <li><strong>Batching &amp; Overdraw:</strong> Unchecked 'Raycast Target' on all decorative images and non-interactive text.</li>
+                        <li><strong>Persistence Reliability:</strong> Verified JSON game state recovers cleanly after app backgrounding (<code>OnApplicationPause</code>).</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1398,7 +1642,7 @@ public static class SaveSystem {
         </div>
     </details>
     `,
-    notes: "Wrap Up (5 min): Congratulate students on completing Basics 3. Remind them that next week we dive into Game Architecture 1."
+    notes: "Lesson Wrap Up (5 min): Review core takeaways. Next week covers Game Architecture 1."
   }
 ];
 
@@ -1432,6 +1676,16 @@ const glossaryTerms = {
         desc: "Normalized reference points (0.0 to 1.0) on the parent container that pin or stretch UI elements.",
         diff: "<strong>Min == Max:</strong> Element keeps fixed size at corner. <strong>Min != Max:</strong> Element stretches dynamically."
     },
+    "aspectratiofitter": {
+        title: "AspectRatioFitter Component",
+        desc: "Enforces a strict aspect ratio (e.g. 1:1) on a RectTransform regardless of parent canvas stretching.",
+        diff: "<strong>Best for:</strong> Square mini-maps, round avatar portraits, and ability icons on mobile screens."
+    },
+    "9-slice": {
+        title: "9-Sliced Sprite",
+        desc: "A 2D sprite split into 9 quadrants via Sprite Editor border handles so borders remain sharp while the center stretches.",
+        diff: "<strong>Image Type:</strong> Set Image component to Sliced to prevent pixel distortion on scalable UI panels."
+    },
     "pivots": {
         title: "Pivot Point",
         desc: "The local origin point inside an element around which it rotates, scales, and positions (0.5, 0.5 = center).",
@@ -1456,6 +1710,11 @@ const glossaryTerms = {
         title: "JsonUtility",
         desc: "Fast, native C++ serialization utility converting C# objects to JSON strings and vice-versa.",
         diff: "<strong>Requirements:</strong> Target class must have [System.Serializable] and public fields."
+    },
+    "textasset": {
+        title: "TextAsset",
+        desc: "Unity asset format for imported text and data files (.txt, .json, .csv, .xml).",
+        diff: "<strong>Fetching JSON:</strong> Access text via <code>textAsset.text</code> to pass directly into <code>JsonUtility.FromJson&lt;T&gt;()</code>."
     },
     "persistentdatapath": {
         title: "Application.persistentDataPath",
@@ -1648,23 +1907,23 @@ const simulatorJs = `
             if (!icon || !title || !desc || !log) return;
 
             if (mode === 'overlay') {
-                icon.textContent = '🖥️';
+                icon.textContent = '[OVERLAY]';
                 title.textContent = 'Screen Space - Overlay';
                 title.style.color = '#10b981';
-                desc.textContent = 'Pinned to glass. Ignores scene camera. 1:1 pixel crispness. Perfect for HUD & menus.';
+                desc.textContent = 'Pinned to glass. Ignores scene camera. 1:1 pixel crispness. Standard for 2D mobile HUD & menus.';
                 log.innerHTML = '<span style="color:#10b981;">[OVERLAY] Rendered last. Zero camera setup. Best for 90% of game UI.</span>';
             } else if (mode === 'camera') {
-                icon.textContent = '🎥';
+                icon.textContent = '[CAMERA]';
                 title.textContent = 'Screen Space - Camera';
                 title.style.color = '#0284c7';
-                desc.textContent = 'Placed at Plane Distance in front of Camera. Supports 3D perspective and UI Particle VFX.';
-                log.innerHTML = '<span style="color:#0284c7;">[CAMERA] Enables 3D UI VFX, post-processing bloom, and camera perspective tilt.</span>';
+                desc.textContent = 'Placed at Plane Distance in front of Camera. Supports perspective and UI Particle VFX.';
+                log.innerHTML = '<span style="color:#0284c7;">[CAMERA] Enables UI VFX, post-processing bloom, and camera perspective tilt.</span>';
             } else if (mode === 'world') {
-                icon.textContent = '👾';
+                icon.textContent = '[WORLD SPACE]';
                 title.textContent = 'World Space Canvas';
                 title.style.color = '#f59e0b';
-                desc.textContent = 'Acts as physical 3D object in scene. Used for overhead health bars & damage numbers.';
-                log.innerHTML = '<span style="color:#f59e0b;">[WORLD SPACE] Scale down to (0.01, 0.01, 0.01)! Add Billboard script to face camera.</span>';
+                desc.textContent = 'Lives inside 2D scene space. Used for overhead enemy health bars and damage numbers.';
+                log.innerHTML = '<span style="color:#f59e0b;">[WORLD SPACE] Scale to (0.01, 0.01, 0.01). Set Canvas Sorting Layer and upright scale fix.</span>';
             }
         }
 
@@ -1728,7 +1987,7 @@ const simulatorJs = `
 
                 if (status) {
                     status.style.color = '#10b981';
-                    status.textContent = 'SUCCESS: JsonUtility.FromJson<SaveData>() loaded state from disk!';
+                    status.textContent = 'SUCCESS: Fetched data from JSON! JsonUtility.FromJson<SaveData>() unpacked values into game variables.';
                 }
             } catch (e) {
                 if (status) {
@@ -1763,6 +2022,113 @@ const simulatorJs = `
                 \`;
             }
         }
+
+        // 5. Universal UI Scaling & Distortion Simulator
+        function runScaleSimulator() {
+            const aspect = document.getElementById('simScaleAspectSelect')?.value || '20:9';
+            const useCorrectAnchors = document.getElementById('simScaleCorrectCheck')?.checked ?? true;
+            const frame = document.getElementById('scaleSimFrame');
+            const hudBar = document.getElementById('scaleSimHudBar');
+            const pauseBtn = document.getElementById('scaleSimPauseBtn');
+            const coinCounter = document.getElementById('scaleSimCoinCounter');
+            const minimap = document.getElementById('scaleSimMinimap');
+            const dialogBox = document.getElementById('scaleSimDialogBox');
+            const log = document.getElementById('scaleSimResult');
+
+            if (!frame) return;
+
+            if (aspect === '20:9') {
+                frame.style.width = '290px';
+                frame.style.height = '100px';
+            } else if (aspect === '19.5:9') {
+                frame.style.width = '265px';
+                frame.style.height = '100px';
+            } else if (aspect === '16:9') {
+                frame.style.width = '230px';
+                frame.style.height = '100px';
+            } else if (aspect === '4:3') {
+                frame.style.width = '175px';
+                frame.style.height = '105px';
+            }
+
+            if (useCorrectAnchors) {
+                // Correct Anchors:
+                if (hudBar) {
+                    hudBar.style.left = '4px';
+                    hudBar.style.right = '4px';
+                    hudBar.style.width = 'auto';
+                    hudBar.style.height = '14px';
+                    hudBar.style.borderRadius = '3px';
+                }
+                if (pauseBtn) {
+                    pauseBtn.style.top = '2px';
+                    pauseBtn.style.left = '6px';
+                    pauseBtn.style.width = '20px';
+                    pauseBtn.style.height = '20px';
+                    pauseBtn.style.borderRadius = '3px';
+                }
+                if (coinCounter) {
+                    coinCounter.style.top = '2px';
+                    coinCounter.style.right = '6px';
+                    coinCounter.style.width = 'auto';
+                }
+                if (minimap) {
+                    minimap.style.bottom = '8px';
+                    minimap.style.left = '8px';
+                    minimap.style.width = '30px';
+                    minimap.style.height = '30px';
+                    minimap.style.borderRadius = '50%';
+                }
+                if (dialogBox) {
+                    dialogBox.style.top = '50%';
+                    dialogBox.style.left = '50%';
+                    dialogBox.style.transform = 'translate(-50%, -50%)';
+                    dialogBox.style.width = '110px';
+                    dialogBox.style.height = '42px';
+                    dialogBox.style.border = '2px solid #38bdf8';
+                }
+                if (log) {
+                    log.innerHTML = '<span style="color:#10b981;">[CLEAN &amp; CRISP] Correct anchors: buttons stay corner-pinned, minimap stays 1:1 round, dialog stays centered &amp; undistorted!</span>';
+                }
+            } else {
+                // WRONG: Stretched blindly
+                if (hudBar) {
+                    hudBar.style.left = '0';
+                    hudBar.style.right = '0';
+                    hudBar.style.width = '100%';
+                    hudBar.style.height = '28px';
+                }
+                if (pauseBtn) {
+                    pauseBtn.style.top = '2px';
+                    pauseBtn.style.left = '10px';
+                    pauseBtn.style.width = (aspect === '20:9' ? '54px' : '32px');
+                    pauseBtn.style.height = '16px';
+                    pauseBtn.style.borderRadius = '0';
+                }
+                if (coinCounter) {
+                    coinCounter.style.top = '4px';
+                    coinCounter.style.right = (aspect === '4:3' ? '-20px' : '40px');
+                }
+                if (minimap) {
+                    minimap.style.bottom = '4px';
+                    minimap.style.left = '4px';
+                    minimap.style.width = (aspect === '20:9' ? '58px' : '28px');
+                    minimap.style.height = '24px';
+                    minimap.style.borderRadius = '20px / 10px';
+                }
+                if (dialogBox) {
+                    dialogBox.style.top = '20%';
+                    dialogBox.style.left = '5%';
+                    dialogBox.style.transform = 'none';
+                    dialogBox.style.width = '90%';
+                    dialogBox.style.height = '60%';
+                    dialogBox.style.border = '6px solid #ef4444';
+                }
+                if (log) {
+                    log.innerHTML = '<span style="color:#ef4444;">[DISTORTION BUG!] Without proper anchors &amp; AspectRatioFitter: icons squash into ovals, buttons stretch wide, and dialog borders distort!</span>';
+                }
+            }
+        }
 `;
 
 // Build the full HTML document
@@ -1779,6 +2145,145 @@ const fullHtml = `<!DOCTYPE html>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
 ${cssStyles}
+        /* Font Scaling Root Variables */
+        :root {
+            --font-scale: 1;
+        }
+
+        /* Scalable Slide Content - Affects all elements inside slides */
+        .slide-content-area,
+        .slide-content-area p,
+        .slide-content-area span,
+        .slide-content-area div,
+        .slide-content-area li,
+        .slide-content-area td,
+        .slide-content-area th,
+        .slide-content-area strong,
+        .slide-content-area em,
+        .slide-content-area code,
+        .slide-content-area pre,
+        .slide-content-area select,
+        .slide-content-area button,
+        .slide-content-area .card-title,
+        .slide-content-area .card-body,
+        .slide-content-area .punchy-point,
+        .slide-content-area .interactive-action-btn,
+        .slide-content-area details summary,
+        .slide-content-area .accordion-body {
+            font-size-adjust: none;
+        }
+
+        /* Scalable Slide Content - Affects slide elements, EXCLUDING TITLES */
+        .slide-content-area .card-title,
+        .slide-header .slide-title,
+        .slide-content-area h1,
+        .slide-content-area h2,
+        .slide-content-area h3 {
+            font-size-adjust: none;
+        }
+
+        /* Titles are fixed clamp and strictly excluded from font slider scaling */
+        .slide-content-area .card-title {
+            font-size: clamp(1.10rem, 2.6cqh, 1.48rem) !important;
+        }
+
+        /* Content scaling via CSS var(--font-scale) with boosted comfortable baseline */
+        .slide-content-area .card-body,
+        .slide-content-area .media-panel-card,
+        .slide-content-area .solution-box,
+        .slide-content-area .challenge-box,
+        .slide-content-area .interactive-simulator,
+        .slide-content-area .sim-controls,
+        .slide-content-area .code-snippet-box {
+            font-size: calc(clamp(0.88rem, 1.95cqh, 1.15rem) * var(--font-scale)) !important;
+            line-height: 1.45 !important;
+        }
+
+        .slide-content-area .code-box pre,
+        .slide-content-area .solution-box pre {
+            font-size: calc(clamp(0.78rem, 1.65cqh, 0.96rem) * var(--font-scale)) !important;
+            line-height: 1.35 !important;
+            padding: 0.6cqh 1.0cqw !important;
+        }
+
+        .slide-content-area table.dense-table th {
+            font-size: calc(clamp(0.82rem, 1.70cqh, 1.05rem) * var(--font-scale)) !important;
+        }
+
+        .slide-content-area table.dense-table td {
+            font-size: calc(clamp(0.78rem, 1.62cqh, 0.98rem) * var(--font-scale)) !important;
+        }
+
+        .slide-content-area .accordion-header {
+            font-size: calc(clamp(0.82rem, 1.70cqh, 1.02rem) * var(--font-scale)) !important;
+        }
+
+        .slide-content-area .accordion-body {
+            font-size: calc(clamp(0.80rem, 1.65cqh, 0.98rem) * var(--font-scale)) !important;
+        }
+
+        .slide-content-area .punchy-point {
+            font-size: calc(clamp(0.82rem, 1.70cqh, 1.02rem) * var(--font-scale)) !important;
+        }
+
+        .slide-content-area .interactive-action-btn {
+            font-size: calc(clamp(0.76rem, 1.55cqh, 0.92rem) * var(--font-scale)) !important;
+        }
+
+        .slide-content-area #simModeDesc,
+        .slide-content-area #canvasModeDetailLog,
+        .slide-content-area #anchorSimResult,
+        .slide-content-area #scaleSimResult,
+        .slide-content-area #simSaveStatus,
+        .slide-content-area #benchmarkResult {
+            font-size: calc(clamp(0.78rem, 1.62cqh, 0.96rem) * var(--font-scale)) !important;
+        }
+
+        /* Class 3 Compact Overrides to Prevent Slide Overflow */
+        .content-card.primary {
+            padding: 0.9cqh 1.3cqw !important;
+        }
+        .split-media-layout .left-column,
+        .split-media-layout .right-column {
+            gap: 0.8cqh !important;
+        }
+        .slide-content-area {
+            transform-origin: top left;
+        }
+
+        /* Bottom Bar Font Slider Widget */
+        .font-slider-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #182030;
+            border: 1px solid #334155;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .font-slider-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            user-select: none;
+        }
+        .font-slider-ctrl {
+            width: 80px;
+            height: 4px;
+            accent-color: var(--hr-red);
+            cursor: pointer;
+            outline: none;
+        }
+        .font-slider-val {
+            font-size: 0.70rem;
+            font-weight: 800;
+            color: #38bdf8;
+            font-family: monospace;
+            min-width: 32px;
+            text-align: right;
+            user-select: none;
+        }
     </style>
 </head>
 <body class="lecture-mode">
@@ -1790,15 +2295,6 @@ ${cssStyles}
             <span>Lesson 03: UI &amp; Saving Systems &bull; <strong>Modern Unity 6</strong></span>
         </div>
 
-        <!-- Mode Toggle (Comparison Mode) -->
-        <div class="toggle-wrap">
-            <span class="toggle-text" id="labelOld" onclick="setMode(false); event.stopPropagation();">ORIGINAL KEYNOTE (HD)</span>
-            <div class="switch" onclick="toggleMode(); event.stopPropagation();" title="Toggle view [C]">
-                <input type="checkbox" id="modeSwitch" checked>
-                <span class="slider"></span>
-            </div>
-            <span class="toggle-text active-new" id="labelNew" onclick="setMode(true); event.stopPropagation();">MODERN UNITY 6</span>
-        </div>
 
         <!-- Tier Selector Pills -->
         <div class="tier-selector">
@@ -1817,10 +2313,7 @@ ${cssStyles}
         <!-- Stage Area -->
         <main class="stage-area" id="stageArea">
             <div class="slide-viewport" id="viewport" style="position: relative;">
-                <!-- Original Keynote Image View (Comparison Mode) -->
-                <div id="viewOriginal" class="view-original" style="display: none; width: 100%; height: 100%; background: #000; position: absolute; top:0; left:0; right:0; bottom:0; z-index: 10;">
-                    <img id="originalSlideImg" src="original_slides/slide_01.png" alt="Original Keynote Slide" style="width: 100%; height: 100%; object-fit: contain; display: block; background: #000;">
-                </div>
+
 
                 <!-- Modern Slide View -->
                 <div id="interactiveSlide" class="view-interactive" style="display: flex; width: 100%; height: 100%;">
@@ -1852,11 +2345,11 @@ ${cssStyles}
                 <button class="viewmode-btn active" id="btnViewLecture" onclick="setViewMode('lecture')">Lecture Mode</button>
                 <button class="viewmode-btn" id="btnViewLab" onclick="setViewMode('lab')">Lab Mode</button>
             </div>
-            <button class="btn-flag-pace" id="btnStudentTooFast" onclick="toggleStudentTooFast()">
-                <span class="flag-dot"></span>
-                <span>Too Fast</span>
-            </button>
-            <button class="btn-clear-flags" id="btnClearFlags" onclick="clearAllPaceFlags()">Clear Pace (0)</button>
+            <div class="font-slider-wrap" title="Adjust text font size">
+                <span class="font-slider-label">Font:</span>
+                <input type="range" id="fontScaleSlider" class="font-slider-ctrl" min="70" max="140" value="100" step="5" oninput="setFontScale(this.value)">
+                <span id="fontScaleValue" class="font-slider-val">100%</span>
+            </div>
             <span class="mode-indicator new" id="modeBadge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">Modern Unity 6</span>
         </div>
 
@@ -1912,7 +2405,6 @@ ${cssStyles}
                 <div class="shortcut-row"><span class="shortcut-key">&rarr; / Space</span><span>Next Slide</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">&larr;</span><span>Previous Slide</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">F</span><span>Toggle Fullscreen</span></div>
-                <div class="shortcut-row"><span class="shortcut-key">C</span><span>Switch Original / Modern View (Comparison)</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">L</span><span>Toggle Lecture / Lab Mode</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">0 - 3</span><span>Filter Tracks (All, Core, Adv, Exp)</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">T</span><span>Teacher Mode Access</span></div>
@@ -1960,9 +2452,7 @@ ${cssStyles}
                 } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
                     e.preventDefault();
                     changeSlide(-1);
-                } else if (e.key === 'c' || e.key === 'C') {
-                    e.preventDefault();
-                    toggleMode();
+
                 } else if (e.key === 'l' || e.key === 'L') {
                     e.preventDefault();
                     toggleLectureLabMode();
@@ -2010,6 +2500,7 @@ ${cssStyles}
             updateModeDisplay();
             initTeacherMode();
             initPaceFeedback();
+            initFontScale();
         }
 
         function buildDrawer() {
@@ -2107,6 +2598,9 @@ ${cssStyles}
                 enhanceGlossaryElements();
             }
 
+            // Apply active font scale setting to newly rendered slide elements
+            applyFontScaleToCurrentSlide();
+
             document.getElementById('slideCounter').textContent = \`Slide \${currentSlide + 1} / \${slidesData.length}\`;
             document.getElementById('prevBtn').disabled = (currentSlide === 0);
             document.getElementById('nextBtn').disabled = (currentSlide === slidesData.length - 1);
@@ -2137,49 +2631,12 @@ ${cssStyles}
         // ==========================================
         // COMPARISON MODE (ORIGINAL HD VS MODERN)
         // ==========================================
-        function toggleMode() {
-            setMode(!isModernView);
-        }
-
-        function setMode(modern) {
-            isModernView = modern;
-            const chk = document.getElementById('modeSwitch');
-            if (chk) chk.checked = modern;
-            updateModeDisplay();
-        }
-
+        // Compatibility stubs (Comparison mode permanently removed)
+        function toggleMode() {}
+        function setMode(modern) {}
         function updateModeDisplay() {
-            const oldView = document.getElementById('viewOriginal');
             const newView = document.getElementById('interactiveSlide');
-            const labelOld = document.getElementById('labelOld');
-            const labelNew = document.getElementById('labelNew');
-            const badge = document.getElementById('modeBadge');
-
-            if (isModernView) {
-                if (oldView) oldView.style.display = 'none';
-                if (newView) newView.style.display = 'flex';
-                if (labelNew) labelNew.classList.add('active-new');
-                if (labelOld) labelOld.classList.remove('active-old');
-                if (badge) {
-                    badge.className = 'mode-indicator new';
-                    badge.textContent = 'Modern Unity 6';
-                    badge.style.background = 'rgba(16, 185, 129, 0.15)';
-                    badge.style.color = '#10b981';
-                    badge.style.borderColor = '#10b981';
-                }
-            } else {
-                if (oldView) oldView.style.display = 'block';
-                if (newView) newView.style.display = 'none';
-                if (labelOld) labelOld.classList.add('active-old');
-                if (labelNew) labelNew.classList.remove('active-new');
-                if (badge) {
-                    badge.className = 'mode-indicator old';
-                    badge.textContent = 'Original Keynote (HD)';
-                    badge.style.background = 'rgba(244, 63, 94, 0.15)';
-                    badge.style.color = '#f43f5e';
-                    badge.style.borderColor = '#f43f5e';
-                }
-            }
+            if (newView) newView.style.display = 'flex';
         }
 
         // ==========================================
@@ -2210,6 +2667,82 @@ ${cssStyles}
             setTimeout(autoFitSlideElements, 20);
         }
 
+        function isTitleElement(el) {
+            if (!el || el.nodeType !== 1) return false;
+            if (el.matches('.card-title, .slide-title, .slide-header, h1, h2, h3, h4, h5, h6, .tip-title, .help-modal-header, .modal-title, [data-no-scale], #slideTitle, .drawer-title, .badge, .tier-btn')) {
+                return true;
+            }
+            if (el.closest('.card-title, .slide-title, .slide-header, h1, h2, h3, h4, h5, h6, .tip-title, .help-modal-header, .modal-title, [data-no-scale], #slideTitle, .drawer-title')) {
+                return true;
+            }
+            return false;
+        }
+
+        function applyFontScaleToCurrentSlide() {
+            let saved = '100';
+            try { saved = localStorage.getItem('gdd_font_scale') || '100'; } catch (e) {}
+            const scale = parseFloat(saved) / 100;
+            const area = document.getElementById('slideContentArea');
+            if (!area) return;
+
+            // Baseline boost: ensures 100% starts comfortably readable (+22% boost to inline compact font sizes)
+            const BASE_BOOST = 1.22;
+
+            // 1. Scale all elements with inline font-size, strictly excluding titles
+            const styledEls = area.querySelectorAll('[style*="font-size"]');
+            styledEls.forEach(el => {
+                if (isTitleElement(el)) return;
+                if (!el.dataset.origFontSize) {
+                    el.dataset.origFontSize = el.style.fontSize;
+                }
+                const orig = el.dataset.origFontSize;
+                const match = orig.match(/^([0-9.]+)(rem|px|em|cqh|cqw|vw|vh|pt|%)$/);
+                if (match) {
+                    const num = parseFloat(match[1]);
+                    const unit = match[2];
+                    // Large timer numbers (e.g. 2.6rem) scale directly without compounding boost
+                    const boost = (num >= 2.0) ? 1.0 : BASE_BOOST;
+                    el.style.fontSize = (num * boost * scale).toFixed(3) + unit;
+                }
+            });
+
+            // 2. Universal relative scaling for content blocks outside card-body that lack inline styles
+            const contentEls = area.querySelectorAll('p, li, .media-panel-card > div, #simModeDesc, #canvasModeDetailLog, #anchorSimResult, #scaleSimResult, #simSaveStatus, #benchmarkResult');
+            contentEls.forEach(el => {
+                if (isTitleElement(el) || el.dataset.origFontSize || el.closest('.card-body')) return;
+                if (!el.dataset.baseComputedRem) {
+                    const comp = window.getComputedStyle(el).fontSize;
+                    const px = parseFloat(comp);
+                    if (!isNaN(px) && px > 0) {
+                        el.dataset.baseComputedRem = (px / 16 / scale).toFixed(3);
+                    }
+                }
+                if (el.dataset.baseComputedRem) {
+                    const baseRem = parseFloat(el.dataset.baseComputedRem);
+                    el.style.fontSize = (baseRem * scale).toFixed(3) + 'rem';
+                }
+            });
+        }
+
+        function setFontScale(val) {
+            const scale = parseFloat(val) / 100;
+            document.documentElement.style.setProperty('--font-scale', scale);
+            const disp = document.getElementById('fontScaleValue');
+            if (disp) disp.textContent = val + '%';
+            const slider = document.getElementById('fontScaleSlider');
+            if (slider && slider.value !== String(val)) slider.value = val;
+            try { localStorage.setItem('gdd_font_scale', val); } catch (e) {}
+
+            applyFontScaleToCurrentSlide();
+            setTimeout(autoFitSlideElements, 20);
+        }
+
+        function initFontScale() {
+            let saved = '100';
+            try { saved = localStorage.getItem('gdd_font_scale') || '100'; } catch (e) {}
+            setFontScale(saved);
+        }
+
         function setTier(tier) {
             document.querySelectorAll('.tier-btn').forEach(b => b.className = 'tier-btn');
             const btn = document.getElementById('btnTier' + tier.charAt(0).toUpperCase() + tier.slice(1));
@@ -2235,14 +2768,28 @@ ${cssStyles}
 
         function autoFitSlideElements() {
             const area = document.getElementById('slideContentArea');
-            if (!area) return;
+            const view = document.getElementById('interactiveSlide');
+            if (!area || !view) return;
             area.style.transform = 'none';
             area.style.transformOrigin = 'top left';
+            area.style.width = '100%';
 
-            if (area.scrollHeight > area.clientHeight + 2) {
-                const ratio = (area.clientHeight - 4) / area.scrollHeight;
-                if (ratio < 0.98) {
-                    area.style.transform = \`scale(\${Math.max(ratio, 0.72)})\`;
+            if (document.body.classList.contains('lab-mode')) return;
+
+            const header = document.getElementById('slideHeader');
+            const footer = view.querySelector('.slide-footer');
+            const headerH = (header && header.style.display !== 'none') ? header.getBoundingClientRect().height : 0;
+            const footerH = footer ? footer.getBoundingClientRect().height : 0;
+            const viewH = view.clientHeight;
+            const availableH = viewH - headerH - footerH - 32;
+
+            const contentH = area.scrollHeight;
+            if (contentH > availableH && availableH > 100) {
+                const ratio = availableH / contentH;
+                if (ratio < 0.99) {
+                    const scale = Math.max(ratio, 0.65);
+                    area.style.transform = \`scale(\${scale})\`;
+                    area.style.width = \`\${(100 / scale)}%\`;
                 }
             }
         }
@@ -2924,10 +3471,21 @@ ${simulatorJs}
 // Write to files
 const outPath = path.resolve('presentation_basics3/presentation_unity6_basics3.html');
 const indexPath = path.resolve('presentation_basics3/index.html');
+const docsOutPath = path.resolve('docs/presentation_basics3/presentation_unity6_basics3.html');
+const docsIndexPath = path.resolve('docs/presentation_basics3/index.html');
 
 fs.writeFileSync(outPath, fullHtml, 'utf8');
 fs.writeFileSync(indexPath, fullHtml, 'utf8');
 
+if (fs.existsSync(path.resolve('docs/presentation_basics3'))) {
+    fs.writeFileSync(docsOutPath, fullHtml, 'utf8');
+    fs.writeFileSync(docsIndexPath, fullHtml, 'utf8');
+}
+
 console.log('Successfully generated:');
 console.log(' - ' + outPath + ' (' + fs.statSync(outPath).size + ' bytes)');
 console.log(' - ' + indexPath + ' (' + fs.statSync(indexPath).size + ' bytes)');
+if (fs.existsSync(docsIndexPath)) {
+    console.log(' - ' + docsOutPath + ' (' + fs.statSync(docsOutPath).size + ' bytes)');
+    console.log(' - ' + docsIndexPath + ' (' + fs.statSync(docsIndexPath).size + ' bytes)');
+}

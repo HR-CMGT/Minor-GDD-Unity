@@ -15,10 +15,10 @@ const slidesData = [
       "3. Responsive Multi-Resolution UI & Safe Area (Fluid Adaptation, No Black Bars)",
       "4. Universal Anchor Playbook (Corners, Stretches, Center Modals, 9-Slicing, AspectRatioFitter)",
       "5. TextMeshPro, Touch Controls & Decoupled Scripting (OnScreenStick, C# Actions)",
-      "6. Data Persistence Engine (PlayerPrefs trap vs Production JSON Serialization)"
+      "6. Data Persistence Engine (PlayerPrefs trap vs Saving & Fetching JSON)"
     ],
     origImg: "original_slides/slide_01.png",
-    notes: "Lesson Overview (10 min): Welcome students to Class 3. Frame today around two core pillars: Responsive UI (making sure your game looks identical on 16:9, Ultrawide, and mobile screens) and Data Persistence (saving and loading game state cleanly with JSON)."
+    notes: "Lesson Overview (10 min): Welcome students to Class 3. Frame today around two core pillars: Responsive UI (making sure your game looks identical on 16:9, Ultrawide, and mobile screens) and Data Persistence (saving, fetching, and binding game state cleanly with JSON)."
   },
 
   // Slide 2: Roadmap & 5 Milestones
@@ -58,8 +58,8 @@ const slidesData = [
                         <p style="font-size: 0.88rem; color: #475569; margin-top: 4px;">Listen to gameplay C# Actions (health, score, inventory) instead of calling GameObject.Find.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; grid-column: span 2;">
-                        <span style="font-weight: 800; color: #e11d48; font-size: 0.95rem;">5. Cross-Platform JSON Persistence</span>
-                        <p style="font-size: 0.88rem; color: #475569; margin-top: 4px;">Replace the PlayerPrefs trap with robust, serialized C# JSON save files in persistentDataPath.</p>
+                        <span style="font-weight: 800; color: #10b981; font-size: 0.95rem;">5. Data Persistence &amp; JSON Fetching</span>
+                        <p style="font-size: 0.88rem; color: #475569; margin-top: 4px;">Save game state to persistentDataPath, and fetch saved player data &amp; static config files into your HUD.</p>
                     </div>
                 </div>
             </div>
@@ -483,28 +483,14 @@ public class WorldSpaceHealthBar2D : MonoBehaviour {
             </div>
 
             <div class="content-card primary" style="border-left-color: #10b981;">
-                <div class="card-title core" style="color: #059669;">The Fix: Screen.safeArea &amp; SafeAreaFitter</div>
+                <div class="card-title core" style="color: #059669;">Pivots: Center of Rotation &amp; Scale</div>
                 <div class="card-body">
-                    <p style="margin: 0 0 6px 0; font-size: 0.8rem; font-weight: 600;">Wrap all HUD elements in a full-stretch <code>SafeAreaPanel</code> with this script:</p>
-                    <div class="code-box">
-                        <pre>// Production SafeAreaFitter (Rotation & Notch Aware):
-[RequireComponent(typeof(RectTransform))]
-public class SafeAreaFitter : MonoBehaviour {
-    private RectTransform _rt;
-    private Rect _lastSafe;
-    void Awake() { _rt = GetComponent&lt;RectTransform&gt;(); ApplySafeArea(); }
-    void Update() {
-        if (Screen.safeArea != _lastSafe) ApplySafeArea();
-    }
-    void ApplySafeArea() {
-        _lastSafe = Screen.safeArea;
-        Vector2 min = _lastSafe.position, max = min + _lastSafe.size;
-        min.x /= Screen.width; min.y /= Screen.height;
-        max.x /= Screen.width; max.y /= Screen.height;
-        _rt.anchorMin = min; _rt.anchorMax = max;
-    }
-}</pre>
-                    </div>
+                    <p style="margin: 0 0 6px 0; font-weight: 600;">The <strong>Pivot</strong> (<code>0.0</code> to <code>1.0</code>) is the local origin point inside the UI element itself:</p>
+                    <ul style="padding-left: 18px; margin: 0; line-height: 1.45; font-weight: 600;">
+                        <li><strong>(0.5, 0.5) Center:</strong> Default origin. The element rotates, scales, and positions around its middle.</li>
+                        <li><strong>(0, 1) Top-Left:</strong> Aligns top-left corner directly to anchor (ideal for HUD &amp; Pause buttons).</li>
+                        <li><strong>Anchors vs Pivot:</strong> Anchors specify <em>where on parent</em> to pin; Pivot specifies <em>which point on the child</em> aligns with that pin!</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1305,7 +1291,117 @@ public static class SaveSystem {
     notes: "JSON Persistence (7 min): Walk through SaveData class and SaveSystem service. Point out the static methods and File.Exists check to avoid FileNotFound exceptions."
   },
 
-  // Slide 17: Live JSON Persistence Simulator
+  // Slide 18: Fetching & Consuming JSON Data
+  {
+    title: "Fetching & Consuming JSON in Gameplay & HUD",
+    origImg: "original_slides/slide_15.png",
+    notes: "Fetching JSON Data (6 min): Crucial step! Students often write SaveSystem.Load() but don't know where to call it or how to bind it. Walk through GameDataManager fetching saved progress on Start(), updating TextMeshPro, and also show how to fetch static JSON files (level/item configs) using TextAsset.",
+    content: `
+    <div class="split-media-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">1. Consuming Saved State in MonoBehaviour</div>
+                <div class="card-body">
+                    <p style="margin: 0 0 6px 0; font-weight: 600;">Fetch the JSON save on boot &amp; bind directly to UI:</p>
+                    <div class="code-box">
+                        <pre>using UnityEngine;
+using TMPro;
+
+public class GameDataManager : MonoBehaviour {
+    [SerializeField] private TextMeshProUGUI highScoreText;
+    public SaveData CurrentData { get; private set; }
+
+    private void Start() {
+        // 1. FETCH saved state from disk JSON
+        CurrentData = SaveSystem.Load();
+
+        // 2. Unpack &amp; bind data to HUD
+        highScoreText.SetText("Highscore: {0}", CurrentData.highscore);
+    }
+
+    public void AddScore(int points) {
+        // 3. Mutate in-memory data
+        CurrentData.highscore += points;
+        highScoreText.SetText("Highscore: {0}", CurrentData.highscore);
+    }
+
+    // 4. Auto-save when mobile app pauses
+    private void OnApplicationPause(bool pause) {
+        if (pause) SaveSystem.Save(CurrentData);
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card primary" style="border-left-color: #0284c7;">
+                <div class="card-title core" style="color: #0284c7;">The 3-Step Fetch Lifecycle</div>
+                <div class="card-body">
+                    <div class="punchy-point"><span class="punchy-tag">1. READ</span> <code>File.ReadAllText(path)</code> reads raw JSON text from disk.</div>
+                    <div class="punchy-point"><span class="punchy-tag">2. PARSE</span> <code>JsonUtility.FromJson&lt;T&gt;(json)</code> deserializes into typed C# object.</div>
+                    <div class="punchy-point"><span class="punchy-tag">3. BIND</span> Assign fields (<code>data.highscore</code>) to gameplay logic &amp; HUD text.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="media-panel-card" style="padding: 12px; gap: 8px;">
+                <div style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; width: 100%;">
+                    [FETCHING STATIC CONFIG DATA (TEXTASSET)]
+                </div>
+                <div style="font-size: 0.74rem; font-weight: 700; color: #cbd5e1; width: 100%;">
+                    Fetch level configs, weapon stats, or dialogues from <code>Assets/Data/*.json</code>:
+                </div>
+                <div class="code-box" style="width: 100%;">
+                    <pre>// 1. Define matching data structure
+[System.Serializable]
+public class LevelConfig {
+    public int levelNumber;
+    public float timeLimit;
+    public int targetCoins;
+}
+
+public class LevelLoader : MonoBehaviour {
+    // 2. Drag &amp; drop .json file in Inspector
+    [SerializeField] private TextAsset levelJson;
+
+    private void Awake() {
+        // 3. Fetch text &amp; parse immediately
+        LevelConfig config =
+            JsonUtility.FromJson&lt;LevelConfig&gt;(levelJson.text);
+
+        Debug.Log($"Loaded Level {config.levelNumber}, Limit: {config.timeLimit}s");
+    }
+}</pre>
+                </div>
+                <div style="background: #070b14; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; width: 100%; font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+                    <strong style="color: #38bdf8;">Tip:</strong> Use <code>TextAsset</code> for read-only designer data; use <code>Application.persistentDataPath</code> for player saves!
+                </div>
+            </div>
+        </div>
+    </div>
+    <details class="tier-accordion adv">
+        <summary class="accordion-header">
+            <span>[Advanced] Fetching JSON from Web APIs (UnityWebRequest)</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            To fetch online leaderboards or cloud save data from an HTTP REST API:
+            <pre style="font-size:0.72rem; margin-top:6px; background:#070b14; padding:8px; border-radius:4px; color:#38bdf8;">using UnityEngine.Networking;
+IEnumerator FetchOnlineLeaderboard(string url) {
+    using UnityWebRequest req = UnityWebRequest.Get(url);
+    yield return req.SendWebRequest();
+    if (req.result == UnityWebRequest.Result.Success) {
+        SaveData cloudData = JsonUtility.FromJson&lt;SaveData&gt;(req.downloadHandler.text);
+        Debug.Log($"Fetched online highscore: {cloudData.highscore}");
+    }
+}</pre>
+        </div>
+    </details>
+    `
+  },
+
+  // Slide 19: Live JSON Persistence Simulator
   {
     title: "Live JSON Persistence Sandbox",
     origImg: "original_slides/slide_15.png",
@@ -1340,7 +1436,7 @@ public static class SaveSystem {
                     <div style="display: flex; gap: 6px; margin-top: 10px;">
                         <button class="interactive-action-btn" style="flex: 1;" onclick="simulateJsonSave()">Save to JSON</button>
                         <button class="interactive-action-btn secondary" style="flex: 1;" onclick="simulateGameRestart()">Restart App</button>
-                        <button class="interactive-action-btn secondary" style="flex: 1;" onclick="simulateJsonLoad()">Load Save</button>
+                        <button class="interactive-action-btn secondary" style="flex: 1;" onclick="simulateJsonLoad()">Fetch / Load Save</button>
                     </div>
                 </div>
             </div>
@@ -1390,11 +1486,11 @@ public static class SaveSystem {
     notes: "Save Simulator (6 min): Demonstrate the simulator. Change the player name and score, click Save, click Restart (fields reset to defaults), and click Load to prove data persists."
   },
 
-  // Slide 18: Practice Challenge 2: Complete SaveSystem Service
+  // Slide 20: Practice Challenge 2: Complete SaveSystem Service
   {
-    title: "Challenge 2: The JSON SaveSystem Service",
+    title: "Challenge 2: The JSON Save & Fetch Service",
     origImg: "original_slides/slide_15.png",
-    notes: "Give students 5 minutes to test saving and loading. Emphasize realizing WHAT to serialize: a clean [Serializable] class. Walk around and answer questions.",
+    notes: "Give students 5 minutes to test saving, loading, and fetching. Emphasize realizing WHAT to serialize: a clean [Serializable] class, and how to consume it in a MonoBehaviour.",
     content: `
     <div class="split-media-layout">
         <div class="left-column">
@@ -1402,12 +1498,12 @@ public static class SaveSystem {
                 <div class="card-title core">[5-MIN CHALLENGE] Production JSON Persistence</div>
                 <div class="card-body">
                     <p style="margin: 0 0 8px 0; font-weight: 700; color: #0284c7;">
-                        Goal: Create a complete Save/Load system for player highscore and unlocked levels that survives game restart!
+                        Goal: Create a complete Save/Load system for player highscore and unlocked levels, then fetch and bind it to the HUD!
                     </p>
                     <ul style="padding-left: 18px; margin: 0 0 10px 0; line-height: 1.5; font-weight: 600;">
                         <li><strong>Step 1:</strong> Create <code>SaveData.cs</code> with <code>[System.Serializable]</code>, <code>public int highscore</code>, and <code>public int unlockedLevel</code>.</li>
-                        <li><strong>Step 2:</strong> In <code>SaveSystem.cs</code>, implement <code>Save(SaveData data)</code> with <code>JsonUtility.ToJson(data, true)</code> and <code>File.WriteAllText</code>.</li>
-                        <li><strong>Step 3:</strong> Implement <code>Load()</code> with <code>File.Exists</code> guard check.</li>
+                        <li><strong>Step 2:</strong> In <code>SaveSystem.cs</code>, implement <code>Save(SaveData data)</code> and <code>Load()</code> using <code>JsonUtility</code>.</li>
+                        <li><strong>Step 3:</strong> In a <code>GameDataManager</code>, call <code>SaveSystem.Load()</code> on <code>Start()</code> and fetch/display the score in the HUD!</li>
                     </ul>
                 </div>
             </div>
@@ -1416,8 +1512,8 @@ public static class SaveSystem {
                 <div class="card-title core" style="color: #059669;">Verification Steps</div>
                 <div class="card-body">
                     <div class="punchy-point"><span class="punchy-tag">1. SAVE</span> Trigger save in game &rarr; Check Console log for persistentDataPath.</div>
-                    <div class="punchy-point"><span class="punchy-tag">2. STOP</span> Stop Unity Play Mode.</div>
-                    <div class="punchy-point"><span class="punchy-tag">3. PLAY</span> Start Play Mode &rarr; Verify high score is loaded from JSON!</div>
+                    <div class="punchy-point"><span class="punchy-tag">2. STOP</span> Stop Unity Play Mode &rarr; Wipes in-memory variables.</div>
+                    <div class="punchy-point"><span class="punchy-tag">3. FETCH</span> Start Play Mode &rarr; Verify high score is fetched from JSON and shown on HUD!</div>
                 </div>
             </div>
         </div>
@@ -1448,11 +1544,12 @@ public static class SaveSystem {
                     </button>
                     <div id="solBox2" class="solution-box" style="display: none; margin-top: 8px;">
                         <div style="font-size: 0.75rem; font-weight: 800; color: #10b981; margin-bottom: 4px;">
-                            C# Solution:
+                            C# Solution (Service + Consumer):
                         </div>
                         <pre style="font-size: 0.72rem; padding: 6px 8px;">using System.IO;
 using UnityEngine;
 
+// 1. Persistence Service
 public static class SaveSystem {
     private static string Path =>
         System.IO.Path.Combine(Application.persistentDataPath, "savedata.json");
@@ -1463,8 +1560,14 @@ public static class SaveSystem {
 
     public static SaveData Load() {
         if (!File.Exists(Path)) return new SaveData();
-        return JsonUtility.FromJson<SaveData>(File.ReadAllText(Path));
+        return JsonUtility.FromJson&lt;SaveData&gt;(File.ReadAllText(Path));
     }
+}
+
+// 2. Fetching in MonoBehaviour
+void Start() {
+    SaveData loaded = SaveSystem.Load();
+    highScoreText.SetText("Highscore: {0}", loaded.highscore);
 }</pre>
                     </div>
                 </div>
@@ -1474,7 +1577,7 @@ public static class SaveSystem {
     `
   },
 
-  // Slide 19: Course Summary & Milestones Checklist
+  // Slide 21: Course Summary & Milestones Checklist
   {
     title: "Summary & Milestone Checklist",
     origImg: "original_slides/slide_15.png",
@@ -1490,21 +1593,23 @@ public static class SaveSystem {
                         <li><strong>Touch Ergonomics:</strong> Keep buttons &ge; 44pt (88px at 1080p) &bull; Leave 12px finger padding.</li>
                         <li><strong>Raycast Optimization:</strong> Turn off 'Raycast Target' on all decorative images and static text.</li>
                         <li><strong>TextMeshPro:</strong> Use <code>scoreText.SetText()</code> to prevent mobile garbage collection stutter.</li>
+                        <li><strong>JSON Fetch &amp; Persist:</strong> Save via <code>JsonUtility.ToJson()</code> &bull; Fetch and unpack with <code>SaveSystem.Load()</code> on startup.</li>
+                        <li><strong>Static Config JSON:</strong> Fetch level/dialogue files via <code>TextAsset.text</code> &bull; Parse with <code>JsonUtility.FromJson&lt;T&gt;()</code>.</li>
                         <li><strong>Mobile Auto-Save:</strong> Save in <code>OnApplicationPause(true)</code> when mobile OS suspends the app.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="content-card primary" style="border-left-color: #10b981;">
-                <div class="card-title core" style="color: #059669;">Homework Assignment (classes/03_UI.md)</div>
+                <div class="card-title core" style="color: #059669;">Mobile Game Production Checklist</div>
                 <div class="card-body">
-                    Complete the 4 Milestones in <code>classes/03_UI.md</code>:
-                    <ol style="padding-left: 20px; margin-top: 4px; line-height: 1.45; font-weight: 600;">
-                        <li>Build a scalable mobile HUD with <code>SafeAreaFitter</code> and test in Device Simulator.</li>
-                        <li>Create an overhead world-space health bar with camera billboarding.</li>
-                        <li>Implement a decoupled <code>HealthBarUI</code> listening to player events.</li>
-                        <li>Write the <code>SaveSystem.cs</code> JSON service and persist high scores!</li>
-                    </ol>
+                    Essential verification steps before building your mobile APK / iOS build:
+                    <ul style="padding-left: 20px; margin-top: 4px; line-height: 1.5; font-weight: 600;">
+                        <li><strong>Safe Area &amp; Notches:</strong> Verified HUD bounds across notch, dynamic island, and punch-hole cutouts in Device Simulator.</li>
+                        <li><strong>Aspect Ratio Stability:</strong> Tested layout consistency across 16:9, 19.5:9, 20:9, and 4:3 tablet screens.</li>
+                        <li><strong>Batching &amp; Overdraw:</strong> Unchecked 'Raycast Target' on all decorative images and non-interactive text.</li>
+                        <li><strong>Persistence Reliability:</strong> Verified JSON game state recovers cleanly after app backgrounding (<code>OnApplicationPause</code>).</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1605,6 +1710,11 @@ const glossaryTerms = {
         title: "JsonUtility",
         desc: "Fast, native C++ serialization utility converting C# objects to JSON strings and vice-versa.",
         diff: "<strong>Requirements:</strong> Target class must have [System.Serializable] and public fields."
+    },
+    "textasset": {
+        title: "TextAsset",
+        desc: "Unity asset format for imported text and data files (.txt, .json, .csv, .xml).",
+        diff: "<strong>Fetching JSON:</strong> Access text via <code>textAsset.text</code> to pass directly into <code>JsonUtility.FromJson&lt;T&gt;()</code>."
     },
     "persistentdatapath": {
         title: "Application.persistentDataPath",
@@ -1877,7 +1987,7 @@ const simulatorJs = `
 
                 if (status) {
                     status.style.color = '#10b981';
-                    status.textContent = 'SUCCESS: JsonUtility.FromJson<SaveData>() loaded state from disk!';
+                    status.textContent = 'SUCCESS: Fetched data from JSON! JsonUtility.FromJson<SaveData>() unpacked values into game variables.';
                 }
             } catch (e) {
                 if (status) {
@@ -2063,36 +2173,70 @@ ${cssStyles}
             font-size-adjust: none;
         }
 
-        /* Apply font scaling multiplier to all text within slide-content-area */
-        .slide-content-area .card-title {
-            font-size: calc(clamp(1.05rem, 2.5cqh, 1.55rem) * var(--font-scale)) !important;
+        /* Scalable Slide Content - Affects slide elements, EXCLUDING TITLES */
+        .slide-content-area .card-title,
+        .slide-header .slide-title,
+        .slide-content-area h1,
+        .slide-content-area h2,
+        .slide-content-area h3 {
+            font-size-adjust: none;
         }
-        .slide-content-area .card-body {
-            font-size: calc(clamp(0.78rem, 1.70cqh, 1.05rem) * var(--font-scale)) !important;
+
+        /* Titles are fixed clamp and strictly excluded from font slider scaling */
+        .slide-content-area .card-title {
+            font-size: clamp(1.10rem, 2.6cqh, 1.48rem) !important;
+        }
+
+        /* Content scaling via CSS var(--font-scale) with boosted comfortable baseline */
+        .slide-content-area .card-body,
+        .slide-content-area .media-panel-card,
+        .slide-content-area .solution-box,
+        .slide-content-area .challenge-box,
+        .slide-content-area .interactive-simulator,
+        .slide-content-area .sim-controls,
+        .slide-content-area .code-snippet-box {
+            font-size: calc(clamp(0.88rem, 1.95cqh, 1.15rem) * var(--font-scale)) !important;
             line-height: 1.45 !important;
         }
-        .slide-content-area .code-box pre {
-            font-size: calc(clamp(0.68rem, 1.45cqh, 0.86rem) * var(--font-scale)) !important;
+
+        .slide-content-area .code-box pre,
+        .slide-content-area .solution-box pre {
+            font-size: calc(clamp(0.78rem, 1.65cqh, 0.96rem) * var(--font-scale)) !important;
             line-height: 1.35 !important;
             padding: 0.6cqh 1.0cqw !important;
         }
+
         .slide-content-area table.dense-table th {
-            font-size: calc(clamp(0.70rem, 1.5cqh, 0.95rem) * var(--font-scale)) !important;
+            font-size: calc(clamp(0.82rem, 1.70cqh, 1.05rem) * var(--font-scale)) !important;
         }
+
         .slide-content-area table.dense-table td {
-            font-size: calc(clamp(0.68rem, 1.4cqh, 0.90rem) * var(--font-scale)) !important;
+            font-size: calc(clamp(0.78rem, 1.62cqh, 0.98rem) * var(--font-scale)) !important;
         }
+
         .slide-content-area .accordion-header {
-            font-size: calc(clamp(0.72rem, 1.6cqh, 0.95rem) * var(--font-scale)) !important;
+            font-size: calc(clamp(0.82rem, 1.70cqh, 1.02rem) * var(--font-scale)) !important;
         }
+
         .slide-content-area .accordion-body {
-            font-size: calc(clamp(0.72rem, 1.55cqh, 0.92rem) * var(--font-scale)) !important;
+            font-size: calc(clamp(0.80rem, 1.65cqh, 0.98rem) * var(--font-scale)) !important;
         }
+
         .slide-content-area .punchy-point {
-            font-size: calc(clamp(0.74rem, 1.6cqh, 0.95rem) * var(--font-scale)) !important;
+            font-size: calc(clamp(0.82rem, 1.70cqh, 1.02rem) * var(--font-scale)) !important;
         }
+
         .slide-content-area .interactive-action-btn {
-            font-size: calc(clamp(0.70rem, 1.5cqh, 0.88rem) * var(--font-scale)) !important;
+            font-size: calc(clamp(0.76rem, 1.55cqh, 0.92rem) * var(--font-scale)) !important;
+        }
+
+        .slide-content-area #simModeDesc,
+        .slide-content-area #canvasModeDetailLog,
+        .slide-content-area #anchorSimResult,
+        .slide-content-area #scaleSimResult,
+        .slide-content-area #simSaveStatus,
+        .slide-content-area #benchmarkResult {
+            font-size: calc(clamp(0.78rem, 1.62cqh, 0.96rem) * var(--font-scale)) !important;
         }
 
         /* Class 3 Compact Overrides to Prevent Slide Overflow */
@@ -2151,15 +2295,6 @@ ${cssStyles}
             <span>Lesson 03: UI &amp; Saving Systems &bull; <strong>Modern Unity 6</strong></span>
         </div>
 
-        <!-- Mode Toggle (Comparison Mode) -->
-        <div class="toggle-wrap">
-            <span class="toggle-text" id="labelOld" onclick="setMode(false); event.stopPropagation();">ORIGINAL KEYNOTE (HD)</span>
-            <div class="switch" onclick="toggleMode(); event.stopPropagation();" title="Toggle view [C]">
-                <input type="checkbox" id="modeSwitch" checked>
-                <span class="slider"></span>
-            </div>
-            <span class="toggle-text active-new" id="labelNew" onclick="setMode(true); event.stopPropagation();">MODERN UNITY 6</span>
-        </div>
 
         <!-- Tier Selector Pills -->
         <div class="tier-selector">
@@ -2178,10 +2313,7 @@ ${cssStyles}
         <!-- Stage Area -->
         <main class="stage-area" id="stageArea">
             <div class="slide-viewport" id="viewport" style="position: relative;">
-                <!-- Original Keynote Image View (Comparison Mode) -->
-                <div id="viewOriginal" class="view-original" style="display: none; width: 100%; height: 100%; background: #000; position: absolute; top:0; left:0; right:0; bottom:0; z-index: 10;">
-                    <img id="originalSlideImg" src="original_slides/slide_01.png" alt="Original Keynote Slide" style="width: 100%; height: 100%; object-fit: contain; display: block; background: #000;">
-                </div>
+
 
                 <!-- Modern Slide View -->
                 <div id="interactiveSlide" class="view-interactive" style="display: flex; width: 100%; height: 100%;">
@@ -2273,7 +2405,6 @@ ${cssStyles}
                 <div class="shortcut-row"><span class="shortcut-key">&rarr; / Space</span><span>Next Slide</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">&larr;</span><span>Previous Slide</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">F</span><span>Toggle Fullscreen</span></div>
-                <div class="shortcut-row"><span class="shortcut-key">C</span><span>Switch Original / Modern View (Comparison)</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">L</span><span>Toggle Lecture / Lab Mode</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">0 - 3</span><span>Filter Tracks (All, Core, Adv, Exp)</span></div>
                 <div class="shortcut-row"><span class="shortcut-key">T</span><span>Teacher Mode Access</span></div>
@@ -2321,9 +2452,7 @@ ${cssStyles}
                 } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
                     e.preventDefault();
                     changeSlide(-1);
-                } else if (e.key === 'c' || e.key === 'C') {
-                    e.preventDefault();
-                    toggleMode();
+
                 } else if (e.key === 'l' || e.key === 'L') {
                     e.preventDefault();
                     toggleLectureLabMode();
@@ -2502,49 +2631,12 @@ ${cssStyles}
         // ==========================================
         // COMPARISON MODE (ORIGINAL HD VS MODERN)
         // ==========================================
-        function toggleMode() {
-            setMode(!isModernView);
-        }
-
-        function setMode(modern) {
-            isModernView = modern;
-            const chk = document.getElementById('modeSwitch');
-            if (chk) chk.checked = modern;
-            updateModeDisplay();
-        }
-
+        // Compatibility stubs (Comparison mode permanently removed)
+        function toggleMode() {}
+        function setMode(modern) {}
         function updateModeDisplay() {
-            const oldView = document.getElementById('viewOriginal');
             const newView = document.getElementById('interactiveSlide');
-            const labelOld = document.getElementById('labelOld');
-            const labelNew = document.getElementById('labelNew');
-            const badge = document.getElementById('modeBadge');
-
-            if (isModernView) {
-                if (oldView) oldView.style.display = 'none';
-                if (newView) newView.style.display = 'flex';
-                if (labelNew) labelNew.classList.add('active-new');
-                if (labelOld) labelOld.classList.remove('active-old');
-                if (badge) {
-                    badge.className = 'mode-indicator new';
-                    badge.textContent = 'Modern Unity 6';
-                    badge.style.background = 'rgba(16, 185, 129, 0.15)';
-                    badge.style.color = '#10b981';
-                    badge.style.borderColor = '#10b981';
-                }
-            } else {
-                if (oldView) oldView.style.display = 'block';
-                if (newView) newView.style.display = 'none';
-                if (labelOld) labelOld.classList.add('active-old');
-                if (labelNew) labelNew.classList.remove('active-new');
-                if (badge) {
-                    badge.className = 'mode-indicator old';
-                    badge.textContent = 'Original Keynote (HD)';
-                    badge.style.background = 'rgba(244, 63, 94, 0.15)';
-                    badge.style.color = '#f43f5e';
-                    badge.style.borderColor = '#f43f5e';
-                }
-            }
+            if (newView) newView.style.display = 'flex';
         }
 
         // ==========================================
@@ -2575,26 +2667,61 @@ ${cssStyles}
             setTimeout(autoFitSlideElements, 20);
         }
 
+        function isTitleElement(el) {
+            if (!el || el.nodeType !== 1) return false;
+            if (el.matches('.card-title, .slide-title, .slide-header, h1, h2, h3, h4, h5, h6, .tip-title, .help-modal-header, .modal-title, [data-no-scale], #slideTitle, .drawer-title, .badge, .tier-btn')) {
+                return true;
+            }
+            if (el.closest('.card-title, .slide-title, .slide-header, h1, h2, h3, h4, h5, h6, .tip-title, .help-modal-header, .modal-title, [data-no-scale], #slideTitle, .drawer-title')) {
+                return true;
+            }
+            return false;
+        }
+
         function applyFontScaleToCurrentSlide() {
             let saved = '100';
             try { saved = localStorage.getItem('gdd_font_scale') || '100'; } catch (e) {}
             const scale = parseFloat(saved) / 100;
             const area = document.getElementById('slideContentArea');
-            if (area) {
-                const els = area.querySelectorAll('[style*="font-size"]');
-                els.forEach(el => {
-                    if (!el.dataset.origFontSize) {
-                        el.dataset.origFontSize = el.style.fontSize;
+            if (!area) return;
+
+            // Baseline boost: ensures 100% starts comfortably readable (+22% boost to inline compact font sizes)
+            const BASE_BOOST = 1.22;
+
+            // 1. Scale all elements with inline font-size, strictly excluding titles
+            const styledEls = area.querySelectorAll('[style*="font-size"]');
+            styledEls.forEach(el => {
+                if (isTitleElement(el)) return;
+                if (!el.dataset.origFontSize) {
+                    el.dataset.origFontSize = el.style.fontSize;
+                }
+                const orig = el.dataset.origFontSize;
+                const match = orig.match(/^([0-9.]+)(rem|px|em|cqh|cqw|vw|vh|pt|%)$/);
+                if (match) {
+                    const num = parseFloat(match[1]);
+                    const unit = match[2];
+                    // Large timer numbers (e.g. 2.6rem) scale directly without compounding boost
+                    const boost = (num >= 2.0) ? 1.0 : BASE_BOOST;
+                    el.style.fontSize = (num * boost * scale).toFixed(3) + unit;
+                }
+            });
+
+            // 2. Universal relative scaling for content blocks outside card-body that lack inline styles
+            const contentEls = area.querySelectorAll('p, li, .media-panel-card > div, #simModeDesc, #canvasModeDetailLog, #anchorSimResult, #scaleSimResult, #simSaveStatus, #benchmarkResult');
+            contentEls.forEach(el => {
+                if (isTitleElement(el) || el.dataset.origFontSize || el.closest('.card-body')) return;
+                if (!el.dataset.baseComputedRem) {
+                    const comp = window.getComputedStyle(el).fontSize;
+                    const px = parseFloat(comp);
+                    if (!isNaN(px) && px > 0) {
+                        el.dataset.baseComputedRem = (px / 16 / scale).toFixed(3);
                     }
-                    const orig = el.dataset.origFontSize;
-                    const match = orig.match(/^([0-9.]+)(rem|px|em|cqh|cqw|vw|vh)$/);
-                    if (match) {
-                        const num = parseFloat(match[1]);
-                        const unit = match[2];
-                        el.style.fontSize = (num * scale).toFixed(3) + unit;
-                    }
-                });
-            }
+                }
+                if (el.dataset.baseComputedRem) {
+                    const baseRem = parseFloat(el.dataset.baseComputedRem);
+                    el.style.fontSize = (baseRem * scale).toFixed(3) + 'rem';
+                }
+            });
         }
 
         function setFontScale(val) {
