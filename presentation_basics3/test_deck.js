@@ -79,11 +79,16 @@ assert(html.includes("e.key === 'n' || e.key === 'N'"), 'Speaker notes shortcut 
 // 7. Check Challenge Timers & Strict 1-Minute Solution Lock
 assert(html.includes('cTimer1'), 'Challenge Timer 1 present');
 assert(html.includes('cTimer2'), 'Challenge Timer 2 present');
+assert(html.includes('10:00'), 'Challenge Timer displays 10:00 initial timebox');
+assert(html.includes("lecturerStartTimer('cTimer1', 600)"), 'Challenge Timer 1 configured for 600s (10 min)');
+assert(html.includes("lecturerStartTimer('cTimer2', 600)"), 'Challenge Timer 2 configured for 600s (10 min)');
+assert(html.includes("'cTimer1': 600"), 'challengeRemaining initialized to 600 seconds');
 assert(html.includes('solBox1'), 'Solution Box 1 present');
 assert(html.includes('solBox2'), 'Solution Box 2 present');
 assert(html.includes('btnSol_solBox1'), 'Solution Lock Button 1 present');
 assert(html.includes('btnSol_solBox2'), 'Solution Lock Button 2 present');
 assert(html.includes('updateSolutionLockState'), '1-minute solution lock logic present');
+assert(!html.includes('Homework Assignment'), 'Homework Assignment card removed from presentation');
 
 // 8. Check Interactive Simulators
 assert(html.includes('function runAnchorSimulator()'), 'runAnchorSimulator() simulator present');
