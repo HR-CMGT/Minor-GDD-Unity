@@ -27,13 +27,13 @@ assert(fs.existsSync(lessonDocPath), 'classes/03_UI.md exists');
 
 const html = fs.readFileSync(htmlPath, 'utf8');
 
-// 2. Check Comparison Mode elements
-assert(html.includes('id="viewOriginal"'), 'Comparison Mode #viewOriginal container present');
-assert(html.includes('id="originalSlideImg"'), 'Comparison Mode #originalSlideImg element present');
-assert(html.includes('id="modeSwitch"'), 'Comparison Mode #modeSwitch toggle present');
-assert(html.includes('function toggleMode()'), 'toggleMode() function defined');
-assert(html.includes('function updateModeDisplay()'), 'updateModeDisplay() function defined');
-assert(html.includes("e.key === 'c' || e.key === 'C'"), 'Comparison shortcut [C] registered in keydown');
+// 2. Check Comparison Mode elements are permanently removed
+assert(!html.includes('id="viewOriginal"'), 'Comparison Mode #viewOriginal container removed');
+assert(!html.includes('id="originalSlideImg"'), 'Comparison Mode #originalSlideImg element removed');
+assert(!html.includes('id="modeSwitch"'), 'Comparison Mode #modeSwitch toggle removed');
+assert(!html.includes("e.key === 'c' || e.key === 'C'"), 'Comparison shortcut [C] removed from keydown');
+assert(html.includes('function toggleMode()'), 'toggleMode() stub defined');
+assert(html.includes('function updateModeDisplay()'), 'updateModeDisplay() stub defined');
 
 // 3. Extract slidesData and check original slide images
 const match = html.match(/let slidesData = (\[[\s\S]*?\]);\s*let currentSlide/);
