@@ -3827,7 +3827,7 @@
 
         function initSim13Code() {
             const bcastInit = [
-                '// [BROADCASTER SETUP: PlayerCombat.cs]',
+                '// [BROADCASTER: PlayerCombat.cs]',
                 '[Header("Event Channels")]',
                 '[SerializeField] private IntEventChannelSO onHealthChangedChannel;',
                 '[SerializeField] private IntEventChannelSO onScoreChangedChannel;',
@@ -3836,14 +3836,16 @@
             ].join('\n');
 
             const listenerInit = [
-                '// [LISTENERS SETUP: HealthBarUI.cs]',
-                '[SerializeField] private IntEventChannelSO onHealthChangedChannel;',
-                '',
-                '// Listeners register in OnEnable and unregister in OnDisable.',
-                '// Click any button on the left to fire events!'
+                '// [LISTENER REGISTRATION: HealthBarUI.cs]',
+                'private void OnEnable()',
+                '{',
+                '    // Subscribes callback to receive RaiseEvent(value):',
+                '    onHealthChangedChannel.RegisterListener(UpdateBar);',
+                '}',
+                '// When RaiseEvent fires, UpdateBar(int currentHp) runs!'
             ].join('\n');
 
-            updateSimBlocks(bcastInit, 'PlayerCombat.cs', 'Setup Ready', '#38bdf8', listenerInit, 'HealthBarUI.cs', 'Listening', '#10b981');
+            updateSimBlocks(bcastInit, 'PlayerCombat.cs', 'Setup Ready', '#38bdf8', listenerInit, 'HealthBarUI.cs', 'Subscribed to Channel', '#10b981');
         }
 
         function updateSubs() {
@@ -3866,13 +3868,13 @@
             ].join('\n');
 
             const listenerLifecycle = [
-                '// [LIFECYCLE SAFETY: AnyListener.cs]',
+                '// [LIFECYCLE SUBSCRIPTION: AnyListener.cs]',
                 'private void OnEnable()  => channel?.RegisterListener(UpdateUI);',
                 'private void OnDisable() => channel?.UnregisterListener(UpdateUI);',
-                '// Unsubscribing prevents memory leaks and MissingReferenceExceptions!'
+                '// Unsubscribing in OnDisable prevents memory leaks!'
             ].join('\n');
 
-            updateSimBlocks(bcastLifecycle, 'Broadcaster.cs', 'Independent', '#94a3b8', listenerLifecycle, 'HealthBarUI.cs', 'Toggled', '#38bdf8');
+            updateSimBlocks(bcastLifecycle, 'Broadcaster.cs', 'Independent', '#94a3b8', listenerLifecycle, 'HealthBarUI.cs', 'Lifecycle Updated', '#38bdf8');
         }
 
         function triggerChannelPulse(channelId) {
@@ -3922,26 +3924,29 @@
                 'public void TakeDamage(int damage)',
                 '{',
                 '    _currentHp = Mathf.Max(0, _currentHp - ' + amount + ');',
+                '    // 1. Transmit new HP payload to channel asset:',
                 '    if (onHealthChangedChannel != null)',
                 '        onHealthChangedChannel.RaiseEvent(_currentHp);',
                 '}'
             ].join('\n');
 
-            const listenerLines = [];
+            const listenerLines = [
+                '// [LISTENERS: Receiving RaiseEvent(' + simCurrentHp + ')]'
+            ];
             if (hActive) {
-                listenerLines.push('// HealthBarUI.cs');
-                listenerLines.push('healthSlider.value = ' + simCurrentHp + '; // Active');
+                listenerLines.push('// HealthBarUI.cs (Registered callback)');
+                listenerLines.push('private void UpdateBar(int hp) { healthSlider.value = hp; } // ' + simCurrentHp);
             } else {
-                listenerLines.push('// HealthBarUI.cs: [Disabled/Ignored safely]');
+                listenerLines.push('// HealthBarUI.cs: [Unregistered in OnDisable - Safely skipped]');
             }
             if (aActive) {
-                listenerLines.push('// SFXManager.cs');
-                listenerLines.push('audioSource.PlayOneShot(hurtSfx); // Active');
+                listenerLines.push('// SFXManager.cs (Registered callback)');
+                listenerLines.push('private void OnDamaged(int hp) { audioSource.PlayOneShot(hurtSfx); }');
             } else {
-                listenerLines.push('// SFXManager.cs: [Disabled/Ignored]');
+                listenerLines.push('// SFXManager.cs: [Unregistered - Safely skipped]');
             }
 
-            updateSimBlocks(bcastCode, 'PlayerCombat.cs', 'TakeDamage(' + amount + ')', '#ef4444', listenerLines.join('\n'), 'HealthBarUI.cs & SFXManager.cs', 'Triggered', '#10b981');
+            updateSimBlocks(bcastCode, 'PlayerCombat.cs', 'RaiseEvent(' + simCurrentHp + ')', '#ef4444', listenerLines.join('\n'), 'HealthBarUI.cs & SFXManager.cs', 'Callbacks Received', '#10b981');
         }
 
         function simHeal(amount) {
@@ -3969,16 +3974,24 @@
                 'public void Heal(int amount)',
                 '{',
                 '    _currentHp = Mathf.Min(100, _currentHp + ' + amount + ');',
+                '    // 1. Transmit restored HP payload to channel asset:',
                 '    if (onHealthChangedChannel != null)',
                 '        onHealthChangedChannel.RaiseEvent(_currentHp);',
                 '}'
             ].join('\n');
 
             const listenerCode = hActive
-                ? '// HealthBarUI.cs\nhealthSlider.value = ' + simCurrentHp + '; // Restored!'
-                : '// HealthBarUI.cs: [Disabled/Ignored safely with zero errors]';
+                ? [
+                    '// [LISTENER: Receiving RaiseEvent(' + simCurrentHp + ')]',
+                    '// HealthBarUI.cs (Registered callback method):',
+                    'private void UpdateBar(int currentHealth)',
+                    '{',
+                    '    healthSlider.value = currentHealth; // Restored to ' + simCurrentHp,
+                    '}'
+                  ].join('\n')
+                : '// HealthBarUI.cs: [Unregistered in OnDisable - Safely skipped with 0 errors]';
 
-            updateSimBlocks(bcastCode, 'PlayerHealth.cs', 'Heal(' + amount + ')', '#10b981', listenerCode, 'HealthBarUI.cs', 'Triggered', '#10b981');
+            updateSimBlocks(bcastCode, 'PlayerHealth.cs', 'RaiseEvent(' + simCurrentHp + ')', '#10b981', listenerCode, 'HealthBarUI.cs', 'Callback Received', '#10b981');
         }
 
         function simCollectCoin(pts) {
@@ -4012,27 +4025,30 @@
                 'private void OnTriggerEnter2D(Collider2D other)',
                 '{',
                 '    _currentScore += ' + pts + ';',
+                '    // 1. Transmit updated score payload to channel:',
                 '    if (onScoreChangedChannel != null)',
                 '        onScoreChangedChannel.RaiseEvent(_currentScore);',
-                '    Destroy(gameObject); // Broadcaster destroyed!',
+                '    Destroy(gameObject); // Broadcaster self-destructs!',
                 '}'
             ].join('\n');
 
-            const listenerLines = [];
+            const listenerLines = [
+                '// [LISTENERS: Receiving RaiseEvent(' + simCurrentScore + ')]'
+            ];
             if (sActive) {
-                listenerLines.push('// ScoreCounterUI.cs');
-                listenerLines.push('scoreText.text = "Score: ' + simCurrentScore + ' pts";');
+                listenerLines.push('// ScoreCounterUI.cs:');
+                listenerLines.push('private void UpdateScore(int score) { scoreText.text = $"Score: {score} pts"; }');
             } else {
                 listenerLines.push('// ScoreCounterUI.cs: [Disabled]');
             }
             if (aActive) {
-                listenerLines.push('// SFXManager.cs');
-                listenerLines.push('audioSource.PlayOneShot(coinSfx);');
+                listenerLines.push('// SFXManager.cs:');
+                listenerLines.push('private void OnCoinCollected(int score) { audioSource.PlayOneShot(coinSfx); }');
             } else {
                 listenerLines.push('// SFXManager.cs: [Disabled]');
             }
 
-            updateSimBlocks(bcastCode, 'CoinPickup.cs', 'CollectCoin(' + pts + ')', '#f59e0b', listenerLines.join('\n'), 'ScoreCounterUI.cs & SFXManager.cs', 'Triggered', '#10b981');
+            updateSimBlocks(bcastCode, 'CoinPickup.cs', 'RaiseEvent(' + simCurrentScore + ')', '#f59e0b', listenerLines.join('\n'), 'ScoreCounterUI.cs & SFXManager.cs', 'Callbacks Received', '#10b981');
         }
 
         function simResetPlayer() {
@@ -4052,17 +4068,19 @@
                 'public void ResetGameState()',
                 '{',
                 '    _currentHp = 100; _currentScore = 0;',
+                '    // Transmits default payloads to both channels:',
                 '    if (onHealthChangedChannel != null) onHealthChangedChannel.RaiseEvent(_currentHp);',
                 '    if (onScoreChangedChannel != null)  onScoreChangedChannel.RaiseEvent(_currentScore);',
                 '}'
             ].join('\n');
 
             const listenerCode = [
-                '// HealthBarUI: slider reset to 100%',
-                '// ScoreCounter: text reset to 0 pts'
+                '// [LISTENERS: Callbacks reset UI automatically]',
+                'UpdateBar(100)  => healthSlider.value = 100;',
+                'UpdateScore(0)  => scoreText.text = "Score: 0 pts";'
             ].join('\n');
 
-            updateSimBlocks(bcastCode, 'GameManager.cs', 'ResetGameState()', '#94a3b8', listenerCode, 'All Listeners', 'Reset', '#94a3b8');
+            updateSimBlocks(bcastCode, 'GameManager.cs', 'ResetGameState()', '#94a3b8', listenerCode, 'All Listeners', 'Reset Callbacks', '#94a3b8');
         }
 
         let timerSeconds = 600;
