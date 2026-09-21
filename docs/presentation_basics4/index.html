@@ -2598,7 +2598,7 @@
   },
   {
     "title": "Live Interactive Tool: SO Event Channel Bus",
-    "content": "<div style=\"background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 12px;\">\n            <div style=\"font-weight: 900; color: #38bdf8; font-size: 0.96rem;\">Decoupled Event Channel Architecture Simulator</div>\n            <div style=\"font-size: 0.76rem; color: #94a3b8;\">Click Broadcaster actions and observe independent listener responses</div>\n        </div>\n        \n        <div style=\"display: grid; grid-template-columns: 210px 1fr 240px; gap: 12px; align-items: stretch;\">\n            <!-- Left: Broadcaster -->\n            <div style=\"background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column;\">\n                <div style=\"font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 4px;\">BROADCASTER (Player)</div>\n                <div style=\"font-size: 0.76rem; color: #9ca3af; margin-bottom: 8px;\">Player HP: <strong id=\"simHpText\" style=\"color: #4ade80;\">100</strong> / 100</div>\n                <div style=\"display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: space-between;\">\n                    <button id=\"btnSimDamage\" class=\"nav-btn\" style=\"background: #7f1d1d !important; border: 1px solid #ef4444 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simDamage(25)\">\n                        Take 25 Damage\n                    </button>\n                    <button id=\"btnSimHeal\" class=\"nav-btn\" style=\"background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simHeal(25)\">\n                        Heal 25 HP\n                    </button>\n                    <button id=\"btnSimCoin\" class=\"nav-btn\" style=\"background: #78350f !important; border: 1px solid #f59e0b !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simCollectCoin(10)\">\n                        Collect 10 Coins\n                    </button>\n                    <button id=\"btnSimReset\" class=\"nav-btn\" style=\"background: #374151 !important; border: 1px solid #6b7280 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simResetPlayer()\">\n                        Reset All\n                    </button>\n                </div>\n            </div>\n\n            <!-- Center: Event Channels -->\n            <div style=\"background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;\">\n                <div style=\"font-weight: 800; color: #f59e0b; font-size: 0.84rem;\">EVENT CHANNELS (Project Assets)</div>\n                \n                <div id=\"busHealth\" style=\"background: #1e293b; border: 1.5px solid #475569; border-radius: 6px; padding: 8px; transition: all 0.25s ease;\">\n                    <div style=\"display: flex; justify-content: space-between; font-size: 0.78rem;\">\n                        <span style=\"font-weight: 700; color: #f8fafc;\">OnHealthChangedSO</span>\n                        <span id=\"subCountHealth\" style=\"color: #38bdf8; font-size: 0.70rem; font-weight: 800;\">2 Listeners</span>\n                    </div>\n                    <div id=\"pulseHealth\" style=\"height: 3px; background: #475569; border-radius: 2px; margin-top: 6px; transition: background 0.3s ease;\"></div>\n                </div>\n\n                <div id=\"busCoin\" style=\"background: #1e293b; border: 1.5px solid #475569; border-radius: 6px; padding: 8px; transition: all 0.25s ease;\">\n                    <div style=\"display: flex; justify-content: space-between; font-size: 0.78rem;\">\n                        <span style=\"font-weight: 700; color: #f8fafc;\">OnScoreChangedSO</span>\n                        <span id=\"subCountCoin\" style=\"color: #38bdf8; font-size: 0.70rem; font-weight: 800;\">2 Listeners</span>\n                    </div>\n                    <div id=\"pulseCoin\" style=\"height: 3px; background: #475569; border-radius: 2px; margin-top: 6px; transition: background 0.3s ease;\"></div>\n                </div>\n\n                <div id=\"simLog\" style=\"background: #030712; border: 1px solid #1f2937; border-radius: 6px; padding: 6px 10px; font-family: monospace; font-size: 0.72rem; color: #10b981; flex: 1; display: flex; align-items: center;\">\n                    [Ready] Broadcaster initialized. Zero direct dependencies.\n                </div>\n            </div>\n\n            <!-- Right: Listeners -->\n            <div style=\"background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;\">\n                <div style=\"font-weight: 800; color: #4ade80; font-size: 0.84rem;\">DECOUPLED LISTENERS</div>\n                \n                <!-- Listener 1: Health Bar -->\n                <div style=\"background: #1f2937; border-radius: 6px; padding: 6px 8px; font-size: 0.76rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n                        <span style=\"font-weight: 700; color: #e5e7eb;\">HealthBar UI</span>\n                        <label style=\"font-size: 0.68rem; color: #9ca3af; display: flex; align-items: center; gap: 4px; cursor: pointer;\">\n                            <input type=\"checkbox\" id=\"chkHealthUI\" checked onchange=\"updateSubs()\"> Subscribed\n                        </label>\n                    </div>\n                    <div style=\"background: #374151; height: 8px; border-radius: 4px; margin-top: 4px; overflow: hidden;\">\n                        <div id=\"simHpBar\" style=\"background: #22c55e; height: 100%; width: 100%; transition: width 0.3s ease;\"></div>\n                    </div>\n                </div>\n\n                <!-- Listener 2: Audio Manager -->\n                <div style=\"background: #1f2937; border-radius: 6px; padding: 6px 8px; font-size: 0.76rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n                        <span style=\"font-weight: 700; color: #e5e7eb;\">SFX Manager</span>\n                        <label style=\"font-size: 0.68rem; color: #9ca3af; display: flex; align-items: center; gap: 4px; cursor: pointer;\">\n                            <input type=\"checkbox\" id=\"chkAudio\" checked onchange=\"updateSubs()\"> Subscribed\n                        </label>\n                    </div>\n                    <div id=\"simAudioWave\" style=\"font-size: 0.70rem; color: #94a3b8; margin-top: 2px;\">\n                         Idle\n                    </div>\n                </div>\n\n                <!-- Listener 3: Score Tracker -->\n                <div style=\"background: #1f2937; border-radius: 6px; padding: 6px 8px; font-size: 0.76rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n                        <span style=\"font-weight: 700; color: #e5e7eb;\">Score Counter</span>\n                        <label style=\"font-size: 0.68rem; color: #9ca3af; display: flex; align-items: center; gap: 4px; cursor: pointer;\">\n                            <input type=\"checkbox\" id=\"chkScore\" checked onchange=\"updateSubs()\"> Subscribed\n                        </label>\n                    </div>\n                    <div id=\"simScoreText\" style=\"font-weight: 800; color: #fbbf24; margin-top: 2px;\">\n                        Score: 0 pts\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <!-- Live Unity C# Execution: 2 Clean Side-by-Side Blocks (Broadcaster & Listeners) -->\n        <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; align-items: start;\">\n            <!-- Block 1: Broadcaster Script -->\n            <div style=\"background: #030712; border: 1.5px solid #1e293b; border-radius: 8px; overflow: hidden;\">\n                <div style=\"background: #0b1120; border-bottom: 1px solid #1e293b; padding: 5px 10px; display: flex; justify-content: space-between; align-items: center;\">\n                    <div style=\"display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 800;\">\n                        <span id=\"simBcastDot\" style=\"width: 8px; height: 8px; border-radius: 50%; background: #38bdf8; display: inline-block;\"></span>\n                        <span style=\"color: #38bdf8;\">BROADCASTER SCRIPT</span>\n                        <span id=\"simBcastBadge\" style=\"background: #1e293b; color: #94a3b8; font-size: 0.65rem; padding: 1px 6px; border-radius: 4px; border: 1px solid #334155;\">Ready</span>\n                    </div>\n                    <span id=\"simBcastFileTag\" style=\"color: #64748b; font-size: 0.66rem; font-family: monospace;\">PlayerCombat.cs</span>\n                </div>\n                <div class=\"code-box\" style=\"margin: 0; padding: 8px 10px; background: #070a12; overflow: visible;\">\n                    <pre id=\"simBcastCode\" style=\"margin: 0; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.70rem; line-height: 1.45; color: #d4d4d4; white-space: pre-wrap; word-break: break-word; overflow: visible;\"><code>// Broadcaster code will display here.</code></pre>\n                </div>\n            </div>\n\n            <!-- Block 2: Decoupled Listeners Script -->\n            <div style=\"background: #030712; border: 1.5px solid #1e293b; border-radius: 8px; overflow: hidden;\">\n                <div style=\"background: #0b1120; border-bottom: 1px solid #1e293b; padding: 5px 10px; display: flex; justify-content: space-between; align-items: center;\">\n                    <div style=\"display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 800;\">\n                        <span id=\"simListenerDot\" style=\"width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;\"></span>\n                        <span style=\"color: #4ade80;\">DECOUPLED LISTENERS</span>\n                        <span id=\"simListenerBadge\" style=\"background: #1e293b; color: #94a3b8; font-size: 0.65rem; padding: 1px 6px; border-radius: 4px; border: 1px solid #334155;\">Automated</span>\n                    </div>\n                    <span id=\"simListenerFileTag\" style=\"color: #64748b; font-size: 0.66rem; font-family: monospace;\">HealthBarUI.cs / SFXManager.cs</span>\n                </div>\n                <div class=\"code-box\" style=\"margin: 0; padding: 8px 10px; background: #070a12; overflow: visible;\">\n                    <pre id=\"simListenerCode\" style=\"margin: 0; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.70rem; line-height: 1.45; color: #d4d4d4; white-space: pre-wrap; word-break: break-word; overflow: visible;\"><code>// Listeners code will display here.</code></pre>\n                </div>\n            </div>\n        </div>\n    </div>\n\n<div class=\"lab-deep-dive\" style=\"margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;\">\n            <div style=\"font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;\">\n                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>\n            </div>\n            <span style=\"background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;\">\n                BREAKDOWN\n            </span>\n        </div>\n\n        <!-- ELI5 Callout -->\n        <div style=\"background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #166534; margin-bottom: 4px;\">\n                Simple Analogy (The Core Concept):\n            </div>\n            Try clicking 'Take 25 Damage'. Notice how the Broadcaster fires ONE pulse into the Event Channel. Then, both the Health Bar and the SFX Manager update instantly! Now uncheck 'HealthBar UI' (simulating the UI being closed) and take damage again. Everything works without a single error!\n        </div>\n\n        <!-- What is What & Key Differences Grid -->\n        <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;\">\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">\n                    What is What:\n                </div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>Event Bus:</strong> The central highway where event messages travel.<br><strong>Dynamic Listeners:</strong> Listeners can join, leave, or be turned off at runtime without affecting the broadcaster.\n                </div>\n            </div>\n\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">\n                    Key Differences (X vs Y):\n                </div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>Fragile Direct Reference:</strong> If HealthBarUI is disabled, Player crashes with NullReferenceException.<br><strong>Decoupled Event Bus:</strong> Player broadcasts happily whether there are 0, 1, or 20 listeners active.\n                </div>\n            </div>\n        </div>\n\n        <!-- Beginner Trap -->\n        <div style=\"background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #991b1b; margin-bottom: 4px;\">\n                Common Trap and Why It Breaks:\n            </div>\n            Assuming events are slow. In C#, a delegate invocation is a direct function pointer. Thousands of event calls happen in less than a single millisecond.\n        </div>\n\n        <!-- Golden Rule -->\n        <div style=\"background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;\">\n            <strong>Golden Rule for Your Project:</strong> Test your broadcasters with zero listeners active in the scene. If they run cleanly with no errors, your architecture is solid.\n        </div>\n    </div>",
+    "content": "<div style=\"background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 12px;\">\n            <div style=\"font-weight: 900; color: #38bdf8; font-size: 0.96rem;\">Decoupled Event Channel Architecture Simulator</div>\n            <div style=\"font-size: 0.76rem; color: #94a3b8;\">Click Broadcaster actions and observe independent listener responses</div>\n        </div>\n        \n        <div style=\"display: grid; grid-template-columns: 210px 1fr 240px; gap: 12px; align-items: stretch;\">\n            <!-- Left: Broadcaster -->\n            <div style=\"background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column;\">\n                <div style=\"font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 4px;\">BROADCASTER (Player)</div>\n                <div style=\"font-size: 0.76rem; color: #9ca3af; margin-bottom: 8px;\">Player HP: <strong id=\"simHpText\" style=\"color: #4ade80;\">100</strong> / 100</div>\n                <div style=\"display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: space-between;\">\n                    <button id=\"btnSimDamage\" class=\"nav-btn\" style=\"background: #7f1d1d !important; border: 1px solid #ef4444 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simDamage(25)\">\n                        Take 25 Damage\n                    </button>\n                    <button id=\"btnSimHeal\" class=\"nav-btn\" style=\"background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simHeal(25)\">\n                        Heal 25 HP\n                    </button>\n                    <button id=\"btnSimCoin\" class=\"nav-btn\" style=\"background: #78350f !important; border: 1px solid #f59e0b !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simCollectCoin(10)\">\n                        Collect 10 Coins\n                    </button>\n                    <button id=\"btnSimReset\" class=\"nav-btn\" style=\"background: #374151 !important; border: 1px solid #6b7280 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; cursor: pointer;\" onclick=\"simResetPlayer()\">\n                        Reset All\n                    </button>\n                </div>\n            </div>\n\n            <!-- Center: Event Channels -->\n            <div style=\"background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;\">\n                <div style=\"font-weight: 800; color: #f59e0b; font-size: 0.84rem;\">EVENT CHANNELS (Project Assets)</div>\n                \n                <div id=\"busHealth\" style=\"background: #1e293b; border: 1.5px solid #475569; border-radius: 6px; padding: 8px; transition: all 0.25s ease;\">\n                    <div style=\"display: flex; justify-content: space-between; font-size: 0.78rem;\">\n                        <span style=\"font-weight: 700; color: #f8fafc;\">OnHealthChangedSO</span>\n                        <span id=\"subCountHealth\" style=\"color: #38bdf8; font-size: 0.70rem; font-weight: 800;\">2 Listeners</span>\n                    </div>\n                    <div id=\"pulseHealth\" style=\"height: 3px; background: #475569; border-radius: 2px; margin-top: 6px; transition: background 0.3s ease;\"></div>\n                </div>\n\n                <div id=\"busCoin\" style=\"background: #1e293b; border: 1.5px solid #475569; border-radius: 6px; padding: 8px; transition: all 0.25s ease;\">\n                    <div style=\"display: flex; justify-content: space-between; font-size: 0.78rem;\">\n                        <span style=\"font-weight: 700; color: #f8fafc;\">OnScoreChangedSO</span>\n                        <span id=\"subCountCoin\" style=\"color: #38bdf8; font-size: 0.70rem; font-weight: 800;\">2 Listeners</span>\n                    </div>\n                    <div id=\"pulseCoin\" style=\"height: 3px; background: #475569; border-radius: 2px; margin-top: 6px; transition: background 0.3s ease;\"></div>\n                </div>\n\n                <div id=\"simLog\" style=\"background: #030712; border: 1px solid #1f2937; border-radius: 6px; padding: 6px 10px; font-family: monospace; font-size: 0.72rem; color: #10b981; flex: 1; display: flex; align-items: center;\">\n                    [Ready] Broadcaster initialized. Zero direct dependencies.\n                </div>\n            </div>\n\n            <!-- Right: Listeners -->\n            <div style=\"background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;\">\n                <div style=\"font-weight: 800; color: #4ade80; font-size: 0.84rem;\">DECOUPLED LISTENERS</div>\n                \n                <!-- Listener 1: Health Bar -->\n                <div style=\"background: #1f2937; border-radius: 6px; padding: 6px 8px; font-size: 0.76rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n                        <span style=\"font-weight: 700; color: #e5e7eb;\">HealthBar UI</span>\n                        <label style=\"font-size: 0.68rem; color: #9ca3af; display: flex; align-items: center; gap: 4px; cursor: pointer;\">\n                            <input type=\"checkbox\" id=\"chkHealthUI\" checked onchange=\"updateSubs()\"> Subscribed\n                        </label>\n                    </div>\n                    <div style=\"background: #374151; height: 8px; border-radius: 4px; margin-top: 4px; overflow: hidden;\">\n                        <div id=\"simHpBar\" style=\"background: #22c55e; height: 100%; width: 100%; transition: width 0.3s ease;\"></div>\n                    </div>\n                </div>\n\n                <!-- Listener 2: Audio Manager -->\n                <div style=\"background: #1f2937; border-radius: 6px; padding: 6px 8px; font-size: 0.76rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n                        <span style=\"font-weight: 700; color: #e5e7eb;\">SFX Manager</span>\n                        <label style=\"font-size: 0.68rem; color: #9ca3af; display: flex; align-items: center; gap: 4px; cursor: pointer;\">\n                            <input type=\"checkbox\" id=\"chkAudio\" checked onchange=\"updateSubs()\"> Subscribed\n                        </label>\n                    </div>\n                    <div id=\"simAudioWave\" style=\"font-size: 0.70rem; color: #94a3b8; margin-top: 2px;\">\n                         Idle\n                    </div>\n                </div>\n\n                <!-- Listener 3: Score Tracker -->\n                <div style=\"background: #1f2937; border-radius: 6px; padding: 6px 8px; font-size: 0.76rem;\">\n                    <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n                        <span style=\"font-weight: 700; color: #e5e7eb;\">Score Counter</span>\n                        <label style=\"font-size: 0.68rem; color: #9ca3af; display: flex; align-items: center; gap: 4px; cursor: pointer;\">\n                            <input type=\"checkbox\" id=\"chkScore\" checked onchange=\"updateSubs()\"> Subscribed\n                        </label>\n                    </div>\n                    <div id=\"simScoreText\" style=\"font-weight: 800; color: #fbbf24; margin-top: 2px;\">\n                        Score: 0 pts\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <!-- Connection Pipeline Explainer Strip -->\n        <div id=\"simConnectionBanner\" style=\"background: rgba(14, 165, 233, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 6px; padding: 6px 12px; margin-top: 10px; font-size: 0.72rem; color: #bae6fd; display: flex; align-items: center; justify-content: space-between;\">\n            <div>\n                <strong style=\"color: #38bdf8;\">How The Connection Works:</strong> Broadcaster calls <code style=\"color: #f87171; background: rgba(0,0,0,0.3); padding: 1px 4px; border-radius: 3px;\">RaiseEvent(val)</code> &rarr; ScriptableObject executes <code style=\"color: #fbbf24; background: rgba(0,0,0,0.3); padding: 1px 4px; border-radius: 3px;\">_onEventRaised?.Invoke(val)</code> &rarr; All registered listener methods receive that variable!\n            </div>\n        </div>\n\n        <!-- Live Unity C# Execution: 3 Clean Side-by-Side Blocks (Broadcaster -> SO Channel -> Listener) -->\n        <div style=\"display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px; align-items: start;\">\n            <!-- Block 1: Broadcaster Script -->\n            <div style=\"background: #030712; border: 1.5px solid #1e293b; border-radius: 8px; overflow: hidden;\">\n                <div style=\"background: #0b1120; border-bottom: 1px solid #1e293b; padding: 4px 8px; display: flex; justify-content: space-between; align-items: center;\">\n                    <div style=\"display: flex; align-items: center; gap: 5px; font-size: 0.70rem; font-weight: 800;\">\n                        <span id=\"simBcastDot\" style=\"width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; display: inline-block;\"></span>\n                        <span style=\"color: #38bdf8;\">1. BROADCASTER</span>\n                    </div>\n                    <span id=\"simBcastFileTag\" style=\"color: #64748b; font-size: 0.65rem; font-family: monospace;\">PlayerCombat.cs</span>\n                </div>\n                <div class=\"code-box\" style=\"margin: 0; padding: 6px 8px; background: #070a12; overflow: visible;\">\n                    <pre id=\"simBcastCode\" style=\"margin: 0; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.68rem; line-height: 1.4; color: #d4d4d4; white-space: pre-wrap; word-break: break-word; overflow: visible;\"><code>// Broadcaster code</code></pre>\n                </div>\n            </div>\n\n            <!-- Block 2: ScriptableObject Event Channel Script -->\n            <div style=\"background: #030712; border: 1.5px solid #1e293b; border-radius: 8px; overflow: hidden;\">\n                <div style=\"background: #0b1120; border-bottom: 1px solid #1e293b; padding: 4px 8px; display: flex; justify-content: space-between; align-items: center;\">\n                    <div style=\"display: flex; align-items: center; gap: 5px; font-size: 0.70rem; font-weight: 800;\">\n                        <span id=\"simChannelDot\" style=\"width: 7px; height: 7px; border-radius: 50%; background: #f59e0b; display: inline-block;\"></span>\n                        <span style=\"color: #fbbf24;\">2. CHANNEL SO ASSET</span>\n                    </div>\n                    <span id=\"simChannelFileTag\" style=\"color: #64748b; font-size: 0.65rem; font-family: monospace;\">IntEventChannelSO.cs</span>\n                </div>\n                <div class=\"code-box\" style=\"margin: 0; padding: 6px 8px; background: #070a12; overflow: visible;\">\n                    <pre id=\"simChannelCode\" style=\"margin: 0; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.68rem; line-height: 1.4; color: #d4d4d4; white-space: pre-wrap; word-break: break-word; overflow: visible;\"><code>// Channel SO code</code></pre>\n                </div>\n            </div>\n\n            <!-- Block 3: Decoupled Listeners Script -->\n            <div style=\"background: #030712; border: 1.5px solid #1e293b; border-radius: 8px; overflow: hidden;\">\n                <div style=\"background: #0b1120; border-bottom: 1px solid #1e293b; padding: 4px 8px; display: flex; justify-content: space-between; align-items: center;\">\n                    <div style=\"display: flex; align-items: center; gap: 5px; font-size: 0.70rem; font-weight: 800;\">\n                        <span id=\"simListenerDot\" style=\"width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;\"></span>\n                        <span style=\"color: #4ade80;\">3. LISTENER RECEIVER</span>\n                    </div>\n                    <span id=\"simListenerFileTag\" style=\"color: #64748b; font-size: 0.65rem; font-family: monospace;\">HealthBarUI.cs</span>\n                </div>\n                <div class=\"code-box\" style=\"margin: 0; padding: 6px 8px; background: #070a12; overflow: visible;\">\n                    <pre id=\"simListenerCode\" style=\"margin: 0; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.68rem; line-height: 1.4; color: #d4d4d4; white-space: pre-wrap; word-break: break-word; overflow: visible;\"><code>// Listener code</code></pre>\n                </div>\n            </div>\n        </div>\n    </div>\n\n<div class=\"lab-deep-dive\" style=\"margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;\">\n            <div style=\"font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;\">\n                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>\n            </div>\n            <span style=\"background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;\">\n                BREAKDOWN\n            </span>\n        </div>\n\n        <!-- ELI5 Callout -->\n        <div style=\"background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #166534; margin-bottom: 4px;\">\n                Simple Analogy (The Core Concept):\n            </div>\n            Try clicking 'Take 25 Damage'. Notice how the Broadcaster fires ONE pulse into the Event Channel. Then, both the Health Bar and the SFX Manager update instantly! Now uncheck 'HealthBar UI' (simulating the UI being closed) and take damage again. Everything works without a single error!\n        </div>\n\n        <!-- What is What & Key Differences Grid -->\n        <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;\">\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">\n                    What is What:\n                </div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>Event Bus:</strong> The central highway where event messages travel.<br><strong>Dynamic Listeners:</strong> Listeners can join, leave, or be turned off at runtime without affecting the broadcaster.\n                </div>\n            </div>\n\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">\n                    Key Differences (X vs Y):\n                </div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>Fragile Direct Reference:</strong> If HealthBarUI is disabled, Player crashes with NullReferenceException.<br><strong>Decoupled Event Bus:</strong> Player broadcasts happily whether there are 0, 1, or 20 listeners active.\n                </div>\n            </div>\n        </div>\n\n        <!-- Beginner Trap -->\n        <div style=\"background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #991b1b; margin-bottom: 4px;\">\n                Common Trap and Why It Breaks:\n            </div>\n            Assuming events are slow. In C#, a delegate invocation is a direct function pointer. Thousands of event calls happen in less than a single millisecond.\n        </div>\n\n        <!-- Golden Rule -->\n        <div style=\"background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;\">\n            <strong>Golden Rule for Your Project:</strong> Test your broadcasters with zero listeners active in the scene. If they run cleanly with no errors, your architecture is solid.\n        </div>\n    </div>",
     "notes": "Demonstrate live on screen: Uncheck 'HealthBar UI' to simulate a disabled or missing UI. Click Take 25 Damage. Point out to the students that the Player script runs smoothly with ZERO NullReferenceExceptions!"
   },
   {
@@ -3794,58 +3794,84 @@
         let simCurrentHp = 100;
         let simCurrentScore = 0;
 
-        function updateSimBlocks(bcastCode, bcastFile, bcastBadge, bcastDotColor, listenerCode, listenerFile, listenerBadge, listenerDotColor) {
+        function updateSimBlocks(bcastCode, bcastFile, channelCode, channelFile, listenerCode, listenerFile, bannerHtml) {
             const bcastDisp = document.getElementById('simBcastCode');
             const bcastFileEl = document.getElementById('simBcastFileTag');
-            const bcastBadgeEl = document.getElementById('simBcastBadge');
-            const bcastDot = document.getElementById('simBcastDot');
+
+            const chanDisp = document.getElementById('simChannelCode');
+            const chanFileEl = document.getElementById('simChannelFileTag');
 
             const listDisp = document.getElementById('simListenerCode');
             const listFileEl = document.getElementById('simListenerFileTag');
-            const listBadgeEl = document.getElementById('simListenerBadge');
-            const listDot = document.getElementById('simListenerDot');
+
+            const bannerEl = document.getElementById('simConnectionBanner');
 
             if (bcastFileEl) bcastFileEl.textContent = bcastFile || 'PlayerCombat.cs';
-            if (bcastBadgeEl) bcastBadgeEl.textContent = bcastBadge || 'Broadcaster';
-            if (bcastDot && bcastDotColor) bcastDot.style.background = bcastDotColor;
             if (bcastDisp && typeof highlightCSharp === 'function') {
                 bcastDisp.innerHTML = '<code>' + highlightCSharp(bcastCode) + '</code>';
             }
 
-            if (listFileEl) listFileEl.textContent = listenerFile || 'Listeners';
-            if (listBadgeEl) listBadgeEl.textContent = listenerBadge || 'Subscribers';
-            if (listDot && listenerDotColor) listDot.style.background = listenerDotColor;
+            if (chanFileEl) chanFileEl.textContent = channelFile || 'IntEventChannelSO.cs';
+            if (chanDisp && typeof highlightCSharp === 'function') {
+                chanDisp.innerHTML = '<code>' + highlightCSharp(channelCode) + '</code>';
+            }
+
+            if (listFileEl) listFileEl.textContent = listenerFile || 'HealthBarUI.cs';
             if (listDisp && typeof highlightCSharp === 'function') {
                 listDisp.innerHTML = '<code>' + highlightCSharp(listenerCode) + '</code>';
             }
+
+            if (bannerEl && bannerHtml) {
+                bannerEl.innerHTML = bannerHtml;
+            }
         }
 
-        // Backward-compatible alias
-        function updateSimCode(code, actionTitle, fileName, dotColor) {
-            updateSimBlocks(code, fileName, actionTitle, dotColor, '// Subscribed listeners react automatically via event channels.', 'Listeners.cs', 'Subscribers', '#10b981');
-        }
+        // Backward compatibility
+        function updateSimCode(code, actionTitle, fileName, dotColor) {}
 
         function initSim13Code() {
-            const bcastInit = [
-                '// [BROADCASTER: PlayerCombat.cs]',
-                '[Header("Event Channels")]',
-                '[SerializeField] private IntEventChannelSO onHealthChangedChannel;',
-                '[SerializeField] private IntEventChannelSO onScoreChangedChannel;',
+            const bcastCode = [
+                '// [1. BROADCASTER: PlayerCombat.cs]',
+                '// Holds asset reference:',
+                '[SerializeField] private IntEventChannelSO healthChannel;',
                 '',
-                '// Broadcaster holds zero references to UI or Audio!'
+                'public void TakeDamage(int dmg) {',
+                '    _hp = Mathf.Max(0, _hp - dmg);',
+                '    // Sends current HP (e.g. 75) into channel:',
+                '    healthChannel.RaiseEvent(_hp);',
+                '}'
             ].join('\n');
 
-            const listenerInit = [
-                '// [LISTENER REGISTRATION: HealthBarUI.cs]',
-                'private void OnEnable()',
-                '{',
-                '    // Subscribes callback to receive RaiseEvent(value):',
-                '    onHealthChangedChannel.RegisterListener(UpdateBar);',
+            const channelCode = [
+                '// [2. CHANNEL ASSET: IntEventChannelSO.cs]',
+                'public class IntEventChannelSO : ScriptableObject {',
+                '    // Delegate holds list of subscribed methods:',
+                '    private Action<int> _onEventRaised; // e.g. [ HealthBarUI.UpdateBar ]',
+                '    public void RegisterListener(Action<int> m) => _onEventRaised += m;',
+                '    public void RaiseEvent(int val) {',
+                '        // Passes "val" directly to registered method(s):',
+                '        // -> Calls: HealthBarUI.UpdateBar(val);',
+                '        _onEventRaised?.Invoke(val);',
+                '    }',
+                '}'
+            ].join('\n');
+
+            const listenerCode = [
+                '// [3. LISTENER: HealthBarUI.cs]',
+                '[SerializeField] private IntEventChannelSO healthChannel;',
+                'private void OnEnable() {',
+                '    // Hands "UpdateBar" method pointer to channel:',
+                '    healthChannel.RegisterListener(UpdateBar);',
                 '}',
-                '// When RaiseEvent fires, UpdateBar(int currentHp) runs!'
+                '// Channel.Invoke(val) directly executes this method:',
+                'private void UpdateBar(int hp) { // hp received directly from Invoke!',
+                '    healthSlider.value = hp;',
+                '}'
             ].join('\n');
 
-            updateSimBlocks(bcastInit, 'PlayerCombat.cs', 'Setup Ready', '#38bdf8', listenerInit, 'HealthBarUI.cs', 'Subscribed to Channel', '#10b981');
+            const banner = '<div><strong style="color: #38bdf8;">How Value Reaches Listener:</strong> [1] Player calls <code style="color: #f87171;">RaiseEvent(val)</code> &rarr; [2] SO executes <code style="color: #fbbf24;">_onEventRaised?.Invoke(val)</code> &rarr; [3] C# executes <code style="color: #4ade80;">UpdateBar(hp)</code> where <code style="color: #4ade80;">hp</code> gets the exact value passed into Invoke!</div>';
+
+            updateSimBlocks(bcastCode, 'PlayerCombat.cs', channelCode, 'IntEventChannelSO.cs', listenerCode, 'HealthBarUI.cs', banner);
         }
 
         function updateSubs() {
@@ -3861,20 +3887,36 @@
             if (countElH) countElH.textContent = hCount + ' Listeners';
             if (countElC) countElC.textContent = cCount + ' Listeners';
 
-            const bcastLifecycle = [
-                '// Broadcaster remains 100% untouched!',
-                '// It continues firing into channels whether there',
-                '// are 0, 1, or 50 listeners tuned in.'
+            const bcastCode = [
+                '// [BROADCASTER UNTOUCHED]',
+                '// PlayerCombat has zero references',
+                '// to UI or Audio. It just fires into',
+                '// the neutral channel asset:',
+                'healthChannel.RaiseEvent(_currentHp);'
             ].join('\n');
 
-            const listenerLifecycle = [
-                '// [LIFECYCLE SUBSCRIPTION: AnyListener.cs]',
-                'private void OnEnable()  => channel?.RegisterListener(UpdateUI);',
-                'private void OnDisable() => channel?.UnregisterListener(UpdateUI);',
-                '// Unsubscribing in OnDisable prevents memory leaks!'
+            const channelCode = [
+                '// [CHANNEL REGISTRATION]',
+                'public void RegisterListener(Action<int> l)',
+                '    => _onEventRaised += l;',
+                '',
+                'public void UnregisterListener(Action<int> l)',
+                '    => _onEventRaised -= l; // Prevents leak!'
             ].join('\n');
 
-            updateSimBlocks(bcastLifecycle, 'Broadcaster.cs', 'Independent', '#94a3b8', listenerLifecycle, 'HealthBarUI.cs', 'Lifecycle Updated', '#38bdf8');
+            const listenerCode = [
+                '// [LIFECYCLE SUBSCRIPTION]',
+                'private void OnEnable() {',
+                '    channel.RegisterListener(UpdateBar);',
+                '}',
+                'private void OnDisable() {',
+                '    channel.UnregisterListener(UpdateBar);',
+                '}'
+            ].join('\n');
+
+            const banner = '<div><strong style="color: #38bdf8;">Lifecycle Registration:</strong> In <code style="color: #4ade80;">OnEnable()</code>, Listener gives its method to the channel (<code style="color: #fbbf24;">+=</code>). In <code style="color: #f87171;">OnDisable()</code>, it removes it (<code style="color: #f87171;">-=</code>) so memory cleans up safely!</div>';
+
+            updateSimBlocks(bcastCode, 'PlayerCombat.cs', channelCode, 'IntEventChannelSO.cs', listenerCode, 'HealthBarUI.cs', banner);
         }
 
         function triggerChannelPulse(channelId) {
@@ -3920,33 +3962,43 @@
             }
 
             const bcastCode = [
-                '// [BROADCASTER: PlayerCombat.cs]',
-                'public void TakeDamage(int damage)',
-                '{',
-                '    _currentHp = Mathf.Max(0, _currentHp - ' + amount + ');',
-                '    // 1. Transmit new HP payload to channel asset:',
-                '    if (onHealthChangedChannel != null)',
-                '        onHealthChangedChannel.RaiseEvent(_currentHp);',
+                '// [1. BROADCASTER: PlayerCombat.cs]',
+                'public void TakeDamage(int dmg) {',
+                '    _currentHp = Mathf.Max(0, _currentHp - ' + amount + '); // ' + simCurrentHp,
+                '    // Sends ' + simCurrentHp + ' into the neutral SO channel:',
+                '    healthChannel.RaiseEvent(_currentHp); // ' + simCurrentHp,
                 '}'
             ].join('\n');
 
-            const listenerLines = [
-                '// [LISTENERS: Receiving RaiseEvent(' + simCurrentHp + ')]'
-            ];
+            const channelCode = [
+                '// [2. CHANNEL: OnHealthChangedSO.asset]',
+                '// Delegate holds subscribers: [ HealthBarUI.UpdateBar ]',
+                'public void RaiseEvent(int value) { // value = ' + simCurrentHp + '',
+                '    // Loops registered methods and calls each one with (' + simCurrentHp + '):',
+                '    // -> Literally executes: HealthBarUI.UpdateBar(' + simCurrentHp + ')',
+                '    _onEventRaised?.Invoke(value);',
+                '}'
+            ].join('\n');
+
+            const listenerLines = ['// [3. LISTENER: HealthBarUI.cs]'];
             if (hActive) {
-                listenerLines.push('// HealthBarUI.cs (Registered callback)');
-                listenerLines.push('private void UpdateBar(int hp) { healthSlider.value = hp; } // ' + simCurrentHp);
+                listenerLines.push('// Subscribed in OnEnable: channel.RegisterListener(UpdateBar);');
+                listenerLines.push('// SO Invoke(' + simCurrentHp + ') directly executes this callback:');
+                listenerLines.push('private void UpdateBar(int hp) { // hp is ' + simCurrentHp + ' from Invoke!');
+                listenerLines.push('    healthSlider.value = hp; // Slider becomes ' + simCurrentHp);
+                listenerLines.push('}');
             } else {
-                listenerLines.push('// HealthBarUI.cs: [Unregistered in OnDisable - Safely skipped]');
+                listenerLines.push('// [HealthBarUI Unregistered - Skipped safely]');
             }
             if (aActive) {
-                listenerLines.push('// SFXManager.cs (Registered callback)');
-                listenerLines.push('private void OnDamaged(int hp) { audioSource.PlayOneShot(hurtSfx); }');
-            } else {
-                listenerLines.push('// SFXManager.cs: [Unregistered - Safely skipped]');
+                listenerLines.push('// SFXManager.cs (Also registered):');
+                listenerLines.push('// SO Invoke(' + simCurrentHp + ') calls: OnDamaged(' + simCurrentHp + ')');
+                listenerLines.push('private void OnDamaged(int hp) => audioSource.PlayOneShot(hurtSfx);');
             }
 
-            updateSimBlocks(bcastCode, 'PlayerCombat.cs', 'RaiseEvent(' + simCurrentHp + ')', '#ef4444', listenerLines.join('\n'), 'HealthBarUI.cs & SFXManager.cs', 'Callbacks Received', '#10b981');
+            const banner = '<div><strong style="color: #38bdf8;">Variable Flow (' + simCurrentHp + ' HP):</strong> [1] Broadcaster sends <code style="color: #f87171;">RaiseEvent(' + simCurrentHp + ')</code> &rarr; [2] SO executes <code style="color: #fbbf24;">_onEventRaised?.Invoke(value)</code> [calls UpdateBar(' + simCurrentHp + ')] &rarr; [3] Listener method receives <code style="color: #4ade80;">hp = ' + simCurrentHp + '</code> and updates slider!</div>';
+
+            updateSimBlocks(bcastCode, 'PlayerCombat.cs', channelCode, 'OnHealthChangedSO.cs', listenerLines.join('\n'), 'HealthBarUI.cs', banner);
         }
 
         function simHeal(amount) {
@@ -3970,28 +4022,38 @@
             }
 
             const bcastCode = [
-                '// [BROADCASTER: PlayerHealth.cs]',
-                'public void Heal(int amount)',
-                '{',
-                '    _currentHp = Mathf.Min(100, _currentHp + ' + amount + ');',
-                '    // 1. Transmit restored HP payload to channel asset:',
-                '    if (onHealthChangedChannel != null)',
-                '        onHealthChangedChannel.RaiseEvent(_currentHp);',
+                '// [1. BROADCASTER: PlayerCombat.cs]',
+                'public void Heal(int amt) {',
+                '    _currentHp = Mathf.Min(100, _currentHp + ' + amount + '); // ' + simCurrentHp,
+                '    // Sends ' + simCurrentHp + ' into the neutral SO channel:',
+                '    healthChannel.RaiseEvent(_currentHp); // ' + simCurrentHp,
                 '}'
             ].join('\n');
 
-            const listenerCode = hActive
-                ? [
-                    '// [LISTENER: Receiving RaiseEvent(' + simCurrentHp + ')]',
-                    '// HealthBarUI.cs (Registered callback method):',
-                    'private void UpdateBar(int currentHealth)',
-                    '{',
-                    '    healthSlider.value = currentHealth; // Restored to ' + simCurrentHp,
-                    '}'
-                  ].join('\n')
-                : '// HealthBarUI.cs: [Unregistered in OnDisable - Safely skipped with 0 errors]';
+            const channelCode = [
+                '// [2. CHANNEL: OnHealthChangedSO.asset]',
+                '// Delegate holds subscribers: [ HealthBarUI.UpdateBar ]',
+                'public void RaiseEvent(int value) { // value = ' + simCurrentHp + '',
+                '    // Loops registered methods and calls each one with (' + simCurrentHp + '):',
+                '    // -> Literally executes: HealthBarUI.UpdateBar(' + simCurrentHp + ')',
+                '    _onEventRaised?.Invoke(value);',
+                '}'
+            ].join('\n');
 
-            updateSimBlocks(bcastCode, 'PlayerHealth.cs', 'RaiseEvent(' + simCurrentHp + ')', '#10b981', listenerCode, 'HealthBarUI.cs', 'Callback Received', '#10b981');
+            const listenerLines = ['// [3. LISTENER: HealthBarUI.cs]'];
+            if (hActive) {
+                listenerLines.push('// Subscribed in OnEnable: channel.RegisterListener(UpdateBar);');
+                listenerLines.push('// SO Invoke(' + simCurrentHp + ') directly executes this callback:');
+                listenerLines.push('private void UpdateBar(int hp) { // hp is ' + simCurrentHp + ' from Invoke!');
+                listenerLines.push('    healthSlider.value = hp; // Restored to ' + simCurrentHp);
+                listenerLines.push('}');
+            } else {
+                listenerLines.push('// [HealthBarUI Unregistered - Skipped safely]');
+            }
+
+            const banner = '<div><strong style="color: #38bdf8;">Variable Flow (' + simCurrentHp + ' HP):</strong> [1] Broadcaster sends <code style="color: #10b981;">RaiseEvent(' + simCurrentHp + ')</code> &rarr; [2] SO executes <code style="color: #fbbf24;">_onEventRaised?.Invoke(value)</code> [calls UpdateBar(' + simCurrentHp + ')] &rarr; [3] Listener method receives <code style="color: #4ade80;">hp = ' + simCurrentHp + '</code> and updates slider!</div>';
+
+            updateSimBlocks(bcastCode, 'PlayerCombat.cs', channelCode, 'OnHealthChangedSO.cs', listenerLines.join('\n'), 'HealthBarUI.cs', banner);
         }
 
         function simCollectCoin(pts) {
@@ -4021,34 +4083,44 @@
             }
 
             const bcastCode = [
-                '// [BROADCASTER: CoinPickup.cs]',
-                'private void OnTriggerEnter2D(Collider2D other)',
-                '{',
-                '    _currentScore += ' + pts + ';',
-                '    // 1. Transmit updated score payload to channel:',
-                '    if (onScoreChangedChannel != null)',
-                '        onScoreChangedChannel.RaiseEvent(_currentScore);',
-                '    Destroy(gameObject); // Broadcaster self-destructs!',
+                '// [1. BROADCASTER: CoinPickup.cs]',
+                'private void OnTriggerEnter2D(Collider2D c) {',
+                '    _score += ' + pts + '; // ' + simCurrentScore,
+                '    // Sends ' + simCurrentScore + ' into score channel:',
+                '    scoreChannel.RaiseEvent(_score); // ' + simCurrentScore,
+                '    Destroy(gameObject);',
                 '}'
             ].join('\n');
 
-            const listenerLines = [
-                '// [LISTENERS: Receiving RaiseEvent(' + simCurrentScore + ')]'
-            ];
+            const channelCode = [
+                '// [2. CHANNEL: OnScoreChangedSO.asset]',
+                '// Delegate holds subscribers: [ ScoreCounterUI.UpdateScore ]',
+                'public void RaiseEvent(int newScore) { // newScore = ' + simCurrentScore + '',
+                '    // Loops registered methods and calls each one with (' + simCurrentScore + '):',
+                '    // -> Literally executes: ScoreCounterUI.UpdateScore(' + simCurrentScore + ')',
+                '    _onEventRaised?.Invoke(newScore);',
+                '}'
+            ].join('\n');
+
+            const listenerLines = ['// [3. LISTENER: ScoreCounterUI.cs]'];
             if (sActive) {
-                listenerLines.push('// ScoreCounterUI.cs:');
-                listenerLines.push('private void UpdateScore(int score) { scoreText.text = $"Score: {score} pts"; }');
+                listenerLines.push('// Subscribed in OnEnable: scoreChannel.RegisterListener(UpdateScore);');
+                listenerLines.push('// SO Invoke(' + simCurrentScore + ') directly executes this callback:');
+                listenerLines.push('private void UpdateScore(int score) { // score is ' + simCurrentScore + ' from Invoke!');
+                listenerLines.push('    scoreText.text = $"Score: {score} pts";');
+                listenerLines.push('}');
             } else {
-                listenerLines.push('// ScoreCounterUI.cs: [Disabled]');
+                listenerLines.push('// [ScoreCounterUI Disabled]');
             }
             if (aActive) {
-                listenerLines.push('// SFXManager.cs:');
-                listenerLines.push('private void OnCoinCollected(int score) { audioSource.PlayOneShot(coinSfx); }');
-            } else {
-                listenerLines.push('// SFXManager.cs: [Disabled]');
+                listenerLines.push('// SFXManager.cs (Also registered):');
+                listenerLines.push('// SO Invoke(' + simCurrentScore + ') calls: OnCoinCollected(' + simCurrentScore + ')');
+                listenerLines.push('private void OnCoinCollected(int s) => audioSource.PlayOneShot(coinSfx);');
             }
 
-            updateSimBlocks(bcastCode, 'CoinPickup.cs', 'RaiseEvent(' + simCurrentScore + ')', '#f59e0b', listenerLines.join('\n'), 'ScoreCounterUI.cs & SFXManager.cs', 'Callbacks Received', '#10b981');
+            const banner = '<div><strong style="color: #38bdf8;">Variable Flow (' + simCurrentScore + ' pts):</strong> [1] Broadcaster calls <code style="color: #f59e0b;">scoreChannel.RaiseEvent(' + simCurrentScore + ')</code> &rarr; [2] SO executes <code style="color: #fbbf24;">_onEventRaised?.Invoke(newScore)</code> [calls UpdateScore(' + simCurrentScore + ')] &rarr; [3] UI updates to <code style="color: #4ade80;">' + simCurrentScore + ' pts</code>!</div>';
+
+            updateSimBlocks(bcastCode, 'CoinPickup.cs', channelCode, 'OnScoreChangedSO.cs', listenerLines.join('\n'), 'ScoreCounterUI.cs', banner);
         }
 
         function simResetPlayer() {
@@ -4064,23 +4136,31 @@
             if (log) log.textContent = '[Reset] Player and channels reset to initial state.';
 
             const bcastCode = [
-                '// [COORDINATOR: GameManager.cs]',
-                'public void ResetGameState()',
-                '{',
-                '    _currentHp = 100; _currentScore = 0;',
-                '    // Transmits default payloads to both channels:',
-                '    if (onHealthChangedChannel != null) onHealthChangedChannel.RaiseEvent(_currentHp);',
-                '    if (onScoreChangedChannel != null)  onScoreChangedChannel.RaiseEvent(_currentScore);',
+                '// [1. COORDINATOR: GameManager.cs]',
+                'public void ResetGameState() {',
+                '    _currentHp = 100; _score = 0;',
+                '    // Sends initial values to both SOs:',
+                '    healthChannel.RaiseEvent(100);',
+                '    scoreChannel.RaiseEvent(0);',
                 '}'
             ].join('\n');
 
-            const listenerCode = [
-                '// [LISTENERS: Callbacks reset UI automatically]',
-                'UpdateBar(100)  => healthSlider.value = 100;',
-                'UpdateScore(0)  => scoreText.text = "Score: 0 pts";'
+            const channelCode = [
+                '// [2. SO EVENT CHANNELS]',
+                '// Both OnHealthChangedSO & OnScoreChangedSO',
+                '// forward incoming values to their listeners:',
+                'public void RaiseEvent(int val) => _onEventRaised?.Invoke(val);'
             ].join('\n');
 
-            updateSimBlocks(bcastCode, 'GameManager.cs', 'ResetGameState()', '#94a3b8', listenerCode, 'All Listeners', 'Reset Callbacks', '#94a3b8');
+            const listenerCode = [
+                '// [3. LISTENERS RECEIVE RESET]',
+                'UpdateBar(100) => healthSlider.value = 100;',
+                'UpdateScore(0) => scoreText.text = "Score: 0 pts";'
+            ].join('\n');
+
+            const banner = '<div><strong style="color: #38bdf8;">Reset Pipeline:</strong> Reset transmits initial default values (<code style="color: #4ade80;">100 HP</code> and <code style="color: #4ade80;">0 pts</code>) through both channel assets to all active scene listeners.</div>';
+
+            updateSimBlocks(bcastCode, 'GameManager.cs', channelCode, 'Event Channels', listenerCode, 'All Listeners', banner);
         }
 
         let timerSeconds = 600;
