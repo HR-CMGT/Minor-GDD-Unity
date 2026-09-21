@@ -65,7 +65,17 @@
             }
           ]
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/Apple iPhone 13 Pro_Overlay.png",
+        "borderSize": {
+          "x": 55.0,
+          "y": 55.0,
+          "z": 55.0,
+          "w": 55.0
+        },
+        "cornerRadius": 185.0
+      }
     }
   ],
   "systemInfo": {

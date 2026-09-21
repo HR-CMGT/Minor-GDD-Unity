@@ -65,7 +65,17 @@
             }
           ]
         }
-      ]
+      ],
+      "presentation": {
+        "overlayPath": "Packages/nl.hr.gdd.devicesimulator.devices/Editor/Devices/DeviceOverlays/Apple iPhone 16_Overlay.png",
+        "borderSize": {
+          "x": 70.0,
+          "y": 70.0,
+          "z": 70.0,
+          "w": 70.0
+        },
+        "cornerRadius": 175.0
+      }
     }
   ],
   "systemInfo": {
