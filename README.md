@@ -8,6 +8,7 @@ This curriculum guides students from foundational 2D game prototyping to advance
 
 ## Quick Links & Reference Guides
 
+- [Interactive Course Presentations Portal](https://hr-cmgt.github.io/Minor-GDD-Unity/)
 - [Unity Tips & Complete Reference Manual](classes/00_unity.md)
 - [C# Unity Code Snippets Library](classes/00_codesnippets.md)
 - [GDD Resources & Asset Catalog](classes/00_resources.md)
@@ -32,11 +33,11 @@ This curriculum guides students from foundational 2D game prototyping to advance
 
 | Week | Lesson Code | Topic & Content | Material & Assignment |
 | :--- | :--- | :--- | :--- |
-| **1.1** | `01_basics1` | **Introduction Unity 2D (Workshop)**<br>• GameObjects, Components, Prefabs<br>• Script Lifecycle (`Awake`, `Start`, `Update`, `FixedUpdate`)<br>• 2D Physics (`Rigidbody2D`, `Collider2D`, Physics Materials)<br>• New Input System & Cinemachine 2D Camera Follow | [Lesson 1.1 Material](classes/01_basics1.md) |
-| **1.2** | `02_basics2` | **Object Communication & Data Containers**<br>• Physical Collisions & Stomp Detection (`OnCollisionEnter2D`)<br>• Component Safety (`TryGetComponent`, `CompareTag`)<br>• Data Architecture (Arrays, Lists, Dictionaries, ScriptableObjects)<br>• Asynchronous Coroutines & Event Decoupling | [Lesson 1.2 Material](classes/02_basics2.md) |
-| **1.3** | `03_UI` | **UI Layouting & Data Persistence**<br>• Canvas Scaler (1920x1080 Match 0.5)<br>• Anchors & Pivots Responsive Layout<br>• TextMeshPro & Decoupled UI Events<br>• JSON Data Persistence (`JsonUtility`) | [Lesson 1.3 Material](classes/03_UI.md) |
-| **1.4** | `04_architecture1` | **Game Architecture 1: Decoupling & Prefab API** | *Coming Soon* |
-| **1.5** | `05_gamejam` | **Rapid Prototyping & Game Feel (Juice)** | *Coming Soon* |
+| **1.1** | `01_basics1` | **Introduction Unity 2D (Workshop)**<br>• GameObjects, Components, Prefabs<br>• Script Lifecycle (`Awake`, `Start`, `Update`, `FixedUpdate`)<br>• 2D Physics (`Rigidbody2D`, `Collider2D`, Physics Materials)<br>• New Input System & Cinemachine 2D Camera Follow | [Lesson 1.1 Material](classes/01_basics1.md)<br>[Slide Deck](presentation_basics1/index.html) |
+| **1.2** | `02_basics2` | **Object Communication & Data Containers**<br>• Physical Collisions & Stomp Detection (`OnCollisionEnter2D`)<br>• Component Safety (`TryGetComponent`, `CompareTag`)<br>• Data Architecture (Arrays, Lists, Dictionaries, ScriptableObjects)<br>• Asynchronous Coroutines & Event Decoupling | [Lesson 1.2 Material](classes/02_basics2.md)<br>[Slide Deck](presentation_basics2/index.html) |
+| **1.3** | `03_UI` | **UI Layouting & Data Persistence**<br>• Canvas Scaler (1920x1080 Match 0.5)<br>• Anchors & Pivots Responsive Layout<br>• TextMeshPro & Decoupled UI Events<br>• JSON Data Persistence (`JsonUtility`) | [Lesson 1.3 Material](classes/03_UI.md)<br>[Slide Deck](presentation_basics3/index.html) |
+| **1.4** | `04_architecture` | **Game Architecture 1: Decoupling & Prefab API**<br>• Prefab as an API (The Black Box Pattern)<br>• ScriptableObject Event Channels & Memory Safety<br>• Robust Generic Persistent Singletons<br>• Multi-Scene Additive Loading (`LoadSceneAsync`) | [Lesson 1.4 Material](classes/04_architecture.md)<br>[Slide Deck](presentation_basics4/index.html) |
+| **1.5** | `05_release_polish` | **The Release Candidate: Polish, Lifecycle & Telemetry**<br>• Screen Faders & First-Run Onboarding Detection<br>• Mobile App Lifecycle (`OnApplicationPause`) & State Protection<br>• Procedural Micro-Animations (`AnimationCurve`) & Audio Randomization<br>• Online Leaderboards & Google Sheets Playtest Telemetry | [Lesson 1.5 Material](classes/05_release_polish.md)<br>[Slide Deck](presentation_basics5/index.html) |
 | **1.6** | `--` | *Concept Presentations 2D Project & Feedback* | `--` |
 | **1.7** | `07_blockprototyping` | **3D Block Prototyping & Greyboxing** | *Coming Soon* |
 | **1.8** | `08_gamejam2` | *Blocktober Demo & Midterm Milestone Playtests* | *Coming Soon* |
