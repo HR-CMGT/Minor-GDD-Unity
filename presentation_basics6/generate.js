@@ -7,11 +7,11 @@ const p4Content = fs.readFileSync('presentation_basics4/presentation_unity6_basi
 // Extract CSS and UI Chrome (before script)
 const beforeScript = p4Content.substring(0, p4Content.indexOf('<script>'));
 
-// Customise title and header in HTML
+// Customise title, Three.js includes, and header in HTML
 let customBeforeScript = beforeScript
     .replace(
         /<title>.*?<\/title>/,
-        '<title>Dev - Basics 6: 3D Block Prototyping &amp; Greyboxing</title>'
+        '<title>Dev - Basics 6: 3D Block Prototyping &amp; Greyboxing</title>\n    <script src="three.min.js"></script>\n    <script src="OrbitControls.js"></script>'
     )
     .replace(
         /<span>Lesson 04:.*?<\/span>/s,
@@ -80,6 +80,80 @@ let customBeforeScript = beforeScript
             min-height: 2.2em !important;
             padding: 0.55em 0.9em !important;
         }
+
+        /* Unity Inspector Mockup System */
+        .unity-inspector {
+            background: #282828;
+            border: 1px solid #1a1a1a;
+            border-radius: 6px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 0.76rem;
+            color: #c4c4c4;
+            margin-top: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .unity-inspector-header {
+            background: #3c3c3c;
+            padding: 6px 10px;
+            border-bottom: 1px solid #202020;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            color: #e0e0e0;
+        }
+        .unity-inspector-body {
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .unity-prop-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.75rem;
+        }
+        .unity-prop-label {
+            color: #b0b0b0;
+            flex: 1 1 45%;
+            font-weight: 500;
+        }
+        .unity-prop-val {
+            flex: 1 1 55%;
+            background: #1e1e1e;
+            border: 1px solid #383838;
+            border-radius: 3px;
+            padding: 2px 6px;
+            color: #f1f5f9;
+            font-family: monospace;
+            font-size: 0.73rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .unity-vec3 {
+            display: flex;
+            gap: 3px;
+            width: 100%;
+        }
+        .unity-vec3-field {
+            flex: 1;
+            background: #1e1e1e;
+            border: 1px solid #383838;
+            border-radius: 3px;
+            padding: 2px 4px;
+            font-family: monospace;
+            font-size: 0.70rem;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .unity-badge-x { color: #f87171; font-weight: 800; font-size: 0.68rem; }
+        .unity-badge-y { color: #4ade80; font-weight: 800; font-size: 0.68rem; }
+        .unity-badge-z { color: #60a5fa; font-weight: 800; font-size: 0.68rem; }
     </style>`
     );
 
@@ -124,7 +198,7 @@ const slides = [
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
             <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
-            Transitioning from 2D sprites to 3D spaces requires treating geometry as physical spatial architecture. Before placing art assets, textures, or lighting, every jump gap, doorway clearance, and camera angle must be mathematically validated in greybox primitives. If a level is not fun in untextured grey blocks, no amount of 3D visual fidelity will save it.
+            Transitioning from 2D sprites to 3D spaces requires treating geometry as physical spatial architecture. Before placing art assets, textures, or lighting, every jump gap, doorway clearance, and camera angle must be mathematically validated in greybox primitives. If a level is not fun in untextured grey blocks, visual fidelity will not fix structural design flaws.
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
@@ -143,155 +217,235 @@ const slides = [
                 </div>
             </div>
         </div>
-        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>Project Settings &bull; Physics (3D Simulation Core)</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Engine Default</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Gravity</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> -20.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.00</div>
+                    </div>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Default Solver Iterations</span>
+                    <span class="unity-prop-val">8</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Default Solver Velocity Iterations</span>
+                    <span class="unity-prop-val">2</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Auto Simulation / Auto Sync Transforms</span>
+                    <span class="unity-prop-val">[X] Enabled / [X] Enabled</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
             <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Anti-Pattern:</div>
-            Importing detailed 3D environment art before verifying player metrics and camera clearance. This leads to costly rework when players get stuck in narrow corridors or jump heights mismatch ledge ledgers.
+            Importing detailed 3D environment art before verifying player metrics and camera clearance. This leads to costly rework when players get stuck in narrow corridors or jump heights mismatch ledge positions.
         </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Golden Rule for Block 2:</strong> Prototype fast, snap strictly to grid metrics, and prove gameplay mechanics in pure greybox geometry before requesting 3D model art.
+            <strong>Golden Rule for Your Project:</strong> Build, playtest, and tune your level layout in greybox blocks first. Only begin final 3D asset modeling once the gameplay metrics are locked.
         </div>
     </div>`,
-    notes: "Welcome to Class 06: 3D Block Prototyping & Greyboxing. Today we transition from 2D pixel systems into full 3D spatial environments in Modern Unity 6. We establish universal spatial metrics, master ProBuilder geometry tools, implement responsive 3D CharacterControllers with camera-relative vector math, and deploy modern NavMesh AI navigation."
+    notes: "Welcome to Lesson 06: 3D Block Prototyping & Greyboxing. Today we transition from 2D mechanics to 3D world space. Emphasize that greyboxing is the industry standard approach to validating level design and gameplay feel before any artistic asset production begins."
   },
 
-  // Slide 2: From 2D Pixels to 3D World Space
+  // Slide 2: 3D Spatial Architecture & Coordinate System
   {
-    title: "From 2D Pixels to 3D World Space",
+    title: "From 2D Pixels to 3D World Space: Coordinate Systems & Scaling",
     content: `<div class="split-layout">
         <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">3D Coordinate System & Left-Hand Rule</div>
+            <div class="content-card primary">
+                <div class="card-title core">Left-Handed Y-Up Coordinate System</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Unity uses a <strong>Left-Handed Coordinate System</strong> where Y is strictly Up:
+                        Unity operates on a <strong>Left-Handed Cartesian System</strong> where:
                     </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>+X Axis (Red):</strong> Moves Right.</li>
-                        <li><strong>+Y Axis (Green):</strong> Moves Up (World Vertical).</li>
-                        <li><strong>+Z Axis (Blue):</strong> Moves Forward (Into the screen).</li>
+                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>+X (Thumb):</strong> Points Right (Horizontal East).</li>
+                        <li><strong>+Y (Index):</strong> Points Up (Vertical Altitude).</li>
+                        <li><strong>+Z (Middle):</strong> Points Forward (Depth into screen / North).</li>
                     </ul>
-                    <div style="margin-top: 10px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px; font-size: 0.82rem; color: #0369a1;">
-                        <strong>The Universal Metric Anchor:</strong><br>
-                        <code>1 Unity Unit = 1 Real-World Meter (1.0m)</code>.<br>
-                        Adhering to this scale is mandatory for Unity physics engine (PhysX), lighting falloff (PBR), and AI NavMesh agent sizes.
+                    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; margin-top: 10px; font-size: 0.80rem; color: #0f172a;">
+                        <strong>Vector Reference:</strong><br>
+                        <code>Vector3.forward = (0, 0, 1)</code><br>
+                        <code>Vector3.right = (1, 0, 0)</code><br>
+                        <code>Vector3.up = (0, 1, 0)</code>
                     </div>
                 </div>
             </div>
         </div>
         <div class="right-column">
             <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">Transform Space: Local vs World Space</div>
+                <div class="card-title core" style="color: #047857;">The 1 Unity Unit = 1 Meter Standard</div>
                 <div class="card-body">
-                    <div class="code-box">
-                        <pre><code><span class="r-cm">// Local Space vs World Space Conversion</span>
-Vector3 worldPos = transform.position;
-Vector3 localPos = transform.localPosition;
-
-<span class="r-cm">// Direction Vectors (Normalized 1.0m Basis Vectors)</span>
-Vector3 fwd = transform.forward; <span class="r-cm">// Local +Z projected into World Space</span>
-Vector3 rgt = transform.right;   <span class="r-cm">// Local +X projected into World Space</span>
-Vector3 up  = transform.up;      <span class="r-cm">// Local +Y projected into World Space</span>
-
-<span class="r-cm">// Converting Direction from Local to World</span>
-Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
-                    </div>
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Unity physics, lighting, and audio attenuation are calibrated to real-world meters:
+                    </p>
+                    <ul style="font-size: 0.82rem; color: #065f46; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Rigidbodies:</strong> Gravity at <code>-9.81 m/s²</code> feels floaty on tiny objects if scales are off.</li>
+                        <li><strong>NavMesh:</strong> Agent radius (0.5m) and step height (0.4m) assume human meter scale.</li>
+                        <li><strong>Light Attenuation:</strong> Inverse-square light dropoff requires accurate room dimensions.</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    <details class="tier-accordion adv">
-        <summary class="accordion-header">
-            <span>[Deep Dive] Rotations: Quaternions vs Euler Angles</span>
-            <span style="font-size:0.75rem;">Expand</span>
-        </summary>
-        <div class="accordion-body">
-            Never modify <code>transform.rotation.x/y/z</code> directly as Euler degrees. Euler representation suffers from <strong>Gimbal Lock</strong> (loss of one degree of freedom when two axes align). Always perform rotations using <code>Quaternion.Euler(pitch, yaw, roll)</code>, <code>Quaternion.LookRotation(direction)</code>, or <code>Quaternion.Slerp()</code>.
-        </div>
-    </details>
     <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">COORDINATES</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">COORDINATES &amp; WORLD SPACE</span>
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
-            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Coordinate Space Hierarchy:</div>
-            A child GameObject's <code>localPosition</code> is relative to its parent's origin. Moving the parent translates all children automatically. In 3D programming, always know whether an API expects world space (e.g. <code>NavMeshAgent.SetDestination</code>) or local space (e.g. local weapon offsets).
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            World Space is the global coordinate grid where the entire level resides. Local Space is the relative offset from a parent GameObject. Always verify whether a script is querying <code>transform.position</code> (World) or <code>transform.localPosition</code> (Relative Parent Space).
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
-                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Metric Conventions:</div>
-                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">Human Character = 1.8m height, 0.8m diameter.<br>Standard Cube Primitive = 1.0m x 1.0m x 1.0m.</div>
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">World vs Local Space:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    <strong>World Space:</strong> Absolute origin at <code>(0,0,0)</code>. Used for physics raycasts, NavMesh paths, and distances between independent entities.<br>
+                    <strong>Local Space:</strong> Relative to parent. Moving a parent vehicle moves all child passengers automatically.
+                </div>
             </div>
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
-                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Common Error:</div>
-                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">Scaling parent objects non-uniformly (e.g. Scale = (1, 3, 1)). This distorts child colliders and causes skewed physics calculations. Always keep root scales at (1, 1, 1).</div>
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Handedness in 3D Engines:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    <strong>Unity:</strong> Left-Handed (+Y Up, +Z Forward).<br>
+                    <strong>Blender / Unreal:</strong> Right-Handed (Blender: +Z Up, Unreal: Left-Handed Z-Up). Unity automatically flips coordinates on FBX import, but manual procedural meshes must respect Unity's Left-Handed winding order.
+                </div>
             </div>
         </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>Transform Component &bull; World Anchor Definition</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Inspector Standard</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Position (World Coordinates)</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.00</div>
+                    </div>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Rotation (Euler Angles)</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.00</div>
+                    </div>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Scale (Unit Ratio 1:1)</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 1.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 1.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 1.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Scaling parent GameObjects non-uniformly (e.g. <code>(1, 2.5, 0.4)</code>). Non-uniform parent scales distort child BoxColliders and cause CharacterController physics sweeps to glitch against wall edges.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Keep Transform Scale at <code>(1, 1, 1)</code> for all parent root containers. Change geometry dimensions inside the mesh or collider, never by stretching the parent root scale.
+        </div>
     </div>`,
-    notes: "Review Left-Handed coordinates: Thumb = Right (+X), Index = Up (+Y), Middle = Forward (+Z). Emphasize that 1 unit = 1 meter is the universal baseline for physics, navmesh, and audio attenuation."
+    notes: "Explain the coordinate system differences. Point out that 1 unit = 1 meter is not arbitrary; physics gravity, NavMesh defaults, and lighting dropoff all rely on it."
   },
 
   // Slide 3: Level Design Metrics Standard
   {
-    title: "Level Design Metrics Standard",
+    title: "Level Design Metrics: Architectural Standards & Player Clearance",
     content: `<div class="split-layout">
         <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">Standard Architectural Metrics</div>
+            <div class="content-card primary">
+                <div class="card-title core">Standard Humanoid Character Metrics</div>
                 <div class="card-body">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.80rem; text-align: left;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid #cbd5e1; color: #0f172a;">
-                                <th style="padding: 6px;">Element</th>
-                                <th style="padding: 6px;">Dimensions (W x H x D)</th>
-                                <th style="padding: 6px;">Gameplay Purpose</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 6px; font-weight: 700;">Single Door</td>
-                                <td style="padding: 6px;">1.2m x 2.4m</td>
-                                <td style="padding: 6px;">Comfortable player navigation without snagging</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 6px; font-weight: 700;">Combat Passage</td>
-                                <td style="padding: 6px;">2.5m - 4.0m width</td>
-                                <td style="padding: 6px;">Allows 2 agents + camera without clipping</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 6px; font-weight: 700;">Stair Step</td>
-                                <td style="padding: 6px;">0.2m rise x 0.3m run</td>
-                                <td style="padding: 6px;">CharacterController stepOffset <= 0.3m</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 6px; font-weight: 700;">Low Cover</td>
-                                <td style="padding: 6px;">0.85m - 1.0m height</td>
-                                <td style="padding: 6px;">Crouch protection, shoot-over clearance</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px; font-weight: 700;">High Cover</td>
-                                <td style="padding: 6px;">2.0m - 2.2m height</td>
-                                <td style="padding: 6px;">Full standing block for sightlines</td>
-                            </tr>
-                        </tbody>
+                    <table style="width: 100%; font-size: 0.80rem; border-collapse: collapse; text-align: left;">
+                        <tr style="border-bottom: 1.5px solid #cbd5e1; color: #0f172a;">
+                            <th style="padding: 4px 6px;">Metric Feature</th>
+                            <th style="padding: 4px 6px;">Standard Dimension</th>
+                            <th style="padding: 4px 6px;">Rationale</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Player Height</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">1.8m - 2.0m</td>
+                            <td style="padding: 4px 6px;">Standard humanoid capsule.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Player Radius</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">0.35m - 0.45m</td>
+                            <td style="padding: 4px 6px;">Shoulder width (0.8m diameter).</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Eye Height</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">1.6m - 1.7m</td>
+                            <td style="padding: 4px 6px;">First-person camera horizon.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 6px;"><strong>Step Climb</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">0.3m - 0.4m</td>
+                            <td style="padding: 4px 6px;">Max step height without jumping.</td>
+                        </tr>
                     </table>
                 </div>
             </div>
         </div>
         <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #f59e0b;">
-                <div class="card-title core" style="color: #d97706;">The Metric Reference Dummy</div>
+            <div class="content-card primary" style="border-left-color: #d97706;">
+                <div class="card-title core" style="color: #b45309;">Spatial Architecture Standards</div>
                 <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Always place a <strong>Scale Reference Dummy</strong> (Capsule with height 1.8m, radius 0.4m) in every blockout scene:
-                    </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
-                        <li>Prevents "cathedral syndrome" (building rooms 5x too large).</li>
-                        <li>Verifies camera field-of-view (FOV) framing and headroom.</li>
-                        <li>Validates jump ledge heights before baking NavMesh.</li>
-                    </ul>
+                    <table style="width: 100%; font-size: 0.80rem; border-collapse: collapse; text-align: left;">
+                        <tr style="border-bottom: 1.5px solid #cbd5e1; color: #0f172a;">
+                            <th style="padding: 4px 6px;">Element</th>
+                            <th style="padding: 4px 6px;">Metric Clearance</th>
+                            <th style="padding: 4px 6px;">Buffer Margin</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Doorways</strong></td>
+                            <td style="padding: 4px 6px; color: #d97706; font-weight: 700;">1.2m W x 2.4m H</td>
+                            <td style="padding: 4px 6px;">+0.4m clearance to prevent snags.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Corridors</strong></td>
+                            <td style="padding: 4px 6px; color: #d97706; font-weight: 700;">2.5m - 3.0m Wide</td>
+                            <td style="padding: 4px 6px;">Allows 3rd-person camera orbit.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Full Cover</strong></td>
+                            <td style="padding: 4px 6px; color: #d97706; font-weight: 700;">1.8m - 2.0m High</td>
+                            <td style="padding: 4px 6px;">Completely conceals standing player.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 6px;"><strong>Half Cover / Vault</strong></td>
+                            <td style="padding: 4px 6px; color: #d97706; font-weight: 700;">1.0m - 1.1m High</td>
+                            <td style="padding: 4px 6px;">Allows crouching cover &amp; vaulting.</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -301,46 +455,102 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">METRIC AUDIT</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">METRIC ARCHITECTURE</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Game metrics are physical contracts between the player controller, camera rig, and environment geometry. If a door is 2.0m high and the player is 2.0m high, any micro-bounce from movement physics will collide with the lintel and stop the player cold. Always add 20-30% buffer margin to architectural clearances.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Stairs vs Ramps:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Visual stairs with individual step colliders produce jittery camera movement. In production greyboxing, stair visual meshes are paired with an invisible <strong>smooth ramp collider (angle &lt;= 45 deg)</strong> for silky-smooth character traversal.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Corridor Width vs 3rd Person Camera:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    A 1.5m hallway is realistic in real life, but in a 3rd-person game, a camera orbiting 3m behind the player will collide with the side walls, zooming aggressively into the player's skull. Minimum 3rd-person corridor width is 2.5m - 3.0m.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>BoxCollider &bull; Metric Doorway Frame Clearance</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Metric Component</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Is Trigger</span>
+                    <span class="unity-prop-val">[ ] False</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Material</span>
+                    <span class="unity-prop-val">None (PhysicMaterial)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Center</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 1.20</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.00</div>
+                    </div>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Size (Clearance Standard)</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 1.20</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 2.40</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.20</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Building doorways that match real-world house doors (0.8m wide, 2.0m high). In 3D games with camera lag and character inertia, narrow doors feel claustrophobic and cause frequent snagging.
         </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Step Offset Engineering:</strong> If a staircase riser exceeds <code>CharacterController.stepOffset</code> (default 0.3m), the player cannot walk up the stairs and gets stuck. For smooth stair movement, place an invisible 30-degree ramp collider over stair geometry.
+            <strong>Golden Rule for Your Project:</strong> Make doorways at least 1.2m wide and 2.4m tall. Use 1.0m half-cover and 2.0m full-cover heights across all arenas.
         </div>
     </div>`,
-    notes: "Explain why standard metrics matter. In real game studios, level designers receive strict metric guidelines from character animators and combat designers. If a door is 10cm too narrow, the third-person camera will violently snap forward."
+    notes: "Walk through the architectural metric table. Point out why video games exaggerate real-world scale: cameras require clearance and player movement inertia needs generous corridors."
   },
 
-  // Slide 4: Greybox Color Paletting & Landmark Readability
+  // Slide 4: Greybox Color Paletting & Readability
   {
-    title: "Greybox Color Paletting & Landmark Readability",
+    title: "Functional Color Paletting: 5-Tone Readability Standard",
     content: `<div class="split-layout">
         <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">The 5-Tone Functional Palette</div>
+            <div class="content-card primary">
+                <div class="card-title core">The 5-Tone Functional Palette</div>
                 <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Do not use unlit plain white or pitch black materials. Establish a functional visual language:
-                    </p>
-                    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 0.80rem;">
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; background: #e2e8f0; border-radius: 4px; color: #0f172a;">
-                            <span style="display: inline-block; width: 14px; height: 14px; background: #94a3b8; border-radius: 2px;"></span>
-                            <strong>Floor / Walkable Geometry:</strong> Light Neutral Grey (70% scene area)
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px;">
+                            <div style="width: 22px; height: 22px; background: #e2e8f0; border: 1px solid #94a3b8; border-radius: 4px;"></div>
+                            <div style="font-size: 0.82rem; color: #0f172a;"><strong>Light Grey (#e2e8f0):</strong> Walkable Ground &amp; Floors.</div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; background: #e2e8f0; border-radius: 4px; color: #0f172a;">
-                            <span style="display: inline-block; width: 14px; height: 14px; background: #334155; border-radius: 2px;"></span>
-                            <strong>Impassable Walls:</strong> Dark Charcoal Grey
+                        <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px;">
+                            <div style="width: 22px; height: 22px; background: #64748b; border: 1px solid #334155; border-radius: 4px;"></div>
+                            <div style="font-size: 0.82rem; color: #0f172a;"><strong>Slate Dark Grey (#64748b):</strong> Non-traversable Obstacles &amp; Boundary Walls.</div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; background: #fef3c7; border-radius: 4px; color: #92400e;">
-                            <span style="display: inline-block; width: 14px; height: 14px; background: #f59e0b; border-radius: 2px;"></span>
-                            <strong>Interactive Objects:</strong> High-Contrast Yellow / Amber
+                        <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px;">
+                            <div style="width: 22px; height: 22px; background: #d97706; border: 1px solid #b45309; border-radius: 4px;"></div>
+                            <div style="font-size: 0.82rem; color: #0f172a;"><strong>Orange (#d97706):</strong> Cover Objects &amp; Vaultable Mantles.</div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; background: #e0f2fe; border-radius: 4px; color: #0369a1;">
-                            <span style="display: inline-block; width: 14px; height: 14px; background: #0284c7; border-radius: 2px;"></span>
-                            <strong>Goal / Critical Path:</strong> Signal Cyan / Sky Blue
+                        <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px;">
+                            <div style="width: 22px; height: 22px; background: #ef4444; border: 1px solid #b91c1c; border-radius: 4px;"></div>
+                            <div style="font-size: 0.82rem; color: #0f172a;"><strong>Crimson Red (#ef4444):</strong> Hazards, Pits &amp; Lethal Killzones.</div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; background: #fee2e2; border-radius: 4px; color: #991b1b;">
-                            <span style="display: inline-block; width: 14px; height: 14px; background: #ef4444; border-radius: 2px;"></span>
-                            <strong>Hazard / Killzone:</strong> Signal Red
+                        <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px;">
+                            <div style="width: 22px; height: 22px; background: #10b981; border: 1px solid #047857; border-radius: 4px;"></div>
+                            <div style="font-size: 0.82rem; color: #0f172a;"><strong>Emerald Green (#10b981):</strong> Objectives, Keycards &amp; Exit Portals.</div>
                         </div>
                     </div>
                 </div>
@@ -348,13 +558,13 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
         </div>
         <div class="right-column">
             <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">Orientation & Landmarks (Weenie Principle)</div>
+                <div class="card-title core" style="color: #047857;">Orientation &amp; Landmarks (Weenie Principle)</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
                         A player placed in a blockout arena must instinctively know their heading without a minimap:
                     </p>
                     <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
-                        <li><strong>Major Landmark:</strong> A tall tower, distinct statue, or glowing gateway visible from 80% of the arena.</li>
+                        <li><strong>Major Landmark (The Weenie):</strong> A tall tower, distinct statue, or glowing gateway visible from 80% of the arena.</li>
                         <li><strong>Lighting Contrast:</strong> Bright key light pools on objectives, subdued fill light in secondary side paths.</li>
                         <li><strong>Framing:</strong> Align doorways and arches to frame the destination ahead.</li>
                     </ul>
@@ -367,10 +577,65 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">READABILITY</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">VISUAL READABILITY</span>
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Prototyping Grid Material:</strong> Create a standard URP material using a 1-meter checkered grid texture. This gives instant visual metric feedback directly on walls and floors without measuring tools.
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            In greybox testing, visual clarity is a functional mechanic. Players process color and value contrast in milliseconds. If walkable floors and lethal hazards share the same uniform grey tone, playtesters will die randomly and blame the game. Color coding provides instant affordance.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Checkered Prototyping Texture:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Apply a 1-meter checkered grid texture to all greybox materials. This enables instant spatial measurement: developers and testers can immediately see how many meters wide a room or jump gap is.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Visual Value Hierarchy:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Keep walkable paths high-value (light grey), perimeter boundaries low-value (dark slate), and interactive entities saturated (orange, green, red). High contrast guides the player's eye naturally.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>MeshRenderer &bull; URP Lit Material (Greybox Prototype Setup)</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">URP Material</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Shader</span>
+                    <span class="unity-prop-val">Universal Render Pipeline/Lit</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Base Map</span>
+                    <span class="unity-prop-val">T_Grid_1m_Checkered (Texture2D)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Base Color</span>
+                    <span class="unity-prop-val">#64748B (Slate Obstacle)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Metallic / Smoothness</span>
+                    <span class="unity-prop-val">0.00 / 0.10 (Matte Non-Reflective)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Cast Shadows / Receive Shadows</span>
+                    <span class="unity-prop-val">On / [X] True</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Using a single uniform default grey material for everything in the scene. Without tone differentiation, 3D depth perception collapses, and playtesters cannot distinguish climbable ledges from lethal pits.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Create 5 distinct URP materials for your 5-tone palette in a <code>Materials/Greybox</code> folder on Day 1. Never leave a level untextured in flat default white.
         </div>
     </div>`,
     notes: "Review the 5-tone palette. Emphasize that greyboxing is not about making ugly levels; it is about communicating spatial hierarchy clearly so playtesters test the game mechanics, not their navigation confusion."
@@ -381,8 +646,8 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
     title: "Interactive Simulator: Jump Arc & Metric Clearance Sandbox",
     content: `<div style="background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">Jump Arc &amp; Metric Clearance Sandbox</div>
-            <div style="font-size: 0.76rem; color: #94a3b8;">Side cross-section: 1 grid square = 1.0m x 1.0m world space</div>
+            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">Jump Arc &amp; Metric Clearance Sandbox (3D Three.js WebGL)</div>
+            <div style="font-size: 0.76rem; color: #94a3b8;">Rotate with mouse drag &bull; 1 grid unit = 1.0m world space</div>
         </div>
         
         <div style="display: grid; grid-template-columns: minmax(calc(240px * var(--font-scale, 1)), calc(300px * var(--font-scale, 1))) 1fr minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))); gap: 12px; align-items: stretch;">
@@ -423,9 +688,10 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
                 </div>
             </div>
 
-            <!-- Center: 2D Metric View Canvas -->
-            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <canvas id="jumpSimCanvas" width="460" height="260" style="width: 100%; height: auto; display: block; border-radius: 4px;"></canvas>
+            <!-- Center: 3D Three.js Viewport with Canvas Fallback -->
+            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <div id="sim3dJumpContainer" style="width: 100%; height: 260px; position: relative; border-radius: 4px; overflow: hidden;"></div>
+                <canvas id="jumpSimCanvas" width="460" height="260" style="display: none;"></canvas>
             </div>
 
             <!-- Right: Physics Telemetry -->
@@ -448,12 +714,12 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
                 </div>
 
                 <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Max Jump Distance (dMax):</div>
+                    <div style="color: #94a3b8;">Max Jump Distance:</div>
                     <div id="telemetryMaxDist" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">5.37 m</div>
                 </div>
 
-                <div id="telemetryClearanceStatus" style="padding: 8px; border-radius: 6px; font-size: 0.74rem; background: #064e3b; border: 1px solid #10b981; color: #a7f3d0; line-height: 1.35;">
-                    <strong>STATUS: PASS</strong> - Clears terrain
+                <div id="telemetryClearanceStatus" style="background: #064e3b; border: 1px solid #10b981; color: #a7f3d0; border-radius: 6px; padding: 6px 8px; font-size: 0.74rem; font-weight: 700;">
+                    STATUS: PASS - Clears wall &amp; pit
                 </div>
             </div>
         </div>
@@ -463,151 +729,325 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">KINEMATICS</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">JUMP BALLISTICS</span>
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Ballistic Formula:</strong> <code>v_y0 = sqrt(2 * gravity * jumpHeight)</code>. Real-world gravity (9.81 m/s²) feels floaty and sluggish in platform games. Game developers typically tune gravity between 20.0 and 35.0 m/s² for snappy, responsive jumps.
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Jump ballistics in game development are solved backwards. Rather than guessing an arbitrary initial impulse force, designers specify the desired jump height (h) and time to apex (tApex). The engine then computes the exact launch velocity: <code>vy0 = sqrt(2 * g * h)</code>.
         </div>
-    </div>`,
-    notes: "Demonstrate the interactive jump sandbox. Show students how altering jump height and gravity dynamically changes the initial launch velocity and horizontal reach. Point out that a 4m pit requires at least 4.5m horizontal jump distance to cross safely."
-  },
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Physics Equations for Kinematic Jumps:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    <code>vy0 = Math.Sqrt(2f * gravity * jumpHeight)</code><br>
+                    <code>tApex = vy0 / gravity</code><br>
+                    <code>tHang = 2f * tApex</code><br>
+                    <code>maxJumpDistance = horizontalSpeed * tHang</code>
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Snappy Platformer vs Float:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Realistic gravity (<code>9.81 m/s²</code>) produces a floaty, sluggish jump feel. Most responsive action platformers use gravity between <code>20.0 m/s²</code> and <code>35.0 m/s²</code> paired with higher initial velocity.
+                </div>
+            </div>
+        </div>
 
-  // Slide 6: ProBuilder Workflow & Geometry Editing
-  {
-    title: "ProBuilder Workflow & Geometry Editing",
-    content: `<div class="split-layout">
-        <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">ProBuilder 4 Selection Modes</div>
-                <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        ProBuilder is Unity's built-in 3D modeling tool (<code>Tools -> ProBuilder -> ProBuilder Window</code>):
-                    </p>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; font-size: 0.80rem;">
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px;">
-                            <strong style="color: #0369a1;">1. Object Mode:</strong> Move, rotate, scale whole mesh.
-                        </div>
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px;">
-                            <strong style="color: #059669;">2. Vertex Mode:</strong> Select and tweak individual corner points.
-                        </div>
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px;">
-                            <strong style="color: #d97706;">3. Edge Mode:</strong> Select edges, split loops, bevel transitions.
-                        </div>
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px;">
-                            <strong style="color: #7c3aed;">4. Face Mode:</strong> Extrude, inset, bridge, and delete faces.
-                        </div>
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>CharacterController &bull; Kinematic Physics Configuration</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Built-in</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Slope Limit</span>
+                    <span class="unity-prop-val">45.00 deg</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Step Offset</span>
+                    <span class="unity-prop-val">0.40 m</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Skin Width</span>
+                    <span class="unity-prop-val">0.08 m (10% of Radius)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Min Move Distance</span>
+                    <span class="unity-prop-val">0.001 m</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Center</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 1.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.00</div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">Core Extrusion & Bevel Operations</div>
-                <div class="card-body">
-                    <ul style="font-size: 0.82rem; color: #1e293b; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Shift + Drag Face:</strong> Instantly extrudes face along its normal vector.</li>
-                        <li><strong>Bevel Edges:</strong> Cuts a 45-degree chamfer along sharp corners to prevent player collision snagging.</li>
-                        <li><strong>Center Pivot:</strong> <code>Set Pivot</code> to bottom-center of block so the object sits perfectly flush on the ground plane.</li>
-                        <li><strong>Exporting:</strong> When finished, export blockouts as <code>.obj</code> directly to 3D artists for visual set dressing.</li>
-                    </ul>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Radius / Height</span>
+                    <span class="unity-prop-val">0.40 m / 2.00 m</span>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
-                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
-            </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">PROBUILDER</span>
-        </div>
-        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Collider Warning:</strong> ProBuilder objects generate MeshColliders by default. If you make a moving dynamic obstacle, MeshColliders must have <code>Convex = true</code> or replace them with simple BoxColliders for physics performance.
-        </div>
-    </div>`,
-    notes: "Demonstrate ProBuilder keyboard shortcuts. Highlight Shift+Drag for face extrusion. Remind students that ProBuilder is completely free and built directly into modern Unity."
-  },
 
-  // Slide 7: Snapping Mechanics: Grid vs Vertex Snapping
-  {
-    title: "Snapping Mechanics: Grid vs Vertex Snapping",
-    content: `<div class="split-layout">
-        <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">Incremental Grid Snapping (Ctrl + Drag)</div>
-                <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Never move greybox primitives freely with the mouse. Always snap to the world grid:
-                    </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Shortcut:</strong> Hold <code>Ctrl</code> while dragging gizmo handle.</li>
-                        <li><strong>Grid Increment:</strong> Set Grid Snap to <code>1.0m</code> for walls/floors, <code>0.5m</code> for cover.</li>
-                        <li><strong>Rotation Snap:</strong> Hold <code>Ctrl</code> to snap in 15° or 45° increments.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">Vertex Snapping (Hold V)</div>
-                <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        To align two complex meshes edge-to-edge with zero millimeter gap:
-                    </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Shortcut:</strong> Hold <code>V</code>, hover over source vertex, left-click and drag to target vertex.</li>
-                        <li><strong>Prevents Light Bleeding:</strong> Gaps between walls allow shadow map light leaks.</li>
-                        <li><strong>Prevents NavMesh Disconnection:</strong> Even a 0.05m seam can split NavMesh surfaces.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
-                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
-            </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">SNAPPING</span>
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Placing jump gaps in level geometry that match the mathematical <code>maxJumpDistance</code> exactly. Without a safety clearance margin (0.5m - 1.0m), players who jump 1 frame late will miss the ledge every time.
         </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Rule of Precision:</strong> If position coordinates in the Inspector show decimals like <code>3.00041</code> or <code>-1.9998</code>, an object was dragged without snapping. Reset coordinates to whole integers (e.g. <code>3.0</code>, <code>-2.0</code>).
+            <strong>Golden Rule for Your Project:</strong> Test jump clearances against worst-case jump timings. If max distance is 5.0m, set the greybox pit width to 3.5m - 4.0m to account for human reaction times.
         </div>
     </div>`,
-    notes: "Demonstrate Vertex Snapping with the V key. This is one of the most essential level design techniques in Unity to assemble seamless room modular kits."
+    notes: "Demonstrate the 3D jump simulator. Adjust the gravity and jump height sliders to show students how initial vertical velocity and max jump clearance change mathematically in real time."
   },
 
-  // Slide 8: Physics Architecture: CharacterController vs Rigidbody 3D
+  // Slide 6: ProBuilder In-Engine Mesh Editing
   {
-    title: "Physics Architecture: CharacterController vs Rigidbody 3D",
+    title: "ProBuilder Geometry Editing: In-Engine Rapid Blockouts",
     content: `<div class="split-layout">
         <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">CharacterController (Kinematic)</div>
+            <div class="content-card primary">
+                <div class="card-title core">Sub-Object Element Modes</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Specialized capsule component designed specifically for humanoid player movement:
+                        ProBuilder adds in-editor mesh modeling directly inside Unity's Scene view:
                     </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Movement via Code:</strong> <code>controller.Move(velocity * Time.deltaTime)</code>.</li>
-                        <li><strong>Built-In Slope Limit:</strong> Automatically slides down slopes steeper than e.g. 45°.</li>
-                        <li><strong>Step Offset:</strong> Automatically steps over curbs and stairs up to 0.3m.</li>
-                        <li><strong>Zero Tumbling:</strong> Will never bounce, tip over, or roll down a hill.</li>
+                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Object Mode:</strong> Selects and transforms entire GameObjects.</li>
+                        <li><strong>Vertex Mode:</strong> Move individual vertex coordinates to tweak slopes.</li>
+                        <li><strong>Edge Mode:</strong> Select edges to bevel, chamfer, or insert edge loops.</li>
+                        <li><strong>Face Mode:</strong> Extrude, inset, or delete polygon faces.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Core ProBuilder Modeling Operations</div>
+                <div class="card-body">
+                    <ul style="font-size: 0.82rem; color: #065f46; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Shift + Extrude:</strong> Holding Shift while dragging a face creates an instant connected room or hallway segment.</li>
+                        <li><strong>Connect Edges:</strong> Select two opposing edges and click Connect to insert a clean divider edge loop.</li>
+                        <li><strong>Bevel:</strong> Rounds sharp 90-degree corner edges into smooth beveled angles.</li>
+                        <li><strong>Subdivide:</strong> Increases polygon density uniformly across selected faces.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">GEOMETRY TOOLING</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            ProBuilder turns Unity into an architectural sketching sandbox. Instead of jumping back and forth to external DCC tools (Blender / Maya) for minor metric adjustments, you sculpt and test rooms directly in the scene viewport.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">ProBuilder Mesh Lifecycle:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    ProBuilder meshes contain internal authoring data. In final release builds, meshes can be exported to standard <code>.obj</code> or <code>.asset</code> static meshes with zero runtime memory overhead.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Automatic Collider Generation:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    ProBuilder automatically recalculates and updates the attached <code>MeshCollider</code> every time a face is extruded or modified, maintaining immediate physics synchronization.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>ProBuilder Mesh &bull; Component &amp; Mode Toolbar</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Package</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Active Element Mode</span>
+                    <span class="unity-prop-val">[Object] [Vertex] [Edge] [<strong>Face</strong>]</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Extrude Face Distance</span>
+                    <span class="unity-prop-val">1.00 m (Shortcut: Shift + Drag)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Bevel Edges</span>
+                    <span class="unity-prop-val">0.05 m (1 Iteration)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Collider Type</span>
+                    <span class="unity-prop-val">Mesh Collider (Auto-Updated)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Submesh Materials</span>
+                    <span class="unity-prop-val">Size: 2 (M_Greybox_Floor, M_Greybox_Wall)</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Inverting face normals accidentally during complex extrusions. When face normals point inward, backface culling makes walls invisible from the outside and physics raycasts pass straight through them.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Install ProBuilder via the Unity Package Manager. Use <code>Shift + Drag</code> on faces with 1-meter grid snapping to extrude seamless level geometry without gaps.
+        </div>
+    </div>`,
+    notes: "Introduce ProBuilder. Show students how to open Tools -> ProBuilder -> ProBuilder Window and demonstrate the four selection modes: Object, Vertex, Edge, and Face."
+  },
+
+  // Slide 7: Snapping Mechanics: Grid Snapping vs Vertex Snapping
+  {
+    title: "Precision Geometry: Grid Snapping vs Vertex Snapping",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">Grid Snapping (Ctrl + G / Increment Snap)</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Locks movement transformations to strict discrete metric intervals:
+                    </p>
+                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>1.0m Grid:</strong> For main room walls, floor tiles, and corridors.</li>
+                        <li><strong>0.5m Grid:</strong> For doorways, windows, and cover blockouts.</li>
+                        <li><strong>0.25m Grid:</strong> For stair risers and detailed obstacle ledges.</li>
+                        <li><strong>Shortcut:</strong> Hold <code>Ctrl</code> while dragging gizmos to snap to increments.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Vertex Snapping (V-Key Pivot Align)</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Pins two meshes corner-to-corner with zero sub-millimeter gap:
+                    </p>
+                    <ul style="font-size: 0.82rem; color: #065f46; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Step 1:</strong> Select the mesh you want to move.</li>
+                        <li><strong>Step 2:</strong> Hold the <code>V</code> key to reveal vertex anchor handles.</li>
+                        <li><strong>Step 3:</strong> Click and drag the desired corner vertex onto the target corner vertex of another object.</li>
+                        <li><strong>Result:</strong> Zero light leaks, zero physics seam snags.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">PRECISION SNAPPING</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Imagine building a house with LEGO bricks. If the bricks are not snapped tightly into the studs, microscopic gaps accumulate. When lighting is baked, light bleeds through tiny 0.001m cracks, and player colliders catch on internal seam edges.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Light Leaks on Seams:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    When meshes are placed manually without vertex snapping, sub-millimeter gaps allow directional sunlight to bleed into fully enclosed indoor rooms during shadow mapping and light baking.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Physics Ghost Collisions:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    If two floor boxes overlap unevenly by <code>0.02m</code>, a player moving across the seam hits an invisible micro-ledge and halts abruptly. Snapping eliminates ghost collisions.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>Grid &amp; Snap Settings &bull; Unity 6 Editor Precision Window</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Editor Settings</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Grid Size (World Meter Units)</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 1.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 1.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 1.00</div>
+                    </div>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Increment Snap - Move</span>
+                    <span class="unity-prop-val">1.00 m (Toggle: Hold Ctrl)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Increment Snap - Rotate</span>
+                    <span class="unity-prop-val">15.00 deg</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Increment Snap - Scale</span>
+                    <span class="unity-prop-val">1.00</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Vertex Snapping</span>
+                    <span class="unity-prop-val">[V] Key Active &bull; Corner to Corner</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Dragging objects by eye without snapping. Coordinate values in the Inspector end up as dirty floats like <code>3.00412</code> or <code>-1.9987</code>, making metric alignment and modular tile reuse impossible.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Keep Grid Snap enabled at 1.0m. Use the <code>V</code> key (Vertex Snapping) for placing modular wall corners and stairs.
+        </div>
+    </div>`,
+    notes: "Demonstrate Vertex Snapping live: press V, hover over a corner vertex, and snap it to another mesh corner. Remind students never to position level geometry with freehand dragging."
+  },
+
+  // Slide 8: 3D Kinematics: CharacterController vs Rigidbody 3D
+  {
+    title: "3D Kinematics: CharacterController vs Rigidbody 3D",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">CharacterController (Kinematic Displacement)</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Specialized swept-capsule for arcade and action character movement:
+                    </p>
+                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>No Dynamic Physics:</strong> Immune to unwanted tipping, torque, or friction sticking.</li>
+                        <li><strong>Built-in Step Offset:</strong> Automatically steps over curbs and stairs up to <code>0.4m</code>.</li>
+                        <li><strong>Slope Handling:</strong> Slides down slopes steeper than <code>Slope Limit (45 deg)</code>.</li>
+                        <li><strong>Displacement Method:</strong> <code>controller.Move(velocity * Time.deltaTime);</code>.</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="right-column">
             <div class="content-card primary" style="border-left-color: #d97706;">
-                <div class="card-title core" style="color: #b45309;">Rigidbody 3D (PhysX Simulated)</div>
+                <div class="card-title core" style="color: #b45309;">Rigidbody 3D (PhysX Dynamic Simulation)</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Full Newton physics simulation driven by external forces and collisions:
+                        Full PhysX simulation driven by forces, momentum, and collisions:
                     </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Movement via Forces:</strong> <code>rb.AddForce()</code> or <code>rb.linearVelocity</code>.</li>
-                        <li><strong>Momentum & Friction:</strong> Interacts with Physics Materials (bounciness, dynamic friction).</li>
-                        <li><strong>Use Case:</strong> Physics sandbox games, ragdolls, rolling boulders, vehicles.</li>
+                    <ul style="font-size: 0.82rem; color: #b45309; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Physics Interaction:</strong> Pushes crates, rides realistic moving elevators, bounces.</li>
+                        <li><strong>Requires FixedUpdate:</strong> Must be updated in <code>FixedUpdate</code> via <code>rb.linearVelocity</code> or <code>rb.AddForce</code>.</li>
+                        <li><strong>Constraints Needed:</strong> Must freeze X and Z rotation to prevent the capsule from toppling over.</li>
                     </ul>
                 </div>
             </div>
@@ -618,66 +1058,130 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">ARCHITECTURE</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">KINEMATICS COMPARISON</span>
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Which to pick for your game?</strong> For action platformers, third-person action games, and top-down games, use <code>CharacterController</code>. It gives you 100% deterministic control over acceleration, deceleration, and ground contact without physics friction quirks.
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            A CharacterController is like a motorized bulldozer: it computes swept geometry sweeps every frame and moves exactly where code dictates. A Rigidbody is like a marble rolling down a slope: it is subject to all PhysX environmental forces, friction, and impacts.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">When to Use CharacterController:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    First-person shooters, 3rd-person action games, and platformers where responsive, instant input responsiveness and precise stair climbing are paramount.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">When to Use Rigidbody 3D:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Physics puzzle games, vehicles, ragdoll simulations, or games where external forces (explosions, conveyor belts) dictate character momentum.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>CharacterController vs Rigidbody 3D Inspector Comparison</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Architecture Trade-Off</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">CharacterController</span>
+                    <span class="unity-prop-val">Slope: 45° &bull; Step: 0.4m &bull; Skin: 0.08m &bull; Kinematic Sweep</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Rigidbody 3D</span>
+                    <span class="unity-prop-val">Mass: 70kg &bull; Drag: 0 &bull; Interpolate: On &bull; Freeze Rot X/Y/Z</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Movement Loop</span>
+                    <span class="unity-prop-val">Update() -> controller.Move() vs FixedUpdate() -> rb.linearVelocity</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Attaching BOTH a <code>CharacterController</code> and a <code>Rigidbody</code> to the same GameObject without disabling kinematic mode. The two physics components fight over Transform ownership, causing high-frequency jitter.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> For standard 3D character movement, use a standalone <code>CharacterController</code> component. Handle custom gravity and jumping mathematically in code.
         </div>
     </div>`,
-    notes: "Clarify the distinction between CharacterController and Rigidbody. Students often struggle when using Rigidbody for player controllers because friction and mass cause players to stick to walls or tip over on stairs."
+    notes: "Clarify the difference between CharacterController and Rigidbody. Emphasize that CharacterController is not a physics body; it is a swept-capsule query system designed for arcade responsiveness."
   },
 
-  // Slide 9: Interactive Simulator 2: Camera-Relative Vector Math Inspector
+  // Slide 9: Camera-Relative Vector Math Inspector
   {
     title: "Interactive Simulator: Camera-Relative Vector Math Inspector",
     content: `<div style="background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">Camera-Relative Vector Math Inspector (Top-Down XZ Plane)</div>
+            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">Camera-Relative Vector Math Inspector (3D Three.js WebGL)</div>
             <div style="font-size: 0.76rem; color: #94a3b8;">Transforming 2D Input (WASD) relative to Camera Orbit Yaw</div>
         </div>
         
-        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))) 1fr minmax(calc(260px * var(--font-scale, 1)), calc(320px * var(--font-scale, 1))); gap: 12px; align-items: stretch;">
-            <!-- Left: Controls -->
+        <div style="display: grid; grid-template-columns: minmax(calc(240px * var(--font-scale, 1)), calc(300px * var(--font-scale, 1))) 1fr minmax(calc(240px * var(--font-scale, 1)), calc(320px * var(--font-scale, 1))); gap: 12px; align-items: stretch;">
+            <!-- Left: Inputs & Camera Controls -->
             <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem;">CAMERA ORBIT YAW</div>
                 
                 <div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.74rem; color: #94a3b8;">
-                        <span>Camera Yaw:</span> <strong id="camYawValue" style="color: #38bdf8;">45°</strong>
+                        <span>Camera Yaw Angle:</span> <strong id="camYawValue" style="color: #38bdf8;">45°</strong>
                     </div>
                     <input id="sliderCamYaw" type="range" min="0" max="360" step="5" value="45" style="width: 100%;" oninput="setCamYawSlider(this.value)">
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setCamYawPreset(0)">North (0°)</button>
-                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setCamYawPreset(45)">Iso (45°)</button>
-                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setCamYawPreset(90)">East (90°)</button>
-                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setCamYawPreset(180)">South (180°)</button>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;">
+                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.68rem;" onclick="setCamYawPreset(0)">0° (N)</button>
+                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.68rem;" onclick="setCamYawPreset(45)">45° (NE)</button>
+                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.68rem;" onclick="setCamYawPreset(90)">90° (E)</button>
+                    <button class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.68rem;" onclick="setCamYawPreset(180)">180° (S)</button>
                 </div>
 
-                <div style="border-top: 1px solid #1f2937; padding-top: 6px; font-weight: 800; color: #fbbf24; font-size: 0.78rem;">RAW INPUT (WASD)</div>
+                <div style="border-top: 1px solid #1f2937; padding-top: 6px; font-weight: 800; color: #fbbf24; font-size: 0.78rem;">KEYBOARD INPUT (WASD)</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
-                    <button id="btnInputWA" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setRawInput(-1, 1)">W+A</button>
-                    <button id="btnInputW" class="sim-action-btn" style="background: #0284c7; border: 1px solid #38bdf8; color: #fff; font-size: 0.70rem;" onclick="setRawInput(0, 1)">W (Fwd)</button>
-                    <button id="btnInputWD" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setRawInput(1, 1)">W+D</button>
-                    <button id="btnInputA" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setRawInput(-1, 0)">A (Left)</button>
-                    <button id="btnInputS" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setRawInput(0, -1)">S (Back)</button>
-                    <button id="btnInputD" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setRawInput(1, 0)">D (Right)</button>
+                    <div></div>
+                    <button id="btnInputW" class="sim-action-btn" style="background: #0284c7; border: 1px solid #38bdf8; color: #fff; font-size: 0.74rem; font-weight: 800;" onclick="setRawInput(0, 1)">W (Fwd)</button>
+                    <div></div>
+                    <button id="btnInputA" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.74rem; font-weight: 800;" onclick="setRawInput(-1, 0)">A (Left)</button>
+                    <button id="btnInputS" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.74rem; font-weight: 800;" onclick="setRawInput(0, -1)">S (Back)</button>
+                    <button id="btnInputD" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.74rem; font-weight: 800;" onclick="setRawInput(1, 0)">D (Right)</button>
                 </div>
 
-                <button id="btnToggleFlatten" class="sim-action-btn" style="background: #059669; border: 1px solid #10b981; color: #fff; font-size: 0.72rem; margin-top: 4px;" onclick="toggleFlattenY()">Y-Axis Flattening: ON (Correct)</button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 2px;">
+                    <button id="btnInputWA" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setRawInput(-1, 1)">W + A (Diag)</button>
+                    <button id="btnInputWD" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.70rem;" onclick="setRawInput(1, 1)">W + D (Diag)</button>
+                </div>
+
+                <div style="border-top: 1px solid #1f2937; padding-top: 6px;">
+                    <button id="btnToggleFlatten" class="sim-action-btn" style="background: #059669; border: 1px solid #34d399; color: #fff; font-size: 0.72rem; font-weight: 800;" onclick="toggleFlattenY()">Y-Axis Flattening: ON (Correct)</button>
+                </div>
             </div>
 
-            <!-- Center: Vector Canvas -->
-            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <canvas id="camVecCanvas" width="360" height="260" style="width: 100%; height: auto; display: block; border-radius: 4px;"></canvas>
+            <!-- Center: 3D Three.js Viewport with Canvas Fallback -->
+            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <div id="sim3dCamVecContainer" style="width: 100%; height: 260px; position: relative; border-radius: 4px; overflow: hidden;"></div>
+                <canvas id="camVecCanvas" width="460" height="260" style="display: none;"></canvas>
             </div>
 
             <!-- Right: Code Calculation Breakdown -->
-            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-weight: 800; color: #34d399; font-size: 0.84rem;">LIVE VECTOR ARITHMETIC</div>
-                <div id="camVecCodeBreakdown" class="code-box" style="margin: 0; font-size: 0.72rem; max-height: 220px; overflow-y: auto;">
-                    <!-- Injected via custom_sim_6.js -->
+            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
+                <div style="font-weight: 800; color: #34d399; font-size: 0.84rem;">C# VECTOR MATH DECONSTRUCTION</div>
+                
+                <div id="camVecCodeBreakdown" class="code-box" style="margin: 0; font-size: 0.72rem; line-height: 1.35; padding: 8px; flex: 1;">
+                    <code><span class="r-cm">// 1. Read flattened camera basis vectors</span>
+Vector3 camFwd = cameraTransform.forward;
+camFwd.y = 0f; camFwd.Normalize();
+Vector3 camRight = cameraTransform.right;
+camRight.y = 0f; camRight.Normalize();
+
+<span class="r-cm">// 2. Construct move vector from inputs (0, 1)</span>
+Vector3 move = (camFwd * 1f + camRight * 0f).normalized;
+<span class="r-cm">// Resulting World Vector: (0.71, 0.00, 0.71) at Cam Yaw 45°</span></code>
                 </div>
             </div>
         </div>
@@ -687,524 +1191,154 @@ Vector3 worldMove = transform.TransformDirection(localInput);</code></pre>
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">VECTOR MATH</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">VECTOR MATHEMATICS</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            When a player pushes the 'W' key, their intuitive expectation is "Move in the direction the camera is currently looking". Pushing 'D' means "Move right relative to the camera screen". To translate this into 3D world coordinates, we project the camera's forward and right basis vectors onto the horizontal XZ plane.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Why Flatten Y (camFwd.y = 0f):</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Cameras in 3rd-person games tilt downward (pitch &gt; 0). If you do not zero out <code>camFwd.y</code>, pressing 'W' tries to push the character diagonally down into the ground, losing speed to floor friction.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Diagonal Normalization:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Pressing 'W' and 'D' simultaneously gives an input vector of <code>(1, 1)</code> with magnitude <code>1.414</code>. Calling <code>.normalized</code> clamps diagonal movement to <code>1.0</code>, preventing diagonal speed exploiting.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>PlayerMovement3D &bull; Camera Reference &amp; Vector Pipeline</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Inspector Configuration</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Camera Transform</span>
+                    <span class="unity-prop-val">MainCamera (Transform)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Move Speed / Sprint Multiplier</span>
+                    <span class="unity-prop-val">6.00 m/s / 1.50x</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Rotation Smooth Time (Slerp)</span>
+                    <span class="unity-prop-val">0.10 s</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Flatten Y Basis Vectors</span>
+                    <span class="unity-prop-val">[X] True (camFwd.y = 0; camRight.y = 0)</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Transforming move vectors using <code>transform.TransformDirection</code> instead of the Camera's basis vectors. The character ends up moving relative to their own forward heading, making orbital camera navigation completely uncontrollable.
         </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Why Flatten the Y Axis?</strong> In a third-person camera looking downwards at a 45° pitch, <code>camera.forward</code> points diagonally into the ground. If you move along <code>camera.forward</code> without setting <code>y = 0</code>, the player attempts to dig into the ground collider, causing severe movement friction slowdown!
+            <strong>Golden Rule for Your Project:</strong> Always cache <code>Camera.main.transform</code>, zero out its Y component, normalize it, and construct world move vectors using camera-relative basis math.
         </div>
     </div>`,
-    notes: "Demonstrate camera-relative vector math. Rotate the camera yaw and show how pressing W (forward input) recalculates the resulting world move vector to always match the player's visual forward perspective on screen."
+    notes: "Demonstrate the Camera-Relative Vector Math simulator. Rotate the camera yaw slider and click WASD buttons to show how the resulting green world vector rotates in lockstep with the camera heading."
   },
 
-  // Slide 10: PlayerController3D Implementation
+  // Slide 10: PlayerController3D: Complete CharacterController Implementation
   {
-    title: "PlayerController3D Implementation",
+    title: "PlayerController3D: Complete CharacterController Implementation",
     content: `<div class="split-layout">
         <div class="left-column">
             <div class="content-card primary">
-                <div class="card-title core">PlayerController3D.cs (Part 1)</div>
+                <div class="card-title core">PlayerController3D.cs (Locomotion &amp; Jump)</div>
                 <div class="card-body">
-                    <div class="code-box">
+                    <div class="code-box" style="font-size: 0.72rem; line-height: 1.35;">
                         <pre><code>using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController3D : MonoBehaviour
 {
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float rotationSpeed = 12f;
+    [Header("Locomotion")]
+    [SerializeField] private float moveSpeed = 6.0f;
+    [SerializeField] private float rotationSpeed = 12.0f;
     [SerializeField] private Transform cameraTransform;
 
+    [Header("Jumping & Gravity")]
+    [SerializeField] private float jumpHeight = 2.0f;
+    [SerializeField] private float gravity = 20.0f;
+    [SerializeField] private LayerMask groundMask;
+
     private CharacterController controller;
-    private Vector2 inputVector;
-    private Vector3 verticalVelocity;
+    private float verticalVelocity;
+    private bool isGrounded;
 
     private void Awake()
     {
         controller = GetComponent&lt;CharacterController&gt;();
-        if (cameraTransform == null &amp;&amp; Camera.main != null)
+        if (cameraTransform == null && Camera.main != null)
             cameraTransform = Camera.main.transform;
-    }
-
-    public void SetMoveInput(Vector2 input)
-    {
-        inputVector = input;
-    }</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="right-column">
-            <div class="content-card primary">
-                <div class="card-title core">PlayerController3D.cs (Part 2: Movement & Rotation)</div>
-                <div class="card-body">
-                    <div class="code-box">
-                        <pre><code>    private void Update()
-    {
-        // 1. Calculate camera-relative horizontal movement
-        Vector3 camFwd = cameraTransform.forward;
-        camFwd.y = 0f;
-        camFwd.Normalize();
-
-        Vector3 camRight = cameraTransform.right;
-        camRight.y = 0f;
-        camRight.Normalize();
-
-        Vector3 moveDir = (camFwd * inputVector.y + camRight * inputVector.x).normalized;
-
-        // 2. Smoothly rotate character toward movement direction
-        if (moveDir.sqrMagnitude &gt; 0.001f)
-        {
-            Quaternion targetRot = Quaternion.LookRotation(moveDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
-        }
-
-        // 3. Apply horizontal movement
-        controller.Move(moveDir * moveSpeed * Time.deltaTime + verticalVelocity * Time.deltaTime);
-    }
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
-                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
-            </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">CONTROLLER</span>
-        </div>
-        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Rotation Precision:</strong> Use <code>moveDir.sqrMagnitude > 0.001f</code> before calling <code>Quaternion.LookRotation</code>. If <code>moveDir == Vector3.zero</code>, LookRotation outputs <code>(0,0,0)</code> and throws a console warning.
-        </div>
-    </div>`,
-    notes: "Walk through PlayerController3D code. Highlight how the script accepts input via SetMoveInput (cleanly decoupled from the new Input System) and executes camera-relative movement."
-  },
-
-  // Slide 11: Ballistic Jump Velocity & Ground SphereCast Hardening
-  {
-    title: "Ballistic Jump Velocity & Ground SphereCast Hardening",
-    content: `<div class="split-layout">
-        <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">Ballistic Jump Physics</div>
-                <div class="card-body">
-                    <div class="code-box">
-                        <pre><code>[Header("Jump Physics")]
-[SerializeField] private float jumpHeight = 2.0f;
-[SerializeField] private float gravity = 20.0f;
-[SerializeField] private float fallMultiplier = 1.5f;
-
-private void HandleJumpAndGravity()
-{
-    bool isGrounded = CheckGroundCustom();
-
-    if (isGrounded)
-    {
-        // Maintain small downward force to snap to slopes
-        if (verticalVelocity.y &lt; 0f)
-            verticalVelocity.y = -2f;
-
-        if (jumpRequested)
-        {
-            // Exact formula: v = sqrt(2 * g * h)
-            verticalVelocity.y = Mathf.Sqrt(2f * gravity * jumpHeight);
-            jumpRequested = false;
-        }
-    }
-    else
-    {
-        // Snappy falling gravity multiplier
-        float currentGravity = (verticalVelocity.y &lt; 0f) 
-            ? gravity * fallMultiplier 
-            : gravity;
-
-        verticalVelocity.y -= currentGravity * Time.deltaTime;
-    }
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">Ground SphereCast Hardening</div>
-                <div class="card-body">
-                    <div class="code-box">
-                        <pre><code>[Header("Ground Check")]
-[SerializeField] private LayerMask groundLayer;
-[SerializeField] private float groundCheckOffset = 0.1f;
-[SerializeField] private float groundCheckRadius = 0.35f;
-
-private bool CheckGroundCustom()
-{
-    // SphereCast origin slightly above character base
-    Vector3 sphereOrigin = transform.position + Vector3.up * (controller.radius + groundCheckOffset);
-    
-    // Perform sphere check downward
-    return Physics.SphereCast(
-        sphereOrigin, 
-        groundCheckRadius, 
-        Vector3.down, 
-        out RaycastHit hit, 
-        groundCheckOffset * 2f, 
-        groundLayer, 
-        QueryTriggerInteraction.Ignore
-    );
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
-                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
-            </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">STABILITY</span>
-        </div>
-        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Why <code>controller.isGrounded</code> Fails:</strong> <code>CharacterController.isGrounded</code> flips to <code>false</code> for 1 frame when walking down stairs or gentle slopes, causing the player to enter a falling state and lose jump input. A custom <code>Physics.SphereCast</code> downward with <code>-2f</code> grounding velocity eliminates all slope jitter.
-        </div>
-    </div>`,
-    notes: "Explain why SphereCast is superior to a single raycast or built-in isGrounded. A sphere matches the bottom dome of the CharacterController capsule."
-  },
-
-  // Slide 12: Practice Challenge 1: Build a Greybox Obstacle Course with Jump Clearance
-  {
-    title: "Practice Challenge 1: Greybox Course with Jump Clearance",
-    content: `<div class="content-stack">
-        <div class="content-card primary" style="border-left-color: #0284c7;">
-            <div class="card-title core" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <span>10-Minute Challenge: Build Metric Obstacle Course</span>
-                <span style="background: #0284c7; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem;">10-MIN TIMERBOX</span>
-            </div>
-            <div class="card-body">
-                <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                    Construct a test gym in your scene <code>Assets/Scenes/Gym_Greybox.unity</code> following strict metric rules:
-                </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-top: 8px;">
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px;">
-                        <strong style="color: #0369a1; font-size: 0.84rem;">1. ProBuilder Geometry:</strong>
-                        <ul style="font-size: 0.80rem; color: #475569; margin-top: 4px; padding-left: 14px; line-height: 1.4;">
-                            <li>Start platform: 4.0m x 4.0m (Grid Snapped).</li>
-                            <li>Gap pit: Exactly 3.5m wide.</li>
-                            <li>Obstacle wall: 1.5m height on landing pad.</li>
-                        </ul>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px;">
-                        <strong style="color: #059669; font-size: 0.84rem;">2. Player Tuning:</strong>
-                        <ul style="font-size: 0.80rem; color: #475569; margin-top: 4px; padding-left: 14px; line-height: 1.4;">
-                            <li>Tune <code>moveSpeed = 6.5 m/s</code>, <code>jumpHeight = 2.0m</code>.</li>
-                            <li>Verify player cleanly clears the 3.5m gap and 1.5m wall.</li>
-                            <li>Color-code platforms using 5-tone palette.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Timer Controls -->
-                <div style="margin-top: 14px; background: #0f172a; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-weight: 800; color: #94a3b8; font-size: 0.84rem;">CHALLENGE TIMER:</span>
-                        <span id="challengeTimer1" style="font-size: 1.4rem; font-weight: 900; color: #38bdf8; font-family: monospace;">10:00</span>
-                    </div>
-                    <div style="display: flex; gap: 6px;">
-                        <button class="sim-action-btn" style="background: #059669; border: 1px solid #10b981; color: #fff; font-size: 0.74rem;" onclick="startChallengeTimer(1)">Start Timer</button>
-                        <button class="sim-action-btn" style="background: #d97706; border: 1px solid #f59e0b; color: #fff; font-size: 0.74rem;" onclick="pauseChallengeTimer(1)">Pause</button>
-                        <button class="sim-action-btn" style="background: #475569; border: 1px solid #64748b; color: #fff; font-size: 0.74rem;" onclick="resetChallengeTimer(1)">Reset</button>
-                    </div>
-                </div>
-
-                <!-- Locked Solution -->
-                <div id="solutionLockBanner1" style="margin-top: 10px; background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 6px; padding: 8px 12px; font-size: 0.80rem; color: #991b1b;">
-                    [LOCKED] Solution unlocks in: <strong id="solutionLockTimer1">01:00</strong> (Implement code first)
-                </div>
-                
-                <details id="solutionDetails1" class="tier-accordion adv" style="margin-top: 8px; pointer-events: none; opacity: 0.5;">
-                    <summary class="accordion-header">
-                        <span>[Verified Solution] Metric Validation Checklist</span>
-                        <span style="font-size:0.75rem;">View Architecture</span>
-                    </summary>
-                    <div class="accordion-body">
-                        <div class="code-box">
-                            <pre><code>// Kinematic Verification:
-// jumpHeight = 2.0m, gravity = 22.0 m/s^2, moveSpeed = 6.5 m/s
-// vy0 = sqrt(2 * 22 * 2) = 9.38 m/s
-// tTotal = 2 * (9.38 / 22) = 0.852 s
-// Max Jump Distance = 6.5 m/s * 0.852 s = 5.54 meters
-// Result: 5.54m comfortably clears 3.5m gap with 2.04m safety margin!</code></pre>
-                        </div>
-                    </div>
-                </details>
-            </div>
-        </div>
-    </div>`,
-    notes: "Start the 10-minute countdown timer. Students must build the ProBuilder gym and tune their controller metrics. Remind them that the solution will unlock automatically after 60 seconds."
-  },
-
-  // Slide 13: Cinemachine 3.x Third-Person Camera Rig
-  {
-    title: "Cinemachine 3.x Third-Person Camera Rig",
-    content: `<div class="split-layout">
-        <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">Unity 6 Cinemachine 3.x Architecture</div>
-                <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Cinemachine 3.x introduces streamlined component naming and procedural orbital follow:
-                    </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>CinemachineCamera:</strong> The core virtual camera component (replaces legacy CinemachineVirtualCamera).</li>
-                        <li><strong>Tracking Target (Follow):</strong> Set to player transform.</li>
-                        <li><strong>CinemachineOrbitalFollow:</strong> 360-degree orbital rig driven by mouse / right-stick input.</li>
-                        <li><strong>CinemachineThirdPersonFollow:</strong> Shoulder-cam rig with 3-ring damping heights.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">Damping & Collision Deocclusion</div>
-                <div class="card-body">
-                    <ul style="font-size: 0.82rem; color: #1e293b; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Position Damping:</strong> Set X/Y/Z Damping to <code>0.15s - 0.25s</code> to absorb micro-stutters.</li>
-                        <li><strong>CinemachineDeocclusion:</strong> Prevents camera from clipping inside greybox walls by raycasting and pulling camera forward.</li>
-                        <li><strong>Input Binding:</strong> Attach <code>CinemachineInputAxisController</code> to bind Delta look inputs directly to orbital yaw/pitch.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
-                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
-            </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">CINEMACHINE</span>
-        </div>
-        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Target Center Offset:</strong> Always point the camera LookAt target at <code>transform.position + Vector3.up * 1.4f</code> (chest/shoulder level). Looking at feet <code>(0,0,0)</code> causes downward tilt and bad framing.
-        </div>
-    </div>`,
-    notes: "Review Cinemachine 3.x setup in Unity 6. Emphasize that CinemachineBrain on the Main Camera handles blending, while CinemachineCamera controls orbital tracking."
-  },
-
-  // Slide 14: Modern NavMesh Navigation: NavMeshSurface Architecture
-  {
-    title: "Modern NavMesh Navigation: NavMeshSurface Architecture",
-    content: `<div class="split-layout">
-        <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">Unity 6 AI Navigation Package</div>
-                <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Install via Package Manager: <code>com.unity.ai.navigation</code>. Modern NavMesh is component-based:
-                    </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>NavMeshSurface Component:</strong> Attach to environment root GameObject.</li>
-                        <li><strong>Agent Type:</strong> Humanoid (Radius: 0.4m, Height: 1.8m, Max Slope: 45°, Step: 0.4m).</li>
-                        <li><strong>Collect Objects:</strong> All or Volume (Bake only active room).</li>
-                        <li><strong>Include Layers:</strong> Only include <code>Default</code> and <code>Environment</code> layers.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">Runtime NavMesh Baking</div>
-                <div class="card-body">
-                    <div class="code-box">
-                        <pre><code>using Unity.AI.Navigation;
-using UnityEngine;
-
-public class DungeonBuilder : MonoBehaviour
-{
-    [SerializeField] private NavMeshSurface surface;
-
-    public void GenerateDungeon()
-    {
-        SpawnRoomBlocks();
-
-        // Bake NavMesh dynamically at runtime in &lt;15ms
-        surface.BuildNavMesh();
-    }
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
-                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
-            </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">NAVMESH</span>
-        </div>
-        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Multiple Agent Radii:</strong> You can bake multiple NavMesh surfaces for different agent sizes (e.g. Tiny Goblin radius 0.2m vs Giant Boss radius 1.5m). Each agent uses its matching Agent Type surface.
-        </div>
-    </div>`,
-    notes: "Explain modern NavMeshSurface. The legacy static window workflow is deprecated in Unity 6. The modern package allows runtime baking for procedural layouts and per-room volumes."
-  },
-
-  // Slide 15: Interactive Simulator 3: NavMesh Agent Pathfinding & Carving Simulator
-  {
-    title: "Interactive Simulator: NavMesh Agent Pathfinding & Carving",
-    content: `<div style="background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">NavMesh Agent Pathfinding &amp; Dynamic Carving Simulator</div>
-            <div style="font-size: 0.76rem; color: #94a3b8;">Click canvas to set custom destination; toggle real-time dynamic obstacle carving</div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))) 1fr minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))); gap: 12px; align-items: stretch;">
-            <!-- Left: Controls -->
-            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem;">AGENT BEHAVIOR MODE</div>
-                
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <button id="btnNavPatrol" class="sim-action-btn" style="background: #0369a1; border: 1px solid #38bdf8; color: #fff; font-size: 0.72rem;" onclick="setNavAgentMode('patrol')">Mode: Patrol (WP 1-4)</button>
-                    <button id="btnNavChase" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.72rem;" onclick="setNavAgentMode('chase')">Mode: Chase Player</button>
-                    <button id="btnNavManual" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.72rem;" onclick="setNavAgentMode('manual')">Mode: Click Destination</button>
-                </div>
-
-                <div style="border-top: 1px solid #1f2937; padding-top: 6px; font-weight: 800; color: #fbbf24; font-size: 0.78rem;">DYNAMIC CARVING</div>
-                <button id="btnToggleCarve" class="sim-action-btn" style="background: #059669; border: 1px solid #10b981; color: #fff; font-size: 0.72rem;" onclick="toggleNavCarving()">Dynamic Obstacle Carve: ON</button>
-                
-                <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.35; margin-top: 4px;">
-                    When Carve is ON, the NavMeshObstacle punches a geometric hole in the surface, forcing instant path recalculation around it.
-                </div>
-            </div>
-
-            <!-- Center: Canvas Arena -->
-            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <canvas id="navMeshCanvas" width="460" height="320" style="width: 100%; height: auto; display: block; border-radius: 4px; cursor: crosshair;" onclick="onNavCanvasClick(event)"></canvas>
-            </div>
-
-            <!-- Right: Live Telemetry -->
-            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-weight: 800; color: #34d399; font-size: 0.84rem;">AGENT TELEMETRY</div>
-                
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Path Status:</div>
-                    <div id="navTelemetryStatus" style="color: #10b981; font-weight: 800; font-size: 0.88rem;">PathComplete (A* Polyline)</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Remaining Distance:</div>
-                    <div id="navTelemetryRemaining" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">6.4 m</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Corner Points:</div>
-                    <div id="navTelemetryCorners" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">3 points</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Agent Current State:</div>
-                    <div id="navTelemetryState" style="color: #fbbf24; font-weight: 800; font-size: 0.84rem;">Patrol Loop (WP 1/4)</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
-                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
-            </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">ALGORITHMS</span>
-        </div>
-        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Funnel Algorithm:</strong> Once A* finds the sequence of convex NavMesh polygons, the String Pulling (Funnel) algorithm calculates the shortest path around polygon corners, preventing zigzagging paths.
-        </div>
-    </div>`,
-    notes: "Demonstrate the NavMesh simulator. Click anywhere on the canvas to command the green agent. Toggle Carve ON/OFF to show how cutting the NavMesh instantly redirects the path around the orange barricade."
-  },
-
-  // Slide 16: Enemy AI Patrol & Pursuit Implementation
-  {
-    title: "Enemy AI Patrol & Pursuit Implementation",
-    content: `<div class="split-layout">
-        <div class="left-column">
-            <div class="content-card primary">
-                <div class="card-title core">EnemyAIController.cs (Part 1: Setup & Patrol)</div>
-                <div class="card-body">
-                    <div class="code-box">
-                        <pre><code>using UnityEngine;
-using UnityEngine.AI;
-
-[RequireComponent(typeof(NavMeshAgent))]
-public class EnemyAIController : MonoBehaviour
-{
-    [Header("Patrol")]
-    [SerializeField] private Transform[] waypoints;
-    [SerializeField] private float stoppingDistance = 0.5f;
-
-    [Header("Vision")]
-    [SerializeField] private Transform targetPlayer;
-    [SerializeField] private float detectionRange = 10f;
-    [SerializeField] private float fieldOfView = 60f;
-    [SerializeField] private LayerMask obstacleLayer;
-
-    private NavMeshAgent agent;
-    private int currentWaypointIndex = 0;
-
-    private void Awake()
-    {
-        agent = GetComponent&lt;NavMeshAgent&gt;();
-        agent.stoppingDistance = stoppingDistance;
     }
 
     private void Update()
     {
-        if (CanSeePlayer())
-        {
-            // State: Pursue
-            agent.SetDestination(targetPlayer.position);
-        }
-        else
-        {
-            // State: Patrol Loop
-            HandlePatrol();
-        }
-    }</code></pre>
+        CheckGrounded();
+        HandleMovement();
+        HandleJumpAndGravity();
+    }
+}</code></pre>
                     </div>
                 </div>
             </div>
         </div>
         <div class="right-column">
-            <div class="content-card primary">
-                <div class="card-title core">EnemyAIController.cs (Part 2: Waypoints & LOS)</div>
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Kinematic Move &amp; Rotation Slerp</div>
                 <div class="card-body">
-                    <div class="code-box">
-                        <pre><code>    private void HandlePatrol()
+                    <div class="code-box" style="font-size: 0.72rem; line-height: 1.35;">
+                        <pre><code>private void HandleMovement()
+{
+    float h = Input.GetAxisRaw("Horizontal");
+    float v = Input.GetAxisRaw("Vertical");
+    Vector3 input = new Vector3(h, 0f, v).normalized;
+
+    if (input.magnitude &gt; 0.05f)
     {
-        if (waypoints == null || waypoints.Length == 0) return;
+        Vector3 camFwd = cameraTransform.forward;
+        camFwd.y = 0f; camFwd.Normalize();
+        Vector3 camRight = cameraTransform.right;
+        camRight.y = 0f; camRight.Normalize();
 
-        // Check if agent reached current waypoint
-        if (!agent.pathPending && agent.remainingDistance &lt;= agent.stoppingDistance)
-        {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
-            agent.SetDestination(waypoints[currentWaypointIndex].position);
-        }
+        Vector3 moveDir = (camFwd * input.z + camRight * input.x).normalized;
+        controller.Move(moveDir * moveSpeed * Time.deltaTime);
+
+        Quaternion targetRot = Quaternion.LookRotation(moveDir);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
     }
+}
 
-    private bool CanSeePlayer()
-    {
-        if (targetPlayer == null) return false;
-        Vector3 dirToPlayer = (targetPlayer.position - transform.position);
-        
-        if (dirToPlayer.magnitude &gt; detectionRange) return false;
+private void HandleJumpAndGravity()
+{
+    if (isGrounded && verticalVelocity &lt; 0f)
+        verticalVelocity = -2f; <span class="r-cm">// Snap firmly to ground</span>
 
-        // Check FOV cone angle
-        if (Vector3.Angle(transform.forward, dirToPlayer.normalized) &gt; fieldOfView / 2f)
-            return false;
+    if (isGrounded && Input.GetButtonDown("Jump"))
+        verticalVelocity = Mathf.Sqrt(2f * gravity * jumpHeight);
 
-        // Raycast line of sight check against walls
-        return !Physics.Raycast(transform.position + Vector3.up, dirToPlayer.normalized, dirToPlayer.magnitude, obstacleLayer);
-    }
+    verticalVelocity -= gravity * Time.deltaTime;
+    controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
+}
+
+private void CheckGrounded()
+{
+    Vector3 spherePos = transform.position + Vector3.up * 0.1f;
+    isGrounded = Physics.CheckSphere(spherePos, 0.28f, groundMask, QueryTriggerInteraction.Ignore);
 }</code></pre>
                     </div>
                 </div>
@@ -1216,45 +1350,510 @@ public class EnemyAIController : MonoBehaviour
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">LINE OF SIGHT</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">PLAYER CONTROLLER SCRIPT</span>
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
-            <strong>Essential Check:</strong> Always verify <code>!agent.pathPending</code> before reading <code>agent.remainingDistance</code>. When <code>SetDestination</code> is called, pathfinding runs asynchronously; during that 1-frame window, <code>remainingDistance</code> returns <code>0</code>!
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            The <code>PlayerController3D</code> script isolates horizontal displacement (controlled by camera orientation and user input) from vertical displacement (governed by ballistic gravity and jump impulses). Both components are fed into <code>controller.Move()</code> to yield rock-solid 3D locomotion.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Why verticalVelocity = -2f:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    When walking down gentle slopes or stairs, setting vertical velocity to exactly <code>0</code> causes the character to float airborne for a fraction of a second. A small negative force (<code>-2.0f</code>) keeps the capsule glued firmly to slopes.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">CheckSphere Grounding vs controller.isGrounded:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Unity's built-in <code>controller.isGrounded</code> flag can flicker when moving quickly over polygon seams. An auxiliary <code>Physics.CheckSphere</code> check against a dedicated <code>Ground</code> LayerMask guarantees 100% reliable jump triggers.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>PlayerController3D (Script Component) &bull; Inspector Reference</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Script Inspector</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Camera Transform</span>
+                    <span class="unity-prop-val">MainCamera (Transform)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Move Speed / Rotation Speed</span>
+                    <span class="unity-prop-val">6.00 m/s / 12.00 rad/s</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Jump Height / Gravity</span>
+                    <span class="unity-prop-val">2.00 m / 20.00 m/s²</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Ground Mask</span>
+                    <span class="unity-prop-val">Layer: Ground (Bitmask 1 &lt;&lt; 6)</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Forgetting to assign the <code>Ground</code> layer to level geometry. <code>Physics.CheckSphere</code> returns false, preventing the player from ever jumping.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Create a dedicated <code>Ground</code> Layer in Project Settings and assign all walkable ProBuilder floors to it.
         </div>
     </div>`,
-    notes: "Walk through EnemyAIController. Point out the pathPending guard condition. Emphasize how vector math (Angle) and physics raycasting combine with NavMesh pathfinding."
+    notes: "Review the PlayerController3D script. Highlight the three core methods: CheckGrounded, HandleMovement, and HandleJumpAndGravity."
   },
 
-  // Slide 17: NavMesh Obstacles: Dynamic Carving vs Static Geometry
+  // Slide 11: Cinemachine 3.x in Unity 6: CinemachineCamera & Orbital Follow
   {
-    title: "NavMesh Obstacles: Dynamic Carving vs Static Geometry",
+    title: "Cinemachine 3.x in Unity 6: CinemachineCamera & Orbital Follow",
     content: `<div class="split-layout">
         <div class="left-column">
-            <div class="content-card primary" style="border-left-color: #0284c7;">
-                <div class="card-title core" style="color: #0369a1;">NavMeshObstacle: Carve = true</div>
+            <div class="content-card primary">
+                <div class="card-title core">Cinemachine 3.x Architecture in Unity 6</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Punches a real-time polygonal hole in the NavMesh surface:
+                        In Unity 6, Cinemachine has been streamlined into <code>CinemachineCamera</code>:
                     </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Best For:</strong> Doors that open/close, fallen rubble, barricades.</li>
-                        <li><strong>TimeToStationary:</strong> Set to e.g. <code>0.5s</code> so carving only happens when the object stops moving.</li>
-                        <li><strong>Performance:</strong> Carving forces NavMesh triangulation update. Avoid carving 50+ objects simultaneously every frame.</li>
+                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>CinemachineBrain:</strong> Attached to Main Camera. Controls camera blending and cuts.</li>
+                        <li><strong>Tracking Target:</strong> Drag the player's <code>Transform</code> into Tracking Target.</li>
+                        <li><strong>Position Control (Body):</strong> Set to <code>CinemachineOrbitalFollow</code> for 3rd-person mouse orbit.</li>
+                        <li><strong>Damping:</strong> Smooths out camera hitching during quick player accelerations.</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Collision Deocclusion &amp; Input Binding</div>
+                <div class="card-body">
+                    <ul style="font-size: 0.82rem; color: #065f46; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>CinemachineDeocclusion (Collider):</strong> Prevents the camera from clipping through level walls by performing raycasts and pulling the camera forward.</li>
+                        <li><strong>Input Axis Controller:</strong> Binds Mouse X/Y or Gamepad Right Stick to orbit yaw and pitch.</li>
+                        <li><strong>Vertical Damping vs Horizontal:</strong> Set higher vertical damping to keep the horizon stable while running over stairs.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">CAMERA ARCHITECTURE</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Cinemachine decouples the physical camera from the player hierarchy. Instead of parenting the camera directly under the character (which causes nauseating camera jitter when the player turns), Cinemachine acts as an invisible robotic camera crane tracking the player with procedural spring damping and obstacle avoidance.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Unity 6 Naming Change:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    In older tutorials, virtual cameras were named <code>CinemachineVirtualCamera</code>. In Unity 6 Cinemachine 3.x, the unified component is <code>CinemachineCamera</code> with modular pipeline extensions.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Deocclusion Layer Mask:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Always configure <code>CinemachineDeocclusion</code> to ignore the Player Layer and Transparent FX. If the camera collides with the player capsule itself, it zooms inside the player model.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>CinemachineCamera &bull; Orbital 3rd-Person Follow Rig</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Cinemachine 3.x</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Tracking Target</span>
+                    <span class="unity-prop-val">Player_CharacterController (Transform)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Position Control (Body)</span>
+                    <span class="unity-prop-val">CinemachineOrbitalFollow</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Orbit Radius / Height</span>
+                    <span class="unity-prop-val">5.00 m / 1.80 m</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Damping (X, Y, Z)</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.10</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 0.25</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.10</div>
+                    </div>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Extension &bull; Deocclusion</span>
+                    <span class="unity-prop-val">Collide &bull; Obstacle Layer: Default | Ground</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Parenting the Main Camera directly under the rotating player Transform. Every time the player turns 5 degrees, the entire screen spins violently, causing severe motion sickness.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Always keep Main Camera and CinemachineCamera as standalone root GameObjects in the scene hierarchy. Use <code>Tracking Target</code> to follow the player smoothly.
+        </div>
+    </div>`,
+    notes: "Explain Cinemachine 3.x setup in Unity 6. Show students how adding CinemachineOrbitalFollow creates an immediate commercial-feeling 3rd person camera rig."
+  },
+
+  // Slide 12: Practice Challenge 1: 3D Metric Whitebox Gym & Character Controller
+  {
+    title: "Practice Challenge 1: Metric Whitebox Gym & Character Controller",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">Challenge Brief: 10-Minute Sprint</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Construct a metric validation gym scene and implement 3D camera-relative movement:
+                    </p>
+                    <ol style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 18px;">
+                        <li><strong>ProBuilder Gym:</strong> Build a 20m x 20m floor, a 2.4m doorway, a 1.5m wall, and a 3.5m pit gap using 1.0m grid snapping.</li>
+                        <li><strong>Player Rig:</strong> Attach <code>CharacterController</code> and <code>PlayerController3D</code> to a capsule.</li>
+                        <li><strong>Cinemachine:</strong> Set up a <code>CinemachineCamera</code> with Orbital Follow.</li>
+                        <li><strong>Verification:</strong> Walk through the doorway, jump the 3.5m pit, and clear the 1.5m wall smoothly.</li>
+                    </ol>
                 </div>
             </div>
         </div>
         <div class="right-column">
             <div class="content-card primary" style="border-left-color: #d97706;">
-                <div class="card-title core" style="color: #b45309;">NavMeshObstacle: Carve = false</div>
+                <div class="card-title core" style="color: #b45309;">Sprint Timer &amp; Solution Lock</div>
+                <div class="card-body">
+                    <div style="text-align: center; margin-bottom: 8px;">
+                        <div id="challengeTimer1" style="font-size: 2.0rem; font-weight: 900; color: #0284c7; font-family: monospace;">10:00</div>
+                        <div style="font-size: 0.74rem; color: #64748b;">10-Minute Guided Sprint</div>
+                    </div>
+                    <div style="display: flex; gap: 6px; justify-content: center;">
+                        <button class="sim-action-btn" style="background: #059669; border: 1px solid #10b981; color: #fff; font-size: 0.74rem;" onclick="startChallengeTimer(1)">Start Sprint</button>
+                        <button class="sim-action-btn" style="background: #d97706; border: 1px solid #f59e0b; color: #fff; font-size: 0.74rem;" onclick="pauseChallengeTimer(1)">Pause</button>
+                        <button class="sim-action-btn" style="background: #475569; border: 1px solid #64748b; color: #fff; font-size: 0.74rem;" onclick="resetChallengeTimer(1)">Reset</button>
+                    </div>
+                    <div id="solutionLockBanner1" style="margin-top: 10px; padding: 6px 10px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px; font-size: 0.76rem; color: #991b1b; text-align: center;">
+                        [LOCKED] Solution unlocks in: <strong id="solutionLockTimer1">01:00</strong> (Implement code first)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <details id="solutionDetails1" class="tier-accordion adv" style="margin-top: 12px; pointer-events: none; opacity: 0.5;">
+        <summary class="accordion-header">
+            <span>[Solution Reference] PlayerController3D Architecture</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            <div class="code-box" style="font-size: 0.72rem; line-height: 1.35;">
+                <pre><code><span class="r-cm">// Complete verified PlayerController3D implementation</span>
+using UnityEngine;
+
+[RequireComponent(typeof(CharacterController))]
+public class PlayerController3D : MonoBehaviour
+{
+    [SerializeField] private float moveSpeed = 6.0f;
+    [SerializeField] private float jumpHeight = 2.0f;
+    [SerializeField] private float gravity = 20.0f;
+    [SerializeField] private LayerMask groundMask;
+
+    private CharacterController controller;
+    private Transform cam;
+    private float verticalVelocity;
+
+    private void Awake()
+    {
+        controller = GetComponent&lt;CharacterController&gt;();
+        cam = Camera.main.transform;
+    }
+
+    private void Update()
+    {
+        bool isGrounded = Physics.CheckSphere(transform.position + Vector3.up * 0.1f, 0.28f, groundMask, QueryTriggerInteraction.Ignore);
+        if (isGrounded && verticalVelocity &lt; 0f) verticalVelocity = -2f;
+
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        Vector3 input = new Vector3(h, 0f, v).normalized;
+
+        if (input.magnitude &gt; 0.05f)
+        {
+            Vector3 fwd = cam.forward; fwd.y = 0f; fwd.Normalize();
+            Vector3 right = cam.right; right.y = 0f; right.Normalize();
+            Vector3 move = (fwd * input.z + right * input.x).normalized;
+            controller.Move(move * moveSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move), 12f * Time.deltaTime);
+        }
+
+        if (isGrounded && Input.GetButtonDown("Jump"))
+            verticalVelocity = Mathf.Sqrt(2f * gravity * jumpHeight);
+
+        verticalVelocity -= gravity * Time.deltaTime;
+        controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
+    }
+}</code></pre>
+            </div>
+        </div>
+    </details>
+
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">CHALLENGE 1: GYM &amp; CONTROLLER</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            The Metric Gym is your physics calibration laboratory. Before designing gameplay levels, all core mechanics (run speed, jump clearance, camera collision, stair stepping) must be proven and locked in this single test scene.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Test Suite Checklist:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    1. Doorway Traversal (Zero head bumping at 2.4m height).<br>
+                    2. 3.5m Pit Gap Jump (Lands safely with 0.5m margin).<br>
+                    3. 1.5m Wall Clearance (Apex reaches 2.0m height).<br>
+                    4. Orbit Camera (Smooth 360-degree rotation without clipping walls).
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Layer &amp; Tag Matrix:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Layer 6: <code>Ground</code> (All walkable ProBuilder floor polygons).<br>
+                    Layer 7: <code>Obstacles</code> (Static boundary walls).<br>
+                    Layer 8: <code>Player</code> (Character capsule).
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>Scene Hierarchy &bull; Metric Validation Gym Structure</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Hierarchy Reference</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">[Gym_MetricArena]</span>
+                    <span class="unity-prop-val">Root Anchor (0, 0, 0)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label"> &bull; [Geometry_Static_Floors]</span>
+                    <span class="unity-prop-val">Layer: Ground &bull; Static: [X]</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label"> &bull; [Player_Rig]</span>
+                    <span class="unity-prop-val">CharacterController + PlayerController3D</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label"> &bull; [Cinemachine_OrbitalRig]</span>
+                    <span class="unity-prop-val">CinemachineCamera &bull; Target: Player_Rig</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Starting level blockout before testing the controller in the gym scene. If jump heights change later, every single platform across all your levels will have to be repositioned manually.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Save your metric gym scene as <code>Scenes/Gym_MetricCalibration.unity</code> and keep it in your repository throughout the entire semester.
+        </div>
+    </div>`,
+    notes: "Launch Practice Challenge 1. Give students 10 minutes to assemble their metric gym, attach the controller, and tune their jump arc and camera orbit."
+  },
+
+  // Slide 13: Modern AI Navigation in Unity 6: NavMeshSurface
+  {
+    title: "Modern AI Navigation in Unity 6: NavMeshSurface & Baking",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">Unity 6 AI Navigation Package (com.unity.ai.navigation)</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Uses reciprocal velocity obstacle (RVO) steering avoidance without changing the mesh:
+                        Legacy Unity baked global navigation windows. Unity 6 uses component-based <code>NavMeshSurface</code>:
                     </p>
-                    <ul style="font-size: 0.82rem; color: #1e293b; margin-top: 8px; line-height: 1.5; padding-left: 16px;">
-                        <li><strong>Best For:</strong> Moving crates, patrol vehicles, other AI agents.</li>
-                        <li><strong>Lightweight:</strong> Zero CPU cost on NavMesh geometry.</li>
-                        <li><strong>Limitation:</strong> Agents will not plan long-term routes around large non-carved obstacles.</li>
+                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Component-Based:</strong> Attach <code>NavMeshSurface</code> directly to level roots or floor meshes.</li>
+                        <li><strong>Multiple Agent Types:</strong> Bake distinct NavMeshes for Small Humanoids vs Large Boss Monsters.</li>
+                        <li><strong>Runtime Baking:</strong> Call <code>surface.BuildNavMesh()</code> at runtime for procedurally generated dungeons.</li>
+                        <li><strong>Layer Filtering:</strong> Include or exclude specific layers during bake.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Agent Baking Parameters</div>
+                <div class="card-body">
+                    <table style="width: 100%; font-size: 0.80rem; border-collapse: collapse; text-align: left;">
+                        <tr style="border-bottom: 1.5px solid #cbd5e1; color: #0f172a;">
+                            <th style="padding: 4px 6px;">Parameter</th>
+                            <th style="padding: 4px 6px;">Value</th>
+                            <th style="padding: 4px 6px;">Function</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Agent Radius</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">0.5m</td>
+                            <td style="padding: 4px 6px;">Wall setback distance.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Agent Height</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">2.0m</td>
+                            <td style="padding: 4px 6px;">Ceiling clearance check.</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 4px 6px;"><strong>Max Slope</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">45.0°</td>
+                            <td style="padding: 4px 6px;">Steepest walkable ramp.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 6px;"><strong>Step Height</strong></td>
+                            <td style="padding: 4px 6px; color: #0284c7; font-weight: 700;">0.4m</td>
+                            <td style="padding: 4px 6px;">Max climbable ledge.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">AI NAVIGATION PACKAGE</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            A Navigation Mesh (NavMesh) is a 2D polygonal blueprint of walkable floor space overlaid across 3D environment geometry. Instead of performing expensive 3D physics raycasts every frame, AI agents run fast 2D A* pathfinding on these pre-computed convex polygons.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Agent Radius Wall Setback:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    The NavMesh bake automatically cuts back <code>Agent Radius (0.5m)</code> from all obstacle walls. This prevents the agent capsule from scraping against wall geometry while turning corners.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Voxelization &amp; Region Merging:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Unity rasterizes geometry into solid voxels, extracts walkable surfaces, and simplifies them into large convex 2D polygons for maximum runtime pathfinding throughput.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>NavMeshSurface &bull; Component Inspector (Unity 6 AI Navigation)</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Component</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Agent Type</span>
+                    <span class="unity-prop-val">Humanoid (Radius: 0.5m, Height: 2.0m)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Default Area</span>
+                    <span class="unity-prop-val">Walkable (Cost: 1.0)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Collect Objects / Include Layers</span>
+                    <span class="unity-prop-val">All GameObjects &bull; Default | Ground | Obstacles</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Use Geometry</span>
+                    <span class="unity-prop-val">Render Meshes (or Physics Colliders)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Bake Control</span>
+                    <span class="unity-prop-val"><strong style="color: #38bdf8;">[Bake NavMesh]</strong> &bull; Status: Baked</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Forgetting to click [Bake] after moving level geometry. The NavMesh remains at the old coordinates, causing AI enemies to walk through new walls or float over relocated floor plates.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Install <code>com.unity.ai.navigation</code> via Package Manager. Attach <code>NavMeshSurface</code> to the environment root and re-bake whenever geometry changes.
+        </div>
+    </div>`,
+    notes: "Demonstrate NavMeshSurface in Unity 6. Explain that the old Window -> AI -> Navigation workflow is deprecated in favor of component-based NavMeshSurface."
+  },
+
+  // Slide 14: NavMeshAgent Pathfinding & Steering
+  {
+    title: "NavMeshAgent Steering: Pathfinding, Velocity & Waypoint Traversal",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">NavMeshAgent C# API</div>
+                <div class="card-body">
+                    <div class="code-box" style="font-size: 0.72rem; line-height: 1.35;">
+                        <pre><code>using UnityEngine;
+using UnityEngine.AI;
+
+[RequireComponent(typeof(NavMeshAgent))]
+public class AgentSteering : MonoBehaviour
+{
+    private NavMeshAgent agent;
+
+    private void Awake()
+    {
+        agent = GetComponent&lt;NavMeshAgent&gt;();
+    }
+
+    public void MoveToTarget(Vector3 destination)
+    {
+        agent.SetDestination(destination);
+    }
+
+    public bool HasReachedDestination()
+    {
+        if (agent.pathPending) return false;
+        return agent.remainingDistance &lt;= agent.stoppingDistance;
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Path Query Lifecycle &amp; Corner Nodes</div>
+                <div class="card-body">
+                    <ul style="font-size: 0.82rem; color: #065f46; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>SetDestination():</strong> Triggers an asynchronous A* path query across NavMesh polygons.</li>
+                        <li><strong>agent.pathPending:</strong> True while the background thread computes the path corridor.</li>
+                        <li><strong>agent.corners:</strong> Array of <code>Vector3</code> waypoints along the calculated corridor.</li>
+                        <li><strong>agent.stoppingDistance:</strong> Distance threshold before the agent decelerates to a complete stop.</li>
                     </ul>
                 </div>
             </div>
@@ -1265,88 +1864,643 @@ public class EnemyAIController : MonoBehaviour
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">CARVING</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">AGENT STEERING</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            <code>NavMeshAgent</code> combines high-level path planning (A* global corridor computation) with low-level steering (local avoidance, acceleration, angular turning, and deceleration). It moves the GameObject directly along the path without requiring manual Transform translation.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">The pathPending Race Condition:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    When <code>SetDestination()</code> is called, <code>remainingDistance</code> reads <code>0</code> on that exact frame because path calculation runs asynchronously on a worker thread. Always check <code>!agent.pathPending</code> before evaluating <code>remainingDistance</code>.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Auto Braking:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    When enabled, the agent smoothly decelerates as it approaches its final target. When disabled, the agent maintains full speed through intermediate waypoints in continuous patrol loops.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>NavMeshAgent &bull; Component Steering Inspector</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Built-in</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Agent Type / Base Offset</span>
+                    <span class="unity-prop-val">Humanoid / 0.00</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Speed / Angular Speed</span>
+                    <span class="unity-prop-val">4.50 m/s / 360.00 deg/s</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Acceleration</span>
+                    <span class="unity-prop-val">12.00 m/s²</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Stopping Distance</span>
+                    <span class="unity-prop-val">0.50 m</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Auto Braking / Quality</span>
+                    <span class="unity-prop-val">[X] True / High Quality</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Checking <code>if (agent.remainingDistance == 0)</code> to detect destination arrival. Due to floating-point imprecision and agent stopping radius, <code>remainingDistance</code> rarely reaches exactly <code>0.0f</code>.
         </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Rule of Thumb:</strong> If an obstacle moves constantly (e.g. wandering guard), keep Carve OFF. If an obstacle opens or closes occasionally (e.g. security gate), turn Carve ON with <code>TimeToStationary = 0.5s</code>.
+            <strong>Golden Rule for Your Project:</strong> Always check <code>if (!agent.pathPending && agent.remainingDistance &lt;= agent.stoppingDistance)</code> to determine when an AI agent has arrived.
         </div>
     </div>`,
-    notes: "Contrast Carving vs Non-carving obstacles. Explain how TimeToStationary prevents frame rate drops when physics objects are pushed across the floor."
+    notes: "Review the NavMeshAgent API. Highlight the importance of checking agent.pathPending to avoid the single-frame zero distance bug."
   },
 
-  // Slide 18: Practice Challenge 2: NavMesh Arena Patrol & Chaser
+  // Slide 15: 3D NavMesh Agent Pathfinding & Dynamic Carving Sandbox
   {
-    title: "Practice Challenge 2: NavMesh Arena Patrol & Chaser",
-    content: `<div class="content-stack">
-        <div class="content-card primary" style="border-left-color: #0284c7;">
-            <div class="card-title core" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <span>10-Minute Challenge: Patrol Waypoint AI with Dynamic Gate</span>
-                <span style="background: #0284c7; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.74rem;">10-MIN TIMERBOX</span>
-            </div>
-            <div class="card-body">
-                <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                    Implement an AI patrol arena in <code>Assets/Scenes/Gym_NavMesh.unity</code>:
-                </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-top: 8px;">
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px;">
-                        <strong style="color: #0369a1; font-size: 0.84rem;">1. Scene Setup:</strong>
-                        <ul style="font-size: 0.80rem; color: #475569; margin-top: 4px; padding-left: 14px; line-height: 1.4;">
-                            <li>Bake a <code>NavMeshSurface</code> on arena floor.</li>
-                            <li>Place 4 Empty GameObjects as patrol waypoints (A, B, C, D).</li>
-                            <li>Add a dynamic blast door with <code>NavMeshObstacle (Carve = true)</code>.</li>
-                        </ul>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px;">
-                        <strong style="color: #059669; font-size: 0.84rem;">2. AI Logic:</strong>
-                        <ul style="font-size: 0.80rem; color: #475569; margin-top: 4px; padding-left: 14px; line-height: 1.4;">
-                            <li>Attach <code>EnemyAIController.cs</code> to enemy capsule.</li>
-                            <li>Verify enemy loops through waypoints.</li>
-                            <li>Close blast door and observe enemy rerouting cleanly.</li>
-                        </ul>
-                    </div>
+    title: "Interactive Simulator: NavMesh Pathfinding & Dynamic Carving Sandbox",
+    content: `<div style="background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">NavMesh Agent Pathfinding &amp; Dynamic Carving (3D Three.js WebGL)</div>
+            <div style="font-size: 0.76rem; color: #94a3b8;">Real-time obstacle avoidance &bull; Orbit 3D camera with mouse drag</div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: minmax(calc(240px * var(--font-scale, 1)), calc(300px * var(--font-scale, 1))) 1fr minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))); gap: 12px; align-items: stretch;">
+            <!-- Left: Controls -->
+            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem;">AGENT CONTROLS</div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    <button id="btnNavModePatrol" class="sim-action-btn" style="background: #0369a1; border: 1px solid #38bdf8; color: #fff; font-size: 0.72rem;" onclick="setNavAgentMode('patrol')">Mode: Patrol</button>
+                    <button id="btnNavModeChase" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.72rem;" onclick="setNavAgentMode('chase')">Mode: Chase</button>
                 </div>
 
-                <!-- Timer Controls -->
-                <div style="margin-top: 14px; background: #0f172a; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-weight: 800; color: #94a3b8; font-size: 0.84rem;">CHALLENGE TIMER:</span>
-                        <span id="challengeTimer2" style="font-size: 1.4rem; font-weight: 900; color: #38bdf8; font-family: monospace;">10:00</span>
+                <div style="border-top: 1px solid #1f2937; padding-top: 6px;">
+                    <button id="btnNavCarve" class="sim-action-btn" style="background: #059669; border: 1px solid #34d399; color: #fff; font-size: 0.72rem; font-weight: 800;" onclick="toggleNavCarving()">Dynamic Carving: ON</button>
+                </div>
+
+                <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+                    When <strong>Carving is ON</strong>, the orange block punches a real-time hole in the NavMesh, forcing the agent to route around corners!
+                </div>
+            </div>
+
+            <!-- Center: 3D Three.js Viewport with Canvas Fallback -->
+            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <div id="sim3dNavMeshContainer" style="width: 100%; height: 260px; position: relative; border-radius: 4px; overflow: hidden;"></div>
+                <canvas id="navMeshCanvas" width="460" height="260" style="display: none;"></canvas>
+            </div>
+
+            <!-- Right: Path Telemetry -->
+            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-weight: 800; color: #34d399; font-size: 0.84rem;">PATHFINDING TELEMETRY</div>
+                
+                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
+                    <div style="color: #94a3b8;">Remaining Distance:</div>
+                    <div id="navTelemetryRemaining" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">8.4 m</div>
+                </div>
+
+                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
+                    <div style="color: #94a3b8;">Path Corners:</div>
+                    <div id="navTelemetryCorners" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">3 points</div>
+                </div>
+
+                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
+                    <div style="color: #94a3b8;">Agent State:</div>
+                    <div id="navTelemetryState" style="color: #10b981; font-weight: 800; font-size: 0.82rem;">Patrol Loop (WP 1/4)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">AI PATHFINDING SIMULATION</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Dynamic Carving modifies the underlying NavMesh polygons in real time. Instead of having to re-bake the entire level geometry when a crate moves or a door closes, the <code>NavMeshObstacle</code> component cuts a local hole in the surface, forcing AI agents to recalculate fresh paths around the obstacle.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Static vs Dynamic Obstacles:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    <strong>Static Walls:</strong> Baked once into the static NavMesh at design time.<br>
+                    <strong>Dynamic Obstacles (Crates/Doors):</strong> Unbaked GameObjects with <code>NavMeshObstacle (Carve = True)</code> that modify the mesh dynamically when stationary.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Carving Performance Overhead:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Every carve event triggers polygon triangulation. Use <code>Carve Only Stationary = True</code> so the obstacle only carves when it stops moving, avoiding per-frame polygon recalculations.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>AI Arena Coordinator &amp; Dynamic Obstacle System</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Simulator System</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Agent Speed / Stopping Distance</span>
+                    <span class="unity-prop-val">4.00 m/s / 0.80 m</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Dynamic Carve Footprint</span>
+                    <span class="unity-prop-val">1.80m x 1.80m Box</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Carve Move Threshold</span>
+                    <span class="unity-prop-val">0.10 m (Time To Stationary: 0.30s)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Patrol Waypoints Loop</span>
+                    <span class="unity-prop-val">4 Waypoints (WP1 &bull; WP2 &bull; WP3 &bull; WP4)</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Attaching both a <code>NavMeshAgent</code> and a <code>NavMeshObstacle</code> with Carving enabled to the same AI entity. The agent tries to carve a hole beneath its own feet, invalidating its own NavMesh position.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> AI characters use <code>NavMeshAgent</code>. Moveable props, crates, and closing doors use <code>NavMeshObstacle</code> with <code>Carve Only Stationary</code> enabled.
+        </div>
+    </div>`,
+    notes: "Demonstrate the 3D NavMesh simulator. Toggle dynamic carving ON and OFF to show how the agent immediately reroutes around the central carved crate."
+  },
+
+  // Slide 16: Dynamic Obstacle Carving: NavMeshObstacle
+  {
+    title: "Dynamic Obstacle Carving: NavMeshObstacle Component",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">NavMeshObstacle Configuration</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Attach <code>NavMeshObstacle</code> to movable environment objects:
+                    </p>
+                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Shape:</strong> <code>Box</code> or <code>Capsule</code> matching object dimensions.</li>
+                        <li><strong>Carve Checkbox:</strong> When enabled, dynamically punches a cutout in the NavMesh.</li>
+                        <li><strong>Move Threshold:</strong> Distance the obstacle must move before the carve hole updates (e.g. <code>0.1m</code>).</li>
+                        <li><strong>Time To Stationary:</strong> Time (seconds) the object must rest before carving starts (e.g. <code>0.5s</code>).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Carve Only Stationary Optimization</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Why <code>Carve Only Stationary</code> is critical for production performance:
+                    </p>
+                    <ul style="font-size: 0.82rem; color: #065f46; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Moving Physics Crates:</strong> While a physics crate is rolling, it uses lightweight local avoidance.</li>
+                        <li><strong>Once at Rest:</strong> When the crate comes to a complete stop, it carves a permanent hole in the NavMesh.</li>
+                        <li><strong>Prevents CPU Spikes:</strong> Eliminates continuous per-frame NavMesh re-triangulation.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">DYNAMIC CARVING</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Think of a NavMesh as a carpet laid over the floor. A static obstacle has a hole cut out of the carpet permanently during manufacturing (baking). A <code>NavMeshObstacle</code> is a heavy metal stamp that cuts a dynamic square out of the carpet whenever it lands.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Closing Security Doors:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    When a blast door closes, enabling its <code>NavMeshObstacle</code> carves the doorway shut. AI agents instantly recognize the path is blocked and reroute through alternate ventilation shafts.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Physics Barricades:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Players pushing wooden crates across hallways create dynamic chokepoints. When the crate rests, the NavMesh updates automatically.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>NavMeshObstacle &bull; Component Inspector Configuration</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Component</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Shape</span>
+                    <span class="unity-prop-val">Box</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Center</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 0.50</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.00</div>
                     </div>
-                    <div style="display: flex; gap: 6px;">
-                        <button class="sim-action-btn" style="background: #059669; border: 1px solid #10b981; color: #fff; font-size: 0.74rem;" onclick="startChallengeTimer(2)">Start Timer</button>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Size</span>
+                    <div class="unity-vec3">
+                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 1.50</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 1.00</div>
+                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 1.50</div>
+                    </div>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Carve / Carve Only Stationary</span>
+                    <span class="unity-prop-val">[X] True / [X] True</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Move Threshold / Time To Stationary</span>
+                    <span class="unity-prop-val">0.10 m / 0.50 s</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Leaving <code>Carve Only Stationary</code> unchecked on fast-moving physics props. Continuously re-carving the NavMesh 60 times per second causes massive CPU frame-time stutters.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Always enable <code>Carve Only Stationary</code> on movable props. Set <code>TimeToStationary = 0.5s</code>.
+        </div>
+    </div>`,
+    notes: "Explain NavMeshObstacle properties. Emphasize why Carve Only Stationary is an essential performance optimization in production games."
+  },
+
+  // Slide 17: Enemy AI State Machine: Patrol, Detect, Chase, Attack
+  {
+    title: "Enemy AI State Machine: Patrol, Line-of-Sight Detection & Pursuit",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">EnemyNavMeshAI.cs (State Machine)</div>
+                <div class="card-body">
+                    <div class="code-box" style="font-size: 0.72rem; line-height: 1.35;">
+                        <pre><code>using UnityEngine;
+using UnityEngine.AI;
+
+public class EnemyNavMeshAI : MonoBehaviour
+{
+    public enum AIState { Patrol, Chase, Attack }
+
+    [SerializeField] private AIState currentState = AIState.Patrol;
+    [SerializeField] private Transform[] waypoints;
+    [SerializeField] private Transform playerTarget;
+    [SerializeField] private float detectionRadius = 8.0f;
+    [SerializeField] private float attackRadius = 1.5f;
+    [SerializeField] private LayerMask visionObstacleMask;
+
+    private NavMeshAgent agent;
+    private int waypointIndex;
+
+    private void Awake()
+    {
+        agent = GetComponent&lt;NavMeshAgent&gt;();
+    }
+
+    private void Update()
+    {
+        switch (currentState)
+        {
+            case AIState.Patrol: HandlePatrol(); break;
+            case AIState.Chase:  HandleChase();  break;
+            case AIState.Attack: HandleAttack(); break;
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">State Transitions &amp; Raycast Vision</div>
+                <div class="card-body">
+                    <div class="code-box" style="font-size: 0.72rem; line-height: 1.35;">
+                        <pre><code>private void HandlePatrol()
+{
+    if (waypoints.Length == 0) return;
+    if (!agent.pathPending && agent.remainingDistance &lt;= agent.stoppingDistance)
+    {
+        waypointIndex = (waypointIndex + 1) % waypoints.Length;
+        agent.SetDestination(waypoints[waypointIndex].position);
+    }
+
+    if (CanSeePlayer())
+        currentState = AIState.Chase;
+}
+
+private void HandleChase()
+{
+    agent.SetDestination(playerTarget.position);
+    float dist = Vector3.Distance(transform.position, playerTarget.position);
+
+    if (dist &lt;= attackRadius)
+        currentState = AIState.Attack;
+    else if (dist &gt; detectionRadius * 1.5f)
+        currentState = AIState.Patrol;
+}
+
+private bool CanSeePlayer()
+{
+    float dist = Vector3.Distance(transform.position, playerTarget.position);
+    if (dist &gt; detectionRadius) return false;
+
+    Vector3 eyePos = transform.position + Vector3.up * 1.6f;
+    Vector3 targetPos = playerTarget.position + Vector3.up * 1.0f;
+    Vector3 dir = (targetPos - eyePos).normalized;
+
+    if (Physics.Raycast(eyePos, dir, dist, visionObstacleMask))
+        return false; <span class="r-cm">// Wall blocks line of sight</span>
+
+    return true;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">AI STATE MACHINE</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            An AI State Machine (FSM) structures autonomous behavior into clear, discrete states (Patrol, Chase, Attack). Transitions between states are driven by sensory queries: distance checks and physics line-of-sight raycasts.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Hysteresis in Detection:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Detection distance is <code>8.0m</code>, but de-aggro distance is <code>12.0m (1.5x)</code>. This gap (hysteresis) prevents the AI from flickering rapidly between Patrol and Chase when the player hovers at the 8m threshold.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Eye-Level Raycasting:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Always offset the raycast origin by <code>Vector3.up * 1.6f</code> (eye height). Raycasting from <code>transform.position</code> (feet level) causes the ray to hit floor geometry and fail line-of-sight checks.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>EnemyNavMeshAI (Script Component) &bull; Inspector Reference</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">AI Component</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Current State</span>
+                    <span class="unity-prop-val">Patrol</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Player Target</span>
+                    <span class="unity-prop-val">Player_Rig (Transform)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Detection / Attack Radius</span>
+                    <span class="unity-prop-val">8.00 m / 1.50 m</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Waypoints</span>
+                    <span class="unity-prop-val">Size: 4 (WP_1, WP_2, WP_3, WP_4)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Vision Obstacle Mask</span>
+                    <span class="unity-prop-val">Layer: Default | Ground | Obstacles</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Running line-of-sight raycasts without a LayerMask. The ray hits the AI's own collider first, permanently blocking vision to the player.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Raycast from eye height (<code>y = 1.6m</code>) and use a dedicated <code>LayerMask</code> that includes environment obstacles while ignoring the AI's own layer.
+        </div>
+    </div>`,
+    notes: "Walk through the EnemyNavMeshAI state machine. Emphasize how clean enum states and eye-level raycasting create believable guard AI in under 80 lines of code."
+  },
+
+  // Slide 18: Practice Challenge 2: Dynamic Obstacle Arena & Guard AI
+  {
+    title: "Practice Challenge 2: Dynamic Obstacle Arena & Guard AI",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">Challenge Brief: 10-Minute AI Arena Sprint</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Create a patrol arena with dynamic obstacle carving and responsive guard AI:
+                    </p>
+                    <ol style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 18px;">
+                        <li><strong>NavMesh Arena:</strong> Create a 15m x 15m arena with 4 perimeter waypoints and bake a <code>NavMeshSurface</code>.</li>
+                        <li><strong>Guard Agent:</strong> Create an enemy capsule with <code>NavMeshAgent</code> and <code>EnemyNavMeshAI</code>.</li>
+                        <li><strong>Dynamic Crate:</strong> Place a movable block with <code>NavMeshObstacle (Carve = True)</code> across the patrol route.</li>
+                        <li><strong>Verification:</strong> Observe the guard patrol waypoints, reroute around the carved crate, and pursue the player on visual contact.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #d97706;">
+                <div class="card-title core" style="color: #b45309;">Sprint Timer &amp; Solution Lock</div>
+                <div class="card-body">
+                    <div style="text-align: center; margin-bottom: 8px;">
+                        <div id="challengeTimer2" style="font-size: 2.0rem; font-weight: 900; color: #0284c7; font-family: monospace;">10:00</div>
+                        <div style="font-size: 0.74rem; color: #64748b;">10-Minute Guided Sprint</div>
+                    </div>
+                    <div style="display: flex; gap: 6px; justify-content: center;">
+                        <button class="sim-action-btn" style="background: #059669; border: 1px solid #10b981; color: #fff; font-size: 0.74rem;" onclick="startChallengeTimer(2)">Start Sprint</button>
                         <button class="sim-action-btn" style="background: #d97706; border: 1px solid #f59e0b; color: #fff; font-size: 0.74rem;" onclick="pauseChallengeTimer(2)">Pause</button>
                         <button class="sim-action-btn" style="background: #475569; border: 1px solid #64748b; color: #fff; font-size: 0.74rem;" onclick="resetChallengeTimer(2)">Reset</button>
                     </div>
-                </div>
-
-                <!-- Locked Solution -->
-                <div id="solutionLockBanner2" style="margin-top: 10px; background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 6px; padding: 8px 12px; font-size: 0.80rem; color: #991b1b;">
-                    [LOCKED] Solution unlocks in: <strong id="solutionLockTimer2">01:00</strong> (Implement code first)
-                </div>
-                
-                <details id="solutionDetails2" class="tier-accordion adv" style="margin-top: 8px; pointer-events: none; opacity: 0.5;">
-                    <summary class="accordion-header">
-                        <span>[Verified Solution] Enemy Patrol State Machine</span>
-                        <span style="font-size:0.75rem;">View Implementation</span>
-                    </summary>
-                    <div class="accordion-body">
-                        <div class="code-box">
-                            <pre><code>// Ensure layer masks are configured correctly:
-// 1. Obstacles on 'Environment' layer (Layer 3)
-// 2. Player on 'Player' layer (Layer 6)
-// 3. Raycast uses LayerMask.GetMask("Environment") to check for wall occlusion.</code></pre>
-                        </div>
+                    <div id="solutionLockBanner2" style="margin-top: 10px; padding: 6px 10px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px; font-size: 0.76rem; color: #991b1b; text-align: center;">
+                        [LOCKED] Solution unlocks in: <strong id="solutionLockTimer2">01:00</strong> (Implement code first)
                     </div>
-                </details>
+                </div>
             </div>
         </div>
+    </div>
+    
+    <details id="solutionDetails2" class="tier-accordion adv" style="margin-top: 12px; pointer-events: none; opacity: 0.5;">
+        <summary class="accordion-header">
+            <span>[Solution Reference] AI Patrol Arena Architecture</span>
+            <span style="font-size:0.75rem;">Expand</span>
+        </summary>
+        <div class="accordion-body">
+            <div class="code-box" style="font-size: 0.72rem; line-height: 1.35;">
+                <pre><code><span class="r-cm">// Complete verified EnemyNavMeshAI implementation</span>
+using UnityEngine;
+using UnityEngine.AI;
+
+[RequireComponent(typeof(NavMeshAgent))]
+public class EnemyNavMeshAI : MonoBehaviour
+{
+    public enum State { Patrol, Chase }
+    [SerializeField] private State state = State.Patrol;
+    [SerializeField] private Transform[] waypoints;
+    [SerializeField] private Transform player;
+    [SerializeField] private float viewDist = 8f;
+    [SerializeField] private LayerMask obstacleMask;
+
+    private NavMeshAgent agent;
+    private int wpIdx;
+
+    private void Awake() { agent = GetComponent&lt;NavMeshAgent&gt;(); }
+
+    private void Start()
+    {
+        if (waypoints.Length &gt; 0) agent.SetDestination(waypoints[0].position);
+    }
+
+    private void Update()
+    {
+        bool seesPlayer = CanSee();
+        if (seesPlayer) state = State.Chase;
+        else if (state == State.Chase && Vector3.Distance(transform.position, player.position) &gt; viewDist * 1.5f)
+            state = State.Patrol;
+
+        if (state == State.Chase) agent.SetDestination(player.position);
+        else Patrol();
+    }
+
+    private void Patrol()
+    {
+        if (waypoints.Length == 0) return;
+        if (!agent.pathPending && agent.remainingDistance &lt;= agent.stoppingDistance)
+        {
+            wpIdx = (wpIdx + 1) % waypoints.Length;
+            agent.SetDestination(waypoints[wpIdx].position);
+        }
+    }
+
+    private bool CanSee()
+    {
+        float d = Vector3.Distance(transform.position, player.position);
+        if (d &gt; viewDist) return false;
+        Vector3 eye = transform.position + Vector3.up * 1.6f;
+        Vector3 target = player.position + Vector3.up * 1.0f;
+        return !Physics.Raycast(eye, (target - eye).normalized, d, obstacleMask);
+    }
+}</code></pre>
+            </div>
+        </div>
+    </details>
+
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">CHALLENGE 2: AI ARENA</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Dynamic AI testing requires validating the interaction between static geometry (NavMeshSurface), dynamic obstacles (NavMeshObstacle), autonomous agents (NavMeshAgent), and player kinematics (CharacterController).
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Arena Setup Checklist:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    1. 15m x 15m Baked NavMesh Surface.<br>
+                    2. 4 Waypoints placed at arena corners.<br>
+                    3. Dynamic Obstacle Crate positioned between Waypoint 1 and 2.<br>
+                    4. Player capsule with CharacterController.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Success Criteria:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Guard smoothly paths between waypoints, routes around the carved crate without sticking to corners, and enters Chase state immediately when player enters line-of-sight.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>AI Patrol Arena &bull; Hierarchy &amp; Component Verification</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Arena Blueprint</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">[AI_PatrolArena]</span>
+                    <span class="unity-prop-val">NavMeshSurface Baked</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label"> &bull; [Carved_Crate_Dynamic]</span>
+                    <span class="unity-prop-val">NavMeshObstacle &bull; Carve: [X] True</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label"> &bull; [Enemy_Guard_AI]</span>
+                    <span class="unity-prop-val">NavMeshAgent + EnemyNavMeshAI</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label"> &bull; [Waypoints_Group]</span>
+                    <span class="unity-prop-val">Size: 4 Transforms</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Placing Waypoints outside the baked NavMesh polygon boundary. <code>SetDestination()</code> fails to find a valid sample position on the mesh, causing the agent to stop moving completely.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Place waypoints slightly inside the walkable NavMesh boundary (at least 0.8m away from perimeter walls) to guarantee clean agent pathing.
+        </div>
     </div>`,
-    notes: "Start the second 10-minute timer. Help students verify that their NavMeshObstacle dynamically carves when enabled in Play Mode."
+    notes: "Launch Practice Challenge 2. Give students 10 minutes to set up their NavMesh arena, attach the EnemyNavMeshAI script, and test dynamic obstacle carving."
   },
 
-  // Slide 19: Milestone Summary & 3D Project Sprint Checklist
+  // Slide 19: Architecture Summary, Deliverables Checklist & Next Steps
   {
-    title: "Milestone Summary & 3D Project Sprint Checklist",
+    title: "Lesson 06 Summary: Milestone Deliverables & Next Steps",
     content: `<div class="content-stack">
         <div class="content-card primary" style="border-left-color: #059669;">
             <div class="card-title core" style="color: #047857;">Lesson 06 Engineering Deliverables</div>
@@ -1365,7 +2519,7 @@ public class EnemyAIController : MonoBehaviour
                         <p style="font-size: 0.82rem; color: #475569; margin-top: 4px;">CinemachineOrbitalFollow rig with position damping, collision deocclusion, and mouse look controls.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 14px;">
-                        <span style="font-weight: 800; color: #7c3aed; font-size: 0.90rem;">4. AI Navigation & Carving</span>
+                        <span style="font-weight: 800; color: #7c3aed; font-size: 0.90rem;">4. AI Navigation &amp; Carving</span>
                         <p style="font-size: 0.82rem; color: #475569; margin-top: 4px;">NavMeshSurface baking, waypoint patrol loop, line-of-sight pursuit, and dynamic obstacle carving.</p>
                     </div>
                 </div>
@@ -1375,6 +2529,68 @@ public class EnemyAIController : MonoBehaviour
         <div style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
             <a href="../index.html" class="portal-nav-btn" style="flex: 1 1 220px; text-align: center; font-size: 0.82rem; font-weight: 700; background: #0284c7; color: #ffffff; text-decoration: none; border: 1px solid #0369a1; padding: 0.55em 0.9em; border-radius: 6px; white-space: normal; line-height: 1.35; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;">&larr; Return to Course Portal</a>
             <button onclick="selectSlide(0)" class="portal-nav-btn" style="flex: 1 1 220px; text-align: center; font-size: 0.82rem; font-weight: 700; background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 0.55em 0.9em; border-radius: 6px; cursor: pointer; white-space: normal; line-height: 1.35; box-sizing: border-box; height: auto;">Restart Deck &uarr;</button>
+        </div>
+    </div>
+    <div class="lab-deep-dive" style="margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
+                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
+            </div>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">MILESTONE DELIVERABLES</span>
+        </div>
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
+            Greybox architecture is the foundation for all 3D game production. By mastering metric standards, precision vertex snapping, camera-relative locomotion, and NavMesh navigation, your team has the exact toolset required to build compelling, commercially viable 3D levels.
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Git &amp; Version Control Best Practice:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Keep <code>Scenes/Gym_MetricCalibration.unity</code> isolated from project level scenes. When testing new controller mechanics or jump values, test them in the gym scene before merging into the main game level.
+                </div>
+            </div>
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Next Sprint Roadmap:</div>
+                <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
+                    Lesson 07 will build on this greybox foundation by introducing custom 3D shader graphs, lighting pipelines, and visual effect systems.
+                </div>
+            </div>
+        </div>
+
+        <div class="unity-inspector">
+            <div class="unity-inspector-header">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
+                    <span>Project Milestone 6 Checklist &bull; Build Settings</span>
+                </div>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Final Verification</span>
+            </div>
+            <div class="unity-inspector-body">
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Scenes In Build</span>
+                    <span class="unity-prop-val">0: Scenes/Gym_MetricCalibration &bull; 1: Scenes/Level01_Greybox</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Physics Fixed Timestep</span>
+                    <span class="unity-prop-val">0.02 s (50 Hz Simulation Rate)</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">URP Quality Tier</span>
+                    <span class="unity-prop-val">Performant / High-Fidelity 3D</span>
+                </div>
+                <div class="unity-prop-row">
+                    <span class="unity-prop-label">Milestone Status</span>
+                    <span class="unity-prop-val"><strong style="color: #4ade80;">100% COMPLETE &bull; READY FOR LEVEL DESIGN</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
+            Rushing into 3D asset modeling before verifying your greybox layout with real playtesters. Fixing geometry in greybox takes 2 minutes; fixing UVs and 3D meshes takes hours.
+        </div>
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
+            <strong>Golden Rule for Your Project:</strong> Complete your full level layout in greybox, playtest it with 3 external users, lock the metrics, and only then begin final asset art production.
         </div>
     </div>`,
     notes: "Wrap up Lesson 06. Congratulate students on finishing the 3D block prototyping milestone. Remind teams to commit their gym scenes to GitHub and begin greyboxing their project levels."
