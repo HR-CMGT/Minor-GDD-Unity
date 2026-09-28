@@ -56,16 +56,13 @@ assert(html.includes("e.key === 'n' || e.key === 'N'"), 'Presenter notes shortcu
 assert(html.includes("e.key === 'l' || e.key === 'L'"), 'Lecture/Lab shortcut [L] registered');
 assert(html.includes("e.key === 'f' || e.key === 'F'"), 'Fullscreen shortcut [F] registered');
 
-// 5. Check Interactive Simulators
+// 5. Check Interactive Simulators (3D Jump Arc Sandbox & 3D Camera-Relative Vector Math Inspector)
 assert(html.includes('function initJumpSandbox('), 'initJumpSandbox() function present');
 assert(html.includes('function updateJumpParam('), 'updateJumpParam() function present');
 assert(html.includes('function launchJumpSimulation('), 'launchJumpSimulation() function present');
 assert(html.includes('function initCamVecInspector('), 'initCamVecInspector() function present');
 assert(html.includes('function setCamYawSlider('), 'setCamYawSlider() function present');
 assert(html.includes('function setRawInput('), 'setRawInput() function present');
-assert(html.includes('function initNavMeshSimulator('), 'initNavMeshSimulator() function present');
-assert(html.includes('function setNavAgentMode('), 'setNavAgentMode() function present');
-assert(html.includes('function toggleNavCarving('), 'toggleNavCarving() function present');
 
 // 6. Check Challenge Timers & Solution Lock
 assert(html.includes('function startChallengeTimer('), 'startChallengeTimer() present');

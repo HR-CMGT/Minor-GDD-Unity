@@ -1935,57 +1935,50 @@ public class AgentSteering : MonoBehaviour
     notes: "Review the NavMeshAgent API. Highlight the importance of checking agent.pathPending to avoid the single-frame zero distance bug."
   },
 
-  // Slide 15: 3D NavMesh Agent Pathfinding & Dynamic Carving Sandbox
+  // Slide 15: NavMesh Pathfinding: Corridor Queries & Waypoint Navigation
   {
-    title: "Interactive Simulator: NavMesh Pathfinding & Dynamic Carving Sandbox",
-    content: `<div style="background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">NavMesh Agent Pathfinding &amp; Dynamic Carving (3D Three.js WebGL)</div>
-            <div style="font-size: 0.76rem; color: #94a3b8;">Real-time obstacle avoidance &bull; Orbit 3D camera with mouse drag</div>
+    title: "NavMesh Pathfinding: Corridor Queries & Waypoint Navigation",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">Path Query Pipeline &amp; Arrival Logic</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        <code>NavMeshAgent</code> separates path calculation from physical locomotion:
+                    </p>
+                    <div class="code-box" style="font-size: 0.72rem; line-height: 1.35; margin: 8px 0;">
+                        <pre><code><span class="r-cm">// 1. Command agent to target position</span>
+public void MoveToTarget(Vector3 targetPos)
+{
+    agent.SetDestination(targetPos);
+}
+
+<span class="r-cm">// 2. Robust arrival detection check</span>
+public bool HasReachedDestination()
+{
+    <span class="r-cm">// Guard against single-frame async race condition</span>
+    if (agent.pathPending) return false;
+
+    return agent.remainingDistance &lt;= agent.stoppingDistance;
+}</code></pre>
+                    </div>
+                    <ul style="font-size: 0.80rem; color: #475569; line-height: 1.4; padding-left: 16px;">
+                        <li><strong>Asynchronous A* Corridor:</strong> Finds the polygon sequence on background worker threads.</li>
+                        <li><strong>String Pulling (Funnel):</strong> Converts polygonal corridor into straight-line corner nodes (<code>agent.corners</code>).</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        
-        <div style="display: grid; grid-template-columns: minmax(calc(240px * var(--font-scale, 1)), calc(300px * var(--font-scale, 1))) 1fr minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))); gap: 12px; align-items: stretch;">
-            <!-- Left: Controls -->
-            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem;">AGENT CONTROLS</div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <button id="btnNavModePatrol" class="sim-action-btn" style="background: #0369a1; border: 1px solid #38bdf8; color: #fff; font-size: 0.72rem;" onclick="setNavAgentMode('patrol')">Mode: Patrol</button>
-                    <button id="btnNavModeChase" class="sim-action-btn" style="background: #1e293b; border: 1px solid #334155; color: #fff; font-size: 0.72rem;" onclick="setNavAgentMode('chase')">Mode: Chase</button>
-                </div>
-
-                <div style="border-top: 1px solid #1f2937; padding-top: 6px;">
-                    <button id="btnNavCarve" class="sim-action-btn" style="background: #059669; border: 1px solid #34d399; color: #fff; font-size: 0.72rem; font-weight: 800;" onclick="toggleNavCarving()">Dynamic Carving: ON</button>
-                </div>
-
-                <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
-                    When <strong>Carving is ON</strong>, the orange block punches a real-time hole in the NavMesh, forcing the agent to route around corners!
-                </div>
-            </div>
-
-            <!-- Center: 3D Three.js Viewport with Canvas Fallback -->
-            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                <div id="sim3dNavMeshContainer" style="width: 100%; height: 260px; position: relative; border-radius: 4px; overflow: hidden;"></div>
-                <canvas id="navMeshCanvas" width="460" height="260" style="display: none;"></canvas>
-            </div>
-
-            <!-- Right: Path Telemetry -->
-            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-weight: 800; color: #34d399; font-size: 0.84rem;">PATHFINDING TELEMETRY</div>
-                
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Remaining Distance:</div>
-                    <div id="navTelemetryRemaining" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">8.4 m</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Path Corners:</div>
-                    <div id="navTelemetryCorners" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">3 points</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Agent State:</div>
-                    <div id="navTelemetryState" style="color: #10b981; font-weight: 800; font-size: 0.82rem;">Patrol Loop (WP 1/4)</div>
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Steering &amp; Local Obstacle Avoidance</div>
+                <div class="card-body">
+                    <ul style="font-size: 0.82rem; color: #065f46; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Stopping Distance:</strong> Target clearance threshold before halting (e.g. <code>0.5m</code> for patrol, <code>1.5m</code> for melee attacks).</li>
+                        <li><strong>Auto Braking:</strong> Turn ON for discrete stops. Turn OFF for smooth continuous patrol routes through waypoints.</li>
+                        <li><strong>Avoidance Priority (0-99):</strong> Lower values have higher right-of-way (e.g. Heavy Boss = 10, Minions = 50).</li>
+                        <li><strong>Quality (RVO):</strong> Set to <em>High Quality</em> for reciprocal velocity obstacle avoidance between multiple agents.</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1995,24 +1988,24 @@ public class AgentSteering : MonoBehaviour
             <div style="font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;">
                 <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>
             </div>
-            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">AI PATHFINDING SIMULATION</span>
+            <span style="background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;">PATH CORRIDORS</span>
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
             <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
-            Dynamic Carving modifies the underlying NavMesh polygons in real time. Instead of having to re-bake the entire level geometry when a crate moves or a door closes, the <code>NavMeshObstacle</code> component cuts a local hole in the surface, forcing AI agents to recalculate fresh paths around the obstacle.
+            Pathfinding in Unity 6 is a two-tier system: (1) <strong>Global Path Corridor:</strong> An A* graph search that identifies the chain of convex polygons between agent and destination. (2) <strong>Local Steering (RVO):</strong> Frame-by-frame physics velocity adjustments that push agents around other moving agents without recalculating the global polygon corridor.
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
-                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Static vs Dynamic Obstacles:</div>
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Global Corridor vs Local Avoidance:</div>
                 <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
-                    <strong>Static Walls:</strong> Baked once into the static NavMesh at design time.<br>
-                    <strong>Dynamic Obstacles (Crates/Doors):</strong> Unbaked GameObjects with <code>NavMeshObstacle (Carve = True)</code> that modify the mesh dynamically when stationary.
+                    <strong>Global Corridor:</strong> Computed once upon calling <code>SetDestination()</code>. Cheap and efficient.<br>
+                    <strong>Local Avoidance:</strong> Evaluated every frame against nearby dynamic agents using Reciprocal Velocity Obstacles (RVO).
                 </div>
             </div>
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
-                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Carving Performance Overhead:</div>
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Corner Nodes (agent.corners):</div>
                 <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
-                    Every carve event triggers polygon triangulation. Use <code>Carve Only Stationary = True</code> so the obstacle only carves when it stops moving, avoiding per-frame polygon recalculations.
+                    Access <code>agent.path.corners</code> to inspect the exact world-space vertices the agent will traverse. Ideal for drawing custom debug path gizmos in Scene view.
                 </div>
             </div>
         </div>
@@ -2021,39 +2014,39 @@ public class AgentSteering : MonoBehaviour
             <div class="unity-inspector-header">
                 <div style="display: flex; align-items: center; gap: 6px;">
                     <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
-                    <span>AI Arena Coordinator &amp; Dynamic Obstacle System</span>
+                    <span>NavMeshAgent &bull; Steering &amp; Avoidance Reference</span>
                 </div>
-                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Simulator System</span>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Inspector Configuration</span>
             </div>
             <div class="unity-inspector-body">
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Agent Speed / Stopping Distance</span>
-                    <span class="unity-prop-val">4.00 m/s / 0.80 m</span>
+                    <span class="unity-prop-label">Speed / Angular Speed</span>
+                    <span class="unity-prop-val">4.50 m/s / 360.00 deg/s</span>
                 </div>
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Dynamic Carve Footprint</span>
-                    <span class="unity-prop-val">1.80m x 1.80m Box</span>
+                    <span class="unity-prop-label">Acceleration / Stopping Distance</span>
+                    <span class="unity-prop-val">12.00 m/s² / 0.50 m</span>
                 </div>
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Carve Move Threshold</span>
-                    <span class="unity-prop-val">0.10 m (Time To Stationary: 0.30s)</span>
+                    <span class="unity-prop-label">Auto Braking</span>
+                    <span class="unity-prop-val">[X] True</span>
                 </div>
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Patrol Waypoints Loop</span>
-                    <span class="unity-prop-val">4 Waypoints (WP1 &bull; WP2 &bull; WP3 &bull; WP4)</span>
+                    <span class="unity-prop-label">Avoidance Priority</span>
+                    <span class="unity-prop-val">50 (Medium Default)</span>
                 </div>
             </div>
         </div>
 
         <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
             <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
-            Attaching both a <code>NavMeshAgent</code> and a <code>NavMeshObstacle</code> with Carving enabled to the same AI entity. The agent tries to carve a hole beneath its own feet, invalidating its own NavMesh position.
+            Evaluating <code>if (agent.remainingDistance &lt;= 0.1f)</code> immediately on the frame <code>SetDestination()</code> is called. Since path queries run asynchronously, <code>remainingDistance</code> reads <code>0</code> on frame 1 until the worker thread returns the corridor.
         </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Golden Rule for Your Project:</strong> AI characters use <code>NavMeshAgent</code>. Moveable props, crates, and closing doors use <code>NavMeshObstacle</code> with <code>Carve Only Stationary</code> enabled.
+            <strong>Golden Rule for Your Project:</strong> Always guard distance evaluations with <code>if (!agent.pathPending &amp;&amp; agent.remainingDistance &lt;= agent.stoppingDistance)</code>.
         </div>
     </div>`,
-    notes: "Demonstrate the 3D NavMesh simulator. Toggle dynamic carving ON and OFF to show how the agent immediately reroutes around the central carved crate."
+    notes: "Review the path query pipeline. Emphasize why checking agent.pathPending is essential to avoid the initial-frame zero distance bug."
   },
 
   // Slide 16: Dynamic Obstacle Carving: NavMeshObstacle
@@ -2654,8 +2647,6 @@ const simLifecycleHook = `
                     if (typeof initJumpSandbox === 'function') initJumpSandbox();
                 } else if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
                     if (typeof initCamVecInspector === 'function') initCamVecInspector();
-                } else if (slideIdx === 14) { // Slide 15 (0-indexed 14): NavMesh Simulator
-                    if (typeof initNavMeshSimulator === 'function') initNavMeshSimulator();
                 }
             }, 30);
         }
