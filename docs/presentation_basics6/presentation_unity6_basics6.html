@@ -4563,26 +4563,59 @@ function toggleFlattenY() {
 
 
 // --------------------------------------------------
-// 3. NavMesh Agent Pathfinding & Carving Simulator (Slide 15)
+// 3. High-Precision 3D NavMesh Agent Pathfinding & Dynamic Carving Simulator (Slide 15)
 // --------------------------------------------------
+
+// Arena Dimensions & Level Layout
+const NAV_ARENA = {
+    minX: -4.5, maxX: 4.5,
+    minZ: -3.0, maxZ: 3.0,
+    agentRadius: 0.35 // Collision padding so capsule never touches walls
+};
+
+// Static Solid Wall Obstacles (Boxes: minX, maxX, minZ, maxZ)
+const NAV_STATIC_OBSTACLES = [
+    // Outer perimeter boundary walls (with thickness)
+    { id: 'north_wall', minX: -4.8, maxX: 4.8, minZ: -3.3, maxZ: -2.9 },
+    { id: 'south_wall', minX: -4.8, maxX: 4.8, minZ: 2.9, maxZ: 3.3 },
+    { id: 'west_wall',  minX: -4.8, maxX: -4.4, minZ: -3.3, maxZ: 3.3 },
+    { id: 'east_wall',  minX: 4.4, maxX: 4.8, minZ: -3.3, maxZ: 3.3 },
+
+    // Left barrier wall (leaves lower corridor z: 0.5 to 2.8)
+    { id: 'left_pillar', minX: -2.3, maxX: -1.7, minZ: -2.9, maxZ: 0.5 },
+
+    // Right barrier wall (leaves upper corridor z: -2.8 to -0.5)
+    { id: 'right_pillar', minX: 1.7, maxX: 2.3, minZ: -0.5, maxZ: 2.9 },
+
+    // Central dividing partition walls (flanking the central blast door)
+    { id: 'center_wall_top', minX: -0.2, maxX: 0.2, minZ: -2.9, maxZ: -0.9 },
+    { id: 'center_wall_bot', minX: -0.2, maxX: 0.2, minZ: 0.9, maxZ: 2.9 }
+];
+
+// Dynamic Carved Obstacle (Central Blast Door / Crate)
+const NAV_CARVED_OBSTACLE = {
+    id: 'center_blast_door',
+    minX: -0.65, maxX: 0.65,
+    minZ: -0.9, maxZ: 0.9
+};
+
 let navSimState = {
     carveEnabled: true,
     agentMode: 'patrol',
-    agentX: -3.5,
-    agentZ: -2.2,
-    targetX: 3.5,
-    targetZ: 2.2,
-    speed: 4.0,           // m/s
-    stoppingDist: 0.3,    // m
+    agentX: -3.4,
+    agentZ: -1.8,
+    targetX: 3.4,
+    targetZ: 1.8,
+    speed: 3.8,           // m/s
+    stoppingDist: 0.25,   // m
     waypointIndex: 0,
     waypoints: [
-        { x: -3.5, z: -2.2 },
-        { x: 3.5, z: -2.2 },
-        { x: 3.5, z: 2.2 },
-        { x: -3.5, z: 2.2 }
+        { x: -3.4, z: -1.8 },
+        { x: 3.4, z: -1.8 },
+        { x: 3.4, z: 1.8 },
+        { x: -3.4, z: 1.8 }
     ],
-    path: [],
-    carvedObstacle: { x: 0, z: 0, w: 2.0, d: 2.0 }
+    path: []
 };
 
 let nav3d = {
@@ -4592,7 +4625,8 @@ let nav3d = {
     controls: null,
     agentMesh: null,
     targetMesh: null,
-    obstacleMesh: null,
+    doorMesh: null,
+    doorCarveHoleMesh: null,
     pathLine: null,
     floorMesh: null,
     raycaster: null,
@@ -4604,6 +4638,258 @@ let nav3d = {
     initialized: false
 };
 
+// --------------------------------------------------
+// A* Grid Pathfinding Engine with Line-of-Sight Funnel Smoothing
+// --------------------------------------------------
+const NAV_GRID = {
+    cellSize: 0.15, // High resolution (60x40 cells)
+    cols: 60,
+    rows: 40,
+    walkable: []
+};
+
+function buildNavMeshGrid() {
+    NAV_GRID.walkable = new Uint8Array(NAV_GRID.cols * NAV_GRID.rows);
+    const r = NAV_ARENA.agentRadius;
+
+    // Active obstacle list
+    const activeObstacles = [...NAV_STATIC_OBSTACLES];
+    if (navSimState.carveEnabled) {
+        activeObstacles.push(NAV_CARVED_OBSTACLE);
+    }
+
+    for (let iz = 0; iz < NAV_GRID.rows; iz++) {
+        const z = NAV_ARENA.minZ + (iz + 0.5) * NAV_GRID.cellSize;
+        for (let ix = 0; ix < NAV_GRID.cols; ix++) {
+            const x = NAV_ARENA.minX + (ix + 0.5) * NAV_GRID.cellSize;
+            const idx = iz * NAV_GRID.cols + ix;
+
+            // Check if point is inside boundary
+            if (x < NAV_ARENA.minX + r || x > NAV_ARENA.maxX - r ||
+                z < NAV_ARENA.minZ + r || z > NAV_ARENA.maxZ - r) {
+                NAV_GRID.walkable[idx] = 0;
+                continue;
+            }
+
+            // Check collision with all obstacles (with agent radius padding)
+            let blocked = false;
+            for (let ob of activeObstacles) {
+                if (x >= ob.minX - r && x <= ob.maxX + r &&
+                    z >= ob.minZ - r && z <= ob.maxZ + r) {
+                    blocked = true;
+                    break;
+                }
+            }
+
+            NAV_GRID.walkable[idx] = blocked ? 0 : 1;
+        }
+    }
+}
+
+function worldToGrid(x, z) {
+    const ix = Math.floor((x - NAV_ARENA.minX) / NAV_GRID.cellSize);
+    const iz = Math.floor((z - NAV_ARENA.minZ) / NAV_GRID.cellSize);
+    return {
+        ix: Math.max(0, Math.min(NAV_GRID.cols - 1, ix)),
+        iz: Math.max(0, Math.min(NAV_GRID.rows - 1, iz))
+    };
+}
+
+function gridToWorld(ix, iz) {
+    return {
+        x: NAV_ARENA.minX + (ix + 0.5) * NAV_GRID.cellSize,
+        z: NAV_ARENA.minZ + (iz + 0.5) * NAV_GRID.cellSize
+    };
+}
+
+function findNearestWalkable(x, z) {
+    const start = worldToGrid(x, z);
+    if (NAV_GRID.walkable[start.iz * NAV_GRID.cols + start.ix] === 1) {
+        return { x, z };
+    }
+
+    // Breadth-first search for nearest walkable node
+    const maxRadius = 15;
+    for (let rad = 1; rad <= maxRadius; rad++) {
+        for (let dz = -rad; dz <= rad; dz++) {
+            for (let dx = -rad; dx <= rad; dx++) {
+                if (Math.abs(dx) !== rad && Math.abs(dz) !== rad) continue;
+                const nix = start.ix + dx;
+                const niz = start.iz + dz;
+                if (nix >= 0 && nix < NAV_GRID.cols && niz >= 0 && niz < NAV_GRID.rows) {
+                    if (NAV_GRID.walkable[niz * NAV_GRID.cols + nix] === 1) {
+                        return gridToWorld(nix, niz);
+                    }
+                }
+            }
+        }
+    }
+    return { x, z };
+}
+
+// True A* (A-Star) Path Search on Navigation Grid
+function findAStarPath(startX, startZ, targetX, targetZ) {
+    buildNavMeshGrid();
+
+    const startPos = findNearestWalkable(startX, startZ);
+    const goalPos = findNearestWalkable(targetX, targetZ);
+
+    const startG = worldToGrid(startPos.x, startPos.z);
+    const goalG = worldToGrid(goalPos.x, goalPos.z);
+
+    const startNode = startG.iz * NAV_GRID.cols + startG.ix;
+    const goalNode = goalG.iz * NAV_GRID.cols + goalG.ix;
+
+    if (startNode === goalNode) {
+        return [startPos, goalPos];
+    }
+
+    const numCells = NAV_GRID.cols * NAV_GRID.rows;
+    const gScore = new Float32Array(numCells).fill(1e9);
+    const fScore = new Float32Array(numCells).fill(1e9);
+    const parent = new Int32Array(numCells).fill(-1);
+    const inOpen = new Uint8Array(numCells);
+    const closed = new Uint8Array(numCells);
+
+    // Min-heap priority queue
+    const openSet = [startNode];
+    inOpen[startNode] = 1;
+    gScore[startNode] = 0;
+    fScore[startNode] = Math.hypot(goalG.ix - startG.ix, goalG.iz - startG.iz);
+
+    // 8-Directional neighbor offsets
+    const dx = [1, -1, 0, 0, 1, -1, 1, -1];
+    const dz = [0, 0, 1, -1, 1, 1, -1, -1];
+    const cost = [1.0, 1.0, 1.0, 1.0, 1.414, 1.414, 1.414, 1.414];
+
+    while (openSet.length > 0) {
+        // Pop lowest fScore
+        let bestIdx = 0;
+        let lowestF = fScore[openSet[0]];
+        for (let i = 1; i < openSet.length; i++) {
+            if (fScore[openSet[i]] < lowestF) {
+                lowestF = fScore[openSet[i]];
+                bestIdx = i;
+            }
+        }
+
+        const current = openSet.splice(bestIdx, 1)[0];
+        inOpen[current] = 0;
+        closed[current] = 1;
+
+        if (current === goalNode) {
+            // Reconstruct path
+            const rawPath = [];
+            let curr = current;
+            while (curr !== -1) {
+                const ciz = Math.floor(curr / NAV_GRID.cols);
+                const cix = curr % NAV_GRID.cols;
+                rawPath.push(gridToWorld(cix, ciz));
+                curr = parent[curr];
+            }
+            rawPath.reverse();
+            rawPath[0] = { x: startX, z: startZ };
+            rawPath[rawPath.length - 1] = { x: targetX, z: targetZ };
+
+            return smoothPath(rawPath);
+        }
+
+        const ciz = Math.floor(current / NAV_GRID.cols);
+        const cix = current % NAV_GRID.cols;
+
+        for (let i = 0; i < 8; i++) {
+            const nix = cix + dx[i];
+            const niz = ciz + dz[i];
+
+            if (nix < 0 || nix >= NAV_GRID.cols || niz < 0 || niz >= NAV_GRID.rows) continue;
+            const neighbor = niz * NAV_GRID.cols + nix;
+            if (closed[neighbor] || NAV_GRID.walkable[neighbor] === 0) continue;
+
+            // Prevent diagonal cutting through corner blocks
+            if (i >= 4) {
+                const side1 = ciz * NAV_GRID.cols + nix;
+                const side2 = niz * NAV_GRID.cols + cix;
+                if (NAV_GRID.walkable[side1] === 0 || NAV_GRID.walkable[side2] === 0) continue;
+            }
+
+            const tentativeG = gScore[current] + cost[i];
+            if (tentativeG < gScore[neighbor]) {
+                parent[neighbor] = current;
+                gScore[neighbor] = tentativeG;
+                fScore[neighbor] = tentativeG + Math.hypot(goalG.ix - nix, goalG.iz - niz);
+
+                if (!inOpen[neighbor]) {
+                    openSet.push(neighbor);
+                    inOpen[neighbor] = 1;
+                }
+            }
+        }
+    }
+
+    // Fallback if no full path
+    return [{ x: startX, z: startZ }, { x: targetX, z: targetZ }];
+}
+
+// Line-of-sight raycast between two points
+function hasLineOfSight(p1, p2) {
+    const dist = Math.hypot(p2.x - p1.x, p2.z - p1.z);
+    if (dist < 0.05) return true;
+
+    const steps = Math.ceil(dist / 0.08);
+    const r = NAV_ARENA.agentRadius;
+
+    const activeObstacles = [...NAV_STATIC_OBSTACLES];
+    if (navSimState.carveEnabled) {
+        activeObstacles.push(NAV_CARVED_OBSTACLE);
+    }
+
+    for (let i = 1; i < steps; i++) {
+        const t = i / steps;
+        const x = p1.x + (p2.x - p1.x) * t;
+        const z = p1.z + (p2.z - p1.z) * t;
+
+        // Boundary check
+        if (x < NAV_ARENA.minX + r || x > NAV_ARENA.maxX - r ||
+            z < NAV_ARENA.minZ + r || z > NAV_ARENA.maxZ - r) {
+            return false;
+        }
+
+        // Obstacle checks
+        for (let ob of activeObstacles) {
+            if (x >= ob.minX - r && x <= ob.maxX + r &&
+                z >= ob.minZ - r && z <= ob.maxZ + r) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// String Pulling / Funnel Smoothing
+function smoothPath(rawPath) {
+    if (rawPath.length <= 2) return rawPath;
+
+    const smoothed = [rawPath[0]];
+    let currentIdx = 0;
+
+    while (currentIdx < rawPath.length - 1) {
+        let furthestVisible = currentIdx + 1;
+        for (let checkIdx = rawPath.length - 1; checkIdx > currentIdx + 1; checkIdx--) {
+            if (hasLineOfSight(rawPath[currentIdx], rawPath[checkIdx])) {
+                furthestVisible = checkIdx;
+                break;
+            }
+        }
+        smoothed.push(rawPath[furthestVisible]);
+        currentIdx = furthestVisible;
+    }
+
+    return smoothed;
+}
+
+// --------------------------------------------------
+// 3D Scene Management
+// --------------------------------------------------
 function initNavMeshSimulator() {
     init3dNavMeshSimulator();
     recalculateNavPath();
@@ -4620,8 +4906,8 @@ function init3dNavMeshSimulator() {
         nav3d.scene = new THREE.Scene();
         nav3d.scene.background = new THREE.Color(0x050b14);
 
-        nav3d.camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-        nav3d.camera.position.set(0, 9.0, 8.0);
+        nav3d.camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 100);
+        nav3d.camera.position.set(0, 9.5, 8.5);
 
         nav3d.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         nav3d.renderer.setSize(w, h);
@@ -4640,7 +4926,7 @@ function init3dNavMeshSimulator() {
             nav3d.controls.maxPolarAngle = Math.PI / 2 - 0.05;
         }
 
-        // Click-to-set-destination raycasting
+        // Raycast Click-to-Move handler
         nav3d.renderer.domElement.addEventListener('pointerdown', (e) => {
             nav3d.isPointerDown = true;
             nav3d.downPos = { x: e.clientX, y: e.clientY };
@@ -4650,7 +4936,7 @@ function init3dNavMeshSimulator() {
             if (!nav3d.isPointerDown) return;
             nav3d.isPointerDown = false;
             const dist = Math.hypot(e.clientX - nav3d.downPos.x, e.clientY - nav3d.downPos.y);
-            if (dist < 6) { // Clean click without dragging camera
+            if (dist < 6) { // Click without camera drag
                 const rect = nav3d.renderer.domElement.getBoundingClientRect();
                 nav3d.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
                 nav3d.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -4658,111 +4944,147 @@ function init3dNavMeshSimulator() {
                 const intersects = nav3d.raycaster.intersectObject(nav3d.floorMesh);
                 if (intersects.length > 0) {
                     const pt = intersects[0].point;
-                    navSimState.targetX = THREE.MathUtils.clamp(pt.x, -4.0, 4.0);
-                    navSimState.targetZ = THREE.MathUtils.clamp(pt.z, -2.8, 2.8);
+                    const clamped = findNearestWalkable(pt.x, pt.z);
+                    navSimState.targetX = THREE.MathUtils.clamp(clamped.x, -4.2, 4.2);
+                    navSimState.targetZ = THREE.MathUtils.clamp(clamped.z, -2.7, 2.7);
                     navSimState.agentMode = 'manual';
+
                     const btnP = document.getElementById('btnNavModePatrol');
                     const btnC = document.getElementById('btnNavModeChase');
                     if (btnP) btnP.style.background = '#1e293b';
                     if (btnC) btnC.style.background = '#1e293b';
+
                     recalculateNavPath();
                 }
             }
         });
 
-        // Lighting
-        const amb = new THREE.AmbientLight(0xffffff, 0.8);
+        // Lights
+        const amb = new THREE.AmbientLight(0xffffff, 0.85);
         nav3d.scene.add(amb);
         const dir = new THREE.DirectionalLight(0x38bdf8, 1.4);
         dir.position.set(6, 14, 6);
         nav3d.scene.add(dir);
 
-        // Walkable NavMesh Floor (Translucent Cyan)
-        const floorGeo = new THREE.PlaneGeometry(9.6, 6.4);
+        // Ground Floor base
+        const groundGeo = new THREE.PlaneGeometry(9.6, 6.6);
+        groundGeo.rotateX(-Math.PI / 2);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.8 });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.position.y = -0.01;
+        nav3d.scene.add(ground);
+
+        // Walkable Translucent NavMesh Floor Mesh
+        const floorGeo = new THREE.PlaneGeometry(9.0, 6.0);
         floorGeo.rotateX(-Math.PI / 2);
         const floorMat = new THREE.MeshStandardMaterial({
             color: 0x0284c7,
-            roughness: 0.4,
+            roughness: 0.3,
             metalness: 0.1,
             transparent: true,
-            opacity: 0.35
+            opacity: 0.38
         });
         nav3d.floorMesh = new THREE.Mesh(floorGeo, floorMat);
+        nav3d.floorMesh.position.y = 0.01;
         nav3d.scene.add(nav3d.floorMesh);
 
         // Metric Grid on Floor
-        const grid = new THREE.GridHelper(10, 10, 0x0284c7, 0x1e293b);
-        grid.position.y = 0.01;
+        const grid = new THREE.GridHelper(10, 10, 0x38bdf8, 0x1e293b);
+        grid.position.y = 0.02;
         nav3d.scene.add(grid);
 
-        // Static Boundary Walls
-        const wallMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
-        const wallNorth = new THREE.Mesh(new THREE.BoxGeometry(10.0, 1.0, 0.3), wallMat);
-        wallNorth.position.set(0, 0.5, -3.3);
-        const wallSouth = new THREE.Mesh(new THREE.BoxGeometry(10.0, 1.0, 0.3), wallMat);
-        wallSouth.position.set(0, 0.5, 3.3);
-        const wallWest = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.0, 6.6), wallMat);
-        wallWest.position.set(-4.9, 0.5, 0);
-        const wallEast = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.0, 6.6), wallMat);
-        wallEast.position.set(4.9, 0.5, 0);
+        // Build Static Obstacle Meshes
+        const wallMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.4, metalness: 0.1 });
+        const wallTrimMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.3 });
+
+        NAV_STATIC_OBSTACLES.forEach(ob => {
+            const w = ob.maxX - ob.minX;
+            const d = ob.maxZ - ob.minZ;
+            const cx = (ob.minX + ob.maxX) / 2;
+            const cz = (ob.minZ + ob.maxZ) / 2;
+
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, 1.2, d), wallMat);
+            mesh.position.set(cx, 0.6, cz);
+            nav3d.scene.add(mesh);
+
+            // Wall top trim
+            const trim = new THREE.Mesh(new THREE.BoxGeometry(w + 0.04, 0.08, d + 0.04), wallTrimMat);
+            trim.position.set(cx, 1.22, cz);
+            nav3d.scene.add(trim);
+        });
+
+        // Dynamic Carved Obstacle (Central Blast Door / Heavy Security Crate)
+        const doorGroup = new THREE.Group();
+        const doorMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.25, metalness: 0.2 });
+        const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.4, 1.8), doorMat);
+        doorMesh.position.y = 0.7;
         
-        // Static Interior Dividers
-        const pillar1 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.0, 2.0), wallMat);
-        pillar1.position.set(-2.2, 0.5, -1.8);
-        const pillar2 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.0, 2.0), wallMat);
-        pillar2.position.set(2.2, 0.5, 1.8);
+        // Hazard warning stripes
+        const stripeGeo = new THREE.BoxGeometry(1.32, 0.15, 1.82);
+        const stripeMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
+        const stripeMesh = new THREE.Mesh(stripeGeo, stripeMat);
+        stripeMesh.position.y = 0.7;
+        doorGroup.add(doorMesh);
+        doorGroup.add(stripeMesh);
+        doorGroup.position.set(0, 0, 0);
+        nav3d.doorMesh = doorGroup;
+        nav3d.scene.add(nav3d.doorMesh);
 
-        nav3d.scene.add(wallNorth);
-        nav3d.scene.add(wallSouth);
-        nav3d.scene.add(wallWest);
-        nav3d.scene.add(wallEast);
-        nav3d.scene.add(pillar1);
-        nav3d.scene.add(pillar2);
+        // Carve Hole Marker on Floor (Red dashed boundary when closed)
+        const carveHoleGeo = new THREE.PlaneGeometry(1.5, 2.0);
+        carveHoleGeo.rotateX(-Math.PI / 2);
+        const carveHoleMat = new THREE.MeshBasicMaterial({ color: 0xef4444, transparent: true, opacity: 0.35 });
+        nav3d.doorCarveHoleMesh = new THREE.Mesh(carveHoleGeo, carveHoleMat);
+        nav3d.doorCarveHoleMesh.position.set(0, 0.03, 0);
+        nav3d.scene.add(nav3d.doorCarveHoleMesh);
 
-        // Dynamic Carved Obstacle (Central Crate / Blast Door)
-        const obGeo = new THREE.BoxGeometry(2.0, 1.0, 2.0);
-        const obMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.3 });
-        nav3d.obstacleMesh = new THREE.Mesh(obGeo, obMat);
-        nav3d.obstacleMesh.position.set(0, 0.5, 0);
-        nav3d.scene.add(nav3d.obstacleMesh);
-
-        // NavMesh Agent Capsule
+        // 3D NavMesh Agent Capsule
         const agentGroup = new THREE.Group();
-        const agentBodyGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.8, 16);
-        const agentMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.2 });
+        const agentBodyGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.9, 16);
+        const agentMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.2, metalness: 0.1 });
         const agentBody = new THREE.Mesh(agentBodyGeo, agentMat);
-        agentBody.position.y = 0.4;
+        agentBody.position.y = 0.45;
         
-        const visorGeo = new THREE.BoxGeometry(0.2, 0.1, 0.15);
-        const visorMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const agentCapGeo = new THREE.SphereGeometry(0.25, 16, 8);
+        const agentCapTop = new THREE.Mesh(agentCapGeo, agentMat);
+        agentCapTop.position.y = 0.9;
+        const agentCapBot = new THREE.Mesh(agentCapGeo, agentMat);
+        agentCapBot.position.y = 0.1;
+
+        // Front Visor
+        const visorGeo = new THREE.BoxGeometry(0.22, 0.12, 0.18);
+        const visorMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
         const visor = new THREE.Mesh(visorGeo, visorMat);
-        visor.position.set(0, 0.65, 0.22);
+        visor.position.set(0, 0.8, 0.2);
         
         agentGroup.add(agentBody);
+        agentGroup.add(agentCapTop);
+        agentGroup.add(agentCapBot);
         agentGroup.add(visor);
         nav3d.agentMesh = agentGroup;
         nav3d.agentMesh.position.set(navSimState.agentX, 0, navSimState.agentZ);
         nav3d.scene.add(nav3d.agentMesh);
 
-        // Target Beacon Marker
+        // Target Marker Beacon
         const targetGroup = new THREE.Group();
-        const targetGeo = new THREE.CylinderGeometry(0.25, 0.05, 0.6, 12);
-        const targetMat = new THREE.MeshStandardMaterial({ color: 0xef4444 });
-        const targetMesh = new THREE.Mesh(targetGeo, targetMat);
-        targetMesh.position.y = 0.3;
-        const targetRingGeo = new THREE.RingGeometry(0.35, 0.45, 16);
-        targetRingGeo.rotateX(-Math.PI / 2);
-        const targetRingMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide });
-        const targetRing = new THREE.Mesh(targetRingGeo, targetRingMat);
-        targetRing.position.y = 0.02;
-        targetGroup.add(targetMesh);
-        targetGroup.add(targetRing);
+        const targetCylGeo = new THREE.CylinderGeometry(0.25, 0.05, 0.6, 12);
+        const targetMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3 });
+        const targetCyl = new THREE.Mesh(targetCylGeo, targetMat);
+        targetCyl.position.y = 0.3;
+        
+        const ringGeo = new THREE.RingGeometry(0.35, 0.48, 16);
+        ringGeo.rotateX(-Math.PI / 2);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.y = 0.04;
+        targetGroup.add(targetCyl);
+        targetGroup.add(ring);
         nav3d.targetMesh = targetGroup;
         nav3d.targetMesh.position.set(navSimState.targetX, 0, navSimState.targetZ);
         nav3d.scene.add(nav3d.targetMesh);
 
-        // Path Line
-        const pathMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3 });
+        // 3D Path Line (Smooth Ribbon / Line)
+        const pathMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3.5 });
         const pathGeo = new THREE.BufferGeometry();
         nav3d.pathLine = new THREE.Line(pathGeo, pathMat);
         nav3d.scene.add(nav3d.pathLine);
@@ -4802,69 +5124,48 @@ function recalculateNavPath() {
     const sz = navSimState.agentZ;
     const tx = navSimState.targetX;
     const tz = navSimState.targetZ;
-    
-    const path = [{ x: sx, z: sz }];
-    const ob = navSimState.carvedObstacle;
-    
-    // Check if line segment from start to target intersects carved box obstacle
-    const lineIntersects = navSimState.carveEnabled && lineBoxIntersect(sx, sz, tx, tz, ob.x - ob.w / 2 - 0.3, ob.z - ob.d / 2 - 0.3, ob.w + 0.6, ob.d + 0.6);
-    
-    if (lineIntersects) {
-        // Path around top or bottom corner of obstacle
-        const topCorner = { x: 0, z: -1.8 };
-        const botCorner = { x: 0, z: 1.8 };
-        
-        const distTop = Math.hypot(sx - topCorner.x, sz - topCorner.z) + Math.hypot(tx - topCorner.x, tz - topCorner.z);
-        const distBot = Math.hypot(sx - botCorner.x, sz - botCorner.z) + Math.hypot(tx - botCorner.x, tz - botCorner.z);
-        
-        if (distTop < distBot) {
-            path.push(topCorner);
-        } else {
-            path.push(botCorner);
-        }
-    }
-    
-    path.push({ x: tx, z: tz });
-    navSimState.path = path;
-    
-    // Update 3D Path Line
+
+    // Run True A* with Line-of-Sight smoothing
+    const rawAStar = findAStarPath(sx, sz, tx, tz);
+    navSimState.path = rawAStar;
+
+    // Update 3D Path Line geometry
     if (nav3d.pathLine && nav3d.scene) {
-        const points = path.map(p => new THREE.Vector3(p.x, 0.08, p.z));
+        const points = navSimState.path.map(p => new THREE.Vector3(p.x, 0.1, p.z));
         nav3d.pathLine.geometry.setFromPoints(points);
     }
 
-    // Update 3D Target Position
+    // Update 3D Target Marker position
     if (nav3d.targetMesh) {
         nav3d.targetMesh.position.set(tx, 0, tz);
+    }
+
+    // Update Door visual state (Raised when Carve is ON, Lowered/Open when Carve is OFF)
+    if (nav3d.doorMesh) {
+        nav3d.doorMesh.position.y = navSimState.carveEnabled ? 0 : -1.35;
+    }
+    if (nav3d.doorCarveHoleMesh) {
+        nav3d.doorCarveHoleMesh.visible = navSimState.carveEnabled;
     }
 
     updateNavTelemetry();
 }
 
-function lineBoxIntersect(x1, z1, x2, z2, minX, minZ, w, d) {
-    const maxX = minX + w;
-    const maxZ = minZ + d;
-    const segMinX = Math.min(x1, x2), segMaxX = Math.max(x1, x2);
-    const segMinZ = Math.min(z1, z2), segMaxZ = Math.max(z1, z2);
-    if (segMaxX < minX || segMinX > maxX || segMaxZ < minZ || segMinZ > maxZ) return false;
-    return true;
-}
-
 function update3dNavAgentMovement(dt) {
     if (navSimState.path.length < 2) return;
-    
+
     const nextWp = navSimState.path[1];
     const dx = nextWp.x - navSimState.agentX;
     const dz = nextWp.z - navSimState.agentZ;
     const dist = Math.hypot(dx, dz);
-    
+
     const moveDist = navSimState.speed * dt;
-    
-    if (dist <= moveDist || dist < 0.15) {
+
+    if (dist <= moveDist || dist < 0.12) {
         navSimState.agentX = nextWp.x;
         navSimState.agentZ = nextWp.z;
         navSimState.path.shift();
-        
+
         if (navSimState.path.length <= 1) {
             if (navSimState.agentMode === 'patrol') {
                 navSimState.waypointIndex = (navSimState.waypointIndex + 1) % navSimState.waypoints.length;
@@ -4876,23 +5177,28 @@ function update3dNavAgentMovement(dt) {
     } else {
         navSimState.agentX += (dx / dist) * moveDist;
         navSimState.agentZ += (dz / dist) * moveDist;
-        
-        // Rotate agent towards heading
+
+        // Smooth yaw rotation towards move heading
         if (nav3d.agentMesh) {
-            const angle = Math.atan2(dx, dz);
-            nav3d.agentMesh.rotation.y = angle;
+            const targetAngle = Math.atan2(dx, dz);
+            let curAngle = nav3d.agentMesh.rotation.y;
+            // Shortest angular turn
+            let diff = targetAngle - curAngle;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            nav3d.agentMesh.rotation.y += diff * Math.min(1.0, 14.0 * dt);
         }
     }
-    
+
     if (nav3d.agentMesh) {
         nav3d.agentMesh.position.set(navSimState.agentX, 0, navSimState.agentZ);
     }
-    
-    // Update path line dynamically
+
+    // Update real-time path line
     if (nav3d.pathLine && navSimState.path.length > 0) {
-        const points = [new THREE.Vector3(navSimState.agentX, 0.08, navSimState.agentZ)];
+        const points = [new THREE.Vector3(navSimState.agentX, 0.1, navSimState.agentZ)];
         for (let i = 1; i < navSimState.path.length; i++) {
-            points.push(new THREE.Vector3(navSimState.path[i].x, 0.08, navSimState.path[i].z));
+            points.push(new THREE.Vector3(navSimState.path[i].x, 0.1, navSimState.path[i].z));
         }
         nav3d.pathLine.geometry.setFromPoints(points);
     }
@@ -4904,17 +5210,17 @@ function setNavAgentMode(mode) {
     navSimState.agentMode = mode;
     const btnP = document.getElementById('btnNavModePatrol');
     const btnC = document.getElementById('btnNavModeChase');
-    
+
     if (btnP) btnP.style.background = mode === 'patrol' ? '#0369a1' : '#1e293b';
     if (btnC) btnC.style.background = mode === 'chase' ? '#0369a1' : '#1e293b';
-    
+
     if (mode === 'patrol') {
         navSimState.waypointIndex = 0;
         navSimState.targetX = navSimState.waypoints[0].x;
         navSimState.targetZ = navSimState.waypoints[0].z;
     } else if (mode === 'chase') {
-        navSimState.targetX = 2.5;
-        navSimState.targetZ = 1.5;
+        navSimState.targetX = 3.2;
+        navSimState.targetZ = 1.6;
     }
     recalculateNavPath();
 }
@@ -4926,11 +5232,6 @@ function toggleNavCarving() {
         btn.textContent = navSimState.carveEnabled ? 'Dynamic Carving: ON' : 'Dynamic Carving: OFF';
         btn.style.background = navSimState.carveEnabled ? '#059669' : '#dc2626';
     }
-    if (nav3d.obstacleMesh) {
-        nav3d.obstacleMesh.material.color.setHex(navSimState.carveEnabled ? 0xd97706 : 0x475569);
-        nav3d.obstacleMesh.material.transparent = !navSimState.carveEnabled;
-        nav3d.obstacleMesh.material.opacity = navSimState.carveEnabled ? 1.0 : 0.4;
-    }
     recalculateNavPath();
 }
 
@@ -4938,7 +5239,7 @@ function updateNavTelemetry() {
     const elRem = document.getElementById('navTelemetryRemaining');
     const elState = document.getElementById('navTelemetryState');
     const elCorners = document.getElementById('navTelemetryCorners');
-    
+
     let totalDist = 0;
     if (navSimState.path.length > 0) {
         totalDist += Math.hypot(navSimState.path[0].x - navSimState.agentX, navSimState.path[0].z - navSimState.agentZ);
@@ -4946,7 +5247,7 @@ function updateNavTelemetry() {
             totalDist += Math.hypot(navSimState.path[i].x - navSimState.path[i - 1].x, navSimState.path[i].z - navSimState.path[i - 1].z);
         }
     }
-    
+
     if (elRem) elRem.textContent = totalDist.toFixed(1) + ' m';
     if (elCorners) elCorners.textContent = navSimState.path.length + ' points';
     if (elState) {
@@ -4957,7 +5258,7 @@ function updateNavTelemetry() {
             elState.textContent = 'Pursuit Heading';
             elState.style.color = '#ef4444';
         } else {
-            elState.textContent = totalDist < 0.3 ? 'Destination Reached' : 'Navigating to Point';
+            elState.textContent = totalDist < 0.25 ? 'Destination Reached' : 'Navigating Around Walls';
             elState.style.color = '#10b981';
         }
     }
@@ -4981,7 +5282,7 @@ function formatChallengeTime(sec) {
 function startChallengeTimer(id) {
     const cs = challengeState[id];
     if (!cs || cs.timerInt) return;
-    
+
     cs.timerInt = setInterval(() => {
         if (cs.timerSec > 0) {
             cs.timerSec--;
@@ -4992,7 +5293,7 @@ function startChallengeTimer(id) {
             cs.timerInt = null;
         }
     }, 1000);
-    
+
     if (!cs.lockInt && cs.lockSec > 0) {
         cs.lockInt = setInterval(() => {
             if (cs.lockSec > 0) {
@@ -5027,13 +5328,13 @@ function resetChallengeTimer(id) {
     if (!cs) return;
     cs.timerSec = 600;
     cs.lockSec = 60;
-    
+
     const el = document.getElementById('challengeTimer' + id);
     if (el) el.textContent = '10:00';
-    
+
     const lockEl = document.getElementById('solutionLockTimer' + id);
     if (lockEl) lockEl.textContent = '01:00';
-    
+
     const banner = document.getElementById('solutionLockBanner' + id);
     if (banner) {
         banner.style.display = 'block';
@@ -5042,7 +5343,7 @@ function resetChallengeTimer(id) {
         banner.style.color = '#991b1b';
         banner.innerHTML = '[LOCKED] Solution unlocks in: <strong id="solutionLockTimer' + id + '">01:00</strong> (Implement code first)';
     }
-    
+
     const sol = document.getElementById('solutionDetails' + id);
     if (sol) {
         sol.style.pointerEvents = 'none';
@@ -5059,7 +5360,7 @@ function unlockSolution(id) {
         banner.style.color = '#065f46';
         banner.innerHTML = '<strong>[UNLOCKED] Solution Available:</strong> Click below to verify your implementation.';
     }
-    
+
     const sol = document.getElementById('solutionDetails' + id);
     if (sol) {
         sol.style.pointerEvents = 'auto';
