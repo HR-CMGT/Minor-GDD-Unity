@@ -392,6 +392,22 @@ public class OnlineLeaderboard : MonoBehaviour
 }
 ```
 
+### Important Dreamlo Architecture Behaviors:
+
+#### 1. What Happens With Duplicate Names?
+Dreamlo treats the player name as the unique primary key:
+- **It Overwrites:** If "Alice" submits a score of 500, and later submits 800, Dreamlo updates the existing "Alice" record rather than creating a duplicate entry.
+- **The Drawback:** Any player who enters the exact same display name as another player can overwrite that player's score!
+- **Standard Workaround:** Do not use raw display names as the sole identifier. Combine a unique ID (like `SystemInfo.deviceUniqueIdentifier` or a generated `Guid`) with their name, or save the display name into Dreamlo's extra text field.
+  - E.g., submit the unique ID as the name parameter: `add/GUID_12345/500/0/Alice`
+
+#### 2. Can You Fetch Just One Specific Player's Score?
+Yes. Instead of downloading the full top list, Dreamlo allows fetching a single user's record directly:
+- **Fetch Top 10:** `http://dreamlo.com/lb/PUBLIC_KEY/pipe/10`
+- **Fetch Single Player:** `http://dreamlo.com/lb/PUBLIC_KEY/pipe-get/Alice`
+
+Dreamlo will return only that specific player's single pipe-delimited line (or an empty string if they don't exist yet in the database).
+
 ---
 
 ## 5. Playtest Telemetry: Google Forms & Sheets Pipeline

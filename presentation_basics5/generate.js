@@ -29,6 +29,38 @@ let customBeforeScript = beforeScript
     .replace(
         'title="Student flags: click to clear"',
         'title="Pace flags: click to clear"'
+    )
+    .replace(
+        '</style>',
+        `        /* Dedicated Interactive Simulator Action Buttons that scale with font slider */
+        .sim-action-btn {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            white-space: normal !important;
+            word-break: normal !important;
+            overflow-wrap: break-word !important;
+            line-height: 1.25 !important;
+            font-size: calc(0.74rem * var(--font-scale, 1)) !important;
+            font-weight: 700 !important;
+            padding: calc(7px * var(--font-scale, 1)) calc(10px * var(--font-scale, 1)) !important;
+            min-height: calc(2.2rem * var(--font-scale, 1)) !important;
+            height: auto !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            transition: all 0.15s ease !important;
+        }
+        .sim-action-btn:hover:not(:disabled) {
+            filter: brightness(1.15) !important;
+            transform: translateY(-1px) !important;
+        }
+        .sim-action-btn:active:not(:disabled) {
+            transform: translateY(1px) scale(0.98) !important;
+        }
+    </style>`
     );
 
 // Extract clean engine code (excluding Class 4 simulators and ending script/body tags)
@@ -44,6 +76,25 @@ let engineCode = p4Content.substring(engineStart, bannerStart > -1 ? bannerStart
 engineCode = engineCode.replace(
     "try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { if (window.self === window.top) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}",
     "try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { let isTop = false; try { isTop = (window.self === window.top); } catch (err) { isTop = false; } if (isTop) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}"
+);
+
+// Prevent font size slider from exploding buttons outside their containers
+engineCode = engineCode.replace(
+    'const boost = (num >= 2.0) ? 1.0 : BASE_BOOST;',
+    'const isBtnOrInput = (el.tagName === "BUTTON" || el.tagName === "INPUT" || el.classList.contains("sim-action-btn") || el.classList.contains("interactive-action-btn"));\n' +
+    '                    const boost = (num >= 2.0 || isBtnOrInput) ? 1.0 : BASE_BOOST;'
+);
+
+engineCode = engineCode.replace(
+    '// 2. Universal relative scaling for content blocks outside card-body that lack inline styles',
+    '// Ensure buttons and simulator controls scale cleanly with font slider and never overflow\n' +
+    '            area.querySelectorAll("button, .sim-action-btn, .interactive-action-btn").forEach(btn => {\n' +
+    '                btn.style.whiteSpace = "normal";\n' +
+    '                btn.style.wordBreak = "normal";\n' +
+    '                btn.style.overflowWrap = "break-word";\n' +
+    '                btn.style.height = "auto";\n' +
+    '            });\n\n' +
+    '            // 2. Universal relative scaling for content blocks outside card-body that lack inline styles'
 );
 
 // 19 Detailed Slides
@@ -396,20 +447,20 @@ public class ScreenFader : MonoBehaviour
             </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 220px 1fr 1.25fr; gap: 12px; align-items: stretch;">
+        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), 270px) 1fr 1.25fr; gap: 12px; align-items: stretch;">
             <!-- Left: Transition Controls -->
             <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
                 <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 2px;">SCENE CONTROLS</div>
-                <button id="btnFaderLvl1" class="nav-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simTransitionScene('Level_01')">
+                <button id="btnFaderLvl1" class="sim-action-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important;" onclick="simTransitionScene('Level_01')">
                     Fade to 'Level_01'
                 </button>
-                <button id="btnFaderLvl2" class="nav-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simTransitionScene('Level_02')">
+                <button id="btnFaderLvl2" class="sim-action-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important;" onclick="simTransitionScene('Level_02')">
                     Fade to 'Level_02'
                 </button>
-                <button id="btnFaderMenu" class="nav-btn" style="background: #475569 !important; border: 1px solid #94a3b8 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simTransitionScene('MainMenu')">
+                <button id="btnFaderMenu" class="sim-action-btn" style="background: #475569 !important; border: 1px solid #94a3b8 !important; color: #fff !important;" onclick="simTransitionScene('MainMenu')">
                     Fade to 'MainMenu'
                 </button>
-                <button id="btnFaderSpam" class="nav-btn" style="background: #991b1b !important; border: 1px solid #ef4444 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simSpamClick()">
+                <button id="btnFaderSpam" class="sim-action-btn" style="background: #991b1b !important; border: 1px solid #ef4444 !important; color: #fff !important;" onclick="simSpamClick()">
                     Spam Double-Click Test
                 </button>
 
@@ -1078,20 +1129,20 @@ public class UniversalAudioFeedback : MonoBehaviour
             <div style="font-size: 0.76rem; color: #94a3b8;">Test button tactility, modal bounce easing, pitch variance, and screen flash</div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 210px 1fr 1.2fr; gap: 12px; align-items: stretch;">
+        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), 270px) 1fr 1.2fr; gap: 12px; align-items: stretch;">
             <!-- Left: Controls -->
             <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
                 <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 4px;">INTERACTION TRIGGERS</div>
-                <button id="btnTactileTest" class="nav-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer; transition: transform 0.1s ease;" onmousedown="simTactilePress(true)" onmouseup="simTactilePress(false)">
+                <button id="btnTactileTest" class="sim-action-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; cursor: pointer; transition: transform 0.1s ease;" onmousedown="simTactilePress(true)" onmouseup="simTactilePress(false)">
                     Press Tactile Button
                 </button>
-                <button id="btnPopupTest" class="nav-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simTriggerPopup()">
+                <button id="btnPopupTest" class="sim-action-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; cursor: pointer;" onclick="simTriggerPopup()">
                     Trigger Victory Popup
                 </button>
-                <button id="btnAudioChime" class="nav-btn" style="background: #78350f !important; border: 1px solid #f59e0b !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simPlayAudio('chime')">
+                <button id="btnAudioChime" class="sim-action-btn" style="background: #78350f !important; border: 1px solid #f59e0b !important; color: #fff !important; cursor: pointer;" onclick="simPlayAudio('chime')">
                     Play Success Chime
                 </button>
-                <button id="btnFlashTest" class="nav-btn" style="background: #4c1d95 !important; border: 1px solid #a855f7 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simScreenFlash()">
+                <button id="btnFlashTest" class="sim-action-btn" style="background: #4c1d95 !important; border: 1px solid #a855f7 !important; color: #fff !important; cursor: pointer;" onclick="simScreenFlash()">
                     Canvas Screen Flash
                 </button>
             </div>
@@ -1319,6 +1370,37 @@ public class OnlineLeaderboard : MonoBehaviour
             <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
             Forgetting <code>EscapeURL</code>. If a player enters 'Super Cool Guy', the URL breaks on the space and returns HTTP 400 Bad Request!
         </div>
+        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; color: #0f172a; font-size: 0.88rem; line-height: 1.55;">
+            <div style="font-weight: 800; color: #0369a1; font-size: 0.95rem; margin-bottom: 8px;">Handling Duplicate Names &amp; Fetching Single Player Records:</div>
+            
+            <div style="margin-bottom: 10px;">
+                <strong style="color: #0f172a; font-size: 0.88rem;">1. What Happens With Duplicate Names?</strong>
+                <p style="margin: 4px 0 4px 0; color: #334155; font-size: 0.84rem;">
+                    Dreamlo treats the <strong>name as the unique primary key</strong>. It <strong>overwrites</strong>: if "Alice" submits a score of 500, and later submits 800, Dreamlo updates the existing "Alice" record rather than creating a second entry.
+                </p>
+                <p style="margin: 0 0 6px 0; color: #991b1b; font-size: 0.82rem; font-weight: 600;">
+                    The drawback: Any player who enters the exact same display name as another player can overwrite their score!
+                </p>
+                <div style="background: #f1f5f9; border-left: 3px solid #0284c7; padding: 6px 10px; font-size: 0.82rem; color: #1e293b;">
+                    <strong>Standard Workaround:</strong> Don't use raw display names as the identifier. Combine a unique ID (like <code>SystemInfo.deviceUniqueIdentifier</code> or a generated <code>Guid</code>) with their name, or save the name into Dreamlo's extra text field.<br>
+                    E.g., submit the unique ID as the name: <code>add/GUID_12345/500/0/Alice</code>
+                </div>
+            </div>
+
+            <div>
+                <strong style="color: #0f172a; font-size: 0.88rem;">2. Can You Fetch Just One Specific Player's Score?</strong>
+                <p style="margin: 4px 0 4px 0; color: #334155; font-size: 0.84rem;">
+                    Yes. Instead of downloading the full top list, Dreamlo allows fetching a single user's record:
+                </p>
+                <div style="background: #0f172a; color: #e2e8f0; padding: 8px 12px; border-radius: 6px; font-family: monospace; font-size: 0.78rem; line-height: 1.5; margin-bottom: 4px;">
+                    Fetch Top 10: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://dreamlo.com/lb/PUBLIC_KEY/pipe/10<br>
+                    Fetch Single Player: http://dreamlo.com/lb/PUBLIC_KEY/pipe-get/Alice
+                </div>
+                <p style="margin: 0; color: #475569; font-size: 0.82rem;">
+                    Dreamlo will return only that specific player's single pipe-delimited line (or an empty string if they don't exist yet).
+                </p>
+            </div>
+        </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
             <strong>Golden Rule for Your Project:</strong> Always wrap user-entered text with <code>UnityWebRequest.EscapeURL()</code> before appending it to web query strings.
         </div>
@@ -1510,19 +1592,19 @@ public class PlaytestTelemetry : MonoBehaviour
             <div style="font-size: 0.76rem; color: #94a3b8;">Submit high scores and dispatch real-time playtest session data</div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 210px 1fr 1.2fr; gap: 12px; align-items: stretch;">
+        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), 270px) 1fr 1.2fr; gap: 12px; align-items: stretch;">
             <!-- Left: Inputs & Triggers -->
             <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
                 <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 4px;">TELEMETRY CONTROLS</div>
-                <input id="inputPlayerName" type="text" value="Alex" placeholder="Player Name" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 5px 8px; border-radius: 4px; width: 100%; box-sizing: border-box;">
-                <input id="inputPlayerScore" type="number" value="850" placeholder="Score" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 5px 8px; border-radius: 4px; width: 100%; box-sizing: border-box;">
-                <button id="btnSubmitScore" class="nav-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simSubmitLeaderboard()">
+                <input id="inputPlayerName" type="text" value="Alex" placeholder="Player Name" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 6px 8px; border-radius: 4px; width: 100%; box-sizing: border-box;">
+                <input id="inputPlayerScore" type="number" value="850" placeholder="Score" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 6px 8px; border-radius: 4px; width: 100%; box-sizing: border-box;">
+                <button id="btnSubmitScore" class="sim-action-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important;" onclick="simSubmitLeaderboard()">
                     Submit to Leaderboard
                 </button>
-                <button id="btnDispatchTel" class="nav-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simDispatchTelemetry()">
+                <button id="btnDispatchTel" class="sim-action-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important;" onclick="simDispatchTelemetry()">
                     Dispatch Session (Sheet)
                 </button>
-                <button id="btnToggleOffline" class="nav-btn" style="background: #374151 !important; border: 1px solid #6b7280 !important; color: #fff !important; font-size: 0.76rem; padding: 7px 10px !important; width: 100%; box-sizing: border-box; cursor: pointer;" onclick="simToggleOffline()">
+                <button id="btnToggleOffline" class="sim-action-btn" style="background: #374151 !important; border: 1px solid #6b7280 !important; color: #fff !important;" onclick="simToggleOffline()">
                     Toggle Airplane Mode
                 </button>
             </div>
@@ -1661,9 +1743,9 @@ public class PlaytestTelemetry : MonoBehaviour
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
             <strong>Golden Rule for Your Project:</strong> Push your final update patch to itch.io / Google Play at least 24 hours before the deadline. Download the live release from your public link onto a real device to verify the patch runs cleanly.
         </div>
-        <div style="margin-top: 14px; display: flex; gap: 10px; width: 100%;">
-            <a href="../index.html" class="portal-nav-btn" style="flex: 1; text-align: center; text-decoration: none; font-size: 0.82rem; font-weight: 700; background: #0f172a; color: #94a3b8; border: 1px solid #334155; padding: 10px 16px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">&larr; Return to Course Portal</a>
-            <button onclick="selectSlide(0)" style="flex: 1; text-align: center; font-size: 0.82rem; font-weight: 700; background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 10px 16px; border-radius: 6px; cursor: pointer;">Restart Deck &uarr;</button>
+        <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; width: 100%;">
+            <a href="../index.html" class="portal-nav-btn" style="flex: 1 1 200px; text-align: center; text-decoration: none; font-size: 0.82rem; font-weight: 700; background: #0f172a; color: #94a3b8; border: 1px solid #334155; padding: 10px 16px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: normal; line-height: 1.3;">&larr; Return to Course Portal</a>
+            <button onclick="selectSlide(0)" style="flex: 1 1 200px; text-align: center; font-size: 0.82rem; font-weight: 700; background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 10px 16px; border-radius: 6px; cursor: pointer; white-space: normal; line-height: 1.3;">Restart Deck &uarr;</button>
         </div>
     </div>`,
     notes: "Wrap up: Remind everyone that their games are already downloadable. This final sprint is about publishing the definitive polish, game feel, and telemetry update patch to itch.io or Google Play before the deadline."

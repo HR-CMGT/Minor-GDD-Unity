@@ -180,5 +180,14 @@ assert(readmeText.includes('presentation_basics5/index.html'), 'README.md links 
 assert(readmeText.includes('classes/05_release_polish.md'), 'README.md links to Lesson 05 handbook');
 assert(readmeText.includes('Interactive Course Presentations Portal'), 'README.md links to Course Presentations Portal');
 
+// 16. Button Font Size Slider Overflow Hardening
+assert(html.includes('.sim-action-btn'), 'Dedicated .sim-action-btn class present in CSS');
+assert(html.includes('overflow-wrap: break-word'), 'Simulator buttons allow word wrapping so text never spills outside container');
+assert(html.includes('minmax(calc(220px * var(--font-scale'), 'Simulator control columns dynamically grow with font scale slider');
+
+// 17. Dreamlo Duplicate Names & Single Player Fetch Verification (Slide 15)
+assert(html.includes('What Happens With Duplicate Names?') && html.includes('pipe-get/Alice'), 'Slide 15 contains duplicate names and single player fetch guide');
+assert(lessonDoc.includes('What Happens With Duplicate Names?') && lessonDoc.includes('pipe-get/Alice'), 'Handbook contains duplicate names and single player fetch guide');
+
 console.log('--- TEST SUMMARY: ' + (failures === 0 ? 'ALL PASSED!' : failures + ' FAILED!') + ' ---');
 process.exit(failures > 0 ? 1 : 0);
