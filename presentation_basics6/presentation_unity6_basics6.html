@@ -2949,9 +2949,12 @@ let currentSlide = 0;
             document.getElementById('nextBtn').disabled = (currentSlide === slidesData.length - 1);
 
             updateDrawerActive();
-            try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { let isTop = false; try { isTop = (window.self === window.top); } catch (err) { isTop = false; } if (isTop) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}
+            try { if (window.location && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) { window.location.hash = '#slide-' + (currentSlide + 1); } } catch(e) {}
             
             setTimeout(autoFitSlideElements, 20);
+            if (typeof checkInitSimulators === 'function') {
+                checkInitSimulators(currentSlide);
+            }
         }
 
         function changeSlide(delta) {
@@ -3930,8 +3933,7 @@ let jumpSimState = {
     animTime: 0,
     animRaf: null,
     playerX: 0,
-    playerY: 0,
-    trail: []
+    playerY: 0
 };
 
 let jump3d = {
@@ -3944,13 +3946,14 @@ let jump3d = {
     gapMesh: null,
     trajLine: null,
     apexMarker: null,
+    animRaf: null,
     initialized: false
 };
 
 function initJumpSandbox() {
     init3dJumpSandbox();
     updateJumpTelemetry();
-    drawJumpSandbox();
+    update3dJumpGeometry();
 }
 
 function init3dJumpSandbox() {
@@ -3960,16 +3963,16 @@ function init3dJumpSandbox() {
     const w = container.clientWidth || 480;
     const h = container.clientHeight || 260;
 
-    if (!jump3d.initialized) {
+    if (!jump3d.initialized || !jump3d.renderer) {
         jump3d.scene = new THREE.Scene();
         jump3d.scene.background = new THREE.Color(0x050b14);
 
         jump3d.camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
-        jump3d.camera.position.set(4.5, 3.2, 7.5);
+        jump3d.camera.position.set(4.5, 3.8, 8.5);
 
-        jump3d.renderer = new THREE.WebGLRenderer({ antialias: true });
+        jump3d.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         jump3d.renderer.setSize(w, h);
-        jump3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        jump3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         container.innerHTML = '';
         container.appendChild(jump3d.renderer.domElement);
 
@@ -3982,39 +3985,47 @@ function init3dJumpSandbox() {
         }
 
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         jump3d.scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
-        dirLight.position.set(5, 10, 7);
+        const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.4);
+        dirLight.position.set(6, 12, 8);
         jump3d.scene.add(dirLight);
 
-        // 3D Metric Grid (10m x 4m)
-        const gridHelper = new THREE.GridHelper(12, 12, 0x0284c7, 0x1e293b);
+        // 3D Metric Grid (12m x 6m)
+        const gridHelper = new THREE.GridHelper(14, 14, 0x0284c7, 0x1e293b);
         gridHelper.position.set(5, 0, 0);
         jump3d.scene.add(gridHelper);
 
         // Ground platform (Launch)
-        const launchGeo = new THREE.BoxGeometry(2, 0.4, 3);
+        const launchGeo = new THREE.BoxGeometry(2, 0.4, 3.6);
         const launchMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.2 });
         const launchMesh = new THREE.Mesh(launchGeo, launchMat);
         launchMesh.position.set(-1, -0.2, 0);
         jump3d.scene.add(launchMesh);
 
         // Landing platform
-        const landGeo = new THREE.BoxGeometry(8, 0.4, 3);
+        const landGeo = new THREE.BoxGeometry(10, 0.4, 3.6);
         const landMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.5 });
         const landMesh = new THREE.Mesh(landGeo, landMat);
-        landMesh.position.set(7, -0.2, 0);
+        landMesh.position.set(9, -0.2, 0);
         jump3d.scene.add(landMesh);
 
+        // Gap Hazard Lines
+        const gapGeo = new THREE.PlaneGeometry(4, 3.6);
+        gapGeo.rotateX(-Math.PI / 2);
+        const gapMat = new THREE.MeshBasicMaterial({ color: 0x7f1d1d, transparent: true, opacity: 0.35 });
+        jump3d.gapMesh = new THREE.Mesh(gapGeo, gapMat);
+        jump3d.gapMesh.position.set(2, 0.01, 0);
+        jump3d.scene.add(jump3d.gapMesh);
+
         // Wall Obstacle Mesh
-        const wallGeo = new THREE.BoxGeometry(0.3, 1.5, 2.8);
+        const wallGeo = new THREE.BoxGeometry(0.3, 1.5, 3.2);
         const wallMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.3 });
         jump3d.wallMesh = new THREE.Mesh(wallGeo, wallMat);
         jump3d.wallMesh.position.set(jumpSimState.wallDistance, 0.75, 0);
         jump3d.scene.add(jump3d.wallMesh);
 
-        // Character Capsule Mesh
+        // Character Capsule Mesh (height 1.8m, radius 0.35m)
         const capGroup = new THREE.Group();
         const capBodyGeo = new THREE.CylinderGeometry(0.35, 0.35, 1.1, 16);
         const capTopGeo = new THREE.SphereGeometry(0.35, 16, 8);
@@ -4025,9 +4036,17 @@ function init3dJumpSandbox() {
         topMesh.position.y = 1.45;
         const botMesh = new THREE.Mesh(capTopGeo, capMat);
         botMesh.position.y = 0.35;
+        
+        // Visor
+        const visorGeo = new THREE.BoxGeometry(0.25, 0.15, 0.2);
+        const visorMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+        const visorMesh = new THREE.Mesh(visorGeo, visorMat);
+        visorMesh.position.set(0.28, 1.45, 0);
+        
         capGroup.add(bodyMesh);
         capGroup.add(topMesh);
         capGroup.add(botMesh);
+        capGroup.add(visorMesh);
         jump3d.playerMesh = capGroup;
         jump3d.playerMesh.position.set(0, 0, 0);
         jump3d.scene.add(jump3d.playerMesh);
@@ -4039,15 +4058,16 @@ function init3dJumpSandbox() {
         jump3d.scene.add(jump3d.apexMarker);
 
         // Trajectory Line
-        const trajMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2 });
+        const trajMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3 });
         const trajGeo = new THREE.BufferGeometry();
         jump3d.trajLine = new THREE.Line(trajGeo, trajMat);
         jump3d.scene.add(jump3d.trajLine);
 
         jump3d.initialized = true;
 
+        if (jump3d.animRaf) cancelAnimationFrame(jump3d.animRaf);
         const animate3d = () => {
-            requestAnimationFrame(animate3d);
+            jump3d.animRaf = requestAnimationFrame(animate3d);
             if (jump3d.controls) jump3d.controls.update();
             if (jump3d.renderer && jump3d.scene && jump3d.camera) {
                 jump3d.renderer.render(jump3d.scene, jump3d.camera);
@@ -4055,6 +4075,10 @@ function init3dJumpSandbox() {
         };
         animate3d();
     } else {
+        if (!container.contains(jump3d.renderer.domElement)) {
+            container.innerHTML = '';
+            container.appendChild(jump3d.renderer.domElement);
+        }
         jump3d.renderer.setSize(w, h);
         jump3d.camera.aspect = w / h;
         jump3d.camera.updateProjectionMatrix();
@@ -4064,7 +4088,7 @@ function init3dJumpSandbox() {
 }
 
 function update3dJumpGeometry() {
-    if (!jump3d.initialized) return;
+    if (!jump3d.initialized || !jump3d.scene) return;
 
     // Update Wall
     if (jump3d.wallMesh) {
@@ -4073,10 +4097,17 @@ function update3dJumpGeometry() {
         jump3d.wallMesh.position.set(jumpSimState.wallDistance, jumpSimState.wallHeight / 2, 0);
     }
 
+    // Update Gap Hazard
+    if (jump3d.gapMesh) {
+        jump3d.gapMesh.visible = jumpSimState.gapEnabled;
+        jump3d.gapMesh.scale.set(jumpSimState.gapWidth / 4.0, 1, 1);
+        jump3d.gapMesh.position.set(jumpSimState.gapWidth / 2, 0.01, 0);
+    }
+
     // Update Trajectory Arc
     const phys = calcJumpPhysics();
     const points = [];
-    const steps = 40;
+    const steps = 50;
     for (let i = 0; i <= steps; i++) {
         const t = (i / steps) * phys.tTotal;
         const x = phys.vx * t;
@@ -4091,7 +4122,7 @@ function update3dJumpGeometry() {
     jump3d.apexMarker.position.set(apexX, apexY, 0);
 
     // Update player position
-    if (jump3d.playerMesh) {
+    if (jump3d.playerMesh && !jumpSimState.isJumping) {
         jump3d.playerMesh.position.set(jumpSimState.playerX, jumpSimState.playerY, 0);
     }
 }
@@ -4117,9 +4148,6 @@ function updateJumpParam(param, val) {
     
     updateJumpTelemetry();
     update3dJumpGeometry();
-    if (!jumpSimState.isJumping) {
-        drawJumpSandbox();
-    }
 }
 
 function setJumpPreset(preset) {
@@ -4129,11 +4157,11 @@ function setJumpPreset(preset) {
         updateJumpParam('moveSpeed', 4.5);
     } else if (preset === 'platformer') {
         updateJumpParam('jumpHeight', 2.0);
-        updateJumpParam('gravity', 22.0);
-        updateJumpParam('moveSpeed', 6.5);
+        updateJumpParam('gravity', 20.0);
+        updateJumpParam('moveSpeed', 6.0);
     } else if (preset === 'lowgrav') {
         updateJumpParam('jumpHeight', 3.5);
-        updateJumpParam('gravity', 7.0);
+        updateJumpParam('gravity', 8.0);
         updateJumpParam('moveSpeed', 5.0);
     }
     
@@ -4146,7 +4174,6 @@ function setJumpPreset(preset) {
     
     updateJumpTelemetry();
     update3dJumpGeometry();
-    drawJumpSandbox();
 }
 
 function toggleJumpObstacle(type) {
@@ -4155,25 +4182,24 @@ function toggleJumpObstacle(type) {
         const btn = document.getElementById('btnToggleWall');
         if (btn) {
             btn.style.background = jumpSimState.wallEnabled ? '#0369a1' : '#334155';
-            btn.textContent = jumpSimState.wallEnabled ? 'Wall Obstacle: ON' : 'Wall Obstacle: OFF';
+            btn.textContent = jumpSimState.wallEnabled ? 'Wall: ON' : 'Wall: OFF';
         }
     } else if (type === 'gap') {
         jumpSimState.gapEnabled = !jumpSimState.gapEnabled;
         const btn = document.getElementById('btnToggleGap');
         if (btn) {
             btn.style.background = jumpSimState.gapEnabled ? '#0369a1' : '#334155';
-            btn.textContent = jumpSimState.gapEnabled ? 'Gap Pit: ON' : 'Gap Pit: OFF';
+            btn.textContent = jumpSimState.gapEnabled ? 'Pit: ON' : 'Pit: OFF';
         }
     }
     updateJumpTelemetry();
     update3dJumpGeometry();
-    drawJumpSandbox();
 }
 
 function calcJumpPhysics() {
-    const h = jumpSimState.jumpHeight;
-    const g = jumpSimState.gravity;
-    const vx = jumpSimState.moveSpeed;
+    const h = Math.max(0.1, jumpSimState.jumpHeight);
+    const g = Math.max(1.0, jumpSimState.gravity);
+    const vx = Math.max(0.1, jumpSimState.moveSpeed);
     
     const vy0 = Math.sqrt(2 * g * h);
     const tApex = vy0 / g;
@@ -4223,7 +4249,7 @@ function updateJumpTelemetry() {
                 gapPass = false;
                 reasons.push('Falls in pit (short by ' + (jumpSimState.gapWidth - phys.maxDist).toFixed(2) + 'm)');
             } else {
-                reasons.push('Clears gap (+' + (phys.maxDist - jumpSimState.gapWidth).toFixed(2) + 'm margin)');
+                reasons.push('Clears pit (+' + (phys.maxDist - jumpSimState.gapWidth).toFixed(2) + 'm margin)');
             }
         }
         
@@ -4231,7 +4257,7 @@ function updateJumpTelemetry() {
             elStatus.style.background = '#064e3b';
             elStatus.style.borderColor = '#10b981';
             elStatus.style.color = '#a7f3d0';
-            elStatus.innerHTML = '<strong>STATUS: PASS</strong> - ' + (reasons.length > 0 ? reasons.join(' | ') : 'Clear terrain path');
+            elStatus.innerHTML = '<strong>STATUS: PASS</strong> - ' + (reasons.length > 0 ? reasons.join(' | ') : 'Clear terrain trajectory');
         } else {
             elStatus.style.background = '#7f1d1d';
             elStatus.style.borderColor = '#ef4444';
@@ -4245,7 +4271,6 @@ function launchJumpSimulation() {
     if (jumpSimState.isJumping) return;
     jumpSimState.isJumping = true;
     jumpSimState.animTime = 0;
-    jumpSimState.trail = [];
     
     const phys = calcJumpPhysics();
     const startTime = performance.now();
@@ -4260,13 +4285,10 @@ function launchJumpSimulation() {
         
         jumpSimState.playerX = x;
         jumpSimState.playerY = y;
-        jumpSimState.trail.push({ x, y });
         
         if (jump3d.playerMesh) {
             jump3d.playerMesh.position.set(x, y, 0);
         }
-        
-        drawJumpSandbox();
         
         if (elapsed < phys.tTotal) {
             jumpSimState.animRaf = requestAnimationFrame(animate);
@@ -4277,7 +4299,6 @@ function launchJumpSimulation() {
             if (jump3d.playerMesh) {
                 jump3d.playerMesh.position.set(phys.maxDist, 0, 0);
             }
-            drawJumpSandbox();
         }
     };
     
@@ -4292,165 +4313,9 @@ function resetJumpSimulation() {
     jumpSimState.animTime = 0;
     jumpSimState.playerX = 0;
     jumpSimState.playerY = 0;
-    jumpSimState.trail = [];
     if (jump3d.playerMesh) {
         jump3d.playerMesh.position.set(0, 0, 0);
     }
-    drawJumpSandbox();
-}
-
-function drawJumpSandbox() {
-    const canvas = document.getElementById('jumpSimCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
-    
-    ctx.clearRect(0, 0, w, h);
-    
-    const originX = 50;
-    const originY = h - 50;
-    const scaleX = (w - 80) / 10.0;
-    const scaleY = (h - 80) / 4.5;
-    
-    // Grid
-    ctx.lineWidth = 1;
-    for (let mx = 0; mx <= 10; mx++) {
-        const px = originX + mx * scaleX;
-        ctx.strokeStyle = mx % 2 === 0 ? '#334155' : '#1e293b';
-        ctx.beginPath();
-        ctx.moveTo(px, 20);
-        ctx.lineTo(px, originY);
-        ctx.stroke();
-        
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px monospace';
-        ctx.fillText(mx + 'm', px - 8, originY + 16);
-    }
-    
-    for (let my = 0; my <= 4; my++) {
-        const py = originY - my * scaleY;
-        ctx.strokeStyle = my % 2 === 0 ? '#334155' : '#1e293b';
-        ctx.beginPath();
-        ctx.moveTo(originX, py);
-        ctx.lineTo(originX + 10 * scaleX, py);
-        ctx.stroke();
-        
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px monospace';
-        ctx.fillText(my + 'm', originX - 28, py + 4);
-    }
-    
-    // Platforms
-    const launchPadWidth = 1.0 * scaleX;
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(originX - 30, originY, launchPadWidth + 30, 40);
-    ctx.strokeStyle = '#0284c7';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(originX - 30, originY);
-    ctx.lineTo(originX + launchPadWidth, originY);
-    ctx.stroke();
-    
-    if (jumpSimState.gapEnabled) {
-        const pitStartX = originX + launchPadWidth;
-        const pitWidthPx = jumpSimState.gapWidth * scaleX;
-        
-        ctx.fillStyle = '#090d16';
-        ctx.fillRect(pitStartX, originY, pitWidthPx, 40);
-        ctx.strokeStyle = '#ef4444';
-        ctx.setLineDash([4, 4]);
-        ctx.strokeRect(pitStartX, originY, pitWidthPx, 35);
-        ctx.setLineDash([]);
-        
-        ctx.fillStyle = '#ef4444';
-        ctx.font = '11px sans-serif';
-        ctx.fillText('PIT HAZARD (' + jumpSimState.gapWidth.toFixed(1) + 'm)', pitStartX + pitWidthPx / 2 - 45, originY + 22);
-        
-        const landingX = pitStartX + pitWidthPx;
-        ctx.fillStyle = '#1e293b';
-        ctx.fillRect(landingX, originY, w - landingX - 20, 40);
-        ctx.strokeStyle = '#10b981';
-        ctx.beginPath();
-        ctx.moveTo(landingX, originY);
-        ctx.lineTo(originX + 10 * scaleX, originY);
-        ctx.stroke();
-    } else {
-        ctx.fillStyle = '#1e293b';
-        ctx.fillRect(originX, originY, 10 * scaleX, 40);
-        ctx.strokeStyle = '#475569';
-        ctx.beginPath();
-        ctx.moveTo(originX, originY);
-        ctx.lineTo(originX + 10 * scaleX, originY);
-        ctx.stroke();
-    }
-    
-    // Wall
-    if (jumpSimState.wallEnabled) {
-        const wallPx = originX + jumpSimState.wallDistance * scaleX;
-        const wallHeightPx = jumpSimState.wallHeight * scaleY;
-        const wallThickness = 14;
-        
-        ctx.fillStyle = '#f59e0b';
-        ctx.fillRect(wallPx - wallThickness / 2, originY - wallHeightPx, wallThickness, wallHeightPx);
-        ctx.strokeStyle = '#d97706';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(wallPx - wallThickness / 2, originY - wallHeightPx, wallThickness, wallHeightPx);
-        
-        ctx.fillStyle = '#fbbf24';
-        ctx.font = '10px sans-serif';
-        ctx.fillText('WALL (' + jumpSimState.wallHeight.toFixed(1) + 'm)', wallPx - 25, originY - wallHeightPx - 8);
-    }
-    
-    // Arc
-    const phys = calcJumpPhysics();
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
-    ctx.beginPath();
-    
-    const steps = 60;
-    for (let i = 0; i <= steps; i++) {
-        const t = (i / steps) * phys.tTotal;
-        const px = originX + (phys.vx * t) * scaleX;
-        const py = originY - ((phys.vy0 * t) - (0.5 * phys.g * t * t)) * scaleY;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-    }
-    ctx.stroke();
-    ctx.setLineDash([]);
-    
-    // Apex
-    const apexPx = originX + (phys.vx * phys.tApex) * scaleX;
-    const apexPy = originY - phys.h * scaleY;
-    ctx.fillStyle = '#38bdf8';
-    ctx.beginPath();
-    ctx.arc(apexPx, apexPy, 4, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.font = '10px sans-serif';
-    ctx.fillText('Apex (' + phys.h.toFixed(1) + 'm)', apexPx - 25, apexPy - 8);
-    
-    // Capsule
-    const charPx = originX + jumpSimState.playerX * scaleX;
-    const charPy = originY - jumpSimState.playerY * scaleY;
-    const capRadius = 0.4 * scaleX;
-    const capHeight = 1.8 * scaleY;
-    
-    ctx.fillStyle = '#0284c7';
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 2;
-    
-    ctx.beginPath();
-    ctx.arc(charPx, charPy - capHeight + capRadius, capRadius, Math.PI, 0, false);
-    ctx.arc(charPx, charPy - capRadius, capRadius, 0, Math.PI, false);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    
-    ctx.fillStyle = '#f8fafc';
-    ctx.beginPath();
-    ctx.arc(charPx, charPy, 3, 0, Math.PI * 2);
-    ctx.fill();
 }
 
 
@@ -4472,15 +4337,15 @@ let camVec3d = {
     camProxy: null,
     arrowFwd: null,
     arrowRight: null,
-    arrowInput: null,
     arrowMove: null,
     playerMesh: null,
+    animRaf: null,
     initialized: false
 };
 
 function initCamVecInspector() {
     init3dCamVecInspector();
-    drawCamVecInspector();
+    update3dCamVec();
 }
 
 function init3dCamVecInspector() {
@@ -4490,36 +4355,44 @@ function init3dCamVecInspector() {
     const w = container.clientWidth || 480;
     const h = container.clientHeight || 260;
 
-    if (!camVec3d.initialized) {
+    if (!camVec3d.initialized || !camVec3d.renderer) {
         camVec3d.scene = new THREE.Scene();
         camVec3d.scene.background = new THREE.Color(0x050b14);
 
         camVec3d.camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-        camVec3d.camera.position.set(0, 5.5, 6.0);
+        camVec3d.camera.position.set(0, 6.0, 7.0);
 
-        camVec3d.renderer = new THREE.WebGLRenderer({ antialias: true });
+        camVec3d.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         camVec3d.renderer.setSize(w, h);
-        camVec3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        camVec3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         container.innerHTML = '';
         container.appendChild(camVec3d.renderer.domElement);
 
         if (typeof THREE.OrbitControls !== 'undefined') {
             camVec3d.controls = new THREE.OrbitControls(camVec3d.camera, camVec3d.renderer.domElement);
-            camVec3d.controls.target.set(0, 0.5, 0);
+            camVec3d.controls.target.set(0, 0.6, 0);
             camVec3d.controls.enableDamping = true;
             camVec3d.controls.dampingFactor = 0.08;
         }
 
         // Lights
-        const amb = new THREE.AmbientLight(0xffffff, 0.7);
+        const amb = new THREE.AmbientLight(0xffffff, 0.8);
         camVec3d.scene.add(amb);
-        const dir = new THREE.DirectionalLight(0x38bdf8, 1.2);
-        dir.position.set(5, 10, 5);
+        const dir = new THREE.DirectionalLight(0x38bdf8, 1.3);
+        dir.position.set(5, 12, 6);
         camVec3d.scene.add(dir);
 
         // Ground Compass & Grid
         const grid = new THREE.GridHelper(8, 8, 0x0284c7, 0x1e293b);
         camVec3d.scene.add(grid);
+
+        // Compass Ring
+        const ringGeo = new THREE.RingGeometry(3.15, 3.25, 32);
+        ringGeo.rotateX(-Math.PI / 2);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0x334155, side: THREE.DoubleSide });
+        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+        ringMesh.position.y = 0.01;
+        camVec3d.scene.add(ringMesh);
 
         // Character Mesh in Center
         const charGeo = new THREE.CylinderGeometry(0.3, 0.3, 1.2, 16);
@@ -4528,18 +4401,26 @@ function init3dCamVecInspector() {
         camVec3d.playerMesh.position.set(0, 0.6, 0);
         camVec3d.scene.add(camVec3d.playerMesh);
 
-        // Camera Proxy Indicator
-        const camBoxGeo = new THREE.ConeGeometry(0.3, 0.6, 4);
-        camBoxGeo.rotateX(Math.PI / 2);
+        // Camera Proxy Indicator (Box + Lens Cone)
+        const camGroup = new THREE.Group();
+        const camBoxGeo = new THREE.BoxGeometry(0.4, 0.3, 0.5);
         const camBoxMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8 });
-        camVec3d.camProxy = new THREE.Mesh(camBoxGeo, camBoxMat);
+        const camBox = new THREE.Mesh(camBoxGeo, camBoxMat);
+        const camLensGeo = new THREE.ConeGeometry(0.2, 0.3, 12);
+        camLensGeo.rotateX(Math.PI / 2);
+        const camLensMat = new THREE.MeshStandardMaterial({ color: 0x0284c7 });
+        const camLens = new THREE.Mesh(camLensGeo, camLensMat);
+        camLens.position.z = 0.35;
+        camGroup.add(camBox);
+        camGroup.add(camLens);
+        camVec3d.camProxy = camGroup;
         camVec3d.scene.add(camVec3d.camProxy);
 
         // Vector Arrows
         const origin = new THREE.Vector3(0, 0.1, 0);
-        camVec3d.arrowFwd = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), origin, 2.0, 0x38bdf8, 0.4, 0.2);
-        camVec3d.arrowRight = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), origin, 1.6, 0xfb923c, 0.35, 0.18);
-        camVec3d.arrowMove = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), origin, 2.4, 0x10b981, 0.5, 0.25);
+        camVec3d.arrowFwd = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), origin, 2.2, 0x38bdf8, 0.4, 0.2);
+        camVec3d.arrowRight = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), origin, 1.8, 0xfb923c, 0.35, 0.18);
+        camVec3d.arrowMove = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), origin, 2.5, 0x10b981, 0.5, 0.25);
         
         camVec3d.scene.add(camVec3d.arrowFwd);
         camVec3d.scene.add(camVec3d.arrowRight);
@@ -4547,8 +4428,9 @@ function init3dCamVecInspector() {
 
         camVec3d.initialized = true;
 
+        if (camVec3d.animRaf) cancelAnimationFrame(camVec3d.animRaf);
         const animate3d = () => {
-            requestAnimationFrame(animate3d);
+            camVec3d.animRaf = requestAnimationFrame(animate3d);
             if (camVec3d.controls) camVec3d.controls.update();
             if (camVec3d.renderer && camVec3d.scene && camVec3d.camera) {
                 camVec3d.renderer.render(camVec3d.scene, camVec3d.camera);
@@ -4556,6 +4438,10 @@ function init3dCamVecInspector() {
         };
         animate3d();
     } else {
+        if (!container.contains(camVec3d.renderer.domElement)) {
+            container.innerHTML = '';
+            container.appendChild(camVec3d.renderer.domElement);
+        }
         camVec3d.renderer.setSize(w, h);
         camVec3d.camera.aspect = w / h;
         camVec3d.camera.updateProjectionMatrix();
@@ -4565,7 +4451,7 @@ function init3dCamVecInspector() {
 }
 
 function update3dCamVec() {
-    if (!camVec3d.initialized) return;
+    if (!camVec3d.initialized || !camVec3d.scene) return;
 
     const yawRad = (camVecState.camYaw * Math.PI) / 180;
     const fwdX = Math.sin(yawRad);
@@ -4574,28 +4460,57 @@ function update3dCamVec() {
     const rightX = Math.cos(yawRad);
     const rightZ = -Math.sin(yawRad);
 
-    // Camera proxy position
+    // Camera proxy position & pitch
     const camDist = 3.2;
-    camVec3d.camProxy.position.set(-fwdX * camDist, 1.4, -fwdZ * camDist);
+    const camHeight = 1.6;
+    camVec3d.camProxy.position.set(-fwdX * camDist, camHeight, -fwdZ * camDist);
     camVec3d.camProxy.lookAt(0, 0.6, 0);
 
     // Camera Forward & Right Arrows
-    camVec3d.arrowFwd.setDirection(new THREE.Vector3(fwdX, 0, fwdZ).normalize());
-    camVec3d.arrowRight.setDirection(new THREE.Vector3(rightX, 0, rightZ).normalize());
+    let fwdVecY = 0;
+    if (!camVecState.flattenY) {
+        // Without flattening, camera forward pitches downward toward target
+        fwdVecY = -0.4;
+    }
+    const fwdVec = new THREE.Vector3(fwdX, fwdVecY, fwdZ).normalize();
+    const rightVec = new THREE.Vector3(rightX, 0, rightZ).normalize();
+
+    camVec3d.arrowFwd.setDirection(fwdVec);
+    camVec3d.arrowRight.setDirection(rightVec);
 
     // World Move Vector
     const ix = camVecState.inputX;
     const iy = camVecState.inputY;
-    let moveX = (fwdX * iy) + (rightX * ix);
-    let moveZ = (fwdZ * iy) + (rightZ * ix);
-    const mag = Math.hypot(moveX, moveZ);
+    let moveX = (fwdVec.x * iy) + (rightVec.x * ix);
+    let moveY = (fwdVec.y * iy) + (rightVec.y * ix);
+    let moveZ = (fwdVec.z * iy) + (rightVec.z * ix);
+    const mag = Math.hypot(moveX, moveY, moveZ);
 
     if (mag > 0.001) {
         camVec3d.arrowMove.visible = true;
-        camVec3d.arrowMove.setDirection(new THREE.Vector3(moveX / mag, 0, moveZ / mag));
+        camVec3d.arrowMove.setDirection(new THREE.Vector3(moveX / mag, moveY / mag, moveZ / mag));
         camVec3d.arrowMove.setLength(2.4);
     } else {
         camVec3d.arrowMove.visible = false;
+    }
+
+    // Update Live C# Code Breakdown UI
+    const elCode = document.getElementById('camVecCodeBreakdown');
+    if (elCode) {
+        const yawDeg = camVecState.camYaw;
+        const normX = mag > 0.001 ? (moveX / mag).toFixed(2) : '0.00';
+        const normY = mag > 0.001 ? (moveY / mag).toFixed(2) : '0.00';
+        const normZ = mag > 0.001 ? (moveZ / mag).toFixed(2) : '0.00';
+        
+        elCode.innerHTML = `<code><span class="r-cm">// 1. Read camera basis vectors &amp; project horizontally</span>
+Vector3 camFwd = cameraTransform.forward;
+${camVecState.flattenY ? 'camFwd.y = 0f; camFwd.Normalize(); <span class="r-cm">// Correct horizontal plane</span>' : '<span style="color:#ef4444; font-weight: bold;">// MISSING camFwd.y = 0f (Vector points into floor!)</span>'}
+Vector3 camRight = cameraTransform.right;
+${camVecState.flattenY ? 'camRight.y = 0f; camRight.Normalize();' : '<span style="color:#ef4444; font-weight: bold;">// MISSING camRight.y = 0f</span>'}
+
+<span class="r-cm">// 2. Construct move vector from inputs (${ix}, ${iy})</span>
+Vector3 move = (camFwd * ${iy}f + camRight * ${ix}f).normalized;
+<span class="r-cm">// Resulting World Vector: (${normX}, ${normY}, ${normZ}) at Cam Yaw ${yawDeg}°</span></code>`;
     }
 }
 
@@ -4604,7 +4519,6 @@ function setCamYawSlider(val) {
     const el = document.getElementById('camYawValue');
     if (el) el.textContent = camVecState.camYaw.toFixed(0) + '°';
     update3dCamVec();
-    drawCamVecInspector();
 }
 
 function setCamYawPreset(deg) {
@@ -4635,7 +4549,6 @@ function setRawInput(ix, iy) {
     }
     
     update3dCamVec();
-    drawCamVecInspector();
 }
 
 function toggleFlattenY() {
@@ -4646,149 +4559,6 @@ function toggleFlattenY() {
         btn.style.background = camVecState.flattenY ? '#059669' : '#dc2626';
     }
     update3dCamVec();
-    drawCamVecInspector();
-}
-
-function drawCamVecInspector() {
-    const canvas = document.getElementById('camVecCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
-    
-    ctx.clearRect(0, 0, w, h);
-    
-    const cx = w / 2;
-    const cy = h / 2;
-    const radius = Math.min(w, h) * 0.38;
-    
-    // Compass Ring
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-    ctx.stroke();
-    
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px monospace';
-    ctx.fillText('+Z (Forward / North)', cx - 55, cy - radius - 8);
-    ctx.fillText('+X (Right / East)', cx + radius + 8, cy + 4);
-    ctx.fillText('-Z (South)', cx - 25, cy + radius + 18);
-    ctx.fillText('-X (West)', cx - radius - 55, cy + 4);
-    
-    ctx.strokeStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.moveTo(cx - radius, cy); ctx.lineTo(cx + radius, cy);
-    ctx.moveTo(cx, cy - radius); ctx.lineTo(cx, cy + radius);
-    ctx.stroke();
-    
-    const yawRad = (camVecState.camYaw - 90) * (Math.PI / 180);
-    const fwdX = Math.cos(yawRad);
-    const fwdZ = Math.sin(yawRad);
-    
-    const rightRad = yawRad + Math.PI / 2;
-    const rightX = Math.cos(rightRad);
-    const rightZ = Math.sin(rightRad);
-    
-    const camDist = radius * 0.85;
-    const camPx = cx - fwdX * camDist;
-    const camPy = cy - fwdZ * camDist;
-    
-    ctx.fillStyle = '#0284c7';
-    ctx.beginPath();
-    ctx.arc(camPx, camPy, 8, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#f8fafc';
-    ctx.font = '10px sans-serif';
-    ctx.fillText('Camera', camPx - 18, camPy + 18);
-    
-    // Frustum
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
-    ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
-    ctx.beginPath();
-    ctx.moveTo(camPx, camPy);
-    ctx.lineTo(cx + fwdX * 40 - rightX * 50, cy + fwdZ * 40 - rightZ * 50);
-    ctx.lineTo(cx + fwdX * 40 + rightX * 50, cy + fwdZ * 40 + rightZ * 50);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    
-    const vecLen = radius * 0.65;
-    drawArrow(ctx, cx, cy, cx + fwdX * vecLen, cy + fwdZ * vecLen, '#38bdf8', 2);
-    ctx.fillStyle = '#38bdf8';
-    ctx.fillText('cam.forward', cx + fwdX * vecLen + 5, cy + fwdZ * vecLen + 5);
-    
-    drawArrow(ctx, cx, cy, cx + rightX * (vecLen * 0.7), cy + rightZ * (vecLen * 0.7), '#fb923c', 2);
-    ctx.fillStyle = '#fb923c';
-    ctx.fillText('cam.right', cx + rightX * (vecLen * 0.7) + 5, cy + rightZ * (vecLen * 0.7) + 5);
-    
-    const ix = camVecState.inputX;
-    const iy = camVecState.inputY;
-    let rawMoveX = (fwdX * iy) + (rightX * ix);
-    let rawMoveZ = (fwdZ * iy) + (rightZ * ix);
-    const mag = Math.sqrt(rawMoveX * rawMoveX + rawMoveZ * rawMoveZ);
-    
-    let normMoveX = 0;
-    let normMoveZ = 0;
-    if (mag > 0.001) {
-        normMoveX = rawMoveX / mag;
-        normMoveZ = rawMoveZ / mag;
-    }
-    
-    if (mag > 0.001) {
-        drawArrow(ctx, cx, cy, cx + normMoveX * vecLen, cy + normMoveZ * vecLen, '#10b981', 3.5);
-        ctx.fillStyle = '#10b981';
-        ctx.font = 'bold 11px sans-serif';
-        ctx.fillText('moveDirection (World)', cx + normMoveX * vecLen + 8, cy + normMoveZ * vecLen + 8);
-    }
-    
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#0284c7';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    const elCode = document.getElementById('camVecCodeBreakdown');
-    if (elCode) {
-        const yawDeg = camVecState.camYaw;
-        const normX = normMoveX.toFixed(2);
-        const normZ = normMoveZ.toFixed(2);
-        
-        elCode.innerHTML = `<code><span class="r-cm">// 1. Read flattened camera basis vectors</span>
-Vector3 camFwd = cameraTransform.forward;
-${camVecState.flattenY ? 'camFwd.y = 0f; camFwd.Normalize(); <span class="r-cm">// Clean horizontal projection</span>' : '<span class="r-kw" style="color:#ef4444;">// MISSING camFwd.y = 0f (Character moves into floor!)</span>'}
-Vector3 camRight = cameraTransform.right;
-${camVecState.flattenY ? 'camRight.y = 0f; camRight.Normalize();' : '<span class="r-kw" style="color:#ef4444;">// MISSING camRight.y = 0f</span>'}
-
-<span class="r-cm">// 2. Construct move vector from inputs (${ix}, ${iy})</span>
-Vector3 move = (camFwd * ${iy}f + camRight * ${ix}f).normalized;
-<span class="r-cm">// Resulting World Vector: (${normX}, 0.00, ${normZ}) at Cam Yaw ${yawDeg}°</span></code>`;
-    }
-}
-
-function drawArrow(ctx, fromX, fromY, toX, toY, color, width) {
-    const headLen = 9;
-    const dx = toX - fromX;
-    const dy = toY - fromY;
-    const angle = Math.atan2(dy, dx);
-    
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
-    ctx.lineWidth = width;
-    
-    ctx.beginPath();
-    ctx.moveTo(fromX, fromY);
-    ctx.lineTo(toX, toY);
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.moveTo(toX, toY);
-    ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
-    ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
-    ctx.closePath();
-    ctx.fill();
 }
 
 
@@ -4798,32 +4568,21 @@ function drawArrow(ctx, fromX, fromY, toX, toY, color, width) {
 let navSimState = {
     carveEnabled: true,
     agentMode: 'patrol',
-    agentX: 60,
-    agentY: 60,
-    targetX: 380,
-    targetY: 260,
+    agentX: -3.5,
+    agentZ: -2.2,
+    targetX: 3.5,
+    targetZ: 2.2,
     speed: 4.0,           // m/s
-    stoppingDist: 15,     // px
+    stoppingDist: 0.3,    // m
     waypointIndex: 0,
     waypoints: [
-        { x: 60, y: 60 },
-        { x: 380, y: 60 },
-        { x: 380, y: 260 },
-        { x: 60, y: 260 }
+        { x: -3.5, z: -2.2 },
+        { x: 3.5, z: -2.2 },
+        { x: 3.5, z: 2.2 },
+        { x: -3.5, z: 2.2 }
     ],
     path: [],
-    pathPending: false,
-    carvedObstacle: { x: 190, y: 110, w: 90, h: 90 },
-    staticWalls: [
-        { x: 0, y: 0, w: 460, h: 10 },
-        { x: 0, y: 310, w: 460, h: 10 },
-        { x: 0, y: 0, w: 10, h: 320 },
-        { x: 450, y: 0, w: 10, h: 320 },
-        { x: 140, y: 0, w: 16, h: 120 },
-        { x: 310, y: 200, w: 16, h: 120 }
-    ],
-    animRaf: null,
-    lastTime: 0
+    carvedObstacle: { x: 0, z: 0, w: 2.0, d: 2.0 }
 };
 
 let nav3d = {
@@ -4835,18 +4594,19 @@ let nav3d = {
     targetMesh: null,
     obstacleMesh: null,
     pathLine: null,
+    floorMesh: null,
+    raycaster: null,
+    mouse: null,
+    animRaf: null,
+    lastTime: 0,
+    isPointerDown: false,
+    downPos: { x: 0, y: 0 },
     initialized: false
 };
 
 function initNavMeshSimulator() {
     init3dNavMeshSimulator();
     recalculateNavPath();
-    startNavLoop();
-    
-    const canvas = document.getElementById('navMeshCanvas');
-    if (canvas) {
-        canvas.onclick = onNavCanvasClick;
-    }
 }
 
 function init3dNavMeshSimulator() {
@@ -4856,62 +4616,111 @@ function init3dNavMeshSimulator() {
     const w = container.clientWidth || 480;
     const h = container.clientHeight || 260;
 
-    if (!nav3d.initialized) {
+    if (!nav3d.initialized || !nav3d.renderer) {
         nav3d.scene = new THREE.Scene();
         nav3d.scene.background = new THREE.Color(0x050b14);
 
         nav3d.camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-        nav3d.camera.position.set(0, 8.5, 7.5);
+        nav3d.camera.position.set(0, 9.0, 8.0);
 
-        nav3d.renderer = new THREE.WebGLRenderer({ antialias: true });
+        nav3d.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         nav3d.renderer.setSize(w, h);
-        nav3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        nav3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         container.innerHTML = '';
         container.appendChild(nav3d.renderer.domElement);
+
+        nav3d.raycaster = new THREE.Raycaster();
+        nav3d.mouse = new THREE.Vector2();
 
         if (typeof THREE.OrbitControls !== 'undefined') {
             nav3d.controls = new THREE.OrbitControls(nav3d.camera, nav3d.renderer.domElement);
             nav3d.controls.target.set(0, 0, 0);
             nav3d.controls.enableDamping = true;
             nav3d.controls.dampingFactor = 0.08;
+            nav3d.controls.maxPolarAngle = Math.PI / 2 - 0.05;
         }
 
+        // Click-to-set-destination raycasting
+        nav3d.renderer.domElement.addEventListener('pointerdown', (e) => {
+            nav3d.isPointerDown = true;
+            nav3d.downPos = { x: e.clientX, y: e.clientY };
+        });
+
+        nav3d.renderer.domElement.addEventListener('pointerup', (e) => {
+            if (!nav3d.isPointerDown) return;
+            nav3d.isPointerDown = false;
+            const dist = Math.hypot(e.clientX - nav3d.downPos.x, e.clientY - nav3d.downPos.y);
+            if (dist < 6) { // Clean click without dragging camera
+                const rect = nav3d.renderer.domElement.getBoundingClientRect();
+                nav3d.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                nav3d.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                nav3d.raycaster.setFromCamera(nav3d.mouse, nav3d.camera);
+                const intersects = nav3d.raycaster.intersectObject(nav3d.floorMesh);
+                if (intersects.length > 0) {
+                    const pt = intersects[0].point;
+                    navSimState.targetX = THREE.MathUtils.clamp(pt.x, -4.0, 4.0);
+                    navSimState.targetZ = THREE.MathUtils.clamp(pt.z, -2.8, 2.8);
+                    navSimState.agentMode = 'manual';
+                    const btnP = document.getElementById('btnNavModePatrol');
+                    const btnC = document.getElementById('btnNavModeChase');
+                    if (btnP) btnP.style.background = '#1e293b';
+                    if (btnC) btnC.style.background = '#1e293b';
+                    recalculateNavPath();
+                }
+            }
+        });
+
         // Lighting
-        const amb = new THREE.AmbientLight(0xffffff, 0.7);
+        const amb = new THREE.AmbientLight(0xffffff, 0.8);
         nav3d.scene.add(amb);
-        const dir = new THREE.DirectionalLight(0x38bdf8, 1.2);
-        dir.position.set(5, 12, 5);
+        const dir = new THREE.DirectionalLight(0x38bdf8, 1.4);
+        dir.position.set(6, 14, 6);
         nav3d.scene.add(dir);
 
         // Walkable NavMesh Floor (Translucent Cyan)
-        const floorGeo = new THREE.PlaneGeometry(9.2, 6.4);
+        const floorGeo = new THREE.PlaneGeometry(9.6, 6.4);
         floorGeo.rotateX(-Math.PI / 2);
         const floorMat = new THREE.MeshStandardMaterial({
             color: 0x0284c7,
-            roughness: 0.5,
+            roughness: 0.4,
             metalness: 0.1,
             transparent: true,
             opacity: 0.35
         });
-        const floorMesh = new THREE.Mesh(floorGeo, floorMat);
-        nav3d.scene.add(floorMesh);
+        nav3d.floorMesh = new THREE.Mesh(floorGeo, floorMat);
+        nav3d.scene.add(nav3d.floorMesh);
 
+        // Metric Grid on Floor
         const grid = new THREE.GridHelper(10, 10, 0x0284c7, 0x1e293b);
         grid.position.y = 0.01;
         nav3d.scene.add(grid);
 
-        // Static Walls
+        // Static Boundary Walls
         const wallMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
-        const wall1 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.0, 2.4), wallMat);
-        wall1.position.set(-2.0, 0.5, -1.8);
-        nav3d.scene.add(wall1);
+        const wallNorth = new THREE.Mesh(new THREE.BoxGeometry(10.0, 1.0, 0.3), wallMat);
+        wallNorth.position.set(0, 0.5, -3.3);
+        const wallSouth = new THREE.Mesh(new THREE.BoxGeometry(10.0, 1.0, 0.3), wallMat);
+        wallSouth.position.set(0, 0.5, 3.3);
+        const wallWest = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.0, 6.6), wallMat);
+        wallWest.position.set(-4.9, 0.5, 0);
+        const wallEast = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.0, 6.6), wallMat);
+        wallEast.position.set(4.9, 0.5, 0);
+        
+        // Static Interior Dividers
+        const pillar1 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.0, 2.0), wallMat);
+        pillar1.position.set(-2.2, 0.5, -1.8);
+        const pillar2 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.0, 2.0), wallMat);
+        pillar2.position.set(2.2, 0.5, 1.8);
 
-        const wall2 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.0, 2.4), wallMat);
-        wall2.position.set(2.0, 0.5, 1.8);
-        nav3d.scene.add(wall2);
+        nav3d.scene.add(wallNorth);
+        nav3d.scene.add(wallSouth);
+        nav3d.scene.add(wallWest);
+        nav3d.scene.add(wallEast);
+        nav3d.scene.add(pillar1);
+        nav3d.scene.add(pillar2);
 
-        // Dynamic Carved Obstacle
-        const obGeo = new THREE.BoxGeometry(1.8, 1.0, 1.8);
+        // Dynamic Carved Obstacle (Central Crate / Blast Door)
+        const obGeo = new THREE.BoxGeometry(2.0, 1.0, 2.0);
         const obMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.3 });
         nav3d.obstacleMesh = new THREE.Mesh(obGeo, obMat);
         nav3d.obstacleMesh.position.set(0, 0.5, 0);
@@ -4919,66 +4728,176 @@ function init3dNavMeshSimulator() {
 
         // NavMesh Agent Capsule
         const agentGroup = new THREE.Group();
-        const agentGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.8, 16);
+        const agentBodyGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.8, 16);
         const agentMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.2 });
-        const agentBody = new THREE.Mesh(agentGeo, agentMat);
+        const agentBody = new THREE.Mesh(agentBodyGeo, agentMat);
         agentBody.position.y = 0.4;
+        
+        const visorGeo = new THREE.BoxGeometry(0.2, 0.1, 0.15);
+        const visorMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const visor = new THREE.Mesh(visorGeo, visorMat);
+        visor.position.set(0, 0.65, 0.22);
+        
         agentGroup.add(agentBody);
+        agentGroup.add(visor);
         nav3d.agentMesh = agentGroup;
+        nav3d.agentMesh.position.set(navSimState.agentX, 0, navSimState.agentZ);
         nav3d.scene.add(nav3d.agentMesh);
 
-        // Target Marker
-        const targetGeo = new THREE.CylinderGeometry(0.2, 0.05, 0.6, 12);
+        // Target Beacon Marker
+        const targetGroup = new THREE.Group();
+        const targetGeo = new THREE.CylinderGeometry(0.25, 0.05, 0.6, 12);
         const targetMat = new THREE.MeshStandardMaterial({ color: 0xef4444 });
-        nav3d.targetMesh = new THREE.Mesh(targetGeo, targetMat);
-        nav3d.targetMesh.position.set(2.5, 0.3, 1.5);
+        const targetMesh = new THREE.Mesh(targetGeo, targetMat);
+        targetMesh.position.y = 0.3;
+        const targetRingGeo = new THREE.RingGeometry(0.35, 0.45, 16);
+        targetRingGeo.rotateX(-Math.PI / 2);
+        const targetRingMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide });
+        const targetRing = new THREE.Mesh(targetRingGeo, targetRingMat);
+        targetRing.position.y = 0.02;
+        targetGroup.add(targetMesh);
+        targetGroup.add(targetRing);
+        nav3d.targetMesh = targetGroup;
+        nav3d.targetMesh.position.set(navSimState.targetX, 0, navSimState.targetZ);
         nav3d.scene.add(nav3d.targetMesh);
 
         // Path Line
-        const pathMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2.5 });
+        const pathMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 3 });
         const pathGeo = new THREE.BufferGeometry();
         nav3d.pathLine = new THREE.Line(pathGeo, pathMat);
         nav3d.scene.add(nav3d.pathLine);
 
         nav3d.initialized = true;
 
-        const animate3d = () => {
-            requestAnimationFrame(animate3d);
+        if (nav3d.animRaf) cancelAnimationFrame(nav3d.animRaf);
+        nav3d.lastTime = performance.now();
+        const animate3d = (currentTime) => {
+            nav3d.animRaf = requestAnimationFrame(animate3d);
+            const dt = Math.min((currentTime - nav3d.lastTime) / 1000, 0.1);
+            nav3d.lastTime = currentTime;
+
+            update3dNavAgentMovement(dt);
+
             if (nav3d.controls) nav3d.controls.update();
             if (nav3d.renderer && nav3d.scene && nav3d.camera) {
                 nav3d.renderer.render(nav3d.scene, nav3d.camera);
             }
         };
-        animate3d();
+        animate3d(performance.now());
     } else {
+        if (!container.contains(nav3d.renderer.domElement)) {
+            container.innerHTML = '';
+            container.appendChild(nav3d.renderer.domElement);
+        }
         nav3d.renderer.setSize(w, h);
         nav3d.camera.aspect = w / h;
         nav3d.camera.updateProjectionMatrix();
     }
+
+    recalculateNavPath();
 }
 
-function update3dNavAgentPosition() {
-    if (!nav3d.initialized) return;
-
-    // Convert 2D canvas coordinates (0..460, 0..320) to 3D world (-4.6..4.6, -3.2..3.2)
-    const scale = 0.02;
-    const ax = (navSimState.agentX - 230) * scale;
-    const az = (navSimState.agentY - 160) * scale;
-    const tx = (navSimState.targetX - 230) * scale;
-    const tz = (navSimState.targetY - 160) * scale;
-
-    if (nav3d.agentMesh) {
-        nav3d.agentMesh.position.set(ax, 0, az);
+function recalculateNavPath() {
+    const sx = navSimState.agentX;
+    const sz = navSimState.agentZ;
+    const tx = navSimState.targetX;
+    const tz = navSimState.targetZ;
+    
+    const path = [{ x: sx, z: sz }];
+    const ob = navSimState.carvedObstacle;
+    
+    // Check if line segment from start to target intersects carved box obstacle
+    const lineIntersects = navSimState.carveEnabled && lineBoxIntersect(sx, sz, tx, tz, ob.x - ob.w / 2 - 0.3, ob.z - ob.d / 2 - 0.3, ob.w + 0.6, ob.d + 0.6);
+    
+    if (lineIntersects) {
+        // Path around top or bottom corner of obstacle
+        const topCorner = { x: 0, z: -1.8 };
+        const botCorner = { x: 0, z: 1.8 };
+        
+        const distTop = Math.hypot(sx - topCorner.x, sz - topCorner.z) + Math.hypot(tx - topCorner.x, tz - topCorner.z);
+        const distBot = Math.hypot(sx - botCorner.x, sz - botCorner.z) + Math.hypot(tx - botCorner.x, tz - botCorner.z);
+        
+        if (distTop < distBot) {
+            path.push(topCorner);
+        } else {
+            path.push(botCorner);
+        }
     }
-    if (nav3d.targetMesh) {
-        nav3d.targetMesh.position.set(tx, 0.3, tz);
-    }
-
-    // Update Path Line
-    if (nav3d.pathLine && navSimState.path.length > 0) {
-        const points = navSimState.path.map(p => new THREE.Vector3((p.x - 230) * scale, 0.08, (p.y - 160) * scale));
+    
+    path.push({ x: tx, z: tz });
+    navSimState.path = path;
+    
+    // Update 3D Path Line
+    if (nav3d.pathLine && nav3d.scene) {
+        const points = path.map(p => new THREE.Vector3(p.x, 0.08, p.z));
         nav3d.pathLine.geometry.setFromPoints(points);
     }
+
+    // Update 3D Target Position
+    if (nav3d.targetMesh) {
+        nav3d.targetMesh.position.set(tx, 0, tz);
+    }
+
+    updateNavTelemetry();
+}
+
+function lineBoxIntersect(x1, z1, x2, z2, minX, minZ, w, d) {
+    const maxX = minX + w;
+    const maxZ = minZ + d;
+    const segMinX = Math.min(x1, x2), segMaxX = Math.max(x1, x2);
+    const segMinZ = Math.min(z1, z2), segMaxZ = Math.max(z1, z2);
+    if (segMaxX < minX || segMinX > maxX || segMaxZ < minZ || segMinZ > maxZ) return false;
+    return true;
+}
+
+function update3dNavAgentMovement(dt) {
+    if (navSimState.path.length < 2) return;
+    
+    const nextWp = navSimState.path[1];
+    const dx = nextWp.x - navSimState.agentX;
+    const dz = nextWp.z - navSimState.agentZ;
+    const dist = Math.hypot(dx, dz);
+    
+    const moveDist = navSimState.speed * dt;
+    
+    if (dist <= moveDist || dist < 0.15) {
+        navSimState.agentX = nextWp.x;
+        navSimState.agentZ = nextWp.z;
+        navSimState.path.shift();
+        
+        if (navSimState.path.length <= 1) {
+            if (navSimState.agentMode === 'patrol') {
+                navSimState.waypointIndex = (navSimState.waypointIndex + 1) % navSimState.waypoints.length;
+                navSimState.targetX = navSimState.waypoints[navSimState.waypointIndex].x;
+                navSimState.targetZ = navSimState.waypoints[navSimState.waypointIndex].z;
+                recalculateNavPath();
+            }
+        }
+    } else {
+        navSimState.agentX += (dx / dist) * moveDist;
+        navSimState.agentZ += (dz / dist) * moveDist;
+        
+        // Rotate agent towards heading
+        if (nav3d.agentMesh) {
+            const angle = Math.atan2(dx, dz);
+            nav3d.agentMesh.rotation.y = angle;
+        }
+    }
+    
+    if (nav3d.agentMesh) {
+        nav3d.agentMesh.position.set(navSimState.agentX, 0, navSimState.agentZ);
+    }
+    
+    // Update path line dynamically
+    if (nav3d.pathLine && navSimState.path.length > 0) {
+        const points = [new THREE.Vector3(navSimState.agentX, 0.08, navSimState.agentZ)];
+        for (let i = 1; i < navSimState.path.length; i++) {
+            points.push(new THREE.Vector3(navSimState.path[i].x, 0.08, navSimState.path[i].z));
+        }
+        nav3d.pathLine.geometry.setFromPoints(points);
+    }
+
+    updateNavTelemetry();
 }
 
 function setNavAgentMode(mode) {
@@ -4992,7 +4911,10 @@ function setNavAgentMode(mode) {
     if (mode === 'patrol') {
         navSimState.waypointIndex = 0;
         navSimState.targetX = navSimState.waypoints[0].x;
-        navSimState.targetY = navSimState.waypoints[0].y;
+        navSimState.targetZ = navSimState.waypoints[0].z;
+    } else if (mode === 'chase') {
+        navSimState.targetX = 2.5;
+        navSimState.targetZ = 1.5;
     }
     recalculateNavPath();
 }
@@ -5006,110 +4928,10 @@ function toggleNavCarving() {
     }
     if (nav3d.obstacleMesh) {
         nav3d.obstacleMesh.material.color.setHex(navSimState.carveEnabled ? 0xd97706 : 0x475569);
+        nav3d.obstacleMesh.material.transparent = !navSimState.carveEnabled;
+        nav3d.obstacleMesh.material.opacity = navSimState.carveEnabled ? 1.0 : 0.4;
     }
     recalculateNavPath();
-}
-
-function onNavCanvasClick(e) {
-    const rect = e.target.getBoundingClientRect();
-    navSimState.targetX = e.clientX - rect.left;
-    navSimState.targetY = e.clientY - rect.top;
-    navSimState.agentMode = 'manual';
-    
-    const btnP = document.getElementById('btnNavModePatrol');
-    const btnC = document.getElementById('btnNavModeChase');
-    const btnM = document.getElementById('btnNavTargetManual');
-    if (btnP) btnP.style.background = '#1e293b';
-    if (btnC) btnC.style.background = '#1e293b';
-    if (btnM) btnM.style.background = '#0369a1';
-    
-    recalculateNavPath();
-}
-
-function recalculateNavPath() {
-    const sx = navSimState.agentX;
-    const sy = navSimState.agentY;
-    const tx = navSimState.targetX;
-    const ty = navSimState.targetY;
-    
-    const path = [{ x: sx, y: sy }];
-    const ob = navSimState.carvedObstacle;
-    
-    const lineIntersectsObstacle = navSimState.carveEnabled && lineRectIntersect(sx, sy, tx, ty, ob.x - 12, ob.y - 12, ob.w + 24, ob.h + 24);
-    
-    if (lineIntersectsObstacle) {
-        const topCorner = { x: ob.x + ob.w / 2, y: ob.y - 20 };
-        const bottomCorner = { x: ob.x + ob.w / 2, y: ob.y + ob.h + 20 };
-        
-        const distTop = Math.hypot(sx - topCorner.x, sy - topCorner.y) + Math.hypot(tx - topCorner.x, ty - topCorner.y);
-        const distBottom = Math.hypot(sx - bottomCorner.x, sy - bottomCorner.y) + Math.hypot(tx - bottomCorner.x, ty - bottomCorner.y);
-        
-        if (distTop < distBottom) {
-            path.push(topCorner);
-        } else {
-            path.push(bottomCorner);
-        }
-    }
-    
-    path.push({ x: tx, y: ty });
-    navSimState.path = path;
-    updateNavTelemetry();
-    update3dNavAgentPosition();
-}
-
-function lineRectIntersect(x1, y1, x2, y2, rx, ry, rw, rh) {
-    const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
-    const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
-    if (maxX < rx || minX > rx + rw || maxY < ry || minY > ry + rh) return false;
-    return true;
-}
-
-function startNavLoop() {
-    if (navSimState.animRaf) cancelAnimationFrame(navSimState.animRaf);
-    
-    navSimState.lastTime = performance.now();
-    const step = (currentTime) => {
-        const dt = (currentTime - navSimState.lastTime) / 1000;
-        navSimState.lastTime = currentTime;
-        
-        updateNavAgentMovement(dt);
-        drawNavMeshSimulator();
-        update3dNavAgentPosition();
-        
-        navSimState.animRaf = requestAnimationFrame(step);
-    };
-    navSimState.animRaf = requestAnimationFrame(step);
-}
-
-function updateNavAgentMovement(dt) {
-    if (navSimState.path.length < 2) return;
-    
-    const nextWaypoint = navSimState.path[1];
-    const dx = nextWaypoint.x - navSimState.agentX;
-    const dy = nextWaypoint.y - navSimState.agentY;
-    const dist = Math.hypot(dx, dy);
-    
-    const movePx = navSimState.speed * 40 * dt;
-    
-    if (dist <= movePx || dist < 6) {
-        navSimState.agentX = nextWaypoint.x;
-        navSimState.agentY = nextWaypoint.y;
-        navSimState.path.shift();
-        
-        if (navSimState.path.length <= 1) {
-            if (navSimState.agentMode === 'patrol') {
-                navSimState.waypointIndex = (navSimState.waypointIndex + 1) % navSimState.waypoints.length;
-                navSimState.targetX = navSimState.waypoints[navSimState.waypointIndex].x;
-                navSimState.targetY = navSimState.waypoints[navSimState.waypointIndex].y;
-                recalculateNavPath();
-            }
-        }
-    } else {
-        navSimState.agentX += (dx / dist) * movePx;
-        navSimState.agentY += (dy / dist) * movePx;
-    }
-    
-    updateNavTelemetry();
 }
 
 function updateNavTelemetry() {
@@ -5117,132 +4939,27 @@ function updateNavTelemetry() {
     const elState = document.getElementById('navTelemetryState');
     const elCorners = document.getElementById('navTelemetryCorners');
     
-    const totalDistPx = navSimState.path.reduce((acc, curr, idx, arr) => {
-        if (idx === 0) return acc;
-        return acc + Math.hypot(curr.x - arr[idx - 1].x, curr.y - arr[idx - 1].y);
-    }, 0);
+    let totalDist = 0;
+    if (navSimState.path.length > 0) {
+        totalDist += Math.hypot(navSimState.path[0].x - navSimState.agentX, navSimState.path[0].z - navSimState.agentZ);
+        for (let i = 1; i < navSimState.path.length; i++) {
+            totalDist += Math.hypot(navSimState.path[i].x - navSimState.path[i - 1].x, navSimState.path[i].z - navSimState.path[i - 1].z);
+        }
+    }
     
-    const totalMeters = (totalDistPx / 40).toFixed(1);
-    
-    if (elRem) elRem.textContent = totalMeters + ' m';
+    if (elRem) elRem.textContent = totalDist.toFixed(1) + ' m';
     if (elCorners) elCorners.textContent = navSimState.path.length + ' points';
     if (elState) {
         if (navSimState.agentMode === 'patrol') {
             elState.textContent = 'Patrol Loop (WP ' + (navSimState.waypointIndex + 1) + '/4)';
+            elState.style.color = '#38bdf8';
         } else if (navSimState.agentMode === 'chase') {
-            elState.textContent = 'Chasing Player Target';
+            elState.textContent = 'Pursuit Heading';
+            elState.style.color = '#ef4444';
         } else {
-            elState.textContent = totalDistPx < 10 ? 'Destination Reached' : 'Navigating to Point';
+            elState.textContent = totalDist < 0.3 ? 'Destination Reached' : 'Navigating to Point';
+            elState.style.color = '#10b981';
         }
-    }
-}
-
-function drawNavMeshSimulator() {
-    const canvas = document.getElementById('navMeshCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
-    
-    ctx.clearRect(0, 0, w, h);
-    
-    // Walkable NavMesh
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, w, h);
-    
-    ctx.fillStyle = 'rgba(2, 132, 199, 0.18)';
-    ctx.strokeStyle = '#0284c7';
-    ctx.lineWidth = 1;
-    ctx.fillRect(10, 10, w - 20, h - 20);
-    ctx.strokeRect(10, 10, w - 20, h - 20);
-    
-    // Static Walls
-    ctx.fillStyle = '#334155';
-    navSimState.staticWalls.forEach(wall => {
-        ctx.fillRect(wall.x, wall.y, wall.w, wall.h);
-    });
-    
-    // Dynamic Obstacle
-    const ob = navSimState.carvedObstacle;
-    if (navSimState.carveEnabled) {
-        ctx.fillStyle = '#090d16';
-        ctx.fillRect(ob.x - 8, ob.y - 8, ob.w + 16, ob.h + 16);
-        ctx.strokeStyle = '#ef4444';
-        ctx.setLineDash([4, 4]);
-        ctx.strokeRect(ob.x - 8, ob.y - 8, ob.w + 16, ob.h + 16);
-        ctx.setLineDash([]);
-    }
-    
-    ctx.fillStyle = '#d97706';
-    ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(ob.x, ob.y, ob.w, ob.h);
-    
-    ctx.fillStyle = '#fef3c7';
-    ctx.font = '10px sans-serif';
-    ctx.fillText(navSimState.carveEnabled ? 'Carved Box' : 'Obstacle (No Carve)', ob.x + 4, ob.y + ob.h / 2 + 3);
-    
-    // Waypoints
-    navSimState.waypoints.forEach((wp, idx) => {
-        ctx.fillStyle = idx === navSimState.waypointIndex ? '#38bdf8' : '#475569';
-        ctx.beginPath();
-        ctx.arc(wp.x, wp.y, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '10px monospace';
-        ctx.fillText('WP' + (idx + 1), wp.x - 8, wp.y - 8);
-    });
-    
-    // Calculated Path
-    if (navSimState.path.length > 1) {
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2.5;
-        ctx.setLineDash([6, 4]);
-        ctx.beginPath();
-        navSimState.path.forEach((pt, idx) => {
-            if (idx === 0) ctx.moveTo(pt.x, pt.y);
-            else ctx.lineTo(pt.x, pt.y);
-        });
-        ctx.stroke();
-        ctx.setLineDash([]);
-        
-        ctx.fillStyle = '#38bdf8';
-        navSimState.path.forEach(pt => {
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
-            ctx.fill();
-        });
-    }
-    
-    // Target
-    ctx.fillStyle = '#ef4444';
-    ctx.beginPath();
-    ctx.arc(navSimState.targetX, navSimState.targetY, 7, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#fca5a5';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    // Agent
-    ctx.fillStyle = '#10b981';
-    ctx.beginPath();
-    ctx.arc(navSimState.agentX, navSimState.agentY, 9, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#6ee7b7';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    // FOV
-    if (navSimState.path.length > 1) {
-        const nextPt = navSimState.path[1];
-        const angle = Math.atan2(nextPt.y - navSimState.agentY, nextPt.x - navSimState.agentX);
-        ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
-        ctx.beginPath();
-        ctx.moveTo(navSimState.agentX, navSimState.agentY);
-        ctx.arc(navSimState.agentX, navSimState.agentY, 28, angle - Math.PI / 4, angle + Math.PI / 4);
-        ctx.closePath();
-        ctx.fill();
     }
 }
 
@@ -5350,11 +5067,35 @@ function unlockSolution(id) {
     }
 }
 
+// Window resize listener to keep Three.js viewports crisp
+window.addEventListener('resize', () => {
+    if (jump3d.renderer && jump3d.camera && document.getElementById('sim3dJumpContainer')) {
+        const c = document.getElementById('sim3dJumpContainer');
+        const w = c.clientWidth || 480;
+        const h = c.clientHeight || 260;
+        jump3d.renderer.setSize(w, h);
+        jump3d.camera.aspect = w / h;
+        jump3d.camera.updateProjectionMatrix();
+    }
+    if (camVec3d.renderer && camVec3d.camera && document.getElementById('sim3dCamVecContainer')) {
+        const c = document.getElementById('sim3dCamVecContainer');
+        const w = c.clientWidth || 480;
+        const h = c.clientHeight || 260;
+        camVec3d.renderer.setSize(w, h);
+        camVec3d.camera.aspect = w / h;
+        camVec3d.camera.updateProjectionMatrix();
+    }
+    if (nav3d.renderer && nav3d.camera && document.getElementById('sim3dNavMeshContainer')) {
+        const c = document.getElementById('sim3dNavMeshContainer');
+        const w = c.clientWidth || 480;
+        const h = c.clientHeight || 260;
+        nav3d.renderer.setSize(w, h);
+        nav3d.camera.aspect = w / h;
+        nav3d.camera.updateProjectionMatrix();
+    }
+});
 
 
-        // Hook into showSlide / selectSlide to init simulators on entry
-        const origShowSlide = typeof showSlide === 'function' ? showSlide : null;
-        const origSelectSlide = typeof selectSlide === 'function' ? selectSlide : null;
 
         function checkInitSimulators(slideIdx) {
             setTimeout(() => {
@@ -5365,20 +5106,7 @@ function unlockSolution(id) {
                 } else if (slideIdx === 14) { // Slide 15 (0-indexed 14): NavMesh Simulator
                     if (typeof initNavMeshSimulator === 'function') initNavMeshSimulator();
                 }
-            }, 50);
-        }
-
-        if (typeof showSlide === 'function') {
-            window.showSlide = function(idx) {
-                origShowSlide(idx);
-                checkInitSimulators(idx);
-            };
-        }
-        if (typeof selectSlide === 'function') {
-            window.selectSlide = function(idx) {
-                origSelectSlide(idx);
-                checkInitSimulators(idx);
-            };
+            }, 30);
         }
 
 

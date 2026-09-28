@@ -167,9 +167,16 @@ const bannerStart = p4Content.lastIndexOf('// ==================================
 let engineCode = p4Content.substring(engineStart, bannerStart > -1 ? bannerStart : simIdx).trim();
 
 // Harden engineCode against file:/// and cross-frame security origin exceptions
+const targetHashCheck = "try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { if (window.self === window.top) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}";
+const safeHashCheck = "try { if (window.location && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) { window.location.hash = '#slide-' + (currentSlide + 1); } } catch(e) {}";
+engineCode = engineCode.replace(targetHashCheck, safeHashCheck);
+
 engineCode = engineCode.replace(
-    "try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { if (window.self === window.top) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}",
-    "try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { let isTop = false; try { isTop = (window.self === window.top); } catch (err) { isTop = false; } if (isTop) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}"
+    "setTimeout(autoFitSlideElements, 20);",
+    `setTimeout(autoFitSlideElements, 20);
+            if (typeof checkInitSimulators === 'function') {
+                checkInitSimulators(currentSlide);
+            }`
 );
 
 // Define 19 Comprehensive Slides for Lesson 06
@@ -2641,10 +2648,6 @@ const safeStorageCode = `
 
 // Hook into engine slide transitions to initialize simulators when active
 const simLifecycleHook = `
-        // Hook into showSlide / selectSlide to init simulators on entry
-        const origShowSlide = typeof showSlide === 'function' ? showSlide : null;
-        const origSelectSlide = typeof selectSlide === 'function' ? selectSlide : null;
-
         function checkInitSimulators(slideIdx) {
             setTimeout(() => {
                 if (slideIdx === 4) { // Slide 5 (0-indexed 4): Jump Sandbox
@@ -2654,20 +2657,7 @@ const simLifecycleHook = `
                 } else if (slideIdx === 14) { // Slide 15 (0-indexed 14): NavMesh Simulator
                     if (typeof initNavMeshSimulator === 'function') initNavMeshSimulator();
                 }
-            }, 50);
-        }
-
-        if (typeof showSlide === 'function') {
-            window.showSlide = function(idx) {
-                origShowSlide(idx);
-                checkInitSimulators(idx);
-            };
-        }
-        if (typeof selectSlide === 'function') {
-            window.selectSlide = function(idx) {
-                origSelectSlide(idx);
-                checkInitSimulators(idx);
-            };
+            }, 30);
         }
 `;
 
