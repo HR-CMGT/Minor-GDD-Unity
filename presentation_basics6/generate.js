@@ -648,85 +648,44 @@ const slides = [
     notes: "Review the 5-tone palette. Emphasize that greyboxing is not about making ugly levels; it is about communicating spatial hierarchy clearly so playtesters test the game mechanics, not their navigation confusion."
   },
 
-  // Slide 5: Interactive Simulator 1: Jump Arc & Metric Clearance Sandbox
+  // Slide 5: 3D Level Metrics: Jump Arcs & Clearance Formulas
   {
-    title: "Interactive Simulator: Jump Arc & Metric Clearance Sandbox",
-    content: `<div style="background: #090d16; border: 1.5px solid #1e293b; border-radius: 10px; padding: 14px; color: #f8fafc;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-            <div style="font-weight: 900; color: #38bdf8; font-size: 0.96rem;">Jump Arc &amp; Metric Clearance Sandbox (3D Three.js WebGL)</div>
-            <div style="font-size: 0.76rem; color: #94a3b8;">Rotate with mouse drag &bull; 1 grid unit = 1.0m world space</div>
+    title: "3D Level Metrics: Jump Arcs & Clearance Formulas",
+    content: `<div class="split-layout">
+        <div class="left-column">
+            <div class="content-card primary">
+                <div class="card-title core">Ballistic Kinematics: Computing Launch Velocity</div>
+                <div class="card-body">
+                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
+                        Rather than guessing impulse forces, professional 3D action games compute exact vertical velocity from desired height:
+                    </p>
+                    <div class="code-box" style="font-size: 0.72rem; line-height: 1.35; margin: 8px 0;">
+                        <pre><code><span class="r-cm">// 1. Compute exact vertical velocity for target height (h)</span>
+float initialJumpVelocity = Mathf.Sqrt(2f * gravity * jumpHeight);
+
+<span class="r-cm">// 2. Compute flight duration for metric gap validation</span>
+float timeToApex = initialJumpVelocity / gravity;
+float totalHangTime = 2f * timeToApex;
+float maxJumpDistance = horizontalSpeed * totalHangTime;</code></pre>
+                    </div>
+                    <ul style="font-size: 0.80rem; color: #475569; line-height: 1.4; padding-left: 16px;">
+                        <li><strong>Height (h = 2.0m):</strong> Player jumps exactly onto 2m elevated ledges.</li>
+                        <li><strong>Gravity (g = 20-25 m/s²):</strong> Snappy 0.4s apex prevents floatiness.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        
-        <div style="display: grid; grid-template-columns: minmax(calc(240px * var(--font-scale, 1)), calc(300px * var(--font-scale, 1))) 1fr minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))); gap: 12px; align-items: stretch;">
-            <!-- Left: Controls -->
-            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem;">PHYSICS PARAMETERS</div>
-                
-                <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.74rem; color: #94a3b8;">
-                        <span>Jump Height (h):</span> <strong id="jumpHeightVal" style="color: #38bdf8;">2.0 m</strong>
-                    </div>
-                    <input id="sliderJumpHeight" type="range" min="0.5" max="4.0" step="0.1" value="2.0" style="width: 100%;" oninput="updateJumpParam('jumpHeight', this.value)">
-                </div>
-
-                <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.74rem; color: #94a3b8;">
-                        <span>Gravity (g):</span> <strong id="jumpGravityVal" style="color: #38bdf8;">20.0 m/s²</strong>
-                    </div>
-                    <input id="sliderJumpGravity" type="range" min="9.8" max="40.0" step="1.0" value="20.0" style="width: 100%;" oninput="updateJumpParam('gravity', this.value)">
-                </div>
-
-                <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.74rem; color: #94a3b8;">
-                        <span>Move Speed (vx):</span> <strong id="jumpSpeedVal" style="color: #38bdf8;">6.0 m/s</strong>
-                    </div>
-                    <input id="sliderJumpSpeed" type="range" min="2.0" max="12.0" step="0.5" value="6.0" style="width: 100%;" oninput="updateJumpParam('moveSpeed', this.value)">
-                </div>
-
-                <div style="border-top: 1px solid #1f2937; padding-top: 6px; font-weight: 800; color: #fbbf24; font-size: 0.78rem;">OBSTACLES</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <button id="btnToggleWall" class="sim-action-btn" style="background: #0369a1; border: 1px solid #38bdf8; color: #fff; font-size: 0.70rem;" onclick="toggleJumpObstacle('wall')">Wall: ON</button>
-                    <button id="btnToggleGap" class="sim-action-btn" style="background: #0369a1; border: 1px solid #38bdf8; color: #fff; font-size: 0.70rem;" onclick="toggleJumpObstacle('gap')">Pit: ON</button>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px;">
-                    <button class="sim-action-btn" style="background: #10b981; border: 1px solid #34d399; color: #fff; font-size: 0.74rem; font-weight: 800;" onclick="launchJumpSimulation()">Launch Jump</button>
-                    <button class="sim-action-btn" style="background: #374151; border: 1px solid #6b7280; color: #fff; font-size: 0.74rem;" onclick="resetJumpSimulation()">Reset</button>
-                </div>
-            </div>
-
-            <!-- Center: 3D Three.js Viewport with Canvas Fallback -->
-            <div style="background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                <div id="sim3dJumpContainer" style="width: 100%; height: 260px; position: relative; border-radius: 4px; overflow: hidden;"></div>
-                <canvas id="jumpSimCanvas" width="460" height="260" style="display: none;"></canvas>
-            </div>
-
-            <!-- Right: Physics Telemetry -->
-            <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-weight: 800; color: #34d399; font-size: 0.84rem;">CALCULATED TELEMETRY</div>
-                
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Initial Jump Velocity (vy0):</div>
-                    <div id="telemetryVy" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">8.94 m/s</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Time to Apex (tApex):</div>
-                    <div id="telemetryTapex" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">0.45 s</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Total Air Time (tHang):</div>
-                    <div id="telemetryThang" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">0.89 s</div>
-                </div>
-
-                <div style="background: #1e293b; padding: 8px; border-radius: 6px; font-size: 0.78rem;">
-                    <div style="color: #94a3b8;">Max Jump Distance:</div>
-                    <div id="telemetryMaxDist" style="color: #38bdf8; font-weight: 800; font-size: 0.92rem; font-family: monospace;">5.37 m</div>
-                </div>
-
-                <div id="telemetryClearanceStatus" style="background: #064e3b; border: 1px solid #10b981; color: #a7f3d0; border-radius: 6px; padding: 6px 8px; font-size: 0.74rem; font-weight: 700;">
-                    STATUS: PASS - Clears wall &amp; pit
+        <div class="right-column">
+            <div class="content-card primary" style="border-left-color: #059669;">
+                <div class="card-title core" style="color: #047857;">Standard Metric Clearances in Greybox</div>
+                <div class="card-body">
+                    <ul style="font-size: 0.82rem; color: #065f46; line-height: 1.45; padding-left: 16px;">
+                        <li><strong>Standard Vault Ledge:</strong> <code>1.0m - 1.2m</code> (reachable without full jump).</li>
+                        <li><strong>Standard Jump Platform:</strong> <code>1.8m - 2.2m</code> (clean single-jump clearance).</li>
+                        <li><strong>Walking Gap Pit:</strong> <code>2.0m - 3.0m</code> (cleared at standard 6.0 m/s run speed).</li>
+                        <li><strong>Sprint Leap Chasm:</strong> <code>4.0m - 5.5m</code> (requires 9.0 m/s sprint velocity).</li>
+                        <li><strong>Ceiling Headroom:</strong> Minimum <code>3.5m</code> clearance above floors to prevent camera clipping.</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -740,7 +699,7 @@ const slides = [
         </div>
         <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;">
             <div style="font-weight: 800; color: #166534; margin-bottom: 4px;">Mental Model:</div>
-            Jump ballistics in game development are solved backwards. Rather than guessing an arbitrary initial impulse force, designers specify the desired jump height (h) and time to apex (tApex). The engine then computes the exact launch velocity: <code>vy0 = sqrt(2 * g * h)</code>.
+            Jump physics in game development are solved backwards. Rather than applying an arbitrary impulse force, designers specify the desired jump height (h) and time to apex (tApex). The engine computes launch velocity: <code>vy0 = sqrt(2 * g * h)</code>.
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
@@ -753,9 +712,9 @@ const slides = [
                 </div>
             </div>
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;">
-                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Snappy Platformer vs Float:</div>
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;">Snappy Action vs Floaty Simulation:</div>
                 <div style="font-size: 0.84rem; color: #334155; line-height: 1.5;">
-                    Realistic gravity (<code>9.81 m/s²</code>) produces a floaty, sluggish jump feel. Most responsive action platformers use gravity between <code>20.0 m/s²</code> and <code>35.0 m/s²</code> paired with higher initial velocity.
+                    Real-world Earth gravity (<code>9.81 m/s²</code>) feels slow and floaty in third-person games. Double or triple gravity (<code>20.0 - 25.0 m/s²</code>) gives immediate responsiveness and athletic weight.
                 </div>
             </div>
         </div>
@@ -764,51 +723,39 @@ const slides = [
             <div class="unity-inspector-header">
                 <div style="display: flex; align-items: center; gap: 6px;">
                     <span style="display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;">#</span>
-                    <span>CharacterController &bull; Kinematic Physics Configuration</span>
+                    <span>PlayerController3D &bull; Kinematic Jump &amp; Gravity Configuration</span>
                 </div>
-                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Unity 6 Built-in</span>
+                <span style="font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;">Inspector Configuration</span>
             </div>
             <div class="unity-inspector-body">
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Slope Limit</span>
-                    <span class="unity-prop-val">45.00 deg</span>
+                    <span class="unity-prop-label">Move Speed / Sprint Multiplier</span>
+                    <span class="unity-prop-val">6.00 m/s / 1.50x</span>
                 </div>
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Step Offset</span>
-                    <span class="unity-prop-val">0.40 m</span>
+                    <span class="unity-prop-label">Jump Height</span>
+                    <span class="unity-prop-val">2.00 m</span>
                 </div>
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Skin Width</span>
-                    <span class="unity-prop-val">0.08 m (10% of Radius)</span>
+                    <span class="unity-prop-label">Gravity</span>
+                    <span class="unity-prop-val">22.00 m/s² (Snappy Action)</span>
                 </div>
                 <div class="unity-prop-row">
-                    <span class="unity-prop-label">Min Move Distance</span>
-                    <span class="unity-prop-val">0.001 m</span>
-                </div>
-                <div class="unity-prop-row">
-                    <span class="unity-prop-label">Center</span>
-                    <div class="unity-vec3">
-                        <div class="unity-vec3-field"><span class="unity-badge-x">X</span> 0.00</div>
-                        <div class="unity-vec3-field"><span class="unity-badge-y">Y</span> 1.00</div>
-                        <div class="unity-vec3-field"><span class="unity-badge-z">Z</span> 0.00</div>
-                    </div>
-                </div>
-                <div class="unity-prop-row">
-                    <span class="unity-prop-label">Radius / Height</span>
-                    <span class="unity-prop-val">0.40 m / 2.00 m</span>
+                    <span class="unity-prop-label">Ground Check Radius / Offset</span>
+                    <span class="unity-prop-val">0.28 m / -0.85 m (SphereCast)</span>
                 </div>
             </div>
         </div>
 
         <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;">
             <div style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">Common Trap and Why It Breaks:</div>
-            Placing jump gaps in level geometry that match the mathematical <code>maxJumpDistance</code> exactly. Without a safety clearance margin (0.5m - 1.0m), players who jump 1 frame late will miss the ledge every time.
+            Using realistic Earth gravity (<code>9.81 m/s²</code>). The character lingers in the air for over a full second, making platforming precision impossible.
         </div>
         <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;">
-            <strong>Golden Rule for Your Project:</strong> Test jump clearances against worst-case jump timings. If max distance is 5.0m, set the greybox pit width to 3.5m - 4.0m to account for human reaction times.
+            <strong>Golden Rule for Your Project:</strong> Set gravity to <code>20.0 - 25.0 m/s²</code> and compute jump launch velocity using <code>Mathf.Sqrt(2f * gravity * jumpHeight)</code>.
         </div>
     </div>`,
-    notes: "Demonstrate the 3D jump simulator. Adjust the gravity and jump height sliders to show students how initial vertical velocity and max jump clearance change mathematically in real time."
+    notes: "Review ballistic jump equations. Explain why game gravity must be 2x-3x Earth gravity for responsive platforming feel."
   },
 
   // Slide 6: ProBuilder In-Engine Mesh Editing
@@ -2643,9 +2590,7 @@ const safeStorageCode = `
 const simLifecycleHook = `
         function checkInitSimulators(slideIdx) {
             setTimeout(() => {
-                if (slideIdx === 4) { // Slide 5 (0-indexed 4): Jump Sandbox
-                    if (typeof initJumpSandbox === 'function') initJumpSandbox();
-                } else if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
+                if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
                     if (typeof initCamVecInspector === 'function') initCamVecInspector();
                 }
             }, 30);
