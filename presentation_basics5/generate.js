@@ -32,7 +32,17 @@ let customBeforeScript = beforeScript
     )
     .replace(
         '</style>',
-        `        /* Dedicated Interactive Simulator Action Buttons that scale with font slider */
+        `        /* Universal Button Scaling & Overflow Prevention across all viewports and font sizes */
+        button, .sim-action-btn, .nav-btn, .portal-nav-btn, .interactive-action-btn {
+            box-sizing: border-box !important;
+            height: auto !important;
+            min-height: fit-content !important;
+            white-space: normal !important;
+            word-break: normal !important;
+            overflow-wrap: break-word !important;
+            line-height: 1.35 !important;
+        }
+
         .sim-action-btn {
             display: flex !important;
             align-items: center !important;
@@ -43,11 +53,11 @@ let customBeforeScript = beforeScript
             white-space: normal !important;
             word-break: normal !important;
             overflow-wrap: break-word !important;
-            line-height: 1.25 !important;
-            font-size: calc(0.74rem * var(--font-scale, 1)) !important;
+            line-height: 1.35 !important;
+            font-size: 0.74rem;
             font-weight: 700 !important;
-            padding: calc(7px * var(--font-scale, 1)) calc(10px * var(--font-scale, 1)) !important;
-            min-height: calc(2.2rem * var(--font-scale, 1)) !important;
+            padding: 0.55em 0.85em !important;
+            min-height: 2.2em !important;
             height: auto !important;
             border-radius: 6px !important;
             cursor: pointer !important;
@@ -59,6 +69,17 @@ let customBeforeScript = beforeScript
         }
         .sim-action-btn:active:not(:disabled) {
             transform: translateY(1px) scale(0.98) !important;
+        }
+
+        .portal-nav-btn {
+            box-sizing: border-box !important;
+            white-space: normal !important;
+            word-break: normal !important;
+            overflow-wrap: break-word !important;
+            line-height: 1.35 !important;
+            height: auto !important;
+            min-height: 2.2em !important;
+            padding: 0.55em 0.9em !important;
         }
     </style>`
     );
@@ -76,25 +97,6 @@ let engineCode = p4Content.substring(engineStart, bannerStart > -1 ? bannerStart
 engineCode = engineCode.replace(
     "try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { if (window.self === window.top) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}",
     "try { if (window.location && window.location.protocol && window.location.protocol.startsWith('http')) { let isTop = false; try { isTop = (window.self === window.top); } catch (err) { isTop = false; } if (isTop) { window.location.hash = '#slide-' + (currentSlide + 1); } } } catch(e) {}"
-);
-
-// Prevent font size slider from exploding buttons outside their containers
-engineCode = engineCode.replace(
-    'const boost = (num >= 2.0) ? 1.0 : BASE_BOOST;',
-    'const isBtnOrInput = (el.tagName === "BUTTON" || el.tagName === "INPUT" || el.classList.contains("sim-action-btn") || el.classList.contains("interactive-action-btn"));\n' +
-    '                    const boost = (num >= 2.0 || isBtnOrInput) ? 1.0 : BASE_BOOST;'
-);
-
-engineCode = engineCode.replace(
-    '// 2. Universal relative scaling for content blocks outside card-body that lack inline styles',
-    '// Ensure buttons and simulator controls scale cleanly with font slider and never overflow\n' +
-    '            area.querySelectorAll("button, .sim-action-btn, .interactive-action-btn").forEach(btn => {\n' +
-    '                btn.style.whiteSpace = "normal";\n' +
-    '                btn.style.wordBreak = "normal";\n' +
-    '                btn.style.overflowWrap = "break-word";\n' +
-    '                btn.style.height = "auto";\n' +
-    '            });\n\n' +
-    '            // 2. Universal relative scaling for content blocks outside card-body that lack inline styles'
 );
 
 // 19 Detailed Slides
@@ -447,20 +449,20 @@ public class ScreenFader : MonoBehaviour
             </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), 270px) 1fr 1.25fr; gap: 12px; align-items: stretch;">
+        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))) 1fr 1.25fr; gap: 12px; align-items: stretch;">
             <!-- Left: Transition Controls -->
             <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
                 <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 2px;">SCENE CONTROLS</div>
-                <button id="btnFaderLvl1" class="sim-action-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important;" onclick="simTransitionScene('Level_01')">
+                <button id="btnFaderLvl1" class="sim-action-btn" style="font-size: 0.74rem; background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; padding: 0.55em 0.85em;" onclick="simTransitionScene('Level_01')">
                     Fade to 'Level_01'
                 </button>
-                <button id="btnFaderLvl2" class="sim-action-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important;" onclick="simTransitionScene('Level_02')">
+                <button id="btnFaderLvl2" class="sim-action-btn" style="font-size: 0.74rem; background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; padding: 0.55em 0.85em;" onclick="simTransitionScene('Level_02')">
                     Fade to 'Level_02'
                 </button>
-                <button id="btnFaderMenu" class="sim-action-btn" style="background: #475569 !important; border: 1px solid #94a3b8 !important; color: #fff !important;" onclick="simTransitionScene('MainMenu')">
+                <button id="btnFaderMenu" class="sim-action-btn" style="font-size: 0.74rem; background: #475569 !important; border: 1px solid #94a3b8 !important; color: #fff !important; padding: 0.55em 0.85em;" onclick="simTransitionScene('MainMenu')">
                     Fade to 'MainMenu'
                 </button>
-                <button id="btnFaderSpam" class="sim-action-btn" style="background: #991b1b !important; border: 1px solid #ef4444 !important; color: #fff !important;" onclick="simSpamClick()">
+                <button id="btnFaderSpam" class="sim-action-btn" style="font-size: 0.74rem; background: #991b1b !important; border: 1px solid #ef4444 !important; color: #fff !important; padding: 0.55em 0.85em;" onclick="simSpamClick()">
                     Spam Double-Click Test
                 </button>
 
@@ -1129,20 +1131,20 @@ public class UniversalAudioFeedback : MonoBehaviour
             <div style="font-size: 0.76rem; color: #94a3b8;">Test button tactility, modal bounce easing, pitch variance, and screen flash</div>
         </div>
         
-        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), 270px) 1fr 1.2fr; gap: 12px; align-items: stretch;">
+        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))) 1fr 1.2fr; gap: 12px; align-items: stretch;">
             <!-- Left: Controls -->
             <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
                 <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 4px;">INTERACTION TRIGGERS</div>
-                <button id="btnTactileTest" class="sim-action-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; cursor: pointer; transition: transform 0.1s ease;" onmousedown="simTactilePress(true)" onmouseup="simTactilePress(false)">
+                <button id="btnTactileTest" class="sim-action-btn" style="font-size: 0.74rem; background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; padding: 0.55em 0.85em; cursor: pointer; transition: transform 0.1s ease;" onmousedown="simTactilePress(true)" onmouseup="simTactilePress(false)">
                     Press Tactile Button
                 </button>
-                <button id="btnPopupTest" class="sim-action-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; cursor: pointer;" onclick="simTriggerPopup()">
+                <button id="btnPopupTest" class="sim-action-btn" style="font-size: 0.74rem; background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; padding: 0.55em 0.85em; cursor: pointer;" onclick="simTriggerPopup()">
                     Trigger Victory Popup
                 </button>
-                <button id="btnAudioChime" class="sim-action-btn" style="background: #78350f !important; border: 1px solid #f59e0b !important; color: #fff !important; cursor: pointer;" onclick="simPlayAudio('chime')">
+                <button id="btnAudioChime" class="sim-action-btn" style="font-size: 0.74rem; background: #78350f !important; border: 1px solid #f59e0b !important; color: #fff !important; padding: 0.55em 0.85em; cursor: pointer;" onclick="simPlayAudio('chime')">
                     Play Success Chime
                 </button>
-                <button id="btnFlashTest" class="sim-action-btn" style="background: #4c1d95 !important; border: 1px solid #a855f7 !important; color: #fff !important; cursor: pointer;" onclick="simScreenFlash()">
+                <button id="btnFlashTest" class="sim-action-btn" style="font-size: 0.74rem; background: #4c1d95 !important; border: 1px solid #a855f7 !important; color: #fff !important; padding: 0.55em 0.85em; cursor: pointer;" onclick="simScreenFlash()">
                     Canvas Screen Flash
                 </button>
             </div>
@@ -1592,19 +1594,19 @@ public class PlaytestTelemetry : MonoBehaviour
             <div style="font-size: 0.76rem; color: #94a3b8;">Submit high scores and dispatch real-time playtest session data</div>
         </div>
         
-        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), 270px) 1fr 1.2fr; gap: 12px; align-items: stretch;">
+        <div style="display: grid; grid-template-columns: minmax(calc(220px * var(--font-scale, 1)), calc(280px * var(--font-scale, 1))) 1fr 1.2fr; gap: 12px; align-items: stretch;">
             <!-- Left: Inputs & Triggers -->
             <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
                 <div style="font-weight: 800; color: #60a5fa; font-size: 0.84rem; margin-bottom: 4px;">TELEMETRY CONTROLS</div>
-                <input id="inputPlayerName" type="text" value="Alex" placeholder="Player Name" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 6px 8px; border-radius: 4px; width: 100%; box-sizing: border-box;">
-                <input id="inputPlayerScore" type="number" value="850" placeholder="Score" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 6px 8px; border-radius: 4px; width: 100%; box-sizing: border-box;">
-                <button id="btnSubmitScore" class="sim-action-btn" style="background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important;" onclick="simSubmitLeaderboard()">
+                <input id="inputPlayerName" type="text" value="Alex" placeholder="Player Name" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 0.5em 0.7em; border-radius: 4px; width: 100%; box-sizing: border-box;">
+                <input id="inputPlayerScore" type="number" value="850" placeholder="Score" style="background: #1e293b; border: 1px solid #475569; color: #fff; font-size: 0.76rem; padding: 0.5em 0.7em; border-radius: 4px; width: 100%; box-sizing: border-box;">
+                <button id="btnSubmitScore" class="sim-action-btn" style="font-size: 0.74rem; background: #0369a1 !important; border: 1px solid #38bdf8 !important; color: #fff !important; padding: 0.55em 0.85em;" onclick="simSubmitLeaderboard()">
                     Submit to Leaderboard
                 </button>
-                <button id="btnDispatchTel" class="sim-action-btn" style="background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important;" onclick="simDispatchTelemetry()">
+                <button id="btnDispatchTel" class="sim-action-btn" style="font-size: 0.74rem; background: #065f46 !important; border: 1px solid #10b981 !important; color: #fff !important; padding: 0.55em 0.85em;" onclick="simDispatchTelemetry()">
                     Dispatch Session (Sheet)
                 </button>
-                <button id="btnToggleOffline" class="sim-action-btn" style="background: #374151 !important; border: 1px solid #6b7280 !important; color: #fff !important;" onclick="simToggleOffline()">
+                <button id="btnToggleOffline" class="sim-action-btn" style="font-size: 0.74rem; background: #374151 !important; border: 1px solid #6b7280 !important; color: #fff !important; padding: 0.55em 0.85em;" onclick="simToggleOffline()">
                     Toggle Airplane Mode
                 </button>
             </div>
@@ -1744,8 +1746,8 @@ public class PlaytestTelemetry : MonoBehaviour
             <strong>Golden Rule for Your Project:</strong> Push your final update patch to itch.io / Google Play at least 24 hours before the deadline. Download the live release from your public link onto a real device to verify the patch runs cleanly.
         </div>
         <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; width: 100%;">
-            <a href="../index.html" class="portal-nav-btn" style="flex: 1 1 200px; text-align: center; text-decoration: none; font-size: 0.82rem; font-weight: 700; background: #0f172a; color: #94a3b8; border: 1px solid #334155; padding: 10px 16px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: normal; line-height: 1.3;">&larr; Return to Course Portal</a>
-            <button onclick="selectSlide(0)" style="flex: 1 1 200px; text-align: center; font-size: 0.82rem; font-weight: 700; background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 10px 16px; border-radius: 6px; cursor: pointer; white-space: normal; line-height: 1.3;">Restart Deck &uarr;</button>
+            <a href="../index.html" class="portal-nav-btn" style="flex: 1 1 220px; text-align: center; text-decoration: none; font-size: 0.82rem; font-weight: 700; background: #0f172a; color: #94a3b8; border: 1px solid #334155; padding: 0.55em 0.9em; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: normal; line-height: 1.35; box-sizing: border-box; height: auto;">&larr; Return to Course Portal</a>
+            <button onclick="selectSlide(0)" class="portal-nav-btn" style="flex: 1 1 220px; text-align: center; font-size: 0.82rem; font-weight: 700; background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 0.55em 0.9em; border-radius: 6px; cursor: pointer; white-space: normal; line-height: 1.35; box-sizing: border-box; height: auto;">Restart Deck &uarr;</button>
         </div>
     </div>`,
     notes: "Wrap up: Remind everyone that their games are already downloadable. This final sprint is about publishing the definitive polish, game feel, and telemetry update patch to itch.io or Google Play before the deadline."
