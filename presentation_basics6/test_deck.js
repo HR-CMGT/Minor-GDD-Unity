@@ -56,7 +56,10 @@ assert(html.includes("e.key === 'n' || e.key === 'N'"), 'Presenter notes shortcu
 assert(html.includes("e.key === 'l' || e.key === 'L'"), 'Lecture/Lab shortcut [L] registered');
 assert(html.includes("e.key === 'f' || e.key === 'F'"), 'Fullscreen shortcut [F] registered');
 
-// 5. Check Interactive Simulators (3D Camera-Relative Vector Math Inspector)
+// 5. Check Interactive Simulators (3D Left-Hand Coordinate Inspector & 3D Camera-Relative Vector Math)
+assert(html.includes('function initHandCoordInspector('), 'initHandCoordInspector() function present');
+assert(html.includes('function setHandCoordSystem('), 'setHandCoordSystem() function present');
+assert(html.includes('function highlightHandAxis('), 'highlightHandAxis() function present');
 assert(html.includes('function initCamVecInspector('), 'initCamVecInspector() function present');
 assert(html.includes('function setCamYawSlider('), 'setCamYawSlider() function present');
 assert(html.includes('function setRawInput('), 'setRawInput() function present');

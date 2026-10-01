@@ -2682,7 +2682,7 @@
   },
   {
     "title": "From 2D Pixels to 3D World Space: Coordinate Systems & Scaling",
-    "content": "<div class=\"split-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">Left-Handed Y-Up Coordinate System</div>\n                <div class=\"card-body\">\n                    <p style=\"font-size: 0.86rem; color: #334155; line-height: 1.45;\">\n                        Unity operates on a <strong>Left-Handed Cartesian System</strong> where:\n                    </p>\n                    <ul style=\"font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;\">\n                        <li><strong>+X (Thumb):</strong> Points Right (Horizontal East).</li>\n                        <li><strong>+Y (Index):</strong> Points Up (Vertical Altitude).</li>\n                        <li><strong>+Z (Middle):</strong> Points Forward (Depth into screen / North).</li>\n                    </ul>\n                    <div style=\"background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; margin-top: 10px; font-size: 0.80rem; color: #0f172a;\">\n                        <strong>Vector Reference:</strong><br>\n                        <code>Vector3.forward = (0, 0, 1)</code><br>\n                        <code>Vector3.right = (1, 0, 0)</code><br>\n                        <code>Vector3.up = (0, 1, 0)</code>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"right-column\">\n            <div class=\"content-card primary\" style=\"border-left-color: #059669;\">\n                <div class=\"card-title core\" style=\"color: #047857;\">The 1 Unity Unit = 1 Meter Standard</div>\n                <div class=\"card-body\">\n                    <p style=\"font-size: 0.86rem; color: #334155; line-height: 1.45;\">\n                        Unity physics, lighting, and audio attenuation are calibrated to real-world meters:\n                    </p>\n                    <ul style=\"font-size: 0.82rem; color: #065f46; margin-top: 8px; line-height: 1.45; padding-left: 16px;\">\n                        <li><strong>Rigidbodies:</strong> Gravity at <code>-9.81 m/s²</code> feels floaty on tiny objects if scales are off.</li>\n                        <li><strong>NavMesh:</strong> Agent radius (0.5m) and step height (0.4m) assume human meter scale.</li>\n                        <li><strong>Light Attenuation:</strong> Inverse-square light dropoff requires accurate room dimensions.</li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"lab-deep-dive\" style=\"margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;\">\n            <div style=\"font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;\">\n                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>\n            </div>\n            <span style=\"background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;\">COORDINATES &amp; WORLD SPACE</span>\n        </div>\n        <div style=\"background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #166534; margin-bottom: 4px;\">Mental Model:</div>\n            World Space is the global coordinate grid where the entire level resides. Local Space is the relative offset from a parent GameObject. Always verify whether a script is querying <code>transform.position</code> (World) or <code>transform.localPosition</code> (Relative Parent Space).\n        </div>\n        <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;\">\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">World vs Local Space:</div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>World Space:</strong> Absolute origin at <code>(0,0,0)</code>. Used for physics raycasts, NavMesh paths, and distances between independent entities.<br>\n                    <strong>Local Space:</strong> Relative to parent. Moving a parent vehicle moves all child passengers automatically.\n                </div>\n            </div>\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">Handedness in 3D Engines:</div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>Unity:</strong> Left-Handed (+Y Up, +Z Forward).<br>\n                    <strong>Blender / Unreal:</strong> Right-Handed (Blender: +Z Up, Unreal: Left-Handed Z-Up). Unity automatically flips coordinates on FBX import, but manual procedural meshes must respect Unity's Left-Handed winding order.\n                </div>\n            </div>\n        </div>\n\n        <div class=\"unity-inspector\">\n            <div class=\"unity-inspector-header\">\n                <div style=\"display: flex; align-items: center; gap: 6px;\">\n                    <span style=\"display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;\">#</span>\n                    <span>Transform Component &bull; World Anchor Definition</span>\n                </div>\n                <span style=\"font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;\">Inspector Standard</span>\n            </div>\n            <div class=\"unity-inspector-body\">\n                <div class=\"unity-prop-row\">\n                    <span class=\"unity-prop-label\">Position (World Coordinates)</span>\n                    <div class=\"unity-vec3\">\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-x\">X</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-y\">Y</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-z\">Z</span> 0.00</div>\n                    </div>\n                </div>\n                <div class=\"unity-prop-row\">\n                    <span class=\"unity-prop-label\">Rotation (Euler Angles)</span>\n                    <div class=\"unity-vec3\">\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-x\">X</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-y\">Y</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-z\">Z</span> 0.00</div>\n                    </div>\n                </div>\n                <div class=\"unity-prop-row\">\n                    <span class=\"unity-prop-label\">Scale (Unit Ratio 1:1)</span>\n                    <div class=\"unity-vec3\">\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-x\">X</span> 1.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-y\">Y</span> 1.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-z\">Z</span> 1.00</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div style=\"background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #991b1b; margin-bottom: 4px;\">Common Trap and Why It Breaks:</div>\n            Scaling parent GameObjects non-uniformly (e.g. <code>(1, 2.5, 0.4)</code>). Non-uniform parent scales distort child BoxColliders and cause CharacterController physics sweeps to glitch against wall edges.\n        </div>\n        <div style=\"background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;\">\n            <strong>Golden Rule for Your Project:</strong> Keep Transform Scale at <code>(1, 1, 1)</code> for all parent root containers. Change geometry dimensions inside the mesh or collider, never by stretching the parent root scale.\n        </div>\n    </div>",
+    "content": "<div class=\"split-layout\">\n        <div class=\"left-column\">\n            <div class=\"content-card primary\">\n                <div class=\"card-title core\">Left-Handed Cartesian System: The 3-Finger Rule</div>\n                <div class=\"card-body\">\n                    <p style=\"font-size: 0.86rem; color: #334155; line-height: 1.45;\">\n                        Hold out your <strong>left hand</strong> with thumb, index, and middle finger perpendicular to each other:\n                    </p>\n                    <div style=\"display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 0.82rem;\">\n                        <div style=\"display: flex; align-items: center; justify-content: space-between; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 10px;\">\n                            <div><strong style=\"color: #b91c1c;\">Thumb: +X Axis</strong> (Horizontal Right / East)</div>\n                            <code style=\"font-weight: 700; color: #b91c1c;\">(1, 0, 0)</code>\n                        </div>\n                        <div style=\"display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 6px 10px;\">\n                            <div><strong style=\"color: #15803d;\">Index Finger: +Y Axis</strong> (Vertical Altitude / Up)</div>\n                            <code style=\"font-weight: 700; color: #15803d;\">(0, 1, 0)</code>\n                        </div>\n                        <div style=\"display: flex; align-items: center; justify-content: space-between; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; padding: 6px 10px;\">\n                            <div><strong style=\"color: #0369a1;\">Middle Finger: +Z Axis</strong> (Depth / Forward into Screen)</div>\n                            <code style=\"font-weight: 700; color: #0369a1;\">(0, 0, 1)</code>\n                        </div>\n                    </div>\n                    <div style=\"background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; margin-top: 10px; font-size: 0.80rem; color: #0f172a;\">\n                        <strong>The 1 Unity Unit = 1 Meter Standard:</strong><br>\n                        Physics gravity (<code>-9.81 m/s²</code>), lighting dropoff, and NavMesh character radii rely directly on 1 unit = 1 meter.\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"right-column\">\n            <div class=\"content-card primary\" style=\"border-left-color: #0284c7; padding: 12px 14px;\">\n                <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;\">\n                    <div class=\"card-title core\" style=\"margin-bottom: 0; font-size: 0.92rem; color: #0369a1;\">3D Hand Coordinate Inspector</div>\n                    <div style=\"display: flex; gap: 4px;\">\n                        <button id=\"btnHandLeft\" onclick=\"setHandCoordSystem('left')\" style=\"padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #0284c7; color: #ffffff; border: 1px solid #38bdf8; border-radius: 4px; cursor: pointer;\">Left-Hand (Unity)</button>\n                        <button id=\"btnHandRight\" onclick=\"setHandCoordSystem('right')\" style=\"padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 4px; cursor: pointer;\">Right-Hand (OpenGL)</button>\n                    </div>\n                </div>\n\n                <div id=\"sim3dHandContainer\" style=\"width: 100%; height: 210px; background: #050b14; border: 1.5px solid #1e293b; border-radius: 6px; position: relative; overflow: hidden;\"></div>\n\n                <div style=\"display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 4px;\">\n                    <div style=\"display: flex; gap: 3px;\">\n                        <button onclick=\"setHandCameraPreset('orbit')\" style=\"padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;\">Orbit</button>\n                        <button onclick=\"setHandCameraPreset('front')\" style=\"padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;\">Front (XY)</button>\n                        <button onclick=\"setHandCameraPreset('top')\" style=\"padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;\">Top (XZ)</button>\n                        <button onclick=\"setHandCameraPreset('side')\" style=\"padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;\">Side (ZY)</button>\n                    </div>\n                    <div style=\"display: flex; gap: 3px;\">\n                        <button id=\"btnToggleHandRotate\" onclick=\"toggleHandAutoRotate()\" style=\"padding: 2px 6px; font-size: 0.70rem; background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 3px; cursor: pointer;\">Auto-Rotate: OFF</button>\n                        <button onclick=\"highlightHandAxis('x')\" style=\"padding: 2px 5px; font-size: 0.70rem; background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; border-radius: 3px; cursor: pointer;\">+X</button>\n                        <button onclick=\"highlightHandAxis('y')\" style=\"padding: 2px 5px; font-size: 0.70rem; background: #14532d; color: #86efac; border: 1px solid #22c55e; border-radius: 3px; cursor: pointer;\">+Y</button>\n                        <button onclick=\"highlightHandAxis('z')\" style=\"padding: 2px 5px; font-size: 0.70rem; background: #0c4a6e; color: #7dd3fc; border: 1px solid #38bdf8; border-radius: 3px; cursor: pointer;\">+Z</button>\n                    </div>\n                </div>\n\n                <div style=\"background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-size: 0.74rem; color: #94a3b8; line-height: 1.4;\">\n                    <div id=\"handTelemetryTitle\" style=\"color: #f8fafc; margin-bottom: 2px;\"><strong>System:</strong> Unity 6 (Left-Handed Y-Up)</div>\n                    <div id=\"handTelemetryFormula\" style=\"color: #cbd5e1; margin-bottom: 2px;\"><code>Thumb (+X) &times; Index (+Y) = Middle (+Z Forward)</code></div>\n                    <div id=\"handTelemetryZDesc\"><strong style=\"color: #38bdf8;\">+Z (Middle):</strong> Forward into the screen (North)</div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"lab-deep-dive\" style=\"margin-top: 24px; padding: 20px 24px; background: #ffffff; border: 2px solid #0284c7; border-left: 8px solid #0284c7; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); color: #0f172a; text-align: left; width: 100%; box-sizing: border-box;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;\">\n            <div style=\"font-size: 1.05rem; font-weight: 900; color: #0369a1; display: flex; align-items: center; gap: 8px;\">\n                <span>LAB MODE STUDY GUIDE: DEEP DIVE</span>\n            </div>\n            <span style=\"background: #e0f2fe; color: #0284c7; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; border: 1px solid #bae6fd;\">COORDINATES &amp; WORLD SPACE</span>\n        </div>\n        <div style=\"background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; color: #14532d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #166534; margin-bottom: 4px;\">Mental Model:</div>\n            World Space is the global coordinate grid where the entire level resides. Local Space is the relative offset from a parent GameObject. Always verify whether a script is querying <code>transform.position</code> (World) or <code>transform.localPosition</code> (Relative Parent Space).\n        </div>\n        <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;\">\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">World vs Local Space:</div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>World Space:</strong> Absolute origin at <code>(0,0,0)</code>. Used for physics raycasts, NavMesh paths, and distances between independent entities.<br>\n                    <strong>Local Space:</strong> Relative to parent. Moving a parent vehicle moves all child passengers automatically.\n                </div>\n            </div>\n            <div style=\"background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px;\">\n                <div style=\"font-weight: 800; color: #0f172a; font-size: 0.88rem; margin-bottom: 6px;\">Handedness in 3D Engines:</div>\n                <div style=\"font-size: 0.84rem; color: #334155; line-height: 1.5;\">\n                    <strong>Unity:</strong> Left-Handed (+Y Up, +Z Forward).<br>\n                    <strong>Blender / Unreal:</strong> Right-Handed (Blender: +Z Up, Unreal: Left-Handed Z-Up). Unity automatically flips coordinates on FBX import, but manual procedural meshes must respect Unity's Left-Handed winding order.\n                </div>\n            </div>\n        </div>\n\n        <div class=\"unity-inspector\">\n            <div class=\"unity-inspector-header\">\n                <div style=\"display: flex; align-items: center; gap: 6px;\">\n                    <span style=\"display: inline-block; width: 14px; height: 14px; background: #505050; border-radius: 2px; text-align: center; line-height: 14px; font-size: 10px; font-weight: 900; color: #ffffff;\">#</span>\n                    <span>Transform Component &bull; World Anchor Definition</span>\n                </div>\n                <span style=\"font-size: 0.68rem; background: #2b2b2b; color: #8bc34a; padding: 2px 6px; border-radius: 3px; border: 1px solid #383838;\">Inspector Standard</span>\n            </div>\n            <div class=\"unity-inspector-body\">\n                <div class=\"unity-prop-row\">\n                    <span class=\"unity-prop-label\">Position (World Coordinates)</span>\n                    <div class=\"unity-vec3\">\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-x\">X</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-y\">Y</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-z\">Z</span> 0.00</div>\n                    </div>\n                </div>\n                <div class=\"unity-prop-row\">\n                    <span class=\"unity-prop-label\">Rotation (Euler Angles)</span>\n                    <div class=\"unity-vec3\">\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-x\">X</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-y\">Y</span> 0.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-z\">Z</span> 0.00</div>\n                    </div>\n                </div>\n                <div class=\"unity-prop-row\">\n                    <span class=\"unity-prop-label\">Scale (Unit Ratio 1:1)</span>\n                    <div class=\"unity-vec3\">\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-x\">X</span> 1.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-y\">Y</span> 1.00</div>\n                        <div class=\"unity-vec3-field\"><span class=\"unity-badge-z\">Z</span> 1.00</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div style=\"background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 16px; margin-top: 12px; margin-bottom: 12px; color: #7f1d1d; font-size: 0.88rem; line-height: 1.55;\">\n            <div style=\"font-weight: 800; color: #991b1b; margin-bottom: 4px;\">Common Trap and Why It Breaks:</div>\n            Scaling parent GameObjects non-uniformly (e.g. <code>(1, 2.5, 0.4)</code>). Non-uniform parent scales distort child BoxColliders and cause CharacterController physics sweeps to glitch against wall edges.\n        </div>\n        <div style=\"background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 0.86rem; color: #1e40af; line-height: 1.5;\">\n            <strong>Golden Rule for Your Project:</strong> Keep Transform Scale at <code>(1, 1, 1)</code> for all parent root containers. Change geometry dimensions inside the mesh or collider, never by stretching the parent root scale.\n        </div>\n    </div>",
     "notes": "Explain the coordinate system differences. Point out that 1 unit = 1 meter is not arbitrary; physics gravity, NavMesh defaults, and lighting dropoff all rely on it."
   },
   {
@@ -3918,6 +3918,447 @@ let currentSlide = 0;
 // ==========================================
 
 // --------------------------------------------------
+// 0. Left-Handed Cartesian Coordinate Inspector (Slide 2)
+// --------------------------------------------------
+let handCoordState = {
+    system: 'left',       // 'left' (Unity) | 'right' (OpenGL / Blender)
+    autoRotate: false,
+    highlightAxis: null   // 'x' | 'y' | 'z' | null
+};
+
+let handCoord3d = {
+    renderer: null,
+    scene: null,
+    camera: null,
+    controls: null,
+    handGroup: null,
+    gridHelper: null,
+    arrowX: null,
+    arrowY: null,
+    arrowZ: null,
+    spriteX: null,
+    spriteY: null,
+    spriteZ: null,
+    axisMeshes: {
+        x: [],
+        y: [],
+        z: []
+    },
+    animRaf: null,
+    initialized: false
+};
+
+function makeTextSprite(message, colorStr) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    ctx.font = 'Bold 22px "JetBrains Mono", Consolas, monospace';
+    ctx.fillStyle = colorStr || '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(message, 128, 32);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const spriteMaterial = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+    const sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(1.4, 0.35, 1.0);
+    return sprite;
+}
+
+function buildHandGeometry(isLeft) {
+    const group = new THREE.Group();
+    handCoord3d.axisMeshes = { x: [], y: [], z: [] };
+
+    const skinMat = new THREE.MeshStandardMaterial({
+        color: 0x334155,
+        roughness: 0.35,
+        metalness: 0.25
+    });
+    const jointMat = new THREE.MeshStandardMaterial({
+        color: 0x475569,
+        roughness: 0.2,
+        metalness: 0.5
+    });
+    const redMat = new THREE.MeshStandardMaterial({
+        color: 0xef4444,
+        emissive: 0x7f1d1d,
+        emissiveIntensity: 0.35,
+        roughness: 0.3
+    });
+    const greenMat = new THREE.MeshStandardMaterial({
+        color: 0x22c55e,
+        emissive: 0x14532d,
+        emissiveIntensity: 0.35,
+        roughness: 0.3
+    });
+    const blueMat = new THREE.MeshStandardMaterial({
+        color: 0x38bdf8,
+        emissive: 0x0369a1,
+        emissiveIntensity: 0.35,
+        roughness: 0.3
+    });
+
+    // 1. Forearm & Wrist Base
+    const wristGeo = new THREE.CylinderGeometry(0.32, 0.36, 0.7, 16);
+    const wrist = new THREE.Mesh(wristGeo, skinMat);
+    wrist.position.set(0, -0.75, 0);
+    group.add(wrist);
+
+    const wristJointGeo = new THREE.SphereGeometry(0.34, 16, 16);
+    const wristJoint = new THREE.Mesh(wristJointGeo, jointMat);
+    wristJoint.position.set(0, -0.4, 0);
+    group.add(wristJoint);
+
+    // 2. Palm Box
+    const palmGeo = new THREE.BoxGeometry(0.85, 0.8, 0.38);
+    const palm = new THREE.Mesh(palmGeo, skinMat);
+    palm.position.set(0, 0, 0);
+    group.add(palm);
+
+    // Origin Glow Sphere at Center (0,0,0)
+    const originGeo = new THREE.SphereGeometry(0.12, 16, 16);
+    const originMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const originSphere = new THREE.Mesh(originGeo, originMat);
+    originSphere.position.set(0, 0, 0);
+    group.add(originSphere);
+
+    // 3. Thumb (+X Axis - Red)
+    const thumbRoot = new THREE.Group();
+    thumbRoot.position.set(0.42, -0.2, 0.08);
+
+    const thumbJoint1 = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 12), jointMat);
+    thumbRoot.add(thumbJoint1);
+
+    const tSeg1Geo = new THREE.CylinderGeometry(0.12, 0.13, 0.45, 12);
+    tSeg1Geo.rotateZ(-Math.PI / 2.5);
+    const tSeg1 = new THREE.Mesh(tSeg1Geo, skinMat);
+    tSeg1.position.set(0.24, 0.08, 0.02);
+    thumbRoot.add(tSeg1);
+
+    const thumbJoint2 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), jointMat);
+    thumbJoint2.position.set(0.48, 0.16, 0.04);
+    thumbRoot.add(thumbJoint2);
+
+    const tSeg2Geo = new THREE.CylinderGeometry(0.10, 0.11, 0.45, 12);
+    tSeg2Geo.rotateZ(-Math.PI / 2);
+    const tSeg2 = new THREE.Mesh(tSeg2Geo, redMat);
+    tSeg2.position.set(0.72, 0.16, 0.04);
+    thumbRoot.add(tSeg2);
+    handCoord3d.axisMeshes.x.push(tSeg2);
+
+    const thumbTip = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), redMat);
+    thumbTip.position.set(0.95, 0.16, 0.04);
+    thumbRoot.add(thumbTip);
+    handCoord3d.axisMeshes.x.push(thumbTip);
+
+    group.add(thumbRoot);
+
+    // 4. Index Finger (+Y Axis - Green)
+    const indexRoot = new THREE.Group();
+    indexRoot.position.set(0.22, 0.4, 0.08);
+
+    const iJoint1 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), jointMat);
+    indexRoot.add(iJoint1);
+
+    const iSeg1 = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.11, 0.45, 12), skinMat);
+    iSeg1.position.set(0, 0.24, 0);
+    indexRoot.add(iSeg1);
+
+    const iJoint2 = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), jointMat);
+    iJoint2.position.set(0, 0.48, 0);
+    indexRoot.add(iJoint2);
+
+    const iSeg2 = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.10, 0.45, 12), greenMat);
+    iSeg2.position.set(0, 0.72, 0);
+    indexRoot.add(iSeg2);
+    handCoord3d.axisMeshes.y.push(iSeg2);
+
+    const indexTip = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), greenMat);
+    indexTip.position.set(0, 0.95, 0);
+    indexRoot.add(indexTip);
+    handCoord3d.axisMeshes.y.push(indexTip);
+
+    group.add(indexRoot);
+
+    // 5. Middle Finger (Z Axis - Blue)
+    // Left-Handed (Unity): points forward (+Z into screen)
+    // Right-Handed (OpenGL): points backward (-Z toward viewer)
+    const middleRoot = new THREE.Group();
+    middleRoot.position.set(-0.06, 0.38, 0.08);
+
+    const mJoint1 = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 12), jointMat);
+    middleRoot.add(mJoint1);
+
+    const zSign = isLeft ? 1 : -1;
+
+    const mSeg1Geo = new THREE.CylinderGeometry(0.11, 0.12, 0.48, 12);
+    mSeg1Geo.rotateX(Math.PI / 2 * zSign);
+    const mSeg1 = new THREE.Mesh(mSeg1Geo, skinMat);
+    mSeg1.position.set(0, 0, 0.24 * zSign);
+    middleRoot.add(mSeg1);
+
+    const mJoint2 = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), jointMat);
+    mJoint2.position.set(0, 0, 0.48 * zSign);
+    middleRoot.add(mJoint2);
+
+    const mSeg2Geo = new THREE.CylinderGeometry(0.095, 0.105, 0.48, 12);
+    mSeg2Geo.rotateX(Math.PI / 2 * zSign);
+    const mSeg2 = new THREE.Mesh(mSeg2Geo, blueMat);
+    mSeg2.position.set(0, 0, 0.72 * zSign);
+    middleRoot.add(mSeg2);
+    handCoord3d.axisMeshes.z.push(mSeg2);
+
+    const middleTip = new THREE.Mesh(new THREE.SphereGeometry(0.095, 12, 12), blueMat);
+    middleTip.position.set(0, 0, 0.96 * zSign);
+    middleRoot.add(middleTip);
+    handCoord3d.axisMeshes.z.push(middleTip);
+
+    group.add(middleRoot);
+
+    // 6. Curled Ring & Pinky Fingers
+    const curledRoot = new THREE.Group();
+
+    // Ring finger curled
+    const rRoot = new THREE.Group();
+    rRoot.position.set(-0.28, 0.35, 0.08);
+    const rJoint = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), jointMat);
+    rRoot.add(rJoint);
+    const rCurlGeo = new THREE.TorusGeometry(0.16, 0.08, 8, 16, Math.PI);
+    rCurlGeo.rotateY(Math.PI / 2);
+    rCurlGeo.rotateZ(-Math.PI / 2);
+    const rCurl = new THREE.Mesh(rCurlGeo, skinMat);
+    rCurl.position.set(0, -0.05, 0.14);
+    rRoot.add(rCurl);
+    curledRoot.add(rRoot);
+
+    // Pinky finger curled
+    const pRoot = new THREE.Group();
+    pRoot.position.set(-0.48, 0.25, 0.08);
+    const pJoint = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), jointMat);
+    pRoot.add(pJoint);
+    const pCurlGeo = new THREE.TorusGeometry(0.13, 0.07, 8, 16, Math.PI);
+    pCurlGeo.rotateY(Math.PI / 2);
+    pCurlGeo.rotateZ(-Math.PI / 2);
+    const pCurl = new THREE.Mesh(pCurlGeo, skinMat);
+    pCurl.position.set(0, -0.05, 0.12);
+    pRoot.add(pCurl);
+    curledRoot.add(pRoot);
+
+    group.add(curledRoot);
+
+    // 7. Prominent 3D Coordinate Arrows
+    const origin = new THREE.Vector3(0, 0, 0);
+    handCoord3d.arrowX = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), origin, 2.3, 0xef4444, 0.4, 0.2);
+    handCoord3d.arrowY = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), origin, 2.3, 0x22c55e, 0.4, 0.2);
+    handCoord3d.arrowZ = new THREE.ArrowHelper(new THREE.Vector3(0, 0, zSign), origin, 2.3, 0x38bdf8, 0.4, 0.2);
+
+    group.add(handCoord3d.arrowX);
+    group.add(handCoord3d.arrowY);
+    group.add(handCoord3d.arrowZ);
+
+    // 8. 3D Billboard Text Labels
+    handCoord3d.spriteX = makeTextSprite("+X: Thumb (Right)", "#ef4444");
+    handCoord3d.spriteX.position.set(2.6, 0.1, 0);
+    group.add(handCoord3d.spriteX);
+
+    handCoord3d.spriteY = makeTextSprite("+Y: Index (Up)", "#22c55e");
+    handCoord3d.spriteY.position.set(0.2, 2.6, 0);
+    group.add(handCoord3d.spriteY);
+
+    const zLabelText = isLeft ? "+Z: Middle (Forward)" : "-Z: Middle (Back/Out)";
+    handCoord3d.spriteZ = makeTextSprite(zLabelText, "#38bdf8");
+    handCoord3d.spriteZ.position.set(-0.06, 0.4, 2.6 * zSign);
+    group.add(handCoord3d.spriteZ);
+
+    return group;
+}
+
+function initHandCoordInspector() {
+    init3dHandCoordInspector();
+    update3dHandCoord();
+}
+
+function init3dHandCoordInspector() {
+    const container = document.getElementById('sim3dHandContainer');
+    if (!container || typeof THREE === 'undefined') return;
+
+    const w = container.clientWidth || 480;
+    const h = container.clientHeight || 270;
+
+    if (!handCoord3d.initialized || !handCoord3d.renderer) {
+        handCoord3d.scene = new THREE.Scene();
+        handCoord3d.scene.background = new THREE.Color(0x050b14);
+
+        handCoord3d.camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 100);
+        handCoord3d.camera.position.set(3.6, 2.8, 4.4);
+
+        handCoord3d.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        handCoord3d.renderer.setSize(w, h);
+        handCoord3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        container.innerHTML = '';
+        container.appendChild(handCoord3d.renderer.domElement);
+
+        if (typeof THREE.OrbitControls !== 'undefined') {
+            handCoord3d.controls = new THREE.OrbitControls(handCoord3d.camera, handCoord3d.renderer.domElement);
+            handCoord3d.controls.target.set(0.2, 0.5, 0.2);
+            handCoord3d.controls.enableDamping = true;
+            handCoord3d.controls.dampingFactor = 0.08;
+            handCoord3d.controls.autoRotate = handCoordState.autoRotate;
+            handCoord3d.controls.autoRotateSpeed = 1.8;
+        }
+
+        // Lights
+        const amb = new THREE.AmbientLight(0xffffff, 0.85);
+        handCoord3d.scene.add(amb);
+
+        const dir1 = new THREE.DirectionalLight(0x38bdf8, 1.4);
+        dir1.position.set(6, 10, 8);
+        handCoord3d.scene.add(dir1);
+
+        const dir2 = new THREE.DirectionalLight(0x94a3b8, 0.7);
+        dir2.position.set(-6, -4, -6);
+        handCoord3d.scene.add(dir2);
+
+        // Ground Reference Grid
+        handCoord3d.gridHelper = new THREE.GridHelper(6, 6, 0x0284c7, 0x1e293b);
+        handCoord3d.gridHelper.position.y = -1.15;
+        handCoord3d.scene.add(handCoord3d.gridHelper);
+
+        // Build Initial Left-Hand Mesh
+        handCoord3d.handGroup = buildHandGeometry(true);
+        handCoord3d.scene.add(handCoord3d.handGroup);
+
+        handCoord3d.initialized = true;
+
+        if (handCoord3d.animRaf) cancelAnimationFrame(handCoord3d.animRaf);
+        const animateHand = () => {
+            handCoord3d.animRaf = requestAnimationFrame(animateHand);
+            if (handCoord3d.controls) handCoord3d.controls.update();
+            if (handCoord3d.renderer && handCoord3d.scene && handCoord3d.camera) {
+                handCoord3d.renderer.render(handCoord3d.scene, handCoord3d.camera);
+            }
+        };
+        animateHand();
+    } else {
+        if (!container.contains(handCoord3d.renderer.domElement)) {
+            container.innerHTML = '';
+            container.appendChild(handCoord3d.renderer.domElement);
+        }
+        handCoord3d.renderer.setSize(w, h);
+        handCoord3d.camera.aspect = w / h;
+        handCoord3d.camera.updateProjectionMatrix();
+    }
+
+    update3dHandCoord();
+}
+
+function update3dHandCoord() {
+    if (!handCoord3d.initialized || !handCoord3d.scene) return;
+
+    const isLeft = handCoordState.system === 'left';
+
+    // Rebuild hand geometry for current handedness
+    if (handCoord3d.handGroup) {
+        handCoord3d.scene.remove(handCoord3d.handGroup);
+    }
+    handCoord3d.handGroup = buildHandGeometry(isLeft);
+    handCoord3d.scene.add(handCoord3d.handGroup);
+
+    // Apply axis highlight if active
+    if (handCoordState.highlightAxis && handCoord3d.axisMeshes[handCoordState.highlightAxis]) {
+        handCoord3d.axisMeshes[handCoordState.highlightAxis].forEach(m => {
+            if (m.material) {
+                m.material.emissiveIntensity = 0.9;
+            }
+        });
+    }
+
+    // Update UI Buttons State
+    const btnLeft = document.getElementById('btnHandLeft');
+    const btnRight = document.getElementById('btnHandRight');
+    if (btnLeft && btnRight) {
+        if (isLeft) {
+            btnLeft.style.background = '#0284c7';
+            btnLeft.style.borderColor = '#38bdf8';
+            btnLeft.style.color = '#ffffff';
+            btnRight.style.background = '#1e293b';
+            btnRight.style.borderColor = '#334155';
+            btnRight.style.color = '#94a3b8';
+        } else {
+            btnRight.style.background = '#0284c7';
+            btnRight.style.borderColor = '#38bdf8';
+            btnRight.style.color = '#ffffff';
+            btnLeft.style.background = '#1e293b';
+            btnLeft.style.borderColor = '#334155';
+            btnLeft.style.color = '#94a3b8';
+        }
+    }
+
+    // Update Telemetry Panel
+    const telemetryTitle = document.getElementById('handTelemetryTitle');
+    const telemetryFormula = document.getElementById('handTelemetryFormula');
+    const telemetryZDesc = document.getElementById('handTelemetryZDesc');
+
+    if (telemetryTitle) {
+        telemetryTitle.innerHTML = isLeft 
+            ? '<strong>System:</strong> Unity 6 (Left-Handed Y-Up)' 
+            : '<strong>System:</strong> OpenGL / Blender Standard (Right-Handed)';
+    }
+
+    if (telemetryFormula) {
+        telemetryFormula.innerHTML = isLeft
+            ? '<code>Thumb (+X) &times; Index (+Y) = Middle (+Z Forward)</code>'
+            : '<code>Thumb (+X) &times; Index (+Y) = Middle (+Z Outward / -Z Forward)</code>';
+    }
+
+    if (telemetryZDesc) {
+        telemetryZDesc.innerHTML = isLeft
+            ? '<strong style="color: #38bdf8;">+Z (Middle):</strong> Forward into the screen (North)'
+            : '<strong style="color: #38bdf8;">-Z (Middle):</strong> Forward depth (-Z in OpenGL camera space)';
+    }
+}
+
+function setHandCoordSystem(system) {
+    handCoordState.system = system;
+    update3dHandCoord();
+}
+
+function setHandCameraPreset(preset) {
+    if (!handCoord3d.camera || !handCoord3d.controls) return;
+
+    if (preset === 'orbit') {
+        handCoord3d.camera.position.set(3.6, 2.8, 4.4);
+    } else if (preset === 'front') {
+        handCoord3d.camera.position.set(0.2, 0.5, 5.2);
+    } else if (preset === 'top') {
+        handCoord3d.camera.position.set(0.2, 5.5, 0.21);
+    } else if (preset === 'side') {
+        handCoord3d.camera.position.set(5.2, 0.5, 0.2);
+    }
+
+    handCoord3d.controls.target.set(0.2, 0.5, 0.2);
+    handCoord3d.controls.update();
+}
+
+function toggleHandAutoRotate() {
+    handCoordState.autoRotate = !handCoordState.autoRotate;
+    if (handCoord3d.controls) {
+        handCoord3d.controls.autoRotate = handCoordState.autoRotate;
+    }
+    const btn = document.getElementById('btnToggleHandRotate');
+    if (btn) {
+        btn.textContent = handCoordState.autoRotate ? 'Auto-Rotate: ON' : 'Auto-Rotate: OFF';
+        btn.style.background = handCoordState.autoRotate ? '#059669' : '#1e293b';
+    }
+}
+
+function highlightHandAxis(axis) {
+    handCoordState.highlightAxis = (handCoordState.highlightAxis === axis) ? null : axis;
+    update3dHandCoord();
+}
+
+// --------------------------------------------------
 // 1. Camera-Relative Vector Math Inspector (Slide 9)
 // --------------------------------------------------
 let camVecState = {
@@ -4265,6 +4706,14 @@ function unlockSolution(id) {
 
 // Window resize listener to keep Three.js viewports crisp
 window.addEventListener('resize', () => {
+    if (handCoord3d.renderer && handCoord3d.camera && document.getElementById('sim3dHandContainer')) {
+        const c = document.getElementById('sim3dHandContainer');
+        const w = c.clientWidth || 480;
+        const h = c.clientHeight || 270;
+        handCoord3d.renderer.setSize(w, h);
+        handCoord3d.camera.aspect = w / h;
+        handCoord3d.camera.updateProjectionMatrix();
+    }
     if (camVec3d.renderer && camVec3d.camera && document.getElementById('sim3dCamVecContainer')) {
         const c = document.getElementById('sim3dCamVecContainer');
         const w = c.clientWidth || 480;
@@ -4279,7 +4728,9 @@ window.addEventListener('resize', () => {
 
         function checkInitSimulators(slideIdx) {
             setTimeout(() => {
-                if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
+                if (slideIdx === 1) { // Slide 2 (0-indexed 1): Left-Handed Coordinate Inspector
+                    if (typeof initHandCoordInspector === 'function') initHandCoordInspector();
+                } else if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
                     if (typeof initCamVecInspector === 'function') initCamVecInspector();
                 }
             }, 30);

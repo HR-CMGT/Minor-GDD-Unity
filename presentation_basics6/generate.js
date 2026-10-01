@@ -274,37 +274,63 @@ const slides = [
     content: `<div class="split-layout">
         <div class="left-column">
             <div class="content-card primary">
-                <div class="card-title core">Left-Handed Y-Up Coordinate System</div>
+                <div class="card-title core">Left-Handed Cartesian System: The 3-Finger Rule</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Unity operates on a <strong>Left-Handed Cartesian System</strong> where:
+                        Hold out your <strong>left hand</strong> with thumb, index, and middle finger perpendicular to each other:
                     </p>
-                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
-                        <li><strong>+X (Thumb):</strong> Points Right (Horizontal East).</li>
-                        <li><strong>+Y (Index):</strong> Points Up (Vertical Altitude).</li>
-                        <li><strong>+Z (Middle):</strong> Points Forward (Depth into screen / North).</li>
-                    </ul>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 0.82rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 10px;">
+                            <div><strong style="color: #b91c1c;">Thumb: +X Axis</strong> (Horizontal Right / East)</div>
+                            <code style="font-weight: 700; color: #b91c1c;">(1, 0, 0)</code>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 6px 10px;">
+                            <div><strong style="color: #15803d;">Index Finger: +Y Axis</strong> (Vertical Altitude / Up)</div>
+                            <code style="font-weight: 700; color: #15803d;">(0, 1, 0)</code>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; padding: 6px 10px;">
+                            <div><strong style="color: #0369a1;">Middle Finger: +Z Axis</strong> (Depth / Forward into Screen)</div>
+                            <code style="font-weight: 700; color: #0369a1;">(0, 0, 1)</code>
+                        </div>
+                    </div>
                     <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; margin-top: 10px; font-size: 0.80rem; color: #0f172a;">
-                        <strong>Vector Reference:</strong><br>
-                        <code>Vector3.forward = (0, 0, 1)</code><br>
-                        <code>Vector3.right = (1, 0, 0)</code><br>
-                        <code>Vector3.up = (0, 1, 0)</code>
+                        <strong>The 1 Unity Unit = 1 Meter Standard:</strong><br>
+                        Physics gravity (<code>-9.81 m/s²</code>), lighting dropoff, and NavMesh character radii rely directly on 1 unit = 1 meter.
                     </div>
                 </div>
             </div>
         </div>
         <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">The 1 Unity Unit = 1 Meter Standard</div>
-                <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Unity physics, lighting, and audio attenuation are calibrated to real-world meters:
-                    </p>
-                    <ul style="font-size: 0.82rem; color: #065f46; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
-                        <li><strong>Rigidbodies:</strong> Gravity at <code>-9.81 m/s²</code> feels floaty on tiny objects if scales are off.</li>
-                        <li><strong>NavMesh:</strong> Agent radius (0.5m) and step height (0.4m) assume human meter scale.</li>
-                        <li><strong>Light Attenuation:</strong> Inverse-square light dropoff requires accurate room dimensions.</li>
-                    </ul>
+            <div class="content-card primary" style="border-left-color: #0284c7; padding: 12px 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                    <div class="card-title core" style="margin-bottom: 0; font-size: 0.92rem; color: #0369a1;">3D Hand Coordinate Inspector</div>
+                    <div style="display: flex; gap: 4px;">
+                        <button id="btnHandLeft" onclick="setHandCoordSystem('left')" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #0284c7; color: #ffffff; border: 1px solid #38bdf8; border-radius: 4px; cursor: pointer;">Left-Hand (Unity)</button>
+                        <button id="btnHandRight" onclick="setHandCoordSystem('right')" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Right-Hand (OpenGL)</button>
+                    </div>
+                </div>
+
+                <div id="sim3dHandContainer" style="width: 100%; height: 210px; background: #050b14; border: 1.5px solid #1e293b; border-radius: 6px; position: relative; overflow: hidden;"></div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 4px;">
+                    <div style="display: flex; gap: 3px;">
+                        <button onclick="setHandCameraPreset('orbit')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Orbit</button>
+                        <button onclick="setHandCameraPreset('front')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Front (XY)</button>
+                        <button onclick="setHandCameraPreset('top')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Top (XZ)</button>
+                        <button onclick="setHandCameraPreset('side')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Side (ZY)</button>
+                    </div>
+                    <div style="display: flex; gap: 3px;">
+                        <button id="btnToggleHandRotate" onclick="toggleHandAutoRotate()" style="padding: 2px 6px; font-size: 0.70rem; background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Auto-Rotate: OFF</button>
+                        <button onclick="highlightHandAxis('x')" style="padding: 2px 5px; font-size: 0.70rem; background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; border-radius: 3px; cursor: pointer;">+X</button>
+                        <button onclick="highlightHandAxis('y')" style="padding: 2px 5px; font-size: 0.70rem; background: #14532d; color: #86efac; border: 1px solid #22c55e; border-radius: 3px; cursor: pointer;">+Y</button>
+                        <button onclick="highlightHandAxis('z')" style="padding: 2px 5px; font-size: 0.70rem; background: #0c4a6e; color: #7dd3fc; border: 1px solid #38bdf8; border-radius: 3px; cursor: pointer;">+Z</button>
+                    </div>
+                </div>
+
+                <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-size: 0.74rem; color: #94a3b8; line-height: 1.4;">
+                    <div id="handTelemetryTitle" style="color: #f8fafc; margin-bottom: 2px;"><strong>System:</strong> Unity 6 (Left-Handed Y-Up)</div>
+                    <div id="handTelemetryFormula" style="color: #cbd5e1; margin-bottom: 2px;"><code>Thumb (+X) &times; Index (+Y) = Middle (+Z Forward)</code></div>
+                    <div id="handTelemetryZDesc"><strong style="color: #38bdf8;">+Z (Middle):</strong> Forward into the screen (North)</div>
                 </div>
             </div>
         </div>
@@ -2590,7 +2616,9 @@ const safeStorageCode = `
 const simLifecycleHook = `
         function checkInitSimulators(slideIdx) {
             setTimeout(() => {
-                if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
+                if (slideIdx === 1) { // Slide 2 (0-indexed 1): Left-Handed Coordinate Inspector
+                    if (typeof initHandCoordInspector === 'function') initHandCoordInspector();
+                } else if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
                     if (typeof initCamVecInspector === 'function') initCamVecInspector();
                 }
             }, 30);
