@@ -48,6 +48,21 @@ By the end of this class, you will be able to:
 
 Greyboxing (or whiteboxing) is the practice of building playable spaces with primitive geometry before committing art resources. Consistent scale metrics are mandatory to prevent character clipping, camera stutter, and navigation failures.
 
+### 3D Coordinate Systems: Left-Handed vs Right-Handed
+
+Unity uses a **Left-Handed Cartesian Coordinate System (Y-Up, X-Right, Z-Forward)**:
+
+- **Thumb (+X):** Points Right (Horizontal East / Lateral movement).
+- **Index Finger (+Y):** Points Up (Vertical Altitude / Jump).
+- **Middle Finger (+Z):** Points Forward into the screen (North / Look forward).
+
+![Left-Handed System (Unity, Unreal) vs Right-Handed System (Blender, Maya)](../img/basics6/coordinate_systems_handedness.webp)
+
+#### Key Differences Between Game Engines & DCC Tools:
+1. **Unity & Unreal:** Left-Handed systems where `+Z` is forward depth into the screen.
+2. **Blender & Maya:** Right-Handed systems where `+Z` points outward toward the camera/viewer.
+3. **Import Behavior:** When exporting FBX assets from Blender into Unity, ensure proper axis conversion (or enable *Apply Transform* on export) to prevent 180-degree yaw rotation flips.
+
 ### Standard Metric Reference: 1 Unity Unit = 1.0 Meter
 
 Unity's physics engine (PhysX), NavMesh query system, and lighting models are calibrated around 1 unit equaling 1 meter. Deviating from this scale causes unnatural gravity acceleration, incorrect lighting falloff, and agent clipping.

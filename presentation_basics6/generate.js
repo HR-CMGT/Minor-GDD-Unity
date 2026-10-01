@@ -274,37 +274,39 @@ const slides = [
     content: `<div class="split-layout">
         <div class="left-column">
             <div class="content-card primary">
-                <div class="card-title core">Left-Handed Y-Up Coordinate System</div>
+                <div class="card-title core">Left-Handed Cartesian System: The 3-Finger Rule</div>
                 <div class="card-body">
                     <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Unity operates on a <strong>Left-Handed Cartesian System</strong> where:
+                        Hold out your <strong>left hand</strong> with thumb, index, and middle finger perpendicular to each other:
                     </p>
-                    <ul style="font-size: 0.82rem; color: #475569; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
-                        <li><strong>+X (Thumb):</strong> Points Right (Horizontal East).</li>
-                        <li><strong>+Y (Index):</strong> Points Up (Vertical Altitude).</li>
-                        <li><strong>+Z (Middle):</strong> Points Forward (Depth into screen / North).</li>
-                    </ul>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 0.82rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 10px;">
+                            <div><strong style="color: #b91c1c;">Thumb: +X Axis</strong> (Horizontal Right / East)</div>
+                            <code style="font-weight: 700; color: #b91c1c;">(1, 0, 0)</code>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 6px 10px;">
+                            <div><strong style="color: #15803d;">Index Finger: +Y Axis</strong> (Vertical Altitude / Up)</div>
+                            <code style="font-weight: 700; color: #15803d;">(0, 1, 0)</code>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; padding: 6px 10px;">
+                            <div><strong style="color: #0369a1;">Middle Finger: +Z Axis</strong> (Depth / Forward into Screen)</div>
+                            <code style="font-weight: 700; color: #0369a1;">(0, 0, 1)</code>
+                        </div>
+                    </div>
                     <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; margin-top: 10px; font-size: 0.80rem; color: #0f172a;">
-                        <strong>Vector Reference:</strong><br>
-                        <code>Vector3.forward = (0, 0, 1)</code><br>
-                        <code>Vector3.right = (1, 0, 0)</code><br>
-                        <code>Vector3.up = (0, 1, 0)</code>
+                        <strong>The 1 Unity Unit = 1 Meter Standard:</strong><br>
+                        Physics gravity (<code>-9.81 m/s²</code>), lighting dropoff, and NavMesh character radii rely directly on 1 unit = 1 meter.
                     </div>
                 </div>
             </div>
         </div>
         <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #059669;">
-                <div class="card-title core" style="color: #047857;">The 1 Unity Unit = 1 Meter Standard</div>
-                <div class="card-body">
-                    <p style="font-size: 0.86rem; color: #334155; line-height: 1.45;">
-                        Unity physics, lighting, and audio attenuation are calibrated to real-world meters:
-                    </p>
-                    <ul style="font-size: 0.82rem; color: #065f46; margin-top: 8px; line-height: 1.45; padding-left: 16px;">
-                        <li><strong>Rigidbodies:</strong> Gravity at <code>-9.81 m/s²</code> feels floaty on tiny objects if scales are off.</li>
-                        <li><strong>NavMesh:</strong> Agent radius (0.5m) and step height (0.4m) assume human meter scale.</li>
-                        <li><strong>Light Attenuation:</strong> Inverse-square light dropoff requires accurate room dimensions.</li>
-                    </ul>
+            <div class="content-card primary" style="border-left-color: #0284c7; padding: 10px 12px; display: flex; flex-direction: column; align-items: center;">
+                <div class="card-title core" style="margin-bottom: 8px; width: 100%; font-size: 0.90rem; color: #0369a1;">Handedness Coordinate Blueprint</div>
+                <img src="coordinate_systems_handedness.webp" alt="Left-Handed System (Unity, Unreal) vs Right-Handed System (Blender, Maya)" style="width: 100%; max-height: 230px; object-fit: contain; border-radius: 6px; border: 1.5px solid #0f172a; background: #050b14; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-size: 0.76rem; color: #334155; line-height: 1.4; width: 100%; box-sizing: border-box;">
+                    <strong>Left-Handed (Unity):</strong> +Z points forward into the screen (clockwise rotation).<br>
+                    <strong>Right-Handed (Blender):</strong> +Z points outward toward viewer (counter-clockwise).
                 </div>
             </div>
         </div>
