@@ -301,12 +301,36 @@ const slides = [
             </div>
         </div>
         <div class="right-column">
-            <div class="content-card primary" style="border-left-color: #0284c7; padding: 10px 12px; display: flex; flex-direction: column; align-items: center;">
-                <div class="card-title core" style="margin-bottom: 8px; width: 100%; font-size: 0.90rem; color: #0369a1;">Handedness Coordinate Blueprint</div>
-                <img src="coordinate_systems_handedness.webp" alt="Left-Handed System (Unity, Unreal) vs Right-Handed System (Blender, Maya)" style="width: 100%; max-height: 230px; object-fit: contain; border-radius: 6px; border: 1.5px solid #0f172a; background: #050b14; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-size: 0.76rem; color: #334155; line-height: 1.4; width: 100%; box-sizing: border-box;">
-                    <strong>Left-Handed (Unity):</strong> +Z points forward into the screen (clockwise rotation).<br>
-                    <strong>Right-Handed (Blender):</strong> +Z points outward toward viewer (counter-clockwise).
+            <div class="content-card primary" style="border-left-color: #0284c7; padding: 12px 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                    <div class="card-title core" style="margin-bottom: 0; font-size: 0.92rem; color: #0369a1;">3D Rigged Hand Coordinate Inspector</div>
+                    <div style="display: flex; gap: 4px;">
+                        <button id="btnHandLeft" onclick="setHandCoordSystem('left')" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #0284c7; color: #ffffff; border: 1px solid #38bdf8; border-radius: 4px; cursor: pointer;">Left-Hand (Unity)</button>
+                        <button id="btnHandRight" onclick="setHandCoordSystem('right')" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Right-Hand (OpenGL)</button>
+                    </div>
+                </div>
+
+                <div id="sim3dHandContainer" style="width: 100%; height: 215px; background: #050b14; border: 1.5px solid #1e293b; border-radius: 6px; position: relative; overflow: hidden;"></div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 4px;">
+                    <div style="display: flex; gap: 3px;">
+                        <button onclick="setHandCameraPreset('orbit')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Orbit</button>
+                        <button onclick="setHandCameraPreset('front')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Front (XY)</button>
+                        <button onclick="setHandCameraPreset('top')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Top (XZ)</button>
+                        <button onclick="setHandCameraPreset('side')" style="padding: 2px 6px; font-size: 0.70rem; background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Side (ZY)</button>
+                    </div>
+                    <div style="display: flex; gap: 3px;">
+                        <button id="btnToggleHandRotate" onclick="toggleHandAutoRotate()" style="padding: 2px 6px; font-size: 0.70rem; background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 3px; cursor: pointer;">Auto-Rotate: OFF</button>
+                        <button onclick="highlightHandAxis('x')" style="padding: 2px 5px; font-size: 0.70rem; background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; border-radius: 3px; cursor: pointer;">+X</button>
+                        <button onclick="highlightHandAxis('y')" style="padding: 2px 5px; font-size: 0.70rem; background: #14532d; color: #86efac; border: 1px solid #22c55e; border-radius: 3px; cursor: pointer;">+Y</button>
+                        <button onclick="highlightHandAxis('z')" style="padding: 2px 5px; font-size: 0.70rem; background: #0c4a6e; color: #7dd3fc; border: 1px solid #38bdf8; border-radius: 3px; cursor: pointer;">+Z</button>
+                    </div>
+                </div>
+
+                <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-size: 0.74rem; color: #94a3b8; line-height: 1.4;">
+                    <div id="handTelemetryTitle" style="color: #f8fafc; margin-bottom: 2px;"><strong>System:</strong> Unity 6 (Left-Handed Y-Up)</div>
+                    <div id="handTelemetryFormula" style="color: #cbd5e1; margin-bottom: 2px;"><code>Thumb (+X) &times; Index (+Y) = Middle (+Z Forward)</code></div>
+                    <div id="handTelemetryZDesc"><strong style="color: #38bdf8;">+Z (Middle):</strong> Forward into the screen (North)</div>
                 </div>
             </div>
         </div>
@@ -2588,11 +2612,17 @@ const safeStorageCode = `
             }
         };`;
 
+// Rigged Hand Mesh Data (from FBX)
+const handMeshPath = path.resolve(__dirname, 'hand_mesh_data.js');
+const handMeshJs = fs.existsSync(handMeshPath) ? fs.readFileSync(handMeshPath, 'utf8') : '';
+
 // Hook into engine slide transitions to initialize simulators when active
 const simLifecycleHook = `
         function checkInitSimulators(slideIdx) {
             setTimeout(() => {
-                if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
+                if (slideIdx === 1) { // Slide 2 (0-indexed 1): Left-Handed Coordinate Inspector
+                    if (typeof initHandCoordInspector === 'function') initHandCoordInspector();
+                } else if (slideIdx === 8) { // Slide 9 (0-indexed 8): Camera Vector Math
                     if (typeof initCamVecInspector === 'function') initCamVecInspector();
                 }
             }, 30);
@@ -2605,6 +2635,7 @@ const finalHtml = customBeforeScript + '<script>\n' +
     safeStorageCode + '\n\n' +
     '        let slidesData = ' + slidesJson + ';\n\n' +
     engineCode + '\n\n' +
+    handMeshJs + '\n\n' +
     customSimJs + '\n\n' +
     simLifecycleHook + '\n\n' +
     `        window.onload = function() {

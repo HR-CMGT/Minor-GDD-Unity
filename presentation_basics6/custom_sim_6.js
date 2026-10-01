@@ -55,206 +55,77 @@ function makeTextSprite(message, colorStr) {
 function buildHandGeometry(isLeft) {
     const group = new THREE.Group();
     handCoord3d.axisMeshes = { x: [], y: [], z: [] };
+    const zSign = isLeft ? 1 : -1;
 
-    const skinMat = new THREE.MeshStandardMaterial({
-        color: 0x334155,
-        roughness: 0.35,
-        metalness: 0.25
-    });
-    const jointMat = new THREE.MeshStandardMaterial({
-        color: 0x475569,
-        roughness: 0.2,
-        metalness: 0.5
-    });
-    const redMat = new THREE.MeshStandardMaterial({
-        color: 0xef4444,
-        emissive: 0x7f1d1d,
-        emissiveIntensity: 0.35,
-        roughness: 0.3
-    });
-    const greenMat = new THREE.MeshStandardMaterial({
-        color: 0x22c55e,
-        emissive: 0x14532d,
-        emissiveIntensity: 0.35,
-        roughness: 0.3
-    });
-    const blueMat = new THREE.MeshStandardMaterial({
-        color: 0x38bdf8,
-        emissive: 0x0369a1,
-        emissiveIntensity: 0.35,
-        roughness: 0.3
-    });
+    if (typeof RIGGED_HAND_LEFT !== 'undefined' && typeof RIGGED_HAND_RIGHT !== 'undefined') {
+        const data = isLeft ? RIGGED_HAND_LEFT : RIGGED_HAND_RIGHT;
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(data.positions), 3));
+        geo.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(data.normals), 3));
+        geo.setIndex(new THREE.BufferAttribute(new Uint32Array(data.indices), 1));
 
-    // 1. Forearm & Wrist Base
-    const wristGeo = new THREE.CylinderGeometry(0.32, 0.36, 0.7, 16);
-    const wrist = new THREE.Mesh(wristGeo, skinMat);
-    wrist.position.set(0, -0.75, 0);
-    group.add(wrist);
+        // Sci-Fi Technical Hologram Surface
+        const handMat = new THREE.MeshStandardMaterial({
+            color: 0x0284c7,
+            roughness: 0.35,
+            metalness: 0.3,
+            emissive: 0x0369a1,
+            emissiveIntensity: 0.4,
+            side: THREE.DoubleSide
+        });
+        const handMesh = new THREE.Mesh(geo, handMat);
+        handMesh.position.set(0, -0.6, 0);
+        group.add(handMesh);
 
-    const wristJointGeo = new THREE.SphereGeometry(0.34, 16, 16);
-    const wristJoint = new THREE.Mesh(wristJointGeo, jointMat);
-    wristJoint.position.set(0, -0.4, 0);
-    group.add(wristJoint);
-
-    // 2. Palm Box
-    const palmGeo = new THREE.BoxGeometry(0.85, 0.8, 0.38);
-    const palm = new THREE.Mesh(palmGeo, skinMat);
-    palm.position.set(0, 0, 0);
-    group.add(palm);
+        // Technical Holographic Wireframe
+        const wireMat = new THREE.MeshBasicMaterial({
+            color: 0x7dd3fc,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.25
+        });
+        const wireMesh = new THREE.Mesh(geo, wireMat);
+        wireMesh.position.set(0, -0.6, 0);
+        group.add(wireMesh);
+    } else {
+        // Fallback skin material
+        const skinMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.35, metalness: 0.25 });
+        const wrist = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 0.7, 16), skinMat);
+        wrist.position.set(0, -0.75, 0);
+        group.add(wrist);
+        const palm = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.8, 0.38), skinMat);
+        group.add(palm);
+    }
 
     // Origin Glow Sphere at Center (0,0,0)
-    const originGeo = new THREE.SphereGeometry(0.12, 16, 16);
+    const originGeo = new THREE.SphereGeometry(0.10, 16, 16);
     const originMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const originSphere = new THREE.Mesh(originGeo, originMat);
     originSphere.position.set(0, 0, 0);
     group.add(originSphere);
 
-    // 3. Thumb (+X Axis - Red)
-    const thumbRoot = new THREE.Group();
-    thumbRoot.position.set(0.42, -0.2, 0.08);
-
-    const thumbJoint1 = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 12), jointMat);
-    thumbRoot.add(thumbJoint1);
-
-    const tSeg1Geo = new THREE.CylinderGeometry(0.12, 0.13, 0.45, 12);
-    tSeg1Geo.rotateZ(-Math.PI / 2.5);
-    const tSeg1 = new THREE.Mesh(tSeg1Geo, skinMat);
-    tSeg1.position.set(0.24, 0.08, 0.02);
-    thumbRoot.add(tSeg1);
-
-    const thumbJoint2 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), jointMat);
-    thumbJoint2.position.set(0.48, 0.16, 0.04);
-    thumbRoot.add(thumbJoint2);
-
-    const tSeg2Geo = new THREE.CylinderGeometry(0.10, 0.11, 0.45, 12);
-    tSeg2Geo.rotateZ(-Math.PI / 2);
-    const tSeg2 = new THREE.Mesh(tSeg2Geo, redMat);
-    tSeg2.position.set(0.72, 0.16, 0.04);
-    thumbRoot.add(tSeg2);
-    handCoord3d.axisMeshes.x.push(tSeg2);
-
-    const thumbTip = new THREE.Mesh(new THREE.SphereGeometry(0.10, 12, 12), redMat);
-    thumbTip.position.set(0.95, 0.16, 0.04);
-    thumbRoot.add(thumbTip);
-    handCoord3d.axisMeshes.x.push(thumbTip);
-
-    group.add(thumbRoot);
-
-    // 4. Index Finger (+Y Axis - Green)
-    const indexRoot = new THREE.Group();
-    indexRoot.position.set(0.22, 0.4, 0.08);
-
-    const iJoint1 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), jointMat);
-    indexRoot.add(iJoint1);
-
-    const iSeg1 = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.11, 0.45, 12), skinMat);
-    iSeg1.position.set(0, 0.24, 0);
-    indexRoot.add(iSeg1);
-
-    const iJoint2 = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), jointMat);
-    iJoint2.position.set(0, 0.48, 0);
-    indexRoot.add(iJoint2);
-
-    const iSeg2 = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.10, 0.45, 12), greenMat);
-    iSeg2.position.set(0, 0.72, 0);
-    indexRoot.add(iSeg2);
-    handCoord3d.axisMeshes.y.push(iSeg2);
-
-    const indexTip = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), greenMat);
-    indexTip.position.set(0, 0.95, 0);
-    indexRoot.add(indexTip);
-    handCoord3d.axisMeshes.y.push(indexTip);
-
-    group.add(indexRoot);
-
-    // 5. Middle Finger (Z Axis - Blue)
-    // Left-Handed (Unity): points forward (+Z into screen)
-    // Right-Handed (OpenGL): points backward (-Z toward viewer)
-    const middleRoot = new THREE.Group();
-    middleRoot.position.set(-0.06, 0.38, 0.08);
-
-    const mJoint1 = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 12), jointMat);
-    middleRoot.add(mJoint1);
-
-    const zSign = isLeft ? 1 : -1;
-
-    const mSeg1Geo = new THREE.CylinderGeometry(0.11, 0.12, 0.48, 12);
-    mSeg1Geo.rotateX(Math.PI / 2 * zSign);
-    const mSeg1 = new THREE.Mesh(mSeg1Geo, skinMat);
-    mSeg1.position.set(0, 0, 0.24 * zSign);
-    middleRoot.add(mSeg1);
-
-    const mJoint2 = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), jointMat);
-    mJoint2.position.set(0, 0, 0.48 * zSign);
-    middleRoot.add(mJoint2);
-
-    const mSeg2Geo = new THREE.CylinderGeometry(0.095, 0.105, 0.48, 12);
-    mSeg2Geo.rotateX(Math.PI / 2 * zSign);
-    const mSeg2 = new THREE.Mesh(mSeg2Geo, blueMat);
-    mSeg2.position.set(0, 0, 0.72 * zSign);
-    middleRoot.add(mSeg2);
-    handCoord3d.axisMeshes.z.push(mSeg2);
-
-    const middleTip = new THREE.Mesh(new THREE.SphereGeometry(0.095, 12, 12), blueMat);
-    middleTip.position.set(0, 0, 0.96 * zSign);
-    middleRoot.add(middleTip);
-    handCoord3d.axisMeshes.z.push(middleTip);
-
-    group.add(middleRoot);
-
-    // 6. Curled Ring & Pinky Fingers
-    const curledRoot = new THREE.Group();
-
-    // Ring finger curled
-    const rRoot = new THREE.Group();
-    rRoot.position.set(-0.28, 0.35, 0.08);
-    const rJoint = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), jointMat);
-    rRoot.add(rJoint);
-    const rCurlGeo = new THREE.TorusGeometry(0.16, 0.08, 8, 16, Math.PI);
-    rCurlGeo.rotateY(Math.PI / 2);
-    rCurlGeo.rotateZ(-Math.PI / 2);
-    const rCurl = new THREE.Mesh(rCurlGeo, skinMat);
-    rCurl.position.set(0, -0.05, 0.14);
-    rRoot.add(rCurl);
-    curledRoot.add(rRoot);
-
-    // Pinky finger curled
-    const pRoot = new THREE.Group();
-    pRoot.position.set(-0.48, 0.25, 0.08);
-    const pJoint = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), jointMat);
-    pRoot.add(pJoint);
-    const pCurlGeo = new THREE.TorusGeometry(0.13, 0.07, 8, 16, Math.PI);
-    pCurlGeo.rotateY(Math.PI / 2);
-    pCurlGeo.rotateZ(-Math.PI / 2);
-    const pCurl = new THREE.Mesh(pCurlGeo, skinMat);
-    pCurl.position.set(0, -0.05, 0.12);
-    pRoot.add(pCurl);
-    curledRoot.add(pRoot);
-
-    group.add(curledRoot);
-
-    // 7. Prominent 3D Coordinate Arrows
+    // Prominent 3D Coordinate Arrows
     const origin = new THREE.Vector3(0, 0, 0);
-    handCoord3d.arrowX = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), origin, 2.3, 0xef4444, 0.4, 0.2);
-    handCoord3d.arrowY = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), origin, 2.3, 0x22c55e, 0.4, 0.2);
-    handCoord3d.arrowZ = new THREE.ArrowHelper(new THREE.Vector3(0, 0, zSign), origin, 2.3, 0x38bdf8, 0.4, 0.2);
+    handCoord3d.arrowX = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), origin, 2.5, 0xef4444, 0.45, 0.22);
+    handCoord3d.arrowY = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), origin, 2.6, 0x22c55e, 0.45, 0.22);
+    handCoord3d.arrowZ = new THREE.ArrowHelper(new THREE.Vector3(0, 0, zSign), origin, 2.5, 0x38bdf8, 0.45, 0.22);
 
     group.add(handCoord3d.arrowX);
     group.add(handCoord3d.arrowY);
     group.add(handCoord3d.arrowZ);
 
-    // 8. 3D Billboard Text Labels
+    // 3D Billboard Text Labels
     handCoord3d.spriteX = makeTextSprite("+X: Thumb (Right)", "#ef4444");
-    handCoord3d.spriteX.position.set(2.6, 0.1, 0);
+    handCoord3d.spriteX.position.set(2.8, 0.1, 0);
     group.add(handCoord3d.spriteX);
 
     handCoord3d.spriteY = makeTextSprite("+Y: Index (Up)", "#22c55e");
-    handCoord3d.spriteY.position.set(0.2, 2.6, 0);
+    handCoord3d.spriteY.position.set(0.2, 2.85, 0);
     group.add(handCoord3d.spriteY);
 
     const zLabelText = isLeft ? "+Z: Middle (Forward)" : "-Z: Middle (Back/Out)";
     handCoord3d.spriteZ = makeTextSprite(zLabelText, "#38bdf8");
-    handCoord3d.spriteZ.position.set(-0.06, 0.4, 2.6 * zSign);
+    handCoord3d.spriteZ.position.set(0, 0.4, 2.85 * zSign);
     group.add(handCoord3d.spriteZ);
 
     return group;
