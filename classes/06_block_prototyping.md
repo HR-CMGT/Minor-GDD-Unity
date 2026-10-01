@@ -56,8 +56,6 @@ Unity uses a **Left-Handed Cartesian Coordinate System (Y-Up, X-Right, Z-Forward
 - **Index Finger (+Y):** Points Up (Vertical Altitude / Jump).
 - **Middle Finger (+Z):** Points Forward into the screen (North / Look forward).
 
-![Left-Handed System (Unity, Unreal) vs Right-Handed System (Blender, Maya)](../img/basics6/coordinate_systems_handedness.webp)
-
 #### Key Differences Between Game Engines & DCC Tools:
 1. **Unity & Unreal:** Left-Handed systems where `+Z` is forward depth into the screen.
 2. **Blender & Maya:** Right-Handed systems where `+Z` points outward toward the camera/viewer.
