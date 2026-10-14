@@ -38,7 +38,7 @@ This curriculum guides students from foundational 2D game prototyping to advance
 | **1.4** | `04_architecture1` | **Game Architecture 1: Decoupling & Prefab API** | *Coming Soon* |
 | **1.5** | `05_gamejam` | **Rapid Prototyping & Game Feel (Juice)** | *Coming Soon* |
 | **1.6** | `--` | *Concept Presentations 2D Project & Feedback* | `--` |
-| **1.7** | `07_blockprototyping` | **3D Block Prototyping & Greyboxing** | *Coming Soon* |
+| **1.7** | `07_blockprototyping` | **3D Block Prototyping & Greyboxing (Workshop)**<br>• ProBuilder 1m Grid & Modular Prefab Kit<br>• Snapping (Grid Snap & Vertex Snap)<br>• 3D CharacterController (Camera-Relative Movement)<br>• Camera POV / Third-Person Cinemachine 3 Orbit<br>• Interactive Loop (Spawn &rarr; Trigger &rarr; Goal) & NavMesh NPC | [Lesson 1.7 Material](classes/07_blockprototyping.md) |
 | **1.8** | `08_gamejam2` | *Blocktober Demo & Midterm Milestone Playtests* | *Coming Soon* |
 | **1.9** | `09_problemsolving` | **Debugging, Profiling & Problem Solving** | *Coming Soon* |
 | **1.10**| `10_architecture2` | **Game Architecture 2: Finite State Machines & Refactoring** | *Coming Soon* |

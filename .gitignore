@@ -83,4 +83,9 @@ crashlytics-build.properties
 # Local comparison and export artifacts
 docs/presentation_basics1/index_comparison.html
 exported_slides/
-scripts/
+scripts/__pycache__/
+scripts/fbx_converter/
+# Slide deck editor backups
+.deck_backups/
+
+node_modules/
