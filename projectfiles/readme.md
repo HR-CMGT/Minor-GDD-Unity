@@ -1,6 +1,7 @@
 Download the `.unitypackage` files directly:
 - [Download basics1.unitypackage](https://github.com/HR-CMGT/Minor-GDD-Unity/raw/master/projectfiles/basics1.unitypackage) (Class 1)
 - [Download basics2.unitypackage](https://github.com/HR-CMGT/Minor-GDD-Unity/raw/master/projectfiles/basics2.unitypackage) (Class 2 - Unity 6.3)
+- [Download BlockoutToolkit.unitypackage](https://github.com/HR-CMGT/Minor-GDD-Unity/raw/unity6-revamp/projectfiles/BlockoutToolkit.unitypackage) (Class 7 - Blockout Toolkit)
 
 ---
 

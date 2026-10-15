@@ -16,7 +16,9 @@ This week's [presentation can be found here](https://hr-cmgt.github.io/Minor-GDD
 ---
 
 ## Project Files & Setup
-> **Note:** There is **no starter package to download** for this class. You will build and test your 3D blockout directly inside your team's ongoing 3D project (or in a fresh scene `Assets/Class7/Class7_Blockout.unity`). All required tools (ProBuilder, Cinemachine, Input System, and AI Navigation) are pre-installed or available via the Unity Registry in Unity 6 (6000.x).
+> **Note:** You can build and test your 3D blockout directly inside your team's ongoing 3D project (or in a fresh scene `Assets/Class7/Class7_Blockout.unity`). All required tools (ProBuilder, Cinemachine, Input System, and AI Navigation) are pre-installed or available via the Unity Registry in Unity 6 (6000.x).
+>
+> If you want pre-configured player controllers (First/Third-Person with foot IK), Alt+Drag duplicate, and ProBuilder meter snapping tools ready out of the box, you can optionally download and import [BlockoutToolkit.unitypackage](../projectfiles/BlockoutToolkit.unitypackage).
 
 ---
 
