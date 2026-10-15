@@ -1143,10 +1143,6 @@ ${cssStyles}
         }
 
         function copyCode(btn) {
-            if (window.DeckEditor && typeof window.DeckEditor.copyCode === 'function') {
-                window.DeckEditor.copyCode(btn);
-                return;
-            }
             const pre = btn.closest('.code-box, .code-container, .content-card')?.querySelector('pre');
             if (!pre) return;
             const textToCopy = pre.innerText || pre.textContent;
@@ -1181,9 +1177,6 @@ ${cssStyles}
             });
         }
         window.copyCode = copyCode;
-        if (typeof window.DeckEditor === 'undefined') {
-            window.DeckEditor = { copyCode: copyCode };
-        }
 
         function setupKeyboard() {
             document.addEventListener('keydown', (e) => {
@@ -1233,36 +1226,6 @@ ${cssStyles}
         }
 
         window.onload = init;
-    </script>
-    <!-- Local Edit Mode Loader (Runs strictly in local development environments) -->
-    <script>
-        (function() {
-            try {
-                var isLocal = window.location.protocol === 'file:' || 
-                              window.location.hostname === 'localhost' || 
-                              window.location.hostname === '127.0.0.1' ||
-                              window.location.hostname.startsWith('192.168.') ||
-                              window.location.hostname.startsWith('10.');
-                if (!isLocal) return;
-                var scriptPaths = [
-                    '../scripts/hr_deck_editor.js',
-                    '../scripts/hr_edit_mode.js',
-                    '../../scripts/hr_deck_editor.js',
-                    '/scripts/hr_deck_editor.js',
-                    'scripts/hr_deck_editor.js'
-                ];
-                var loaded = false;
-                function tryLoad(idx) {
-                    if (idx >= scriptPaths.length || loaded) return;
-                    var s = document.createElement('script');
-                    s.src = scriptPaths[idx];
-                    s.onload = function() { loaded = true; };
-                    s.onerror = function() { tryLoad(idx + 1); };
-                    document.head.appendChild(s);
-                }
-                tryLoad(0);
-            } catch(e) {}
-        })();
     </script>
 </body>
 </html>
