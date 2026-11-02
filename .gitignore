@@ -84,3 +84,6 @@ crashlytics-build.properties
 docs/presentation_basics1/index_comparison.html
 exported_slides/
 scripts/
+node_modules/
+.deck_backups/
+.agent/

@@ -40,8 +40,8 @@ This curriculum guides students from foundational 2D game prototyping to advance
 | **1.5** | `05_release_polish` | **The Release Candidate: Polish, Lifecycle & Telemetry**<br>• Screen Faders & First-Run Onboarding Detection<br>• Mobile App Lifecycle (`OnApplicationPause`) & State Protection<br>• Procedural Micro-Animations (`AnimationCurve`) & Audio Randomization<br>• Online Leaderboards & Google Sheets Playtest Telemetry | [Lesson 1.5 Material](classes/05_release_polish.md)<br>[Slide Deck](presentation_basics5/index.html) |
 | **1.6** | `--` | *Concept Presentations 2D Project & Feedback* | `--` |
 | **1.7** | `07_blockprototyping` | **3D Block Prototyping & Greyboxing (Workshop)**<br>• ProBuilder 1m Grid & Modular Prefab Kit<br>• Snapping (Grid Snap & Vertex Snap)<br>• 3D CharacterController (Camera-Relative Movement)<br>• Camera POV / Third-Person Cinemachine 3 Orbit<br>• Interactive Loop (Spawn &rarr; Trigger &rarr; Goal) & NavMesh NPC | [Lesson 1.7 Material](classes/07_blockprototyping.md)<br>[Slide Deck](presentation_blockprototyping/index.html) |
-| **1.8** | `08_gamejam2` | *Blocktober Demo & Midterm Milestone Playtests* | *Coming Soon* |
-| **1.9** | `09_problemsolving` | **Debugging, Profiling & Problem Solving** | *Coming Soon* |
+| **1.8** | `08_problemsolving` | **Problem Solving, Controlling AI & Dev Tooling (Workshop)**<br>• Breaking 3D Mechanics into 4 Simple Steps (`Input` &rarr; `Spatial Query` &rarr; `State & Math` &rarr; `Feedback`)<br>• Unity 6 API Verification with `F12` & Scene Visualizers (`OnDrawGizmosSelected`)<br>• 1-Click Inspector Testing (`[ContextMenu]`) & Silent Bug Guards (`OnValidate`)<br>• In-Game Dev Cheats (Teleportation, Slow-Mo) & `DevWatch` Runtime Overlay<br>• IDE Debugger & Call Stack: Pinpoint Bugs in 30 Seconds with Conditional Breakpoints | [Lesson 1.8 Material](classes/08_problemsolving.md)<br>[Slide Deck](presentation_problemsolving/index.html) |
+| **1.9** | `09_gamejam2` | *Blocktober Demo & Midterm Milestone Playtests* | *Coming Soon* |
 | **1.10**| `10_architecture2` | **Game Architecture 2: Finite State Machines & Refactoring** | *Coming Soon* |
 
 ---
