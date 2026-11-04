@@ -1232,6 +1232,106 @@ ${cssStyles}
 </html>
 `;
 
+// Split into clean Docs HTML (for public GitHub Pages) and Local HTML (with Deck Editor [⌥E] enabled)
+const docsHtml = fullHtml;
+
+const editBtnHtml = `<button class="btn-edit-toggle" id="btnEditToggle" onclick="if(window.DeckEditor) window.DeckEditor.toggle();" title="Edit Mode [Alt+E / Option+E]" style="display: inline-flex;">Edit <kbd>[⌥E]</kbd></button>`;
+const editCss = `
+        /* Deck Editor Toggle Button */
+        .btn-edit-toggle {
+            background: #111827;
+            border: 1px solid #1f293d;
+            color: #38bdf8;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            user-select: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .btn-edit-toggle:hover {
+            background: #1e293b;
+            border-color: #e11d48;
+            color: #ffffff;
+        }
+        .btn-edit-toggle.btn-edit-active {
+            background: #be123c;
+            border-color: #e11d48;
+            color: #ffffff;
+            box-shadow: 0 0 14px rgba(225, 29, 72, 0.5);
+        }
+        .btn-edit-toggle kbd {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 3px;
+            padding: 1px 4px;
+            font-size: 0.65rem;
+            font-family: monospace;
+        }
+
+        /* Deck Editor Image Controls: Visible in Edit Mode */
+        body:not(.is-editing) .img-controls-bar,
+        body:not(.is-editing) .img-url-input,
+        body:not(.is-editing) .img-upload-btn,
+        body:not(.is-editing) .img-edit-card .img-controls-bar {
+            display: none !important;
+        }
+        body.is-editing .img-controls-bar {
+            display: flex !important;
+            gap: 6px;
+            margin-top: 6px;
+            align-items: center;
+        }
+        body.is-editing .img-url-input {
+            display: block !important;
+        }
+        body.is-editing .img-upload-btn {
+            display: inline-flex !important;
+        }
+`;
+
+const editScript = `
+    <!-- Local Edit Mode Loader (Runs in local development) -->
+    <script>
+        (function() {
+            try {
+                var scriptPaths = [
+                    '../scripts/hr_deck_editor.js',
+                    '../../scripts/hr_deck_editor.js',
+                    'scripts/hr_deck_editor.js',
+                    '/scripts/hr_deck_editor.js'
+                ];
+                var loaded = false;
+                function tryLoad(idx) {
+                    if (idx >= scriptPaths.length || loaded) return;
+                    var s = document.createElement('script');
+                    s.src = scriptPaths[idx];
+                    s.onload = function() {
+                        loaded = true;
+                        if (window.DeckEditor && !window.DeckEditor.__initialized) {
+                            window.DeckEditor.init();
+                        }
+                    };
+                    s.onerror = function() { tryLoad(idx + 1); };
+                    document.head.appendChild(s);
+                }
+                tryLoad(0);
+            } catch(e) {}
+        })();
+    </script>
+`;
+
+let localHtml = fullHtml;
+localHtml = localHtml.replace('</style>', editCss + '\n    </style>');
+localHtml = localHtml.replace('<a href="../index.html" class="portal-nav-btn"', editBtnHtml + '\n            <a href="../index.html" class="portal-nav-btn"');
+localHtml = localHtml.replace('</body>', editScript + '\n</body>');
+
 // Target output paths as specified
 const outPath = path.resolve(__dirname, 'presentation_unity6_problemsolving.html');
 const indexPath = path.resolve(__dirname, 'index.html');
@@ -1254,18 +1354,22 @@ const docsRootOutPath = path.resolve(__dirname, '../docs/presentation_unity6_pro
     }
 });
 
-// Write all outputs
-fs.writeFileSync(outPath, fullHtml, 'utf8');
-fs.writeFileSync(indexPath, fullHtml, 'utf8');
-fs.writeFileSync(rootOutPath, fullHtml, 'utf8');
-fs.writeFileSync(docsOutPath, fullHtml, 'utf8');
-fs.writeFileSync(docsIndexPath, fullHtml, 'utf8');
-fs.writeFileSync(docsRootOutPath, fullHtml, 'utf8');
+// Write local outputs (with Edit Mode [⌥E] enabled for you locally)
+fs.writeFileSync(outPath, localHtml, 'utf8');
+fs.writeFileSync(indexPath, localHtml, 'utf8');
+fs.writeFileSync(rootOutPath, localHtml, 'utf8');
+
+// Write docs outputs (clean public release for GitHub Pages)
+fs.writeFileSync(docsOutPath, docsHtml, 'utf8');
+fs.writeFileSync(docsIndexPath, docsHtml, 'utf8');
+fs.writeFileSync(docsRootOutPath, docsHtml, 'utf8');
 
 console.log('Successfully generated Class 8 presentation:');
-console.log(' - ' + indexPath + ' (' + fs.statSync(indexPath).size + ' bytes)');
-console.log(' - ' + outPath + ' (' + fs.statSync(outPath).size + ' bytes)');
-console.log(' - ' + rootOutPath + ' (' + fs.statSync(rootOutPath).size + ' bytes)');
-console.log(' - ' + docsIndexPath + ' (' + fs.statSync(docsIndexPath).size + ' bytes)');
-console.log(' - ' + docsOutPath + ' (' + fs.statSync(docsOutPath).size + ' bytes)');
-console.log(' - ' + docsRootOutPath + ' (' + fs.statSync(docsRootOutPath).size + ' bytes)');
+console.log(' [Local - With Edit Mode]');
+console.log('  - ' + indexPath + ' (' + fs.statSync(indexPath).size + ' bytes)');
+console.log('  - ' + outPath + ' (' + fs.statSync(outPath).size + ' bytes)');
+console.log('  - ' + rootOutPath + ' (' + fs.statSync(rootOutPath).size + ' bytes)');
+console.log(' [Docs - Clean Public Release]');
+console.log('  - ' + docsIndexPath + ' (' + fs.statSync(docsIndexPath).size + ' bytes)');
+console.log('  - ' + docsOutPath + ' (' + fs.statSync(docsOutPath).size + ' bytes)');
+console.log('  - ' + docsRootOutPath + ' (' + fs.statSync(docsRootOutPath).size + ' bytes)');

@@ -411,7 +411,7 @@ module.exports = [
                 </div>
             </div>
 
-            <div class="standalone-img-card img-edit-card borderless" style="margin-top: 6px;">
+            <div class="standalone-img-card borderless" style="margin-top: 6px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 4px;">
                     <div class="img-title" style="margin-bottom: 0;">
                         3D SPHERECAST VS RAYCAST VISUALIZATION
@@ -729,9 +729,9 @@ module.exports = [
                 </div>
             </div>
 
-            <div class="standalone-img-card img-edit-card borderless" style="margin-top: 6px;">
+            <div class="standalone-img-card borderless" style="margin-top: 6px;">
                 <div class="img-title">UNITY MANUAL: SCENE VIEW LIVE GIZMOS</div>
-                <div class="img-frame" style="width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <div class="img-frame">
                     <img src="assets/unity_scene_gizmos.png" alt="Unity Scene View Live Gizmos" />
                 </div>
             </div>

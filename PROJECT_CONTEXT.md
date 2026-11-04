@@ -32,13 +32,17 @@ git pull personal master
 
 ## 2. Curriculum Overhaul Status
 
-| Lesson | Topic | Presentation Deck | Guide Document | Status |
-|---|---|---|---|---|
-| **01** | Basics 1: Getting Started & C# Foundations | `presentation_basics1/` | `classes/01_basics.md` | Complete & Active |
-| **02** | Basics 2: Scripting & Coroutines | `presentation_basics2/` | `classes/02_scripting.md` | Complete & Active |
-| **03** | Basics 3: UI Layouting & Data Persistence | `presentation_basics3/` | `classes/03_UI.md` | Complete & Active |
-| **04** | Architecture 1: ScriptableObject Channels | In Planning | `classes/04_architecture.md` | Next Up |
-| **05** | Architecture 2: State Machines & Pooling | In Planning | `classes/05_statemachines.md` | Backlog |
+| Lesson | Code / Slug | Topic | Presentation Deck | Guide Document | Status |
+|---|---|---|---|---|---|
+| **01** | `01_basics1` | Basics 1: Getting Started & C# Foundations | `presentation_basics1/` | `classes/01_basics1.md` | Complete & Active |
+| **02** | `02_basics2` | Basics 2: Scripting & Coroutines | `presentation_basics2/` | `classes/02_basics2.md` | Complete & Active |
+| **03** | `03_UI` | Basics 3: UI Layouting & Data Persistence | `presentation_basics3/` | `classes/03_UI.md` | Complete & Active |
+| **04** | `04_architecture` | Architecture 1: ScriptableObject Event Channels & Scenes | `presentation_basics4/` | `classes/04_architecture.md` | Complete & Active |
+| **05** | `05_release_polish` | Release Candidate: Polish, Lifecycle & Telemetry | `presentation_basics5/` | `classes/05_release_polish.md` | Complete & Active |
+| **06 / 07** | `07_blockprototyping` | 3D Block Prototyping & Greyboxing (Workshop) | `presentation_blockprototyping/` | `classes/07_blockprototyping.md` | Complete & Active |
+| **08** | `08_problemsolving` | Problem Solving, Controlling AI & Dev Tooling (Workshop) | `presentation_problemsolving/` | `classes/08_problemsolving.md` | Complete & Active |
+| **09** | `09_gamejam2` | Blocktober Demo & Midterm Milestone Playtests | In Planning | `classes/09_gamejam2.md` | Next Up |
+| **10** | `10_architecture2` | Game Architecture 2: Finite State Machines & Refactoring | In Planning | `classes/10_architecture2.md` | Upcoming |
 
 ---
 
@@ -194,5 +198,44 @@ python -m http.server 8080
 ## 6. Author & Git History
 - **Author**: `studiohichambendriss-create` (`studiohichambendriss@gmail.com`)
 - **Git State**:
-  - `origin/master`: Tracks `HR-CMGT/Minor-GDD-Unity` (upstream).
-  - `personal/master`: Tracks `studiohichambendriss-create/Minor-GDD-Unity-Private` (private backup).
+  - `cmgt/master`: Tracks `HR-CMGT/Minor-GDD-Unity` (upstream school repository serving GitHub Pages).
+  - `origin/master`: Tracks `studiohichambendriss-create/Minor-GDD-Unity-Private` (private multi-machine backup).
+
+---
+
+## 7. Curriculum Expansion (Lessons 04 - 08 Summary)
+
+### Lesson 04: Architecture 1 (ScriptableObject Event Channels & Prefabs)
+- Decoupled C# architecture eliminating singletons.
+- ScriptableObject Event Channels (`VoidEventChannelSO`, `IntEventChannelSO`).
+- Black-Box Prefabs with serialized references and strict encapsulation.
+- Multi-scene additive workflows (`Bootstrapper.unity`, `Gameplay.unity`, `UI.unity`).
+
+### Lesson 05: Release Candidate (Polish, Lifecycle & Telemetry)
+- Mobile release polish and screen fade transitions.
+- Application lifecycle handling (`OnApplicationPause`) for rock-solid save state protection.
+- Micro-animations using procedural `AnimationCurve` evaluations and audio pitch randomization.
+- Online leaderboards and playtest telemetry tracking.
+
+### Lesson 07: 3D Block Prototyping & Greyboxing (Workshop)
+- ProBuilder 1m metric grid snapping and modular blockout kits.
+- 3D `CharacterController` camera-relative vector math.
+- Cinemachine 3 (`CinemachineCamera`) orbit setups.
+- Core 3D gameplay loop (Spawn -> Trigger -> Goal) and NavMesh NPC agents.
+
+### Lesson 08: Problem Solving, Controlling AI & Dev Tooling (Workshop)
+- Escaping "Passenger Mode" when working with Agentic AI: decomposing mechanics into the 4 Primitives (`Input` -> `3D Spatial Query` -> `State & Math` -> `Feedback`).
+- Verifying Unity 6 API overloads with `F12` and generous aim queries (`Physics.SphereCast` vs 1-pixel `Raycast`, `Vector3.Dot` aim cones).
+- Visualizing invisible 3D queries with live `OnDrawGizmosSelected()`.
+- Designer-proofing prefabs: 1-click Inspector testing (`[ContextMenu]`) and silent bug guards (`OnValidate`).
+- In-game dev tooling: Checkpoint teleportation (`F1-F3`) with `CharacterController.enabled` safety, slow-mo/fast-forward time scrubbing, and `DevWatch` runtime telemetry overlay.
+- IDE debugger workflows: Attaching Rider/VS, conditional breakpoints, and Call Stack forensics.
+
+---
+
+## 8. Development Architecture & Engineering Standards
+
+For complete instructions on authoring, styling, testing, and deploying new lessons in any AI agent harness (Antigravity, Cursor, Claude Code, Cline, Copilot), consult:
+- **`HANDOFF.md`** (Root repository handoff guide for incoming agents and engineers).
+- **`.agent/skills/cmgt-class-builder/SKILL.md`** (Standardized class scaffolding and slide schema specifications).
+
