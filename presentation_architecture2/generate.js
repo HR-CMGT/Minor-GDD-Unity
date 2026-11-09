@@ -593,6 +593,7 @@ private void OnDisable() => _channel.UnregisterListener(OnRaised);
 private void OnRaised() => Debug.Log("raised");`;
 
 const GROUNDED_STATE = `
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public abstract class GroundedState : IState
@@ -835,11 +836,18 @@ public class ArmoredFlyingEnemy : FlyingEnemy { public int Armor; }`;
 
 const PLAIN_VS_MONO = `
 // A plain C# class: no base class, cannot be attached.
-public class PatrolState : IState { /* ... */ }
+public class PatrolState : IState
+{
+    public void Enter() { }
+    public void Tick() { }
+    public void Exit() { }
+}
 
 // A MonoBehaviour: Unity's base class, attach it to a GameObject.
-public class Health : MonoBehaviour, IDamageable { /* ... */ }
-//                    ^ one base class      ^ any number of interfaces`;
+public class Health : MonoBehaviour, IDamageable   // one base class, any number of interfaces
+{
+    public void TakeDamage(int amount) { }
+}`;
 
 const INPUT_READER = `
 using UnityEngine;
@@ -977,12 +985,12 @@ public class NpcBrain : MonoBehaviour
     private void Update() => _machine.Tick();
 }
 
-// Parent state: the child calls base.Tick() first.
+// Hierarchy: the parent holds the shared rule, the child calls base.Tick() first.
 public abstract class GroundedState : IState
 {
     public virtual void Enter() { }
-    public virtual void Tick() { /* shared rule */ }
     public virtual void Exit() { }
+    public virtual void Tick() { /* shared rule, written once */ }
 }
 
 public class WalkState : GroundedState
@@ -1002,7 +1010,7 @@ public class Health : MonoBehaviour, IDamageable   // any class can sign it
     private void Awake() => _current = _max;
     public void TakeDamage(int amount) => _current = Mathf.Max(0, _current - amount);
 }
-
+//---
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private int _damage = 10;
@@ -1028,6 +1036,13 @@ public class JumpCommand : ICommand
     public void Execute() => _motor.Jump();
 }
 
+public class CommandHistory   // minimal undo stack
+{
+    private readonly Stack<IUndoableCommand> _done = new();
+    public void Run(IUndoableCommand command) { command.Execute(); _done.Push(command); }
+    public void Undo() { if (_done.Count > 0) _done.Pop().Undo(); }
+}
+//---
 public class CommandBuffer   // keeps the newest press for a short window
 {
     private readonly float _window;
@@ -1048,18 +1063,17 @@ public class CommandBuffer   // keeps the newest press for a short window
     }
 }
 
-public class CommandHistory   // minimal undo stack
-{
-    private readonly Stack<IUndoableCommand> _done = new();
-    public void Run(IUndoableCommand command) { command.Execute(); _done.Push(command); }
-    public void Undo() { if (_done.Count > 0) _done.Pop().Undo(); }
-}
+
 // In PlayerInputReader.Update:
 //   if (Keyboard.current.spaceKey.wasPressedThisFrame) _buffer.Push(_jump);
 //   _buffer.TryExecute(_motor.IsGrounded);
 // Full script: Putting It Together (commands).`;
 
 const SESS4_CODE = `
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
 public static class Services
 {
     private static readonly Dictionary<Type, object> s_services = new();
@@ -1072,7 +1086,7 @@ public static class Services
         throw new InvalidOperationException($"Service {typeof(T).Name} is not registered.");
     }
 }
-
+//---
 public interface IAudioService { void Play(string clipName); }
 
 [DefaultExecutionOrder(-100)]
@@ -1096,8 +1110,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMotor : MonoBehaviour
 {
-    [SerializeField] private float _jumpSpeed = 6f;
-    [SerializeField] private float _gravity = -20f;
+    [SerializeField] private float _jumpHeight = 1.2f;
     private CharacterController _controller;
     private float _verticalSpeed;
 
@@ -1105,22 +1118,21 @@ public class PlayerMotor : MonoBehaviour
 
     private void Awake() => _controller = GetComponent<CharacterController>();
 
-    public void Jump() => _verticalSpeed = _jumpSpeed;
+    public void Jump() => _verticalSpeed = Mathf.Sqrt(2f * _jumpHeight * -Physics.gravity.y);
     public void Move(Vector3 direction) => _controller.Move(direction * Time.deltaTime);
 
     private void Update()
     {
         if (_controller.isGrounded && _verticalSpeed < 0f) _verticalSpeed = -1f;
-        _verticalSpeed += _gravity * Time.deltaTime;
-        _controller.Move(Vector3.up * _verticalSpeed * Time.deltaTime);
+        _verticalSpeed += Physics.gravity.y * Time.deltaTime;
+        _controller.Move(Vector3.up * (_verticalSpeed * Time.deltaTime));
     }
 }`;
-
 // ---------- visual helpers: Inspector mock, file tree, call flow, class chain ----------
 const MONO = "font-family: ui-monospace, Menlo, Consolas, monospace;";
 // Hierarchy + Inspector mock (HTML/CSS only). hier: [[text, selected, indent]], comps: [{ name, script, fields: [[label, value]] }]
 const inspector = (hier, objName, comps) =>
-    '<div style="display: flex; gap: 8px; font-family: system-ui, sans-serif; font-size: 0.8em; line-height: 1.35;">' +
+    '<div style="display: flex; gap: 8px; font-family: system-ui, sans-serif; font-size: 1em; line-height: 1.4;">' +
     '<div style="flex: 0 0 34%; background: #2b2b2b; color: #d4d4d4; border: 1px solid #1a1a1a; border-radius: 6px; padding: 8px;"><div style="font-weight: 800; color: #9ca3af; margin-bottom: 4px;">Hierarchy</div>' +
     hier.map(([t, sel, ind]) => '<div style="padding: 1px 6px; margin-left: ' + (ind * 12) + 'px;' + (sel ? ' background: #2c5d87; color: #ffffff; border-radius: 3px;' : '') + '">' + t + '</div>').join('') + '</div>' +
     '<div style="flex: 1; background: #383838; color: #e5e7eb; border: 1px solid #1a1a1a; border-radius: 6px; padding: 8px;"><div style="font-weight: 800; color: #9ca3af; margin-bottom: 4px;">Inspector</div>' +
@@ -1131,7 +1143,7 @@ const inspector = (hier, objName, comps) =>
     '<div style="margin-top: 8px; text-align: center; background: #555555; border-radius: 4px; padding: 3px; font-weight: 700;">Add Component</div></div></div>';
 // File tree. rows: [indent, name, tag, kind] where kind is 'mono' (attach to the GameObject), 'plain' (plain C# class) or '' (folder)
 const treeBox = (title, rows) =>
-    '<div style="background: #1e1f22; color: #bcbec4; border-radius: 6px; padding: 8px 10px; ' + MONO + ' font-size: 0.82em; line-height: 1.5;"><div style="color: #38bdf8; font-weight: 800; margin-bottom: 2px;">' + title + '</div>' +
+    '<div style="background: #1e1f22; color: #bcbec4; border-radius: 6px; padding: 8px 10px; ' + MONO + ' font-size: 0.95em; line-height: 1.5;"><div style="color: #38bdf8; font-weight: 800; margin-bottom: 2px;">' + title + '</div>' +
     rows.map(([ind, name, tag, kind]) => '<div style="padding-left: ' + (ind * 16) + 'px;">' + name +
         (kind === 'mono' ? ' <span style="background: #059669; color: #ffffff; border-radius: 3px; padding: 0 6px; font-size: 0.85em;">' + tag + '</span>' : kind === 'plain' ? ' <span style="color: #9ca3af;">' + tag + '</span>' : '') + '</div>').join('') + '</div>';
 // Call flow. rows: arrays of [label, color]; each row is one chain with arrows.
@@ -1149,6 +1161,12 @@ const olist = (items) =>
     '<ol style="padding-left: 22px; margin: 0; line-height: 1.5; font-weight: 600;">' + items.map((i) => '<li>' + i + '</li>').join('') + '</ol>';
 const code = (t) => '<code>' + t + '</code>';
 
+const codeCols = (title, file, src) => {
+    const parts = src.split('\n//---\n');
+    if (parts.length === 1) return '<div class="code-cols">' + codeCard('info', title, file, src) + '</div>';
+    return '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start;">' + parts.map((p, k) => codeCard('info', k ? title + ', continued' : title, file, p)).join('') + '</div>';
+};
+const twoCol = (a, b, ratio) => '<div style="display: grid; grid-template-columns: ' + (ratio || '1fr 1fr') + '; gap: 12px; align-items: start; margin-bottom: 10px;">' + a + b + '</div>';
 // ---------- deep dive helpers ----------
 const leadLine = (t) => '<p style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.08em; color: #0f172a;">' + t + '</p>';
 const H = (t) => '<div style="font-weight: 800; margin: 2px 0 4px 0;">' + t + '</div>';
@@ -1186,12 +1204,10 @@ const sessionTimer = (n, minutes) => {
 // No accordion and no deep dive on a session slide (keeps it compact for the projector).
 const session = (n, title, minutes, pick, tiers, done, file, code, notes) =>
     slide('Working Session ' + n + ': ' + title,
-        split(
+        '<div style="display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; align-items: stretch; margin-bottom: 10px;">' +
             card('primary', 'Try this', '<p style="margin: 0 0 6px 0; font-weight: 800;">' + pick + '</p>' + pp('green', 'Starter', tiers[0]) + pp('amber', 'Standard', tiers[1]) + pp('purple', 'Stretch', tiers[2])) +
-            card('success', 'Done when', '<p style="margin: 0; font-weight: 800;">' + done + '</p>', 'margin-top: 8px;') +
-            '<div style="margin-top: 8px;">' + sessionTimer(n, minutes) + '</div>',
-            codeCard('info', 'Cheat sheet', file, code)
-        ), notes);
+            card('success', 'Done when', '<p style="margin: 0; font-weight: 800;">' + done + '</p>') + sessionTimer(n, minutes) + '</div>' +
+            codeCols('Cheat sheet', file, code), notes);
 
 // ---------- Don't / Do comparison ----------
 const textBox = (file, src) =>
@@ -1343,7 +1359,7 @@ private void Update()
 }`, 'Three flags can all be true.', 'One field, one state at a time.', { badFile: 'SimpleNPC.cs', goodFile: 'SimpleNPC.cs' }),
       rule: P('If two flags can never be true together, replace them with one state.'),
     }),
-    'Recap and poll (2 min): Show the simple NavMesh enemy most of you already have in your game. Lesson 1.7 only showed a simple version in its last slide, we did not build it in class. It calls SetDestination every frame and has no states. Ask: what happens when it must also patrol, attack and flee? Collect answers: flags pile up. Second example, same disease: the PlayerController3D with CharacterController, plus the grappling hook from lesson 1.8. Open the accordion: isGrounded, isJumping and isGrappling tangle in Update. Run the poll with hands: no state machine, enum plus switch, a class per state, Animator. Keep it quick, the fix starts in block 1. Timing so far: 5 min.'),
+    'Recap and poll (2 min): Show the simple NavMesh enemy most of you already have in your game. Lesson 1.7 only showed a simple version in its last slide, we did not build it in class. It calls SetDestination every frame and has no states. Ask: what happens when it must also patrol, attack and flee? Collect answers: flags pile up. Second example, same disease: the PlayerController3D with CharacterController, plus the grappling hook from lesson 1.8. Open the accordion: isGrounded, isJumping and isGrappling tangle in Update. Run the poll with hands: no state machine, enum plus switch, or a class per state. Keep it quick, the fix starts in block 1. Timing so far: 5 min.'),
 
   // 4 Divider
   divider('1. State Machines, Level Up', 'From enum and switch to one class per state',
@@ -1607,14 +1623,13 @@ public void SetState(IState next)
   // 9 Putting it together: the whole NPC
   slide('Putting It Together: The Whole NPC',
     leadLine('One script, NpcBrain, is attached to the GameObject. It creates the plain classes and calls them.') +
-    split(
-      treeBox('Assets/Scripts/Npc/', [[0, 'NpcBrain.cs', 'MonoBehaviour: attach this one', 'mono'], [0, 'IState.cs', 'plain C# class', 'plain'], [0, 'StateMachine.cs', 'plain C# class', 'plain'], [0, 'PatrolState.cs', 'plain C# class', 'plain'], [0, 'ChaseState.cs', 'plain C# class', 'plain']]) +
-      '<div style="height: 8px;"></div>' +
+    (twoCol(
+      treeBox('Assets/Scripts/Npc/', [[0, 'NpcBrain.cs', 'MonoBehaviour: attach this one', 'mono'], [0, 'IState.cs', 'plain C# class', 'plain'], [0, 'StateMachine.cs', 'plain C# class', 'plain'], [0, 'PatrolState.cs', 'plain C# class', 'plain'], [0, 'ChaseState.cs', 'plain C# class', 'plain']]),
       flow('Who calls whom', [
         [['Unity', 'purple'], ['NpcBrain.Update', 'green'], ['StateMachine.Tick', 'blue'], ['Current.Tick', 'blue'], ['NpcBrain / Agent', 'green']],
         [['Event channel', 'amber'], ['NpcBrain.HandleSpotted', 'green'], ['machine.TrySetState', 'blue']],
-      ]),
-      codeCard('info', 'The star: the complete brain', 'NpcBrain.cs', NPC_FULL)
+      ])
+    ) + codeCols('The star: the complete brain', 'NpcBrain.cs', NPC_FULL)
     ) + deep('PUTTING IT TOGETHER', 'NPC ASSEMBLY', {
       plain: P('Until now you saw one class at a time. A real enemy needs one place where Unity meets all of them. That place is NpcBrain, the only MonoBehaviour. Unity calls its Awake, Start and Update. NpcBrain makes the state classes with new, passes itself into each one, and calls the machine. Everything else is a plain C# class.'),
       picture: P('A conductor in front of an orchestra. The conductor makes no sound, but every musician follows the conductor. NpcBrain makes no decisions, but it starts the machine and gives every state a way to reach the agent.'),
@@ -2024,7 +2039,7 @@ private void Update()
     split(
       inspector([['SampleScene', 0, 0], ['Player', 1, 1], ['Main Camera', 0, 1]], 'Player', [
         { name: 'Character Controller', fields: [['Height', '2']] },
-        { name: 'PlayerMotor', script: true, fields: [['Jump Speed', '6']] },
+        { name: 'PlayerMotor', script: true, fields: [['Jump Height', '1.2']] },
         { name: 'PlayerInputReader', script: true, fields: [['Motor', 'Player'], ['Buffer Window', '0.15']] },
       ]) + '<div style="height: 8px;"></div>' +
       flow('Who calls whom, each frame', [
@@ -2919,6 +2934,8 @@ ${cssStyles}
         .dd-main .code-box pre { font-size: calc(0.95rem * var(--effective-font-scale, 1)) !important; line-height: 1.35 !important; max-height: none !important; }
         .dd-main .jb-editor-tab { font-size: 0.85rem; }
         .dd-line { margin: 0 0 4px 0; font-weight: 700; }
+        .code-cols pre { column-count: 2; column-gap: 28px; max-height: none !important; }
+        .code-cols .card-body { overflow: visible; }
 
         .lab-box-neutral {
             background: #f8fafc;

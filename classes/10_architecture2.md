@@ -30,10 +30,10 @@ Architecture 1 was about who talks to whom. Architecture 2 is about how one thin
 | Block | What | Why you need it |
 | :--- | :--- | :--- |
 | 0. Recap | The simple NavMesh enemy (`SimpleNPC`), the player controller with a grappling hook, bool soup, Arch 1 channel API | See the problem first: flags pile up when the enemy must patrol, attack and flee. |
-| 1. State machines, level up | `IState` + `StateMachine`, guards, logging, hierarchy, Animator vs code, behavior tree and utility AI as comparison | If you already have a state machine, you learn what to do when it grows into spaghetti. |
-| 2. Interfaces and composition | `IDamageable`, `IInteractable`, small components | A bullet can hurt a player, a crate or a boss without knowing which. |
-| 3. Command pattern | Commands, input buffer, undo, replay | Input code leaves the player class, and a jump pressed just before landing still counts. |
-| 4. Services instead of singletons | Problems of `PersistentSingleton<T>`, a small service locator, dependency injection named only | Dependencies become visible and a test can swap in a fake. |
+| 1. State machines, level up | `IState` + `StateMachine`, guards, logging, hierarchy (how the brain calls the machine), the whole NPC put together, behavior tree and utility AI as comparison | If you already have a state machine, you learn what to do when it grows into spaghetti. |
+| 2. Interfaces and composition | `IDamageable`, `IInteractable`, a GameObject as a box of components, what a `MonoBehaviour` is, a thin root script, the enemy put together | A bullet can hurt a player, a crate or a boss without knowing which. |
+| 3. Command pattern | Commands, input buffer, undo, replay, the player input script put together | Input code leaves the player class, and a jump pressed just before landing still counts. |
+| 4. Services instead of singletons | Problems of `PersistentSingleton<T>`, a small service locator, dependency injection named only, the bootstrap and a caller put together | Dependencies become visible and a test can swap in a fake. |
 | 5. Refactoring toolkit and safety net | Extract method, extract class, strangler, one NUnit test, assembly definitions, leaks, working with an AI agent | You can improve your worst class without losing a working game. |
 
 The closing slide is a which tool when table. Look for your own needs while you read.
@@ -46,6 +46,18 @@ The teacher talks fast, so the talk is short and the time goes into the working 
 
 | Part | Talk (min) | Working session (min) |
 | :--- | :--- | :--- |
+| Welcome, recap and bool soup | 5 | none |
+| 1. State machines (incl. States Inside States 2 and Putting It Together: The Whole NPC 2) | 13 | Session 1: 15 |
+| 2. Interfaces and composition (Interfaces 4, GameObject box 2, MonoBehaviour 2, Parts 3, Putting It Together: The Enemy 2) | 13 | Session 2: 10 |
+| 3. Commands (Commands 5, buffer 5, Putting It Together: The Player 2) | 12 | Session 3: 15 |
+| 4. Services (Singletons 3, locator 4, Putting It Together: The Services 2) | 9 | Session 4: 12 |
+| 5. Refactoring and safety net | 10 | none (take-home instead) |
+| Wrap-up table | 5 | none |
+| **Total** | **67** | **52** |
+
+67 talk + 52 sessions = 119 minutes, about 1 minute buffer, so it fits in 120 minutes. The Animator was removed from this class: animation (including state machines in the Animator) is the next class. The deck has 30 slides: the 4 session slides each carry a countdown timer (`cTimer1` to `cTimer4`) and a cheat sheet, and the notes of every slide carry its minutes. Each part ends with a Putting It Together slide that shows the parent `MonoBehaviour` script that calls all the separate classes.
+
+--- | :--- | :--- |
 | Welcome, recap and bool soup | 5 | none |
 | 1. State machines | 12 | Session 1: 15 |
 | 2. Interfaces and composition | 8 | Session 2: 10 |
@@ -61,7 +73,7 @@ The teacher talks fast, so the talk is short and the time goes into the working 
 
 ## Working Sessions
 
-Each session has a visible timer, one generic task in three tiers, a code card with the signatures you just saw, and a one-line check. Pick ONE class or place in YOUR project. There is no session after Part 5: the last slide has a take-home line instead.
+Each session has a visible timer, one generic task in three tiers, a cheat sheet with the code you just saw (same names and calls as the slides), and a one-line check. Pick ONE class or place in YOUR project. There is no session after Part 5: the last slide has a take-home line instead.
 
 ### Session 1 (15 min): Give a Class States
 Pick one class in your project with 3 or more flags.
@@ -69,18 +81,76 @@ Pick one class in your project with 3 or more flags.
 - **Standard:** move two states into `IState` classes.
 - **Stretch:** add `TrySetState` and log each switch.
 
+**Cheat sheet** (same names as the slides; the full `NpcBrain` is in Part 1, Putting It Together):
+
 ```csharp
-public interface IState
+public interface IState { void Enter(); void Tick(); void Exit(); }
+public interface IGuardedState : IState { bool Allow(IState next); }   // may I switch?
+
+public class StateMachine
 {
-    void Enter();
-    void Tick();
-    void Exit();
+    public IState Current { get; private set; }
+    public bool LogTransitions;   // the owner copies its Inspector bool here
+
+    public bool TrySetState(IState next)
+    {
+        if (next == null || next == Current) return false;
+        if (Current is IGuardedState rules && !rules.Allow(next)) return false;
+        if (LogTransitions)   // only on a switch, never in Tick
+            Debug.Log($"{Current?.GetType().Name} -> {next.GetType().Name}");
+        Current?.Exit();
+        Current = next;
+        Current.Enter();
+        return true;
+    }
+
+    public void Tick() => Current?.Tick();
 }
 
-// StateMachine, from the slides:
-//   IState Current { get; }
-//   bool TrySetState(IState next);   refuses arrows not on the allowed list
-//   void Tick();                     runs Current.Tick()
+public class PatrolState : IGuardedState
+{
+    private readonly NpcBrain _npc;
+    public PatrolState(NpcBrain npc) => _npc = npc;
+    public void Enter() { }
+    public void Tick() { if (_npc.CanSeePlayer) _npc.Machine.TrySetState(_npc.Chase); }
+    public void Exit() { }
+    public bool Allow(IState next) => next is ChaseState;
+}
+
+public class NpcBrain : MonoBehaviour
+{
+    [SerializeField] private bool _logTransitions = true;
+    private StateMachine _machine;
+
+    public StateMachine Machine => _machine;
+    public PatrolState Patrol { get; private set; }
+    public ChaseState Chase { get; private set; }
+    public bool CanSeePlayer { get; private set; }
+
+    private void Awake()
+    {
+        _machine = new StateMachine { LogTransitions = _logTransitions };
+        Patrol = new PatrolState(this);
+        Chase = new ChaseState(this);
+    }
+
+    private void Start() => _machine.TrySetState(Patrol);   // first state
+    private void Update() => _machine.Tick();
+}
+
+// Hierarchy: the parent holds the shared rule, the child calls base.Tick() first.
+public abstract class GroundedState : IState
+{
+    public virtual void Enter() { }
+    public virtual void Exit() { }
+    public virtual void Tick() { /* shared rule, written once */ }
+}
+
+public class WalkState : GroundedState
+{
+    public override void Tick() { base.Tick(); /* own walk code */ }
+}
+// Full NpcBrain: slide Putting It Together (state machines).
 ```
 **Done when:** `Current` shows one state, and every switch is logged.
 
@@ -90,10 +160,18 @@ Pick one spot in your project with a type check or tag switch.
 - **Standard:** put `IDamageable` on two classes and call it.
 - **Stretch:** share one `Health` component between two prefabs.
 
+**Cheat sheet** (the full scripts are in Part 2, Putting It Together):
+
 ```csharp
-public interface IDamageable
+public interface IDamageable { void TakeDamage(int amount); }   // the contract
+
+public class Health : MonoBehaviour, IDamageable   // any class can sign it
 {
-    void TakeDamage(int amount);
+    [SerializeField] private int _max = 100;
+    private int _current;
+
+    private void Awake() => _current = _max;
+    public void TakeDamage(int amount) => _current = Mathf.Max(0, _current - amount);
 }
 
 public class Bullet : MonoBehaviour
@@ -102,11 +180,13 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // No type check:
+        // No type check. Collider on a child? Use GetComponentInParent<IDamageable>().
         if (other.TryGetComponent<IDamageable>(out var target))
             target.TakeDamage(_damage);
     }
 }
+// Small components: Health, Mover, Attack on one GameObject,
+// cached with GetComponent in Awake. Full scripts: Putting It Together (parts).
 ```
 **Done when:** the caller has no type check and no tag switch.
 
@@ -115,6 +195,8 @@ Pick one action in your project, such as jump, shoot or interact.
 - **Starter:** wrap it in a command with `Execute`.
 - **Standard:** add a 0.15 s buffer for it.
 - **Stretch:** add `Undo` and a history stack.
+
+**Cheat sheet** (the full `PlayerInputReader` is in Part 3, Putting It Together):
 
 ```csharp
 public interface ICommand { void Execute(); }
@@ -127,17 +209,38 @@ public class JumpCommand : ICommand
     public void Execute() => _motor.Jump();
 }
 
-public class BufferCheck
+public class CommandHistory   // minimal undo stack
 {
-    private ICommand _pending;
-    private float _pressedAt, _window = 0.15f;
+    private readonly Stack<IUndoableCommand> _done = new();
+    public void Run(IUndoableCommand command) { command.Execute(); _done.Push(command); }
+    public void Undo() { if (_done.Count > 0) _done.Pop().Undo(); }
+}
 
-    // Is the press still young enough?
-    public void Check()
+public class CommandBuffer   // keeps the newest press for a short window
+{
+    private readonly float _window;
+    private ICommand _pending;
+    private float _pressedAt;   // the stored press time
+
+    public CommandBuffer(float window) => _window = window;
+    public void Push(ICommand command) { _pending = command; _pressedAt = Time.time; }
+
+    public bool TryExecute(bool canRun)
     {
-        if (Time.time - _pressedAt <= _window) _pending.Execute();
+        if (_pending == null) return false;
+        if (Time.time - _pressedAt > _window) { _pending = null; return false; }
+        if (!canRun) return false;
+        _pending.Execute();
+        _pending = null;
+        return true;
     }
 }
+
+
+// In PlayerInputReader.Update:
+//   if (Keyboard.current.spaceKey.wasPressedThisFrame) _buffer.Push(_jump);
+//   _buffer.TryExecute(_motor.IsGrounded);
+// Full script: Putting It Together (commands).
 ```
 **Done when:** a press 0.1 s early still fires, and Stretch undoes a step.
 
@@ -147,16 +250,42 @@ Pick one `Instance` call in your project, such as audio or save.
 - **Standard:** make an interface and call `Services.Register`.
 - **Stretch:** switch one caller to `Services.Get` and test it with a fake.
 
+**Cheat sheet** (the full scripts are in Part 4, Putting It Together):
+
 ```csharp
-// Services.Register<T>(T service) and Services.Get<T>(), from the slides.
-public class ServicesExample : MonoBehaviour
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class Services
+{
+    private static readonly Dictionary<Type, object> s_services = new();
+
+    public static void Register<T>(T service) where T : class => s_services[typeof(T)] = service;
+
+    public static T Get<T>() where T : class
+    {
+        if (s_services.TryGetValue(typeof(T), out object service)) return (T)service;
+        throw new InvalidOperationException($"Service {typeof(T).Name} is not registered.");
+    }
+}
+
+public interface IAudioService { void Play(string clipName); }
+
+[DefaultExecutionOrder(-100)]
+public class CoreBootstrap : MonoBehaviour   // in _PersistentCore
 {
     [SerializeField] private AudioService _audio;   // MonoBehaviour : IAudioService
-    private IAudioService _cached;
-
-    private void Awake() => Services.Register<IAudioService>(_audio);   // once, in a bootstrap
-    private void Start() => _cached = Services.Get<IAudioService>();    // in a spawner: keep in a field
+    private void Awake() => Services.Register<IAudioService>(_audio);   // once
 }
+
+// Before: AudioManager.Instance.Play("spawn");
+// After, in a spawner:
+//   private IAudioService _audio;
+//   private void Start() => _audio = Services.Get<IAudioService>();   // keep in a field
+//   _audio.Play("spawn");
+// PersistentSingleton<T> stays fine for true infrastructure.
+// Full scripts: Putting It Together (services).
 ```
 **Done when:** that caller asks `Services.Get` and has no `Instance` call.
 
@@ -656,29 +785,103 @@ public void SetState(IState next)
 
 ### Step 5: States inside states (hierarchical)
 
-*In plain words:* Idle and Walk both allow jumping. Write the jump rule once, in Grounded, the parent state. The children only add their own part. Like a shared file in a parent folder.
+*In plain words:* Idle and Walk both allow jumping. Write the jump rule once, in Grounded, the parent state. The children only add their own part. Like a shared file in a parent folder. The brain never calls a child by name: it only calls the machine, and the machine calls whichever state is `Current`.
+
+**Who calls whom, every frame:**
+1. `NpcBrain.Update` calls `_machine.Tick()`.
+2. The machine calls `Current.Tick()`, here `WalkState.Tick`.
+3. `WalkState.Tick` calls `base.Tick()` first: `GroundedState` runs the shared jump rule.
+4. Then `WalkState` runs its own walk code.
+
+**Start:** the brain calls `_machine.TrySetState(Idle)` once in `Start`. **Change:** a state asks `Npc.Machine.TrySetState(Npc.Walk)`.
+
+The brain (short):
 
 ```csharp
+public class NpcBrain : MonoBehaviour
+{
+    [SerializeField] private PlayerMotor _motor;
+    [SerializeField] private Transform _player;
+    [SerializeField] private float _sightRange = 12f;
+
+    private StateMachine _machine;
+
+    public StateMachine Machine => _machine;
+    public PlayerMotor Motor => _motor;
+    public IdleState Idle { get; private set; }
+    public WalkState Walk { get; private set; }
+    public bool CanSeePlayer =>
+        (_player.position - transform.position).sqrMagnitude <= _sightRange * _sightRange;
+
+    private void Awake()
+    {
+        _machine = new StateMachine();
+        Idle = new IdleState(this);   // states are made once
+        Walk = new WalkState(this);
+        _machine.Allow(Idle, Walk);
+        _machine.Allow(Walk, Idle);
+    }
+
+    private void Start() => _machine.TrySetState(Idle);   // the brain starts the first state
+
+    private void Update() => _machine.Tick();             // the brain calls the machine
+}
+```
+
+The parent and the two children:
+
+```csharp
+using UnityEngine;
+using UnityEngine.InputSystem;
+
 public abstract class GroundedState : IState
 {
-    public PlayerMotor Motor;
+    protected readonly NpcBrain Npc;
+    protected GroundedState(NpcBrain npc) => Npc = npc;
+
     public virtual void Enter() { }
     public virtual void Exit() { }
     public virtual void Tick()   // the jump rule, written once
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame) Motor.Jump();
+        if (Keyboard.current.spaceKey.wasPressedThisFrame) Npc.Motor.Jump();
     }
 }
 
-public class IdleState : GroundedState { }
+public class IdleState : GroundedState
+{
+    public IdleState(NpcBrain npc) : base(npc) { }
+
+    public override void Tick()
+    {
+        base.Tick();   // 1. the parent's jump rule
+        if (Npc.CanSeePlayer) Npc.Machine.TrySetState(Npc.Walk);   // 2. its own part
+    }
+}
 
 public class WalkState : GroundedState
 {
-    public override void Tick() { base.Tick(); Motor.Move(Vector3.forward); }
+    public WalkState(NpcBrain npc) : base(npc) { }
+
+    public override void Tick()
+    {
+        base.Tick();   // 1. the parent's jump rule
+        Npc.Motor.Move(Vector3.forward);   // 2. its own walk code
+        if (!Npc.CanSeePlayer) Npc.Machine.TrySetState(Npc.Idle);
+    }
 }
 ```
 
-The second kind of layer: a big state can own a small machine of its own. Combat is one state that owns a machine with Approach and Attack. A rule such as Stunned is written once on Combat. When one state needs sub steps, let it own a machine.
+**One frame, step by step.** Awake builds the machine and both states, and lists the arrows with `Allow`. Start runs `TrySetState(Idle)`: no `Current` yet, so `Idle.Enter` runs. Every frame `NpcBrain.Update` calls `_machine.Tick()`. The machine calls `IdleState.Tick`, which calls `base.Tick()` (the jump rule) and then its own part: if `CanSeePlayer`, ask `TrySetState(Walk)`. Allow says yes, so `Idle.Exit` and `Walk.Enter` run. Next frame `WalkState.Tick` runs: `base.Tick()` first, then `Motor.Move`.
+
+**Two ways to nest states.**
+
+| | Way 1: inheritance | Way 2: a child machine |
+| :--- | :--- | :--- |
+| Idea | A parent class holds the shared code. Children call `base.Tick()`. | A big state owns a small `StateMachine` and forwards `Tick` to it. |
+| Brain sees | Idle and Walk, as normal states. | Combat, as one normal state. |
+| Use it when | Several states share a rule (jump, gravity). | One state has its own sub-modes (Approach, Attack). |
+
+Way 2: a big state can own a small machine of its own. Combat is one state that owns a machine with Approach and Attack. A rule such as Stunned is written once on Combat. The parent calls the child machine `Tick`, the same way the brain calls its machine.
 
 ```csharp
 public class CombatState : IState
@@ -703,23 +906,80 @@ public class CombatState : IState
 ```
 `ApproachState` and `AttackState` are two more `IState` classes, written like `ChaseState`.
 
-### Step 6: Animator state machine or code FSM
+**Common mistake:** forgetting `base.Tick()` in a child. The child overrides `Tick`, writes only its own code, and the shared rule silently stops working in that one state. Make `base.Tick()` the first line of every child `Tick`. Also: forgetting to stop a child machine when its parent exits.
 
-*In plain words:* the Animator draws the pose, your code decides what happens. Rules hidden in Animator arrows cannot be searched, logged or reviewed.
-| Animator | Code FSM |
-| :--- | :--- |
-| Poses, blends, clips | Rules, AI, game flow |
-| Artists edit it | Programmers edit it |
+### Step 6: Putting it together: the whole NPC
 
-Code decides, the Animator shows. Set Animator parameters from your states with a cached hash:
+*In plain words:* one script, `NpcBrain`, is attached to the GameObject. It creates the plain classes and calls them. Everything else is a plain C# class.
+
+```text
+Assets/Scripts/Npc/
+  NpcBrain.cs       MonoBehaviour: attach this one
+  IState.cs         plain C# class
+  StateMachine.cs   plain C# class
+  PatrolState.cs    plain C# class
+  ChaseState.cs     plain C# class
+```
+
+```text
+Unity -> NpcBrain.Update -> StateMachine.Tick -> Current.Tick -> NpcBrain / Agent
+Event channel -> NpcBrain.HandleSpotted -> machine.TrySetState
+```
 
 ```csharp
-private static readonly int IsChasing = Animator.StringToHash("IsChasing");
+using UnityEngine;
+using UnityEngine.AI;
 
-public void Enter() => _npc.Animator.SetBool(IsChasing, true);
-public void Exit() => _npc.Animator.SetBool(IsChasing, false);
+[RequireComponent(typeof(NavMeshAgent))]
+public class NpcBrain : MonoBehaviour
+{
+    [SerializeField] private Transform[] _waypoints;
+    [SerializeField] private Transform _player;
+    [SerializeField] private float _sightRange = 12f;
+    [SerializeField] private bool _logTransitions = true;
+    [SerializeField] private VoidEventChannelSO _onPlayerSpotted;   // Arch 1 asset, optional
+
+    private StateMachine _machine;
+
+    // The states only use these: the brain is their one door to Unity.
+    public NavMeshAgent Agent { get; private set; }
+    public StateMachine Machine => _machine;
+    public PatrolState Patrol { get; private set; }
+    public ChaseState Chase { get; private set; }
+    public Transform[] Waypoints => _waypoints;
+    public Transform Player => _player;
+    public bool CanSeePlayer =>
+        (_player.position - transform.position).sqrMagnitude <= _sightRange * _sightRange;
+
+    private void Awake()
+    {
+        Agent = GetComponent<NavMeshAgent>();
+        _machine = new StateMachine { LogTransitions = _logTransitions, Name = name, Owner = this };
+        Patrol = new PatrolState(this);   // the brain goes into each state's constructor
+        Chase = new ChaseState(this);
+        _machine.Allow(Patrol, Chase);
+        _machine.Allow(Chase, Patrol);
+    }
+
+    private void OnEnable()
+    {
+        if (_onPlayerSpotted != null) _onPlayerSpotted.RegisterListener(HandleSpotted);
+    }
+
+    private void OnDisable()
+    {
+        if (_onPlayerSpotted != null) _onPlayerSpotted.UnregisterListener(HandleSpotted);
+    }
+
+    private void Start() => _machine.TrySetState(Patrol);   // first state
+
+    private void Update() => _machine.Tick();               // the only per-frame call
+
+    private void HandleSpotted() => _machine.TrySetState(Chase);   // the channel asks, the machine decides
+}
 ```
-Add an `Animator Animator { get; private set; }` property to `NpcBrain`. `StateMachineBehaviour` scripts are fine for small visual effects. Gameplay rules hidden in an Animator Controller are hard to log, test and review.
+
+This is the `NpcBrain` from Step 2 plus the parts from the next steps: the guard list (`Allow`), the log bool and the Arch 1 channel. Each state gets the brain in its constructor, so it reaches `Agent`, `Waypoints`, `Player`, `CanSeePlayer` and `Machine`. Subscribe to the channel in `OnEnable`, unsubscribe in `OnDisable` with the same method. **Common mistake:** attaching a state class to the GameObject (a plain class cannot be attached), or giving every state its own `Update`.
 
 ### Step 7: When an FSM stops fitting (comparison only)
 
@@ -728,7 +988,7 @@ Signs: more than about 8 states, arrows everywhere, the same transition pasted i
 - **Behavior tree:** a tree of tasks checked from the top every tick. Good for ordered priorities and fallbacks (flee if health is low, else attack if the target is near, else patrol).
 - **Utility AI:** score every action, pick the best. Good when many wants compete smoothly, such as hunger versus danger.
 
-We build neither today. Stay with a clean FSM until the arrows hurt.
+We build neither today. Stay with a clean FSM until the arrows hurt. Animator state machines (boxes and arrows for animation clips) are next class.
 
 ---
 
@@ -759,86 +1019,91 @@ public class Bullet : MonoBehaviour
 ```
 Player, Crate and Boss implement `IDamageable`. The bullet never learns their types. `IInteractable` works the same way for doors and levers. Keep a contract to one job and one to three methods.
 
-**Composition over deep class trees.** Instead of `Entity > Enemy > FlyingEnemy > FlyingBoss`, build objects from small components such as `Health`, `Mover` and `DropLoot`. Each prefab mixes the ones it needs, and each component is a black box as in Architecture 1.
+### A GameObject is a box of components
+
+*In plain words:* a GameObject is an empty box. Each component you put in the box gives it one job.
+
+```text
+Hierarchy              Inspector: Enemy
+  SampleScene            Transform   Position 0, 0, 0   Scale 1, 1, 1
+    Main Camera          Health      (script)  Max 100
+    Ground               Mover       (script)  Speed 3   Flies [ ]
+    Enemy  <- selected   Attack      (script)  Damage 10
+                         [ Add Component ]
+```
+
+- A script is a file in `Assets/Scripts`.
+- The file name must match the class name: `Health.cs` holds `class Health`.
+- Attach it: drag the file onto the GameObject, or press Add Component.
+- One GameObject holds many scripts. Each does one job.
+
+**Problem:** one `Enemy.cs` with health, movement, attack, loot and sound grows to hundreds of lines, and a crate that only needs health cannot reuse any of it. **Common mistake:** a file name that differs from the class name (`Health.cs` holding `class Hp`): Unity cannot attach it. A script that is not on a GameObject does nothing.
+
+### What is a MonoBehaviour?
+
+*In plain words:* a `MonoBehaviour` is the Unity base class that lets your script sit on a GameObject. Unity wrote it, so it comes from Unity and not from you.
+
+```text
+UnityEngine.Object   name, Destroy, Instantiate
+  -> Component       transform, gameObject, GetComponent
+    -> Behaviour     the enabled tick box
+      -> MonoBehaviour   Awake, Start, Update, StartCoroutine
+        -> Health (your script)   your fields and your methods
+```
+
+Unity looks for methods named `Awake`, `Start` and `Update` on your class and calls them. They are names Unity knows, not methods you must override.
+
+| | On a GameObject? | What it is |
+| :--- | :--- | :--- |
+| MonoBehaviour | Yes | Unity's base class. You inherit it. |
+| Plain C# class | No | A normal class, made with `new`: `StateMachine`, `PatrolState`. |
+| Interface | No | A contract any class can sign: `IDamageable`. |
 
 ```csharp
-using UnityEngine;
-
-public class Health : MonoBehaviour, IDamageable
+// A plain C# class: no base class, cannot be attached.
+public class PatrolState : IState
 {
-    [SerializeField] private int _max = 100;
-    [SerializeField] private IntEventChannelSO _onChanged;
-    private int _current;
+    public void Enter() { }
+    public void Tick() { }
+    public void Exit() { }
+}
 
-    private void Awake() => _current = _max;
+// A MonoBehaviour: Unity's base class, attach it to a GameObject.
+public class Health : MonoBehaviour, IDamageable   // one base class, any number of interfaces
+{
+    public void TakeDamage(int amount) { }
+}
+```
 
-    public void TakeDamage(int amount)
+A class has one base class, so only one `MonoBehaviour`, and it can sign many interfaces. **Common mistake:** `new Health()` for a `MonoBehaviour` (Unity warns and the object is on no GameObject), or making every class a `MonoBehaviour` by habit. A state or a command needs no `Update`.
+
+### Parts that work together
+
+*In plain words:* make the root script thin: it owns the parts and only coordinates them. `[RequireComponent]` adds the parts, and `GetComponent` in `Awake` keeps them in fields. In our enemy the root is `NpcBrain`, the script from the state machine part.
+
+```csharp
+[RequireComponent(typeof(Health), typeof(Mover), typeof(Attack))]
+public class NpcBrain : MonoBehaviour   // thin root: owns the parts, coordinates them
+{
+    private Health _health;
+    private Mover _mover;
+    private Attack _attack;
+
+    private void Awake()
     {
-        _current = Mathf.Max(0, _current - amount);
-        if (_onChanged != null) _onChanged.RaiseEvent(_current);
+        _health = GetComponent<Health>();   // once, kept in a field
+        _mover = GetComponent<Mover>();
+        _attack = GetComponent<Attack>();
     }
 }
 ```
-Has-a beats is-a. Share behaviour by adding a component, share a type by implementing an interface.
 
-**Don't / Do (short, as on the slide): type checks or a contract:**
+- Use `TryGetComponent(out _attack)` for an optional part: it returns true or false and logs no error.
+- `Health : MonoBehaviour, IDamageable` links back to the Interfaces step: a bullet finds it through the contract.
+- `Mover` with a bool `_flies` is okay because it is config, not state. A bool that changes at run time, like `_isChasing`, belongs in a state.
+- Has-a beats is-a. Share behaviour by adding a component, share a type by implementing an interface.
 
-**Don't:** Every new target edits the bullet.
-
-```csharp
-private void OnTriggerEnter(Collider other)
-{
-    var target = other.GetComponent<MonoBehaviour>();
-    if (target is Player player) player.LoseHealth(_damage);
-    else if (target is Crate crate) crate.Break();
-    else if (target is Boss boss) boss.ReduceArmor(_damage);
-    Destroy(gameObject);
-}
-```
-
-**Do:** The bullet only knows TakeDamage.
-
-```csharp
-public interface IDamageable { void TakeDamage(int amount); }
-
-public class Bullet : MonoBehaviour
-{
-    [SerializeField] private int _damage = 10;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out IDamageable target))
-            target.TakeDamage(_damage);
-        Destroy(gameObject);
-    }
-}
-```
-
-**Don't / Do: type checks or a contract:**
-
-**Don't:** Every new target edits the bullet.
-
-```csharp
-private void OnTriggerEnter(Collider other)
-{
-    var target = other.GetComponent<MonoBehaviour>();
-    if (target is Player player) player.LoseHealth(_damage);
-    else if (target is Crate crate) crate.Break();
-    else if (target is Boss boss) boss.ReduceArmor(_damage);
-    Destroy(gameObject);
-}
-```
-
-**Do:** The bullet only knows TakeDamage.
-
-```csharp
-private void OnTriggerEnter(Collider other)
-{
-    if (other.TryGetComponent(out IDamageable target))
-        target.TakeDamage(_damage);
-    Destroy(gameObject);
-}
-```
+**Common mistake:** a fat root that does the work itself and becomes the `Enemy` class again. The root decides who does what, the parts do it.
 
 **Don't / Do (short, as on the slide): class tree or components:**
 
@@ -855,15 +1120,20 @@ public class ArmoredFlyingEnemy : FlyingEnemy { public int Armor; }
 **Do:** Mix parts on one object.
 
 ```csharp
-public class Health : MonoBehaviour, IDamageable
+[RequireComponent(typeof(Health), typeof(Mover), typeof(Attack))]
+public class NpcBrain : MonoBehaviour   // thin root: owns the parts, coordinates them
 {
-    [SerializeField] private int _max = 100;
-    private int _current;
+    private Health _health;
+    private Mover _mover;
+    private Attack _attack;
 
-    private void Awake() => _current = _max;
-    public void TakeDamage(int amount) => _current = Mathf.Max(0, _current - amount);
+    private void Awake()
+    {
+        _health = GetComponent<Health>();   // once, kept in a field
+        _mover = GetComponent<Mover>();
+        _attack = GetComponent<Attack>();
+    }
 }
-// Mover, DropLoot: same idea. Mix them per prefab.
 ```
 
 **Don't / Do: class tree or components:**
@@ -899,6 +1169,126 @@ public class Mover : MonoBehaviour
 ```
 
 
+
+### Putting it together: the enemy
+
+*In plain words:* the root script `NpcBrain` calls the parts. A bullet reaches `Health` through the contract. `Health` tells the world with a channel.
+
+```text
+Enemy GameObject
+  NpcBrain  (script)  Player, Attack Range 2
+  Health    (script)  Max 100, On Died: OnEnemyDied
+  Mover     (script)  Speed 3, Flies [ ]
+  Attack    (script)  Damage 10
+```
+
+```text
+Unity -> NpcBrain.Update -> Mover.MoveTo / Attack.Fire
+Bullet.OnTriggerEnter -> GetComponentInParent<IDamageable> -> Health.TakeDamage -> OnDied channel
+```
+
+```csharp
+using UnityEngine;
+
+[RequireComponent(typeof(Health), typeof(Mover), typeof(Attack))]
+public class NpcBrain : MonoBehaviour   // thin root: owns the parts, only coordinates
+{
+    [SerializeField] private Transform _player;
+    [SerializeField] private float _attackRange = 2f;
+
+    private Health _health;
+    private Mover _mover;
+    private Attack _attack;
+
+    private void Awake()
+    {
+        _health = GetComponent<Health>();   // once, kept in fields
+        _mover = GetComponent<Mover>();
+        _attack = GetComponent<Attack>();
+    }
+
+    private void Update()
+    {
+        if (_health.IsDead || _player == null) return;
+
+        float distance = Vector3.Distance(transform.position, _player.position);
+        if (distance > _attackRange) _mover.MoveTo(_player.position);
+        else _attack.Fire(_player);
+    }
+}
+```
+
+```csharp
+using UnityEngine;
+
+public class Health : MonoBehaviour, IDamageable
+{
+    [SerializeField] private int _max = 100;
+    [SerializeField] private VoidEventChannelSO _onDied;   // Arch 1 channel, optional
+    private int _current;
+
+    public bool IsDead => _current <= 0;
+
+    private void Awake() => _current = _max;
+
+    public void TakeDamage(int amount)
+    {
+        if (IsDead) return;
+        _current = Mathf.Max(0, _current - amount);
+        if (IsDead && _onDied != null) _onDied.RaiseEvent();   // news for the UI and loot
+    }
+}
+```
+
+```csharp
+using UnityEngine;
+
+public class Mover : MonoBehaviour
+{
+    [SerializeField] private float _speed = 3f;
+    [SerializeField] private bool _flies;   // config, not state: it never changes at run time
+
+    public void MoveTo(Vector3 target)
+    {
+        if (!_flies) target.y = transform.position.y;
+        transform.position = Vector3.MoveTowards(transform.position, target, _speed * Time.deltaTime);
+    }
+}
+
+public class Attack : MonoBehaviour
+{
+    [SerializeField] private int _damage = 10;
+    [SerializeField] private float _cooldown = 1f;
+    private float _nextTime;
+
+    public void Fire(Transform target)
+    {
+        if (Time.time < _nextTime) return;
+        _nextTime = Time.time + _cooldown;
+        if (target.TryGetComponent<IDamageable>(out var damageable))
+            damageable.TakeDamage(_damage);
+    }
+}
+```
+
+```csharp
+using UnityEngine;
+
+public class Bullet : MonoBehaviour
+{
+    [SerializeField] private int _damage = 10;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // The collider may sit on a child, so look upwards too.
+        IDamageable target = other.GetComponentInParent<IDamageable>();
+        if (target != null) target.TakeDamage(_damage);
+        Destroy(gameObject);
+    }
+}
+```
+
+`RequireComponent` makes sure the parts exist. Update only chooses: far away, `MoveTo`; close, `Fire`. `GetComponentInParent` also looks upwards, because the collider may sit on a child while `Health` sits on the parent. `Health` raises the channel once, because `IsDead` stops a second call. **Common mistake:** `GetComponent` in `Update` every frame, or parts that find each other with `FindObjectOfType`.
 
 ---
 
@@ -972,11 +1362,11 @@ private void Update()
 ```csharp
 private readonly Queue<ICommand> _queue = new();
 
-private void OnJump(InputAction.CallbackContext ctx) =>
-    _queue.Enqueue(new JumpCommand(_motor));
-
 private void Update()
 {
+    if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        _queue.Enqueue(new JumpCommand(_motor));
+
     while (_queue.Count > 0)
         _queue.Dequeue().Execute();
 }
@@ -1037,6 +1427,7 @@ public class PlayerMotor : MonoBehaviour
     private void Awake() => _controller = GetComponent<CharacterController>();
 
     public void Jump() => _verticalSpeed = Mathf.Sqrt(2f * _jumpHeight * -Physics.gravity.y);
+    public void Move(Vector3 direction) => _controller.Move(direction * Time.deltaTime);
 
     private void Update()
     {
@@ -1054,28 +1445,29 @@ using UnityEngine.InputSystem;
 public class PlayerInputReader : MonoBehaviour
 {
     [SerializeField] private PlayerMotor _motor;
-    [SerializeField] private InputActionReference _jump;
+    [SerializeField] private float _bufferWindow = 0.15f;
 
-    private readonly CommandBuffer _buffer = new(0.15f);
-    private ICommand _jumpCommand;
+    private CommandBuffer _buffer;
+    private ICommand _jump;
+    private readonly CommandHistory _history = new();
 
-    private void Awake() => _jumpCommand = new JumpCommand(_motor);
-
-    private void OnEnable()
+    private void Awake()
     {
-        _jump.action.Enable();
-        _jump.action.performed += OnJump;
+        _buffer = new CommandBuffer(_bufferWindow);
+        _jump = new JumpCommand(_motor);   // made once, reused
     }
 
-    private void OnDisable()
+    private void Update()
     {
-        _jump.action.performed -= OnJump;
-        _jump.action.Disable();
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            _buffer.Push(_jump);            // the buffer stores the press time
+        _buffer.TryExecute(_motor.IsGrounded);   // runs it when allowed and young enough
+
+        if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+            _history.Run(new MoveStepCommand(transform, Vector3.right));
+        if (Keyboard.current.zKey.wasPressedThisFrame)
+            _history.Undo();
     }
-
-    private void OnJump(InputAction.CallbackContext ctx) => _buffer.Push(_jumpCommand);
-
-    private void Update() => _buffer.TryExecute(_motor.IsGrounded);
 }
 ```
 Coyote time (allowing a jump a few frames after leaving a ledge) follows the same idea: make the game forgive human timing.
@@ -1132,10 +1524,10 @@ private void Update()
 private const float JumpWindow = 0.15f;
 private float _jumpPressedAt = float.NegativeInfinity;
 
-private void OnJump(InputAction.CallbackContext ctx) => _jumpPressedAt = Time.time;
-
 private void Update()
 {
+    if (Keyboard.current.spaceKey.wasPressedThisFrame) _jumpPressedAt = Time.time;
+
     if (Time.time - _jumpPressedAt > JumpWindow || !_motor.IsGrounded) return;
     _jumpPressedAt = float.NegativeInfinity;
     _motor.Jump();
@@ -1189,6 +1581,25 @@ public class MoveStepCommand : IUndoableCommand
 }
 ```
 **Replay:** record the clock time and the command on every `Run`. To play back, reset to the same start state and run each command when the clock reaches its time. It only works when commands use their own data, not live input. Undo fits puzzle, grid and tactics games best. In a shooter you rarely need it, but buffering and replay still apply. Start with one of the three.
+
+### Putting it together: the player
+
+*In plain words:* two scripts sit on the Player. `PlayerInputReader` reads the keys and makes commands. `PlayerMotor` does the moving. `ICommand`, `JumpCommand`, `CommandBuffer` and `CommandHistory` are plain classes, made by the reader.
+
+```text
+Player GameObject
+  Character Controller
+  PlayerMotor        (script)  Jump Height 1.2
+  PlayerInputReader  (script)  Motor, Buffer Window 0.15
+```
+
+```text
+Unity -> PlayerInputReader.Update -> wasPressedThisFrame -> _buffer.Push(_jump)
+_buffer.TryExecute(IsGrounded) -> JumpCommand.Execute -> PlayerMotor.Jump
+Right arrow -> _history.Run -> Execute + stack     Z -> _history.Undo
+```
+
+The complete script is the `PlayerInputReader` above. In `Awake` it makes the buffer and one `JumpCommand`, once. In `Update`: step 1, if space was pressed this frame, `Push` the command (the buffer stores the press time). Step 2, `TryExecute` with `IsGrounded`: if the player is on the ground and the press is younger than the window, the buffer runs `JumpCommand.Execute`, which calls `PlayerMotor.Jump`. The right arrow runs a `MoveStepCommand` through `CommandHistory.Run`, and Z pops the top and calls `Undo`. **Common mistake:** a new `JumpCommand` every frame, or calling the motor straight from the key check and skipping the buffer.
 
 ---
 
@@ -1321,6 +1732,76 @@ public class EnemySpawner : MonoBehaviour
 }
 ```
 
+
+### Putting it together: the services
+
+*In plain words:* a bootstrap script in `_PersistentCore` registers the service first. Any script asks for it later.
+
+```text
+Assets/Scripts/
+  Core/
+    IAudioService.cs    plain interface
+    Services.cs         plain static class
+    AudioService.cs     MonoBehaviour: on _PersistentCore
+    CoreBootstrap.cs    MonoBehaviour: on _PersistentCore
+  Enemy/
+    EnemySpawner.cs     MonoBehaviour: on a spawner
+```
+
+Order of execution: 1 `_PersistentCore` loads, 2 `CoreBootstrap.Awake` (order -100), 3 `Services.Register`, 4 other Awakes, 5 `EnemySpawner.Start`, 6 `Services.Get`, 7 `_audio.Play`.
+
+```csharp
+using UnityEngine;
+
+[DefaultExecutionOrder(-100)]   // runs before other scripts
+public class CoreBootstrap : MonoBehaviour
+{
+    [SerializeField] private AudioService _audio;   // MonoBehaviour : IAudioService
+
+    private void Awake() => Services.Register<IAudioService>(_audio);
+}
+```
+
+```csharp
+using UnityEngine;
+
+public class EnemySpawner : MonoBehaviour
+{
+    [SerializeField] private GameObject _enemyPrefab;
+    private IAudioService _audio;
+
+    private void Start() => _audio = Services.Get<IAudioService>();   // asked once, kept in a field
+
+    public void Spawn(Vector3 position)
+    {
+        Instantiate(_enemyPrefab, position, Quaternion.identity);
+        _audio.Play("spawn");
+    }
+}
+```
+
+```csharp
+using UnityEngine;
+
+public interface IAudioService
+{
+    void Play(string clipName);
+}
+
+public class AudioService : MonoBehaviour, IAudioService
+{
+    [SerializeField] private AudioSource _source;
+    [SerializeField] private AudioClip[] _clips;
+
+    public void Play(string clipName)
+    {
+        foreach (AudioClip clip in _clips)
+            if (clip.name == clipName) { _source.PlayOneShot(clip); return; }
+    }
+}
+```
+
+`[DefaultExecutionOrder(-100)]` makes `CoreBootstrap.Awake` run before scripts with the default order 0, and `Start` runs after all `Awake` calls of the loaded scene. Load `_PersistentCore` first (scene 0 in Build Settings, or before the game scene). **Common mistake:** calling `Services.Get` in `Awake` and hoping the bootstrap ran first. Ask in `Start`, keep the result in a field, never ask in `Update`.
 
 ---
 
@@ -1574,7 +2055,7 @@ Do not change anything else.
 
 **Take home:** pick one class in your project, do one small named step, commit.
 
-Next lesson (preview, see the README): 2.1 Performance Optimization and Rendering.
+Next class (preview): animation, including state machines in the Animator. Bring a project that builds and a committed git state.
 
 ---
 
