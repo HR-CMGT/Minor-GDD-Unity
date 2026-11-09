@@ -1164,9 +1164,9 @@ const code = (t) => '<code>' + t + '</code>';
 const codeCols = (title, file, src) => {
     const parts = src.split('\n//---\n');
     if (parts.length === 1) return '<div class="code-cols">' + codeCard('info', title, file, src) + '</div>';
-    return '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start;">' + parts.map((p, k) => codeCard('info', k ? title + ', continued' : title, file, p)).join('') + '</div>';
+    return '<div class="l10-cols" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start;">' + parts.map((p, k) => codeCard('info', k ? title + ', continued' : title, file, p)).join('') + '</div>';
 };
-const twoCol = (a, b, ratio) => '<div style="display: grid; grid-template-columns: ' + (ratio || '1fr 1fr') + '; gap: 12px; align-items: start; margin-bottom: 10px;">' + a + b + '</div>';
+const twoCol = (a, b, ratio) => '<div class="l10-cols" style="display: grid; grid-template-columns: ' + (ratio || '1fr 1fr') + '; gap: 12px; align-items: start; margin-bottom: 10px;">' + a + b + '</div>';
 // ---------- deep dive helpers ----------
 const leadLine = (t) => '<p style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.08em; color: #0f172a;">' + t + '</p>';
 const H = (t) => '<div style="font-weight: 800; margin: 2px 0 4px 0;">' + t + '</div>';
@@ -1204,7 +1204,7 @@ const sessionTimer = (n, minutes) => {
 // No accordion and no deep dive on a session slide (keeps it compact for the projector).
 const session = (n, title, minutes, pick, tiers, done, file, code, notes) =>
     slide('Working Session ' + n + ': ' + title,
-        '<div style="display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; align-items: stretch; margin-bottom: 10px;">' +
+        '<div class="l10-cols" style="display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; align-items: stretch; margin-bottom: 10px;">' +
             card('primary', 'Try this', '<p style="margin: 0 0 6px 0; font-weight: 800;">' + pick + '</p>' + pp('green', 'Starter', tiers[0]) + pp('amber', 'Standard', tiers[1]) + pp('purple', 'Stretch', tiers[2])) +
             card('success', 'Done when', '<p style="margin: 0; font-weight: 800;">' + done + '</p>') + sessionTimer(n, minutes) + '</div>' +
             codeCols('Cheat sheet', file, code), notes);
@@ -3022,6 +3022,19 @@ ${cssStyles}
             line-height: 1.45;
             color: #334155;
             background: #ffffff;
+        }
+
+        /* l10-fit-fix: keep code and cards inside the slide at any window width */
+        body.lecture-mode .split-media-layout { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr) !important; }
+        body.lab-mode .split-media-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
+        .split-media-layout > *, .left-column, .right-column, .content-card, .card-body, .media-panel-card, .lab-grid-2col > *, .l10-cols > *, .dd-side, .dd-main, .content-stack, .code-box { min-width: 0 !important; max-width: 100% !important; box-sizing: border-box; }
+        .slide-content-area .code-box pre, .slide-content-area .code-container pre, .dd-main .code-box pre { max-width: 100% !important; max-height: none !important; height: auto !important; overflow-x: auto !important; overflow-y: hidden !important; }
+        .media-panel-card { overflow-x: auto; }
+        @media (max-width: 1500px) {
+            body.lecture-mode .split-media-layout, body.lab-mode .split-media-layout { grid-template-columns: minmax(0, 1fr) !important; }
+            .lab-grid-2col, .dd-main .dd-grid, .l10-cols { grid-template-columns: minmax(0, 1fr) !important; }
+            .code-cols pre { column-count: 1 !important; }
+            .split-media-layout .content-card { width: 100% !important; }
         }
     </style>
 </head>
